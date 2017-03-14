@@ -108,7 +108,7 @@ public class Convertor {
 	{
 		PrepaidsModel prepaidsModel = new PrepaidsModel();
 			prepaidsModel.setPrepaidItemPerDiemAmount(null != prepaidItem.getPREPAIDITEMDETAIL().getPrepaidItemPerDiemAmount() ? prepaidItem.getPREPAIDITEMDETAIL().getPrepaidItemPerDiemAmount().getValue().toPlainString(): "");
-			prepaidsModel.setPrepaidItemPaidFromDate( null != prepaidItem.getPREPAIDITEMDETAIL().getPrepaidItemMonthsPaidCount() ? Integer.toString(prepaidItem.getPREPAIDITEMDETAIL().getPrepaidItemMonthsPaidCount().getValue()): "");
+			prepaidsModel.setPrepaidItemPaidFromDate( null != prepaidItem.getPREPAIDITEMDETAIL().getPrepaidItemPaidFromDate() ? prepaidItem.getPREPAIDITEMDETAIL().getPrepaidItemPaidFromDate().getValue(): "");
 			prepaidsModel.setPrepaidItemPaidThroughDate(null != prepaidItem.getPREPAIDITEMDETAIL().getPrepaidItemPaidThroughDate() ? prepaidItem.getPREPAIDITEMDETAIL().getPrepaidItemPaidThroughDate().getValue() : "");
 			prepaidsModel.setPrepaidItemMonthsPaidCount(null != prepaidItem.getPREPAIDITEMDETAIL().getPrepaidItemMonthsPaidCount() ? Integer.toString(prepaidItem.getPREPAIDITEMDETAIL().getPrepaidItemMonthsPaidCount().getValue()):"");
 			prepaidsModel.setIntegratedDisclosureSectionType(null != prepaidItem.getPREPAIDITEMDETAIL().getIntegratedDisclosureSectionType() ? prepaidItem.getPREPAIDITEMDETAIL().getIntegratedDisclosureSectionType().getValue().value() :"");
@@ -126,9 +126,17 @@ public class Convertor {
 			dLabel = null != escrowItem.getESCROWITEMDETAIL().getEscrowItemType().getDisplayLabelText() ? escrowItem.getESCROWITEMDETAIL().getEscrowItemType().getDisplayLabelText() : "";
 			if(null == dLabel || dLabel.isEmpty())
 				dLabel = escrowItem.getESCROWITEMDETAIL().getEscrowItemType().getValue().value();
-				escrowsModel.setType(dLabel);
+			if("Other".equalsIgnoreCase(dLabel))
+			{
+				if(null != escrowItem.getESCROWITEMDETAIL().getEscrowItemTypeOtherDescription() && !escrowItem.getESCROWITEMDETAIL().getEscrowItemTypeOtherDescription().getValue().isEmpty())
+					escrowsModel.setLabel(escrowItem.getESCROWITEMDETAIL().getEscrowItemTypeOtherDescription().getValue());
+			}
+			else
+				escrowsModel.setLabel(dLabel);
+				
+			escrowsModel.setType(escrowItem.getESCROWITEMDETAIL().getEscrowItemType().getValue().value());		
 		}
-		
+			
 			escrowsModel.setMonthlyPaymentAmount(null != escrowItem.getESCROWITEMDETAIL().getEscrowMonthlyPaymentAmount() ? escrowItem.getESCROWITEMDETAIL().getEscrowMonthlyPaymentAmount().getValue().toPlainString(): "");
 			escrowsModel.setCollectedNumberOfMonthsCount(null != escrowItem.getESCROWITEMDETAIL().getEscrowCollectedNumberOfMonthsCount() ? Integer.toString(escrowItem.getESCROWITEMDETAIL().getEscrowCollectedNumberOfMonthsCount().getValue()):"");
 			

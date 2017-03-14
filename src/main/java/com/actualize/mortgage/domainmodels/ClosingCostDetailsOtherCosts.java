@@ -90,6 +90,16 @@ public class ClosingCostDetailsOtherCosts implements Serializable {
 
 		private static final long serialVersionUID = 8592775879789983999L;
 		
+		private String escrowAmount;
+
+		public String getEscrowAmount() {
+			return escrowAmount;
+		}
+
+		public void setEscrowAmount(String escrowAmount) {
+			this.escrowAmount = escrowAmount;
+		}
+		
 	}
 
 	public class OtherCosts extends ClosingCostProperties

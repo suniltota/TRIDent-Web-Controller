@@ -149,7 +149,7 @@ public class PageTwoServiceImpl implements PageTwoService{
 		
 		ClosingCostDetailsOtherCosts closingCostDetailsOtherCosts = new ClosingCostDetailsOtherCosts();
 		
-		List<TOGovtFees> tOGovtFeesList = new ArrayList();
+		List<TOGovtFees> tOGovtFeesList = new ArrayList<>();
 		List<Prepaids> prepaidsList = new LinkedList<>();
 		List<IEPatClosing> iePatClosingList = new LinkedList<>();
 		List<OtherCosts> otherCostsList = new LinkedList<>();
@@ -209,7 +209,7 @@ public class PageTwoServiceImpl implements PageTwoService{
 				return o1.getFeeType().compareTo(o2.getFeeType());
 			}
 		});
-		String str = "Recording Fees                                          " + deedAmt + mrtgAmt;
+		String str = "Recording Fees          " +"Deed: "+ deedAmt+ " Mortgage: " + mrtgAmt;
 		
 		if (recordingFee == null)
 		{
@@ -319,20 +319,13 @@ public class PageTwoServiceImpl implements PageTwoService{
 		
 		for(String escrowItem : escrowItemsToDisplay)
 		{
-			ClosingCostProperties closingCostProperties = new ClosingCostProperties();
+			IEPatClosing iepAtClosing = closingCostDetailsOtherCosts.new IEPatClosing();
 			if(null != escrowsItems)
-			closingCostProperties = addEscrowByType(escrowsItems, escrowItem);
+			iepAtClosing = addEscrowByType(escrowsItems, escrowItem);
 		
-			if(null != closingCostProperties.getFeeType())
+			if(null != iepAtClosing.getFeeType())
 			{
-				IEPatClosing iePatClosing = closingCostDetailsOtherCosts.new IEPatClosing();
-					iePatClosing.setFeeType(closingCostProperties.getFeeType());
-					iePatClosing.setBpAtClosing(closingCostProperties.getBpAtClosing());
-					iePatClosing.setBpB4Closing(closingCostProperties.getBpB4Closing());
-					iePatClosing.setSpAtClosing(closingCostProperties.getSpAtClosing());
-					iePatClosing.setSpB4Closing(closingCostProperties.getSpB4Closing());
-					iePatClosing.setPaidByOthers(closingCostProperties.getPaidByOthers());
-				iePatClosingList.add(iePatClosing);	
+				iePatClosingList.add(iepAtClosing);	
 			}
 			else
 			{
@@ -365,33 +358,19 @@ public class PageTwoServiceImpl implements PageTwoService{
 			}
 			else
 				{
-				ClosingCostProperties closingCostProperties = new ClosingCostProperties();
-				closingCostProperties =	EscrowCostsTableRow( propertyTaxesEscrow, getEscrowMonthsPaidCount(propertyTaxesEscrow), "Property Taxes");
-				IEPatClosing iePatClosing = closingCostDetailsOtherCosts.new IEPatClosing();
-					iePatClosing.setFeeType(closingCostProperties.getFeeType());
-					iePatClosing.setBpAtClosing(closingCostProperties.getBpAtClosing());
-					iePatClosing.setBpB4Closing(closingCostProperties.getBpB4Closing());
-					iePatClosing.setSpAtClosing(closingCostProperties.getSpAtClosing());
-					iePatClosing.setSpB4Closing(closingCostProperties.getSpB4Closing());
-					iePatClosing.setPaidByOthers(closingCostProperties.getPaidByOthers());
-				iePatClosingList.add(iePatClosing);
+				IEPatClosing iepAtClosing = closingCostDetailsOtherCosts.new IEPatClosing();
+				iepAtClosing =	EscrowCostsTableRow( propertyTaxesEscrow, true, "Property Taxes");
+					iePatClosingList.add(iepAtClosing);
 				}
 			if(null != escrowsItems)
 			for (ESCROWITEM escrowItem : escrowsItems)
 			{
 				EscrowsModel escrow = Convertor.getEscrowModel(escrowItem);
-				if((null != escrow.getLabel() || !escrow.getLabel().isEmpty() ) ||checkOtherEscrows(escrow.getLabel()))
+				if(checkOtherEscrows(escrow.getType()))
 				{
-					ClosingCostProperties closingCostProperties = new ClosingCostProperties();
-					closingCostProperties =	EscrowCostsTableRow(escrow, getEscrowMonthsPaidCount(escrow), escrow.getLabel());
-					Prepaids iePatClosing = closingCostDetailsOtherCosts.new Prepaids();
-						iePatClosing.setFeeType(closingCostProperties.getFeeType());
-						iePatClosing.setBpAtClosing(closingCostProperties.getBpAtClosing());
-						iePatClosing.setBpB4Closing(closingCostProperties.getBpB4Closing());
-						iePatClosing.setSpAtClosing(closingCostProperties.getSpAtClosing());
-						iePatClosing.setSpB4Closing(closingCostProperties.getSpB4Closing());
-						iePatClosing.setPaidByOthers(closingCostProperties.getPaidByOthers());
-					prepaidsList.add(iePatClosing);
+					IEPatClosing iepAtClosing = closingCostDetailsOtherCosts.new IEPatClosing();
+					iepAtClosing =	EscrowCostsTableRow(escrow, true, escrow.getLabel());
+					iePatClosingList.add(iepAtClosing);
 				}
 			}
 	
@@ -617,8 +596,8 @@ public class PageTwoServiceImpl implements PageTwoService{
 				break;
 			}
 		String to = "";
-		//if(null != found)
-			//to = prepaidType.equalsIgnoreCase("PrepaidInterest") ? getPrepaidPerDiemPaidCount(found) : getPrepaidItemMonthsPaidCount(found);
+		if(null != found)
+			to = prepaidType.equalsIgnoreCase("PrepaidInterest") ? getPrepaidPerDiemPaidCount(found) : getPrepaidItemMonthsPaidCount(found);
 		
 		if (found == null)
 		//	addRow(new CostsTableRow(false).add(Columns.CostLabel, label + " " + to));		
@@ -744,27 +723,24 @@ public class PageTwoServiceImpl implements PageTwoService{
 	
 	private boolean checkOtherPrepaids(String prepaidType)
 	{
-		if(null != prepaidType)
 		if("HomeownersInsurancePremium".equalsIgnoreCase(prepaidType) || "MortgageInsurancePremium".equalsIgnoreCase(prepaidType) || "PrepaidInterest".equalsIgnoreCase(prepaidType)
-				||"Property Taxes".equalsIgnoreCase(prepaidType) || isPropertyTax(prepaidType))
+				||"Property Taxes".equalsIgnoreCase(prepaidType) || isPropertyTax(prepaidType) || null == prepaidType || ("").equals(prepaidType) )
 			return false;
 		return true;
 	}
 	
 	private boolean checkOtherEscrows(String escrowType)
 	{
-		if(null != escrowType)
 		if("HomeownersInsurance".equalsIgnoreCase(escrowType) || "MortgageInsurance".equalsIgnoreCase(escrowType) || "PrepaidInterest".equalsIgnoreCase(escrowType)
-				||"Property Taxes".equalsIgnoreCase(escrowType) || isPropertyTax(escrowType))
+				||"Property Taxes".equalsIgnoreCase(escrowType) || isPropertyTax(escrowType) ||null == escrowType || "".equals(escrowType))
 			return false;
 		return true;
 	}
 	
-	
-	
-	private ClosingCostProperties addEscrowByType(List<ESCROWITEM> escrows, String prepaidType) {
+	private IEPatClosing addEscrowByType(List<ESCROWITEM> escrows, String prepaidType) {
 		
-		ClosingCostProperties closingCostProperties = new ClosingCostProperties();
+		ClosingCostDetailsOtherCosts closingCostDetailsOtherCosts = new ClosingCostDetailsOtherCosts();
+		IEPatClosing iepAtClosing = closingCostDetailsOtherCosts.new IEPatClosing();
 		
 		String label = StringFormatter.CAMEL.formatString(prepaidType);
 		if(label.equalsIgnoreCase("Homeowners Insurance")){
@@ -780,49 +756,46 @@ public class PageTwoServiceImpl implements PageTwoService{
 			}
 		}
 		if(null != found) 
-			closingCostProperties = EscrowCostsTableRow(found, getEscrowMonthsPaidCount(found), label);
+			iepAtClosing = EscrowCostsTableRow(found, true, label);
 		
-		return closingCostProperties;
+		return iepAtClosing;
 	}
 	
-	private ClosingCostProperties EscrowCostsTableRow(EscrowsModel found, String to, String label)
+	private IEPatClosing EscrowCostsTableRow(EscrowsModel found, boolean to, String label)
 	{
-		ClosingCostProperties closingCostProperties = new ClosingCostProperties();
+		ClosingCostDetailsOtherCosts closingCostDetailsOtherCosts = new ClosingCostDetailsOtherCosts();
+		IEPatClosing iepAtClosing = closingCostDetailsOtherCosts.new IEPatClosing();
 		String str = label == null ? found.getLabel() : label;
 		String buyerOutsideClosingAmount = "";
 		String buyerAtClosingAmount = "";
 		String sellerOutsideClosingAmount = "";
 		String sellerAtClosingAmount = "";
 		String otherAmount = "";
-		String value = "";
-		if (to!=null)
-			str = str + " " + to;
+		if (to)
+		{
+			iepAtClosing.setEscrowAmount(found.getMonthlyPaymentAmount());
+			iepAtClosing.setToEntity(found.getCollectedNumberOfMonthsCount());
+		}	
 		
-		closingCostProperties.setFeeType(str);
+		iepAtClosing.setFeeType(str);
 		buyerAtClosingAmount = found.getBuyerAtClosingAmount();
 		if (!buyerAtClosingAmount.equals("") && StringFormatter.doubleValue(buyerAtClosingAmount) != 0)
-			closingCostProperties.setBpAtClosing(StringFormatter.NODOLLARS.formatString(buyerAtClosingAmount));
+			iepAtClosing.setBpAtClosing(StringFormatter.NODOLLARS.formatString(buyerAtClosingAmount));
 		buyerOutsideClosingAmount = found.getBuyerOutsideClosingAmount();
 		if (!buyerOutsideClosingAmount.equals("") && StringFormatter.doubleValue(buyerOutsideClosingAmount) != 0)
-			closingCostProperties.setBpB4Closing(StringFormatter.NODOLLARS.formatString(buyerOutsideClosingAmount));
+			iepAtClosing.setBpB4Closing(StringFormatter.NODOLLARS.formatString(buyerOutsideClosingAmount));
 		sellerAtClosingAmount = found.getSellerAtClosingAmount();
 		if (!sellerAtClosingAmount.equals("") && StringFormatter.doubleValue(sellerAtClosingAmount) != 0)
-			closingCostProperties.setSpAtClosing(StringFormatter.NODOLLARS.formatString(sellerAtClosingAmount));
+			iepAtClosing.setSpAtClosing(StringFormatter.NODOLLARS.formatString(sellerAtClosingAmount));
 		sellerOutsideClosingAmount = found.getSellerOutsideClosingAmount();
 		if (!sellerOutsideClosingAmount.equals("") && StringFormatter.doubleValue(sellerOutsideClosingAmount) != 0)
-			closingCostProperties.setSpB4Closing(StringFormatter.NODOLLARS.formatString(sellerOutsideClosingAmount));
+			iepAtClosing.setSpB4Closing(StringFormatter.NODOLLARS.formatString(sellerOutsideClosingAmount));
 		otherAmount = found.getOtherAmount();
 		String prefix = otherAmount.equalsIgnoreCase("Lender") ? "(L)": "";
 		if (!otherAmount.equals("") && StringFormatter.doubleValue(otherAmount) != 0)
-		closingCostProperties.setPaidByOthers(prefix	+ StringFormatter.NODOLLARS.formatString(otherAmount));
+		iepAtClosing.setPaidByOthers(prefix	+ StringFormatter.NODOLLARS.formatString(otherAmount));
 	
-		return closingCostProperties;
+		return iepAtClosing;
 	
-	}
-	
-	private String getEscrowMonthsPaidCount(EscrowsModel found){
-		if (found == null)
-			return "  per month for    mo.";
-		return StringFormatter.NODOLLARS.formatString(found.getMonthlyPaymentAmount()) + " per month for " + found.getCollectedNumberOfMonthsCount() + " mo.";
 	}
 }

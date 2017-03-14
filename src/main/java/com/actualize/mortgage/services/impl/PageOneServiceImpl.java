@@ -9,7 +9,6 @@ import org.mismo.residential._2009.schemas.COLLATERAL;
 import org.mismo.residential._2009.schemas.DEAL;
 import org.mismo.residential._2009.schemas.DOCUMENT;
 import org.mismo.residential._2009.schemas.ESTIMATEDPROPERTYCOSTCOMPONENT;
-import org.mismo.residential._2009.schemas.INTEGRATEDDISCLOSURESECTIONSUMMARY;
 import org.mismo.residential._2009.schemas.INTERESTRATEPERCHANGEADJUSTMENTRULE;
 import org.mismo.residential._2009.schemas.LOANIDENTIFIER;
 import org.mismo.residential._2009.schemas.LoanPurposeBase;
@@ -94,22 +93,18 @@ public class PageOneServiceImpl implements PageOneService {
 		
 		closingInformation.setProperty(property);
 		
-		//DEAL.PARTIES.PARTY.ROLES.ROLE.ROLE_DETAIL.PartyRoleType['__text'] == "ClosingAgent"
 		List<PARTY> parties = deal.getPARTIES().getPARTY();
 		parties.forEach(party ->{
 			if(null != party.getROLES())
 			{
 				if(null != party.getROLES().getROLE().getROLEDETAIL())
 					if(PartyRoleBase.CLOSING_AGENT == party.getROLES().getROLE().getROLEDETAIL().getPartyRoleType().getValue())
-				//DEAL.PARTIES.PARTY.LEGAL_ENTITY.LEGAL_ENTITY_DETAIL.FullName['__text']
 				closingInformation.setSettlementAgent( null != party.getLEGALENTITY() ? party.getLEGALENTITY().getLEGALENTITYDETAIL().getFullName().getValue():"");
 			}
 		});
 				
-				//DEAL_SET.DEALS.DEAL.LOANS.LOAN.TERMS_OF_LOAN.LoanPurposeType
 		if(LoanPurposeBase.PURCHASE == deal.getLOANS().getLOAN().getTERMSOFLOAN().getLoanPurposeType().getValue())
 		{
-			//DEAL.COLLATERALS.COLLATERAL.SUBJECT_PROPERTY.SALES_CONTRACTS.SALES_CONTRACT.SALES_CONTRACT_DETAIL.SalesContractAmount['__text']
 			collaterals.forEach(collateral ->{
 				closingInformation.setSalePrice(collateral.getSUBJECTPROPERTY().getSALESCONTRACTS().getSALESCONTRACT().getSALESCONTRACTDETAIL().getSalesContractAmount().getValue().toString());
 			});
@@ -176,11 +171,10 @@ public class PageOneServiceImpl implements PageOneService {
 				loanMic = deal.getLOANS().getLOAN().getMIDATA().getMIDATADETAIL().getMICertificateIdentifier().getValue();
 			else
 			{
-				 List<LOANIDENTIFIER> loanidentifiers2 = deal.getLOANS().getLOAN().getLOANIDENTIFIERS().getLOANIDENTIFIER();
-					loanidentifiers.forEach(loanidentifier ->{
-						if("AgencyCase".equalsIgnoreCase(loanidentifier.getLoanIdentifier().getValue()))
-							loanMic = loanidentifier.getLoanIdentifier().getValue();
-					});
+				loanidentifiers.forEach(loanidentifier ->{
+					if("AgencyCase".equalsIgnoreCase(loanidentifier.getLoanIdentifier().getValue()))
+						loanMic = loanidentifier.getLoanIdentifier().getValue();
+				});
 			}	 
 		loanInformation.setLoanTerm(loanTotalTerm);
 		loanInformation.setPurpose(loanPurpose);
