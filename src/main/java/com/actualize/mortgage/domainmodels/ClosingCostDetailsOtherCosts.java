@@ -83,6 +83,34 @@ public class ClosingCostDetailsOtherCosts implements Serializable {
 
 		private static final long serialVersionUID = -2388094560107574546L;
 		
+		private String fromDate;
+		private String toDate;
+		private String months;
+		
+		public String getMonths() {
+			return months;
+		}
+
+		public void setMonths(String months) {
+			this.months = months;
+		}
+
+		public String getFromDate() {
+			return fromDate;
+		}
+		
+		public void setFromDate(String fromDate) {
+			this.fromDate = fromDate;
+		}
+		
+		public String getToDate() {
+			return toDate;
+		}
+		public void setToDate(String toDate) {
+			this.toDate = toDate;
+		}
+		
+		
 	}
 	
 	public class IEPatClosing extends ClosingCostProperties

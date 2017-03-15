@@ -242,19 +242,19 @@ public class PageTwoServiceImpl implements PageTwoService{
 		
 		for(String prepaidItem : prepaidItemsToDisplay)
 		{
-			ClosingCostProperties closingCostProperties = new ClosingCostProperties();
+			Prepaids prepaids = closingCostDetailsOtherCosts.new Prepaids();
 			if(null != prepaidItems)
-			closingCostProperties = addPrepaidByType(prepaidItems, prepaidItem);
+			prepaids = addPrepaidByType(prepaidItems, prepaidItem);
 		
-			if(null != closingCostProperties.getFeeType())
+			if(null != prepaids.getFeeType())
 			{
-				Prepaids prepaids = closingCostDetailsOtherCosts.new Prepaids();
-					prepaids.setFeeType(closingCostProperties.getFeeType());
-					prepaids.setBpAtClosing(closingCostProperties.getBpAtClosing());
-					prepaids.setBpB4Closing(closingCostProperties.getBpB4Closing());
-					prepaids.setSpAtClosing(closingCostProperties.getSpAtClosing());
-					prepaids.setSpB4Closing(closingCostProperties.getSpB4Closing());
-					prepaids.setPaidByOthers(closingCostProperties.getPaidByOthers());
+				
+					prepaids.setFeeType(prepaids.getFeeType());
+					prepaids.setBpAtClosing(prepaids.getBpAtClosing());
+					prepaids.setBpB4Closing(prepaids.getBpB4Closing());
+					prepaids.setSpAtClosing(prepaids.getSpAtClosing());
+					prepaids.setSpB4Closing(prepaids.getSpB4Closing());
+					prepaids.setPaidByOthers(prepaids.getPaidByOthers());
 				prepaidsList.add(prepaids);	
 			}
 		}
@@ -280,16 +280,7 @@ public class PageTwoServiceImpl implements PageTwoService{
 		else
 		{
 		//	addRow(new PrepaidCostsTableRow(propertyTaxes, getPrepaidItemMonthsPaidCount(propertyTaxes), "Property Taxes"));
-			ClosingCostProperties closingCostProperties = new ClosingCostProperties();
-			closingCostProperties =	PrepaidCostsTableRow(propertyTaxes, getPrepaidItemMonthsPaidCount(propertyTaxes), "Property Taxes");
-			Prepaids prepaids = closingCostDetailsOtherCosts.new Prepaids();
-				prepaids.setFeeType(closingCostProperties.getFeeType());
-				prepaids.setBpAtClosing(closingCostProperties.getBpAtClosing());
-				prepaids.setBpB4Closing(closingCostProperties.getBpB4Closing());
-				prepaids.setSpAtClosing(closingCostProperties.getSpAtClosing());
-				prepaids.setSpB4Closing(closingCostProperties.getSpB4Closing());
-				prepaids.setPaidByOthers(closingCostProperties.getPaidByOthers());
-			prepaidsList.add(prepaids);
+			prepaidsList.add(PrepaidCostsTableRow(propertyTaxes,true , "Property Taxes"));
 		}
 		if(null != prepaidItems)
 		for(PREPAIDITEM prepaiditem : prepaidItems)
@@ -297,16 +288,7 @@ public class PageTwoServiceImpl implements PageTwoService{
 			String prepaidType = prepaiditem.getPREPAIDITEMDETAIL().getPrepaidItemType().getValue().value();
 			if(checkOtherPrepaids(prepaidType))
 			{
-				ClosingCostProperties closingCostProperties = new ClosingCostProperties();
-				closingCostProperties =	PrepaidCostsTableRow(propertyTaxes, getPrepaidItemMonthsPaidCount(prepaiditem), prepaidType);
-				Prepaids prepaids = closingCostDetailsOtherCosts.new Prepaids();
-					prepaids.setFeeType(closingCostProperties.getFeeType());
-					prepaids.setBpAtClosing(closingCostProperties.getBpAtClosing());
-					prepaids.setBpB4Closing(closingCostProperties.getBpB4Closing());
-					prepaids.setSpAtClosing(closingCostProperties.getSpAtClosing());
-					prepaids.setSpB4Closing(closingCostProperties.getSpB4Closing());
-					prepaids.setPaidByOthers(closingCostProperties.getPaidByOthers());
-				prepaidsList.add(prepaids);
+				prepaidsList.add(PrepaidCostsTableRow(propertyTaxes, true, prepaidType));
 			}
 		}
 		
@@ -581,9 +563,10 @@ public class PageTwoServiceImpl implements PageTwoService{
 	}
 	
 	
-	private ClosingCostProperties addPrepaidByType(List<PREPAIDITEM> prepaidItems, String prepaidType)
+	private Prepaids addPrepaidByType(List<PREPAIDITEM> prepaidItems, String prepaidType)
 	{
-		ClosingCostProperties closingCostProperties = new ClosingCostProperties();
+		ClosingCostDetailsOtherCosts closingCostDetailsOtherCosts = new ClosingCostDetailsOtherCosts();
+		Prepaids prepaids = closingCostDetailsOtherCosts.new Prepaids();
 		
 		String label = StringFormatter.CAMEL.formatString(prepaidType);
 		if(label.equalsIgnoreCase("Homeowners Insurance Premium")){
@@ -595,19 +578,19 @@ public class PageTwoServiceImpl implements PageTwoService{
 				found = prepaid;
 				break;
 			}
-		String to = "";
+		boolean to = false;
 		if(null != found)
-			to = prepaidType.equalsIgnoreCase("PrepaidInterest") ? getPrepaidPerDiemPaidCount(found) : getPrepaidItemMonthsPaidCount(found);
+			to = true;
 		
 		if (found == null)
 		//	addRow(new CostsTableRow(false).add(Columns.CostLabel, label + " " + to));		
 		{
-			closingCostProperties.setFeeType(label+ " "+to);
+			prepaids.setFeeType(label+ " "+to);
 		}
 			else
-			closingCostProperties = PrepaidCostsTableRow(found, to, label);
+			prepaids = PrepaidCostsTableRow(found, to, label);
 		
-		return closingCostProperties;
+		return prepaids;
 	}
 	
 	private boolean isPropertyTax(String type)
@@ -655,9 +638,10 @@ public class PageTwoServiceImpl implements PageTwoService{
 		return string;
 	}
 	
-	private ClosingCostProperties PrepaidCostsTableRow(PREPAIDITEM prepaidItem, String to, String label) 
+	private Prepaids PrepaidCostsTableRow(PREPAIDITEM prepaidItem, boolean to, String label) 
 	{
-		ClosingCostProperties closingCostProperties = new ClosingCostProperties();
+		ClosingCostDetailsOtherCosts closingCostDetailsOtherCosts = new ClosingCostDetailsOtherCosts();
+		Prepaids prepaids = closingCostDetailsOtherCosts.new Prepaids();
 		String str = label == null ? getPrepaidPaidToLabel(prepaidItem) : label;
 		String buyerOutsideClosingAmount = "";
 		String buyerAtClosingAmount = "";
@@ -665,8 +649,29 @@ public class PageTwoServiceImpl implements PageTwoService{
 		String sellerAtClosingAmount = "";
 		String otherAmount = "";
 		String value = "";
-		if (to!=null)
-			str = str + " " + to;
+		if (to)
+		{
+			PrepaidsModel prepaid = Convertor.getPrepaidModel(prepaidItem);
+			
+			if(("PrepaidInterest").equalsIgnoreCase(prepaid.getType()))
+			{
+				prepaids.setMonths(prepaid.getPrepaidItemPerDiemAmount());
+				prepaids.setToDate(prepaid.getPrepaidItemPaidFromDate());
+				prepaids.setFromDate(prepaid.getPrepaidItemPaidThroughDate());
+			}
+			else
+			{
+				if(null != prepaid.getPrepaidItemMonthsPaidCount() && !"".equalsIgnoreCase(prepaid.getPrepaidItemMonthsPaidCount()) ){
+					 prepaids.setMonths(prepaid.getPrepaidItemMonthsPaidCount());
+					if (null != prepaid.getPaymentToEntity() && !"".equalsIgnoreCase(prepaid.getPaymentToEntity()) ){
+						prepaids.setToEntity(" to " + prepaid.getPaymentToEntity());
+					}
+				}
+			}
+			
+		}
+		
+		
 		List<PREPAIDITEMPAYMENT> prepaidPayments = prepaidItem.getPREPAIDITEMPAYMENTS().getPREPAIDITEMPAYMENT();
 		for(PREPAIDITEMPAYMENT prepaidPayment :prepaidPayments)
 		{
@@ -688,25 +693,25 @@ public class PageTwoServiceImpl implements PageTwoService{
 				}
 		
 			}
-		closingCostProperties.setFeeType(str);
+		prepaids.setFeeType(str);
 		value = buyerAtClosingAmount;
 		if (!value.equals("") && StringFormatter.doubleValue(value) != 0)
-			closingCostProperties.setBpAtClosing(StringFormatter.NODOLLARS.formatString(value));
+			prepaids.setBpAtClosing(StringFormatter.NODOLLARS.formatString(value));
 		value = buyerOutsideClosingAmount;
 		if (!value.equals("") && StringFormatter.doubleValue(value) != 0)
-			closingCostProperties.setBpB4Closing(StringFormatter.NODOLLARS.formatString(value));
+			prepaids.setBpB4Closing(StringFormatter.NODOLLARS.formatString(value));
 		value = sellerAtClosingAmount;
 		if (!value.equals("") && StringFormatter.doubleValue(value) != 0)
-			closingCostProperties.setSpAtClosing(StringFormatter.NODOLLARS.formatString(value));
+			prepaids.setSpAtClosing(StringFormatter.NODOLLARS.formatString(value));
 		value = sellerOutsideClosingAmount;
 		if (!value.equals("") && StringFormatter.doubleValue(value) != 0)
-			closingCostProperties.setSpB4Closing(StringFormatter.NODOLLARS.formatString(value));
+			prepaids.setSpB4Closing(StringFormatter.NODOLLARS.formatString(value));
 		value = otherAmount;
 		String prefix = otherAmount.equalsIgnoreCase("Lender") ? "(L)": "";
 		if (!value.equals("") && StringFormatter.doubleValue(value) != 0)
-		closingCostProperties.setPaidByOthers(prefix	+ StringFormatter.NODOLLARS.formatString(value));
+		prepaids.setPaidByOthers(prefix	+ StringFormatter.NODOLLARS.formatString(value));
 	
-		return closingCostProperties;
+		return prepaids;
 		
 	}
 	

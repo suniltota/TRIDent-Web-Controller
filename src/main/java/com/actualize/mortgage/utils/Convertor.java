@@ -107,6 +107,7 @@ public class Convertor {
 	public static PrepaidsModel getPrepaidModel(PREPAIDITEM prepaidItem)
 	{
 		PrepaidsModel prepaidsModel = new PrepaidsModel();
+			prepaidsModel.setType(null != prepaidItem.getPREPAIDITEMDETAIL().getPrepaidItemType().getValue() ? prepaidItem.getPREPAIDITEMDETAIL().getPrepaidItemType().getValue().value(): "");
 			prepaidsModel.setPrepaidItemPerDiemAmount(null != prepaidItem.getPREPAIDITEMDETAIL().getPrepaidItemPerDiemAmount() ? prepaidItem.getPREPAIDITEMDETAIL().getPrepaidItemPerDiemAmount().getValue().toPlainString(): "");
 			prepaidsModel.setPrepaidItemPaidFromDate( null != prepaidItem.getPREPAIDITEMDETAIL().getPrepaidItemPaidFromDate() ? prepaidItem.getPREPAIDITEMDETAIL().getPrepaidItemPaidFromDate().getValue(): "");
 			prepaidsModel.setPrepaidItemPaidThroughDate(null != prepaidItem.getPREPAIDITEMDETAIL().getPrepaidItemPaidThroughDate() ? prepaidItem.getPREPAIDITEMDETAIL().getPrepaidItemPaidThroughDate().getValue() : "");
