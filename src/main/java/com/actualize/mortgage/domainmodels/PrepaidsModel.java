@@ -1,4 +1,6 @@
-package com.actualize.mortgage.utils;
+package com.actualize.mortgage.domainmodels;
+
+import com.actualize.mortgage.utils.Expenses;
 
 public class PrepaidsModel extends Expenses {
 	

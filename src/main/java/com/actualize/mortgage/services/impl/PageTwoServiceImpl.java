@@ -18,21 +18,15 @@ import org.mismo.residential._2009.schemas.PREPAIDITEM;
 import org.mismo.residential._2009.schemas.PREPAIDITEMPAYMENT;
 
 import com.actualize.mortgage.domainmodels.ClosingCostDetailsLoanCosts;
-import com.actualize.mortgage.domainmodels.ClosingCostDetailsLoanCosts.OriginationCharges;
-import com.actualize.mortgage.domainmodels.ClosingCostDetailsLoanCosts.SBDidNotShopFor;
-import com.actualize.mortgage.domainmodels.ClosingCostDetailsLoanCosts.SBDidShopFor;
-import com.actualize.mortgage.domainmodels.ClosingCostDetailsLoanCosts.TLCOSTS;
 import com.actualize.mortgage.domainmodels.ClosingCostDetailsOtherCosts;
-import com.actualize.mortgage.domainmodels.ClosingCostDetailsOtherCosts.IEPatClosing;
-import com.actualize.mortgage.domainmodels.ClosingCostDetailsOtherCosts.OtherCosts;
-import com.actualize.mortgage.domainmodels.ClosingCostDetailsOtherCosts.Prepaids;
-import com.actualize.mortgage.domainmodels.ClosingCostDetailsOtherCosts.TOGovtFees;
 import com.actualize.mortgage.domainmodels.ClosingCostProperties;
+import com.actualize.mortgage.domainmodels.EscrowsModel;
+import com.actualize.mortgage.domainmodels.IEPatClosing;
+import com.actualize.mortgage.domainmodels.Prepaids;
+import com.actualize.mortgage.domainmodels.PrepaidsModel;
 import com.actualize.mortgage.services.PageTwoService;
 import com.actualize.mortgage.utils.Convertor;
 import com.actualize.mortgage.utils.DocumentType;
-import com.actualize.mortgage.utils.EscrowsModel;
-import com.actualize.mortgage.utils.PrepaidsModel;
 import com.actualize.mortgage.utils.StringFormatter;
 
 public class PageTwoServiceImpl implements PageTwoService{
@@ -41,10 +35,10 @@ public class PageTwoServiceImpl implements PageTwoService{
 	public ClosingCostDetailsLoanCosts createClosingCostDetailsLoanCosts(DOCUMENT document) {
 		ClosingCostDetailsLoanCosts closingCostDetailsLoanCosts = new ClosingCostDetailsLoanCosts();
 
-		List<OriginationCharges> originationChargeList = new LinkedList<>();
-		List<SBDidNotShopFor> sbDidNotShopFors = new LinkedList<>();
-		List<SBDidShopFor> sbDidShopFors = new LinkedList<>();
-		TLCOSTS tlCosts = closingCostDetailsLoanCosts.new TLCOSTS();
+		List<ClosingCostProperties> originationChargeList = new LinkedList<>();
+		List<ClosingCostProperties> sbDidNotShopFors = new LinkedList<>();
+		List<ClosingCostProperties> sbDidShopFors = new LinkedList<>();
+		ClosingCostProperties tlCosts = new ClosingCostProperties();
 		
 		Map<String, String> integratedDisclosureSectionTypes = Convertor.getIntegratedDisclosureSectionTypes(document);			
 		closingCostDetailsLoanCosts.setOcTotalAmount(integratedDisclosureSectionTypes.get("OriginationCharges"));
@@ -65,14 +59,7 @@ public class PageTwoServiceImpl implements PageTwoService{
 					closingCostProperties = LoanCostsTable(fee,"OriginationCharges");
 					if(null != closingCostProperties.getFeeType())
 					{
-						OriginationCharges originationCharge = closingCostDetailsLoanCosts.new OriginationCharges();
-							originationCharge.setFeeType(closingCostProperties.getFeeType());
-							originationCharge.setBpAtClosing(closingCostProperties.getBpAtClosing());
-							originationCharge.setBpB4Closing(closingCostProperties.getBpB4Closing());
-							originationCharge.setSpAtClosing(closingCostProperties.getSpAtClosing());
-							originationCharge.setSpB4Closing(closingCostProperties.getSpB4Closing());
-							originationCharge.setPaidByOthers(closingCostProperties.getPaidByOthers());
-							originationChargeList.add(originationCharge);
+						originationChargeList.add(closingCostProperties);
 					}
 			}
 			else if("ServicesBorrowerDidNotShopFor".equalsIgnoreCase(fee.getFEEDETAIL().getIntegratedDisclosureSectionType().getValue().value()))
@@ -81,15 +68,8 @@ public class PageTwoServiceImpl implements PageTwoService{
 					closingCostProperties = LoanCostsTable(fee,"ServicesBorrowerDidNotShopFor");
 					if(null != closingCostProperties.getFeeType())
 					{
-						SBDidNotShopFor sbDidNotShopFor = closingCostDetailsLoanCosts.new SBDidNotShopFor();
-							sbDidNotShopFor.setFeeType(closingCostProperties.getFeeType());
-							sbDidNotShopFor.setBpAtClosing(closingCostProperties.getBpAtClosing());
-							sbDidNotShopFor.setBpB4Closing(closingCostProperties.getBpB4Closing());
-							sbDidNotShopFor.setSpAtClosing(closingCostProperties.getSpAtClosing());
-							sbDidNotShopFor.setSpB4Closing(closingCostProperties.getSpB4Closing());
-							sbDidNotShopFor.setPaidByOthers(closingCostProperties.getPaidByOthers());
-							sbDidNotShopFor.setToEntity(closingCostProperties.getToEntity());
-						sbDidNotShopFors.add(sbDidNotShopFor);
+						
+						sbDidNotShopFors.add(closingCostProperties);
 					}
 			}
 			else if("ServicesBorrowerDidShopFor".equalsIgnoreCase(fee.getFEEDETAIL().getIntegratedDisclosureSectionType().getValue().value()))
@@ -98,48 +78,38 @@ public class PageTwoServiceImpl implements PageTwoService{
 					closingCostProperties = LoanCostsTable(fee,"ServicesBorrowerDidShopFor");
 					if(null != closingCostProperties.getFeeType())
 					{
-						SBDidShopFor sbDidShopFor = closingCostDetailsLoanCosts.new SBDidShopFor();
-						sbDidShopFor.setFeeType(closingCostProperties.getFeeType());
-						sbDidShopFor.setBpAtClosing(closingCostProperties.getBpAtClosing());
-						sbDidShopFor.setBpB4Closing(closingCostProperties.getBpB4Closing());
-						sbDidShopFor.setSpAtClosing(closingCostProperties.getSpAtClosing());
-						sbDidShopFor.setSpB4Closing(closingCostProperties.getSpB4Closing());
-						sbDidShopFor.setPaidByOthers(closingCostProperties.getPaidByOthers());
-						sbDidShopFor.setToEntity(closingCostProperties.getToEntity());
-							sbDidShopFors.add(sbDidShopFor);
+							sbDidShopFors.add(closingCostProperties);
 					}
 			}
 		}
 		
-		Collections.sort(originationChargeList,new Comparator<OriginationCharges>(){
+		Collections.sort(originationChargeList,new Comparator<ClosingCostProperties>(){
 			@Override
-			public int compare(OriginationCharges o1, OriginationCharges o2) {
+			public int compare(ClosingCostProperties o1, ClosingCostProperties o2) {
 				return o1.getFeeType().compareTo(o2.getFeeType());
 			}
 		});
 		
-		Collections.sort(sbDidNotShopFors,new Comparator<SBDidNotShopFor>(){
+		Collections.sort(sbDidNotShopFors,new Comparator<ClosingCostProperties>(){
 
 			@Override
-			public int compare(SBDidNotShopFor o1, SBDidNotShopFor o2) {
+			public int compare(ClosingCostProperties o1, ClosingCostProperties o2) {
 				return o1.getFeeType().compareTo(o2.getFeeType());
 			}
 		});
 		
-		Collections.sort(sbDidShopFors,new Comparator<SBDidShopFor>(){
+		Collections.sort(sbDidShopFors,new Comparator<ClosingCostProperties>(){
 
 			@Override
-			public int compare(SBDidShopFor o1, SBDidShopFor o2) {
+			public int compare(ClosingCostProperties o1, ClosingCostProperties o2) {
 				return o1.getFeeType().compareTo(o2.getFeeType());
 			}
 		});
-		
 		
 		closingCostDetailsLoanCosts.setOriginationCharges(originationChargeList);
 		closingCostDetailsLoanCosts.setSbDidNotShopFors(sbDidNotShopFors);
 		closingCostDetailsLoanCosts.setSbDidShopFors(sbDidShopFors);
 		closingCostDetailsLoanCosts.setTlCosts(tlCosts);
-		
 		
 		return closingCostDetailsLoanCosts;
 	}
@@ -149,10 +119,10 @@ public class PageTwoServiceImpl implements PageTwoService{
 		
 		ClosingCostDetailsOtherCosts closingCostDetailsOtherCosts = new ClosingCostDetailsOtherCosts();
 		
-		List<TOGovtFees> tOGovtFeesList = new ArrayList<>();
+		List<ClosingCostProperties> tOGovtFeesList = new ArrayList<>();
 		List<Prepaids> prepaidsList = new LinkedList<>();
 		List<IEPatClosing> iePatClosingList = new LinkedList<>();
-		List<OtherCosts> otherCostsList = new LinkedList<>();
+		List<ClosingCostProperties> otherCostsList = new LinkedList<>();
 		
 		Map<String, String> integratedDisclosureSectionTypes = Convertor.getIntegratedDisclosureSectionTypes(document);
 	
@@ -191,21 +161,14 @@ public class PageTwoServiceImpl implements PageTwoService{
 				
 				if(null != closingCostProperties.getFeeType())
 				{
-					TOGovtFees toGovtFee = closingCostDetailsOtherCosts.new TOGovtFees();
-						toGovtFee.setFeeType(closingCostProperties.getFeeType());
-						toGovtFee.setBpAtClosing(closingCostProperties.getBpAtClosing());
-						toGovtFee.setBpB4Closing(closingCostProperties.getBpB4Closing());
-						toGovtFee.setSpAtClosing(closingCostProperties.getSpAtClosing());
-						toGovtFee.setSpB4Closing(closingCostProperties.getSpB4Closing());
-						toGovtFee.setPaidByOthers(closingCostProperties.getPaidByOthers());
-					tOGovtFeesList.add(toGovtFee);	
+					tOGovtFeesList.add(closingCostProperties);	
 				}
 			}
 			
 		}
-		Collections.sort(tOGovtFeesList,new Comparator<TOGovtFees>(){
+		Collections.sort(tOGovtFeesList,new Comparator<ClosingCostProperties>(){
 			@Override
-			public int compare(TOGovtFees o1, TOGovtFees o2) {
+			public int compare(ClosingCostProperties o1, ClosingCostProperties o2) {
 				return o1.getFeeType().compareTo(o2.getFeeType());
 			}
 		});
@@ -213,25 +176,16 @@ public class PageTwoServiceImpl implements PageTwoService{
 		
 		if (recordingFee == null)
 		{
-			TOGovtFees toGovtFee = closingCostDetailsOtherCosts.new TOGovtFees();
-				toGovtFee.setFeeType(str);
-			tOGovtFeesList.add(0, toGovtFee);
+			ClosingCostProperties closingCostProperties = new ClosingCostProperties();
+				closingCostProperties.setFeeType(str);
+				closingCostProperties.setFeeType("RecordingFees");
+			tOGovtFeesList.add(0, closingCostProperties);
 		}	
 		else
-		{
-			ClosingCostProperties closingCostProperties = new ClosingCostProperties();	
-			closingCostProperties = FeeCostsTableRow(recordingFee, false, str, null);
-			TOGovtFees toGovtFee = closingCostDetailsOtherCosts.new TOGovtFees();
-				toGovtFee.setFeeType(closingCostProperties.getFeeType());
-				toGovtFee.setBpAtClosing(closingCostProperties.getBpAtClosing());
-				toGovtFee.setBpB4Closing(closingCostProperties.getBpB4Closing());
-				toGovtFee.setSpAtClosing(closingCostProperties.getSpAtClosing());
-				toGovtFee.setSpB4Closing(closingCostProperties.getSpB4Closing());
-				toGovtFee.setPaidByOthers(closingCostProperties.getPaidByOthers());
-			tOGovtFeesList.add(0, toGovtFee);
+		{	
+			tOGovtFeesList.add(0, FeeCostsTableRow(recordingFee, false, str, null));
 		}
 		
-		//DOCUMENT.DEAL_SETS.DEAL_SET.DEALS.DEAL.LOANS.LOAN.CLOSING_INFORMATION.PREPAID_ITEMS
 		List<PREPAIDITEM> prepaidItems = Convertor.getPrepaidItemList(document);
 		
 		//8.5
@@ -242,20 +196,19 @@ public class PageTwoServiceImpl implements PageTwoService{
 		
 		for(String prepaidItem : prepaidItemsToDisplay)
 		{
-			Prepaids prepaids = closingCostDetailsOtherCosts.new Prepaids();
+			Prepaids prepaids = new Prepaids();
 			if(null != prepaidItems)
 			prepaids = addPrepaidByType(prepaidItems, prepaidItem);
 		
-			if(null != prepaids.getFeeType())
-			{
-				
-					prepaids.setFeeType(prepaids.getFeeType());
-					prepaids.setBpAtClosing(prepaids.getBpAtClosing());
-					prepaids.setBpB4Closing(prepaids.getBpB4Closing());
-					prepaids.setSpAtClosing(prepaids.getSpAtClosing());
-					prepaids.setSpB4Closing(prepaids.getSpB4Closing());
-					prepaids.setPaidByOthers(prepaids.getPaidByOthers());
+			if(null != prepaids.getFeeType() && prepaidItem.equalsIgnoreCase(prepaids.getFeeType()))
+			{		
 				prepaidsList.add(prepaids);	
+			}
+			else
+			{
+				prepaids.setDisplayLabel(StringFormatter.CAMEL.formatString(prepaidItem));
+				prepaids.setFeeType(prepaidItem);
+				prepaidsList.add(prepaids);
 			}
 		}
 
@@ -272,14 +225,13 @@ public class PageTwoServiceImpl implements PageTwoService{
 		
 		if (propertyTaxes == null)
 		{
-			Prepaids prepaids = closingCostDetailsOtherCosts.new Prepaids();
-				prepaids.setFeeType("Property Taxes ");
+			Prepaids prepaids = new Prepaids();
+				prepaids.setDisplayLabel("Property Taxes");
+				prepaids.setFeeType("Property Tax");
 			prepaidsList.add(prepaids);
 		}
-			//addRow(new CostsTableRow().add(Columns.CostLabel, "Property Taxes "));
 		else
 		{
-		//	addRow(new PrepaidCostsTableRow(propertyTaxes, getPrepaidItemMonthsPaidCount(propertyTaxes), "Property Taxes"));
 			prepaidsList.add(PrepaidCostsTableRow(propertyTaxes,true , "Property Taxes"));
 		}
 		if(null != prepaidItems)
@@ -301,7 +253,7 @@ public class PageTwoServiceImpl implements PageTwoService{
 		
 		for(String escrowItem : escrowItemsToDisplay)
 		{
-			IEPatClosing iepAtClosing = closingCostDetailsOtherCosts.new IEPatClosing();
+			IEPatClosing iepAtClosing = new IEPatClosing();
 			if(null != escrowsItems)
 			iepAtClosing = addEscrowByType(escrowsItems, escrowItem);
 		
@@ -311,7 +263,8 @@ public class PageTwoServiceImpl implements PageTwoService{
 			}
 			else
 			{
-				IEPatClosing iePatClosing = closingCostDetailsOtherCosts.new IEPatClosing();
+				IEPatClosing iePatClosing = new IEPatClosing();
+					iePatClosing.setDisplayLabel(StringFormatter.CAMEL.formatString(escrowItem));
 					iePatClosing.setFeeType(escrowItem);
 				iePatClosingList.add(iePatClosing);	
 			}
@@ -334,13 +287,14 @@ public class PageTwoServiceImpl implements PageTwoService{
 		}
 			if (propertyTaxesEscrow == null)
 			{
-				IEPatClosing iePatClosing = closingCostDetailsOtherCosts.new IEPatClosing();
-				iePatClosing.setFeeType("Property Taxes");
+				IEPatClosing iePatClosing = new IEPatClosing();
+				iePatClosing.setDisplayLabel("Property Taxes");
+				iePatClosing.setFeeType("Property Tax");
 				iePatClosingList.add(iePatClosing);
 			}
 			else
 				{
-				IEPatClosing iepAtClosing = closingCostDetailsOtherCosts.new IEPatClosing();
+				IEPatClosing iepAtClosing = new IEPatClosing();
 				iepAtClosing =	EscrowCostsTableRow( propertyTaxesEscrow, true, "Property Taxes");
 					iePatClosingList.add(iepAtClosing);
 				}
@@ -350,7 +304,7 @@ public class PageTwoServiceImpl implements PageTwoService{
 				EscrowsModel escrow = Convertor.getEscrowModel(escrowItem);
 				if(checkOtherEscrows(escrow.getType()))
 				{
-					IEPatClosing iepAtClosing = closingCostDetailsOtherCosts.new IEPatClosing();
+					IEPatClosing iepAtClosing = new IEPatClosing();
 					iepAtClosing =	EscrowCostsTableRow(escrow, true, escrow.getLabel());
 					iePatClosingList.add(iepAtClosing);
 				}
@@ -361,20 +315,10 @@ public class PageTwoServiceImpl implements PageTwoService{
 		{
 			String disclosureType = fee.getFEEDETAIL().getIntegratedDisclosureSectionType().getValue().value();
 			if( "OtherCosts".equalsIgnoreCase(disclosureType) )
-			{
-				ClosingCostProperties closingCostProperties = new ClosingCostProperties();
-				closingCostProperties =	FeeCostsTableRow(fee, true, null, null);
-				OtherCosts otherCosts = closingCostDetailsOtherCosts.new OtherCosts();
-					otherCosts.setFeeType(closingCostProperties.getFeeType());
-					otherCosts.setBpAtClosing(closingCostProperties.getBpAtClosing());
-					otherCosts.setBpB4Closing(closingCostProperties.getBpB4Closing());
-					otherCosts.setSpAtClosing(closingCostProperties.getSpAtClosing());
-					otherCosts.setSpB4Closing(closingCostProperties.getSpB4Closing());
-					otherCosts.setPaidByOthers(closingCostProperties.getPaidByOthers());
-				otherCostsList.add(otherCosts);
+			{	
+				otherCostsList.add(FeeCostsTableRow(fee, true, null, null));
 			}
 		}
-		
 		
 		//Total Other Costs
 		//Total Closing Costs
@@ -406,9 +350,9 @@ public class PageTwoServiceImpl implements PageTwoService{
 			}		
 		}
 
-		totalOtherCosts.setFeeType("Other Costs Subtotals (E + F + G + H)");
-		ClosingCostsSubTotal.setFeeType("Closing Costs Subtotals (D + I)");
-		LenderCredits.setFeeType("Lender Credits");
+		totalOtherCosts.setDisplayLabel("Other Costs Subtotals (E + F + G + H)");
+		ClosingCostsSubTotal.setDisplayLabel("Closing Costs Subtotals (D + I)");
+		LenderCredits.setDisplayLabel("Lender Credits");
 		totalClosingCostsList.add(ClosingCostsSubTotal);
 		totalClosingCostsList.add(LenderCredits);
 		
@@ -483,9 +427,16 @@ public class PageTwoServiceImpl implements PageTwoService{
 		if(!"".equals(str)|| null != str)
 			closingCostProperties.setToEntity(str);	
 		if(null != strLabel || !"".equals(strLabel))
-			closingCostProperties.setFeeType(strLabel);
+		{
+			closingCostProperties.setDisplayLabel(strLabel);
+			closingCostProperties.setFeeType(fee.getFEEDETAIL().getFeeType().getValue().value());
+		}
 		else
-			closingCostProperties.setFeeType("");
+		{
+			closingCostProperties.setDisplayLabel("");
+			closingCostProperties.setFeeType(null);
+		}
+		
 		strLabel = "";
 		List<FEEPAYMENTS> feepayments = fee.getFEEPAYMENTS();
 		for(FEEPAYMENTS feepayment :feepayments)
@@ -531,15 +482,14 @@ public class PageTwoServiceImpl implements PageTwoService{
 		return closingCostProperties;
 	}
 	
-	private TLCOSTS calculateTLCosts(INTEGRATEDDISCLOSURESECTIONSUMMARY integrateddisclosuresectionsummary)
+	private ClosingCostProperties calculateTLCosts(INTEGRATEDDISCLOSURESECTIONSUMMARY integrateddisclosuresectionsummary)
 	{
-		ClosingCostDetailsLoanCosts closingCostDetailsLoanCosts = new ClosingCostDetailsLoanCosts();
-			TLCOSTS tlCosts = closingCostDetailsLoanCosts.new TLCOSTS();
+		ClosingCostProperties tlCosts = new ClosingCostProperties();
 		if(null != integrateddisclosuresectionsummary)	
 		if(null != integrateddisclosuresectionsummary.getINTEGRATEDDISCLOSURESECTIONSUMMARYDETAIL().getIntegratedDisclosureSubsectionType() &&
 				"LoanCostsSubtotal".equalsIgnoreCase(integrateddisclosuresectionsummary.getINTEGRATEDDISCLOSURESECTIONSUMMARYDETAIL().getIntegratedDisclosureSubsectionType().getValue().value()))
 			{
-				tlCosts.setFeeType("Loan Costs Subtotals (A + B + C)");
+				tlCosts.setDisplayLabel("Loan Costs Subtotals (A + B + C)");
 				List<INTEGRATEDDISCLOSURESUBSECTIONPAYMENT> integrateddisclosuresubsectionpayments =  integrateddisclosuresectionsummary.getINTEGRATEDDISCLOSURESUBSECTIONPAYMENTS().getINTEGRATEDDISCLOSURESUBSECTIONPAYMENT();
 				for(INTEGRATEDDISCLOSURESUBSECTIONPAYMENT integrateddisclosuresubsectionpayment : integrateddisclosuresubsectionpayments)
 				{
@@ -565,13 +515,13 @@ public class PageTwoServiceImpl implements PageTwoService{
 	
 	private Prepaids addPrepaidByType(List<PREPAIDITEM> prepaidItems, String prepaidType)
 	{
-		ClosingCostDetailsOtherCosts closingCostDetailsOtherCosts = new ClosingCostDetailsOtherCosts();
-		Prepaids prepaids = closingCostDetailsOtherCosts.new Prepaids();
-		
-		String label = StringFormatter.CAMEL.formatString(prepaidType);
-		if(label.equalsIgnoreCase("Homeowners Insurance Premium")){
+		Prepaids prepaids = new Prepaids();
+		String label = "";
+		label = StringFormatter.CAMEL.formatString(prepaidType);
+		if(prepaidType.equalsIgnoreCase("Homeowners Insurance Premium")){
 		      label = "Homeowner's Insurance Premium";
 		}
+		
 		PREPAIDITEM found = null;
 		for (PREPAIDITEM prepaid : prepaidItems)
 			if ((prepaidType).equalsIgnoreCase(prepaid.getPREPAIDITEMDETAIL().getPrepaidItemType().getValue().value())) {
@@ -583,9 +533,10 @@ public class PageTwoServiceImpl implements PageTwoService{
 			to = true;
 		
 		if (found == null)
-		//	addRow(new CostsTableRow(false).add(Columns.CostLabel, label + " " + to));		
 		{
-			prepaids.setFeeType(label+ " "+to);
+			prepaids.setDisplayLabel(label);
+			prepaids.setFeeType(prepaidType);
+			
 		}
 			else
 			prepaids = PrepaidCostsTableRow(found, to, label);
@@ -604,44 +555,9 @@ public class PageTwoServiceImpl implements PageTwoService{
 				|| type.equalsIgnoreCase("TownPropertyTax");
 	}
 	
-	private String getPrepaidPerDiemPaidCount(PREPAIDITEM prepaidItem) {
-		
-		if (prepaidItem == null)
-			return "(   per day from   to   )";
-		else
-		{
-			PrepaidsModel prepaid = Convertor.getPrepaidModel(prepaidItem);
-			
-			return "( " + StringFormatter.NODOLLARS.formatString(prepaid.getPrepaidItemPerDiemAmount()) + "  per day from " +
-			StringFormatter.DATE.formatString(prepaid.getPrepaidItemPaidFromDate()) + " to " +
-			StringFormatter.DATE.formatString(prepaid.getPrepaidItemPaidThroughDate()) + ")";
-		}
-			
-	}
-	
-	private String getPrepaidItemMonthsPaidCount(PREPAIDITEM prepaidItem)
-	{
-		PrepaidsModel prepaid = Convertor.getPrepaidModel(prepaidItem);
-		String string = "";
-		
-		if(null != prepaid.getPrepaidItemMonthsPaidCount() && !"".equalsIgnoreCase(prepaid.getPrepaidItemMonthsPaidCount()) ){
-			string = "( " + prepaid.getPrepaidItemMonthsPaidCount() + " mo.)  " ;
-			if (null != prepaid.getPaymentToEntity() && !"".equalsIgnoreCase(prepaid.getPaymentToEntity()) ){
-				string = string + " to " + prepaid.getPaymentToEntity();
-			}
-		}
-		else {
-			if(prepaid.getLabel() == ""){
-		    string = "";
-		    }
-		}
-		return string;
-	}
-	
 	private Prepaids PrepaidCostsTableRow(PREPAIDITEM prepaidItem, boolean to, String label) 
 	{
-		ClosingCostDetailsOtherCosts closingCostDetailsOtherCosts = new ClosingCostDetailsOtherCosts();
-		Prepaids prepaids = closingCostDetailsOtherCosts.new Prepaids();
+		Prepaids prepaids = new Prepaids();
 		String str = label == null ? getPrepaidPaidToLabel(prepaidItem) : label;
 		String buyerOutsideClosingAmount = "";
 		String buyerAtClosingAmount = "";
@@ -649,10 +565,9 @@ public class PageTwoServiceImpl implements PageTwoService{
 		String sellerAtClosingAmount = "";
 		String otherAmount = "";
 		String value = "";
+		PrepaidsModel prepaid = Convertor.getPrepaidModel(prepaidItem);
 		if (to)
 		{
-			PrepaidsModel prepaid = Convertor.getPrepaidModel(prepaidItem);
-			
 			if(("PrepaidInterest").equalsIgnoreCase(prepaid.getType()))
 			{
 				prepaids.setMonths(prepaid.getPrepaidItemPerDiemAmount());
@@ -668,9 +583,7 @@ public class PageTwoServiceImpl implements PageTwoService{
 					}
 				}
 			}
-			
 		}
-		
 		
 		List<PREPAIDITEMPAYMENT> prepaidPayments = prepaidItem.getPREPAIDITEMPAYMENTS().getPREPAIDITEMPAYMENT();
 		for(PREPAIDITEMPAYMENT prepaidPayment :prepaidPayments)
@@ -693,7 +606,8 @@ public class PageTwoServiceImpl implements PageTwoService{
 				}
 		
 			}
-		prepaids.setFeeType(str);
+		prepaids.setDisplayLabel(StringFormatter.CAMEL.formatString(str));
+		prepaids.setFeeType(prepaid.getType());
 		value = buyerAtClosingAmount;
 		if (!value.equals("") && StringFormatter.doubleValue(value) != 0)
 			prepaids.setBpAtClosing(StringFormatter.NODOLLARS.formatString(value));
@@ -742,12 +656,11 @@ public class PageTwoServiceImpl implements PageTwoService{
 		return true;
 	}
 	
-	private IEPatClosing addEscrowByType(List<ESCROWITEM> escrows, String prepaidType) {
+	private IEPatClosing addEscrowByType(List<ESCROWITEM> escrows, String escrowType) {
 		
-		ClosingCostDetailsOtherCosts closingCostDetailsOtherCosts = new ClosingCostDetailsOtherCosts();
-		IEPatClosing iepAtClosing = closingCostDetailsOtherCosts.new IEPatClosing();
+		IEPatClosing iepAtClosing = new IEPatClosing();
 		
-		String label = StringFormatter.CAMEL.formatString(prepaidType);
+		String label = StringFormatter.CAMEL.formatString(escrowType);
 		if(label.equalsIgnoreCase("Homeowners Insurance")){
 		      label = "Homeowner's Insurance";
 		}
@@ -755,7 +668,7 @@ public class PageTwoServiceImpl implements PageTwoService{
 		for (ESCROWITEM escrowItem : escrows)
 		{
 			EscrowsModel escrow =	Convertor.getEscrowModel(escrowItem);
-			if (null != escrow.getType() && escrow.getType().equalsIgnoreCase(prepaidType)) {
+			if (null != escrow.getType() && escrow.getType().equalsIgnoreCase(escrowType)) {
 				found = escrow;
 				break;
 			}
@@ -768,8 +681,7 @@ public class PageTwoServiceImpl implements PageTwoService{
 	
 	private IEPatClosing EscrowCostsTableRow(EscrowsModel found, boolean to, String label)
 	{
-		ClosingCostDetailsOtherCosts closingCostDetailsOtherCosts = new ClosingCostDetailsOtherCosts();
-		IEPatClosing iepAtClosing = closingCostDetailsOtherCosts.new IEPatClosing();
+		IEPatClosing iepAtClosing = new IEPatClosing();
 		String str = label == null ? found.getLabel() : label;
 		String buyerOutsideClosingAmount = "";
 		String buyerAtClosingAmount = "";
@@ -782,7 +694,8 @@ public class PageTwoServiceImpl implements PageTwoService{
 			iepAtClosing.setToEntity(found.getCollectedNumberOfMonthsCount());
 		}	
 		
-		iepAtClosing.setFeeType(str);
+		iepAtClosing.setDisplayLabel(str);
+		iepAtClosing.setFeeType(found.getType());
 		buyerAtClosingAmount = found.getBuyerAtClosingAmount();
 		if (!buyerAtClosingAmount.equals("") && StringFormatter.doubleValue(buyerAtClosingAmount) != 0)
 			iepAtClosing.setBpAtClosing(StringFormatter.NODOLLARS.formatString(buyerAtClosingAmount));

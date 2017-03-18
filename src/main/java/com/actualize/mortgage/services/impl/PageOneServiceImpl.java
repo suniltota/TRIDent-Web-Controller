@@ -32,14 +32,18 @@ import com.actualize.mortgage.domainmodels.LoanTermsLoanAmount;
 import com.actualize.mortgage.domainmodels.LoanTermsPI;
 import com.actualize.mortgage.domainmodels.LoanTermsPrepaymentPenalty;
 import com.actualize.mortgage.domainmodels.ProjectedPayments;
-import com.actualize.mortgage.domainmodels.ProjectedPayments.ProjectedPaymentsPI;
 import com.actualize.mortgage.domainmodels.ProjectedPaymentsETIA;
+import com.actualize.mortgage.domainmodels.ProjectedPaymentsPI;
+import com.actualize.mortgage.domainmodels.SalesContractDetail;
 import com.actualize.mortgage.domainmodels.Seller;
 import com.actualize.mortgage.domainmodels.TransactionInformation;
 import com.actualize.mortgage.services.PageOneService;
 import com.actualize.mortgage.utils.Convertor;
 import com.actualize.mortgage.utils.DocumentType;
+import com.actualize.mortgage.utils.PopulateData;
 import com.actualize.mortgage.utils.StringFormatter;
+
+import datalayer.PopulateInputData;
 
 public class PageOneServiceImpl implements PageOneService {
 	
@@ -55,33 +59,31 @@ public class PageOneServiceImpl implements PageOneService {
 	@Override
 	public ClosingInformation createClosingInformation(DOCUMENT document) {
 		
+		DEAL deal = document.getDEALSETS().getDEALSET().getDEALS().getDEAL();
 		ClosingInformation closingInformation = new ClosingInformation();
+		SalesContractDetail salesContractDetail = new SalesContractDetail();
 		ADDRESS address = new ADDRESS();
+		Address property = new Address();
+		String settlementAgent = null;
 		
-		deal = document.getDEALSETS().getDEALSET().getDEALS().getDEAL();
-		
-		//DEAL.LOANS.LOAN.CLOSING_INFORMATION.CLOSING_INFORMATION_DETAIL.ClosingDate['__text'];
 		if(null != deal.getLOANS().getLOAN().getCLOSINGINFORMATION().getCLOSINGINFORMATIONDETAIL().getClosingDate())
 			closingInformation.setClosingDate(deal.getLOANS().getLOAN().getCLOSINGINFORMATION().getCLOSINGINFORMATIONDETAIL().getClosingDate().getValue());
 		
-		//DEAL.LOANS.LOAN.DOCUMENT_SPECIFIC_DATA_SETS.DOCUMENT_SPECIFIC_DATA_SET.INTEGRATED_DISCLOSURE.INTEGRATED_DISCLOSURE_DETAIL.IntegratedDisclosureIssuedDate['__text'];
 		if(null != deal.getLOANS().getLOAN().getDOCUMENTSPECIFICDATASETS().getDOCUMENTSPECIFICDATASET().getINTEGRATEDDISCLOSURE().getINTEGRATEDDISCLOSUREDETAIL().getIntegratedDisclosureIssuedDate())
 			closingInformation.setDateIssued(deal.getLOANS().getLOAN().getDOCUMENTSPECIFICDATASETS().getDOCUMENTSPECIFICDATASET().getINTEGRATEDDISCLOSURE().getINTEGRATEDDISCLOSUREDETAIL().getIntegratedDisclosureIssuedDate().getValue());
 		
-		//DEAL.LOANS.LOAN.CLOSING_INFORMATION.CLOSING_INFORMATION_DETAIL.DisbursementDate['__text'];
 		if(null != deal.getLOANS().getLOAN().getCLOSINGINFORMATION().getCLOSINGINFORMATIONDETAIL().getDisbursementDate())
 			closingInformation.setDisbursementDate(deal.getLOANS().getLOAN().getCLOSINGINFORMATION().getCLOSINGINFORMATIONDETAIL().getDisbursementDate().getValue());
 		
-		//DEAL.LOANS.LOAN.CLOSING_INFORMATION.CLOSING_INFORMATION_DETAIL.ClosingAgentOrderNumberIdentifier['__text'];
 		if(null != deal.getLOANS().getLOAN().getCLOSINGINFORMATION().getCLOSINGINFORMATIONDETAIL().getClosingAgentOrderNumberIdentifier())
 			closingInformation.setFileNo(deal.getLOANS().getLOAN().getCLOSINGINFORMATION().getCLOSINGINFORMATIONDETAIL().getClosingAgentOrderNumberIdentifier().getValue());
 		
-		//DEAL.COLLATERALS.COLLATERAL.SUBJECT_PROPERTY.ADDRESS
 		List<COLLATERAL> collaterals = deal.getCOLLATERALS().getCOLLATERAL();
 		for(COLLATERAL collateral : collaterals)
 		{
 			 address = collateral.getSUBJECTPROPERTY().getADDRESS();
 		}
+		
 		property.setAddressLineText(address.getAddressLineText()== null ? "" : address.getAddressLineText().getValue());
 		property.setAddressType(address.getAddressType() == null ? "" : address.getAddressType().getValue().value());
 		property.setAddressUnitDesignatorType(address.getAddressUnitDesignatorType()== null ? "" :address.getAddressUnitDesignatorType().getValue().value());
@@ -94,29 +96,38 @@ public class PageOneServiceImpl implements PageOneService {
 		closingInformation.setProperty(property);
 		
 		List<PARTY> parties = deal.getPARTIES().getPARTY();
-		parties.forEach(party ->{
-			if(null != party.getROLES())
+		for(PARTY party : parties)
+		{
+			if(null != party.getROLES() && (null == settlementAgent || "".equals(settlementAgent)))
 			{
 				if(null != party.getROLES().getROLE().getROLEDETAIL())
+				{
 					if(PartyRoleBase.CLOSING_AGENT == party.getROLES().getROLE().getROLEDETAIL().getPartyRoleType().getValue())
-				closingInformation.setSettlementAgent( null != party.getLEGALENTITY() ? party.getLEGALENTITY().getLEGALENTITYDETAIL().getFullName().getValue():"");
+						settlementAgent = null != party.getLEGALENTITY() ? party.getLEGALENTITY().getLEGALENTITYDETAIL().getFullName().getValue():"";
+					closingInformation.setPartyRoleType(party.getROLES().getROLE().getROLEDETAIL().getPartyRoleType().getValue().value());
+				}
 			}
-		});
-				
+		}		
 		if(LoanPurposeBase.PURCHASE == deal.getLOANS().getLOAN().getTERMSOFLOAN().getLoanPurposeType().getValue())
 		{
 			collaterals.forEach(collateral ->{
-				closingInformation.setSalePrice(collateral.getSUBJECTPROPERTY().getSALESCONTRACTS().getSALESCONTRACT().getSALESCONTRACTDETAIL().getSalesContractAmount().getValue().toString());
+				closingInformation.setSalePrice(null != collateral.getSUBJECTPROPERTY().getSALESCONTRACTS().getSALESCONTRACT().getSALESCONTRACTDETAIL().getSalesContractAmount() ? collateral.getSUBJECTPROPERTY().getSALESCONTRACTS().getSALESCONTRACT().getSALESCONTRACTDETAIL().getSalesContractAmount().getValue().toString():"");
+				salesContractDetail.setSaleContractAmount(null != collateral.getSUBJECTPROPERTY().getSALESCONTRACTS().getSALESCONTRACT().getSALESCONTRACTDETAIL().getSalesContractAmount() ? collateral.getSUBJECTPROPERTY().getSALESCONTRACTS().getSALESCONTRACT().getSALESCONTRACTDETAIL().getSalesContractAmount().getValue().toString():"");
+				salesContractDetail.setPersonalPropertyIndicator(Convertor.booleanToString(null != collateral.getSUBJECTPROPERTY().getSALESCONTRACTS().getSALESCONTRACT().getSALESCONTRACTDETAIL().getPersonalPropertyIncludedIndicator() ? collateral.getSUBJECTPROPERTY().getSALESCONTRACTS().getSALESCONTRACT().getSALESCONTRACTDETAIL().getPersonalPropertyIncludedIndicator().isValue() : false));
 			});
+			closingInformation.setSalesContractDetail(salesContractDetail);
 		}
-				
+		
+		closingInformation.setSettlementAgent(settlementAgent);
+		
 		return closingInformation;
+								
 	}
-
 	@Override
 	public LoanInformation createLoanInformation(DOCUMENT document) {
 		
 		LoanInformation loanInformation = new LoanInformation();
+		loanInformation = PopulateData.populateLoanInformation(document);
 		deal = document.getDEALSETS().getDEALSET().getDEALS().getDEAL();
 		String loanTotalTerm = "";
 		String loanPurpose = "";
@@ -124,13 +135,13 @@ public class PageOneServiceImpl implements PageOneService {
 		String loanType = "";
 		loanId = "";
 		loanMic = "";
-		if(deal.getLOANS().getLOAN().getLOANDETAIL().getConstructionLoanIndicator().isValue() && "ConstructionToPermanent".equalsIgnoreCase(deal.getLOANS().getLOAN().getCONSTRUCTION().getConstructionLoanType().getValue().value()))
+		if(null != deal.getLOANS().getLOAN().getLOANDETAIL().getConstructionLoanIndicator() && null != deal.getLOANS().getLOAN().getCONSTRUCTION() && deal.getLOANS().getLOAN().getLOANDETAIL().getConstructionLoanIndicator().isValue() && "ConstructionToPermanent".equalsIgnoreCase(deal.getLOANS().getLOAN().getCONSTRUCTION().getConstructionLoanType().getValue().value()))
 		{
 			//months = jsonOutput.MESSAGE.DOCUMENT_SETS.DOCUMENT_SET.DOCUMENTS.DOCUMENT.DEAL_SETS.DEAL_SET.DEALS.DEAL.LOANS.LOAN.CONSTRUCTION.ConstructionLoanTotalTermMonthsCount['__text'];
-			loanTotalTerm = convertor.convertMonthsToDisplayFormat(deal.getLOANS().getLOAN().getCONSTRUCTION().getConstructionLoanTotalTermMonthsCount().getValue());
+			loanTotalTerm = Convertor.convertMonthsToDisplayFormat(deal.getLOANS().getLOAN().getCONSTRUCTION().getConstructionLoanTotalTermMonthsCount().getValue());
 		}
 		//else if((DEAL.LOANS.LOAN.MATURITY.MATURITY_RULE.LoanMaturityPeriodType['__text']).equals("Year")){
-		else if("Year".equalsIgnoreCase(deal.getLOANS().getLOAN().getMATURITY().getMATURITYRULE().getLoanMaturityPeriodType().getValue().value()))
+		else if(null != deal.getLOANS().getLOAN().getMATURITY().getMATURITYRULE().getLoanMaturityPeriodType() && "Year".equalsIgnoreCase(deal.getLOANS().getLOAN().getMATURITY().getMATURITYRULE().getLoanMaturityPeriodType().getValue().value()))
 		{
 			//value = DEAL.LOANS.LOAN.MATURITY.MATURITY_RULE.LoanMaturityPeriodCount['__text'];
 			loanTotalTerm = Integer.toString(deal.getLOANS().getLOAN().getMATURITY().getMATURITYRULE().getLoanMaturityPeriodCount().getValue()) + " Year";
@@ -139,17 +150,17 @@ public class PageOneServiceImpl implements PageOneService {
 		else if("Month".equalsIgnoreCase(deal.getLOANS().getLOAN().getMATURITY().getMATURITYRULE().getLoanMaturityPeriodType().getValue().value()) && !("").equalsIgnoreCase(Integer.toString(deal.getLOANS().getLOAN().getMATURITY().getMATURITYRULE().getLoanMaturityPeriodCount().getValue())))
 		{
 			//DEAL.LOANS.LOAN.MATURITY.MATURITY_RULE.LoanMaturityPeriodCount['__text'];
-			loanTotalTerm = convertor.convertMonthsToDisplayFormat(deal.getLOANS().getLOAN().getMATURITY().getMATURITYRULE().getLoanMaturityPeriodCount().getValue());
+			loanTotalTerm = Convertor.convertMonthsToDisplayFormat(deal.getLOANS().getLOAN().getMATURITY().getMATURITYRULE().getLoanMaturityPeriodCount().getValue());
 		}
 		
 		//DEAL.LOANS.LOAN.TERMS_OF_LOAN.LoanPurposeType['__text']).equals("Purchase")) {
 		if(("Purchase").equalsIgnoreCase(deal.getLOANS().getLOAN().getTERMSOFLOAN().getLoanPurposeType().getValue().value()))
 			loanPurpose = "Purchase";
 		//DEAL.LOANS.LOAN.LOAN_DETAIL.ConstructionLoanIndicator['__text']).equals("true")
-		else if(("true").equalsIgnoreCase(deal.getLOANS().getLOAN().getLOANDETAIL().getConstructionLoanIndicator().getLabel()))
+		else if(deal.getLOANS().getLOAN().getLOANDETAIL().getConstructionLoanIndicator().isValue())
 			loanPurpose = "Construction";
 		//DEAL.LOANS.LOAN.DOCUMENT_SPECIFIC_DATA_SETS.DOCUMENT_SPECIFIC_DATA_SET.INTEGRATED_DISCLOSURE.INTEGRATED_DISCLOSURE_DETAIL.IntegratedDisclosureHomeEquityLoanIndicator").equals("true")
-		else if(("true").equalsIgnoreCase(deal.getLOANS().getLOAN().getDOCUMENTSPECIFICDATASETS().getDOCUMENTSPECIFICDATASET().getINTEGRATEDDISCLOSURE().getINTEGRATEDDISCLOSUREDETAIL().getIntegratedDisclosureHomeEquityLoanIndicator().getLabel()))
+		else if(deal.getLOANS().getLOAN().getDOCUMENTSPECIFICDATASETS().getDOCUMENTSPECIFICDATASET().getINTEGRATEDDISCLOSURE().getINTEGRATEDDISCLOSUREDETAIL().getIntegratedDisclosureHomeEquityLoanIndicator().isValue())
 			loanPurpose = "Home Equity Loan";
 		else
 			loanPurpose = "Refinance";
@@ -182,7 +193,7 @@ public class PageOneServiceImpl implements PageOneService {
 		loanInformation.setProduct(loanProduct);
 		loanInformation.setLoanId(loanId);
 		loanInformation.setMic(loanMic);
-
+		
 		return loanInformation;
 	}
 
@@ -283,7 +294,14 @@ public class PageOneServiceImpl implements PageOneService {
 		deal = document.getDEALSETS().getDEALSET().getDEALS().getDEAL();
 		LoanTermsLoanAmount loanTermsLoanAmount = new LoanTermsLoanAmount();
 		String loanAmount = "";
-		text4_2_2 = "";
+		String negativeAmortizationMaximumLoanBalanceAmount = "";
+		String negativeAmortizationLimitMonthsCount = "";
+		String negativeAmortizationType = "";
+		String buydownInitialEffectiveInterestRatePercent = "";
+		String disclosedFullyIndexedRatePercent = "";
+		String weightedAverageInterestRatePercent = "";
+		String noteRatePercent = "";
+		//text4_2_2 = "";
 		//DEAL.LOANS.LOAN.TERMS_OF_LOAN.NoteAmount['__text']
 		loanAmount = deal.getLOANS().getLOAN().getTERMSOFLOAN().getNoteAmount().getValue().toPlainString();	
 		loanTermsLoanAmount.setAmount(loanAmount);
@@ -300,13 +318,15 @@ public class PageOneServiceImpl implements PageOneService {
 				{
 					text4_1_2 = "Does go as high as ";
 					text4_1_3 = "Does increase until year ";
+					negativeAmortizationType = deal.getLOANS().getLOAN().getNEGATIVEAMORTIZATION().getNEGATIVEAMORTIZATIONRULE().getNegativeAmortizationType().getValue().value();
 				}
 			}
 			//DEAL.LOANS.LOAN.NEGATIVE_AMORTIZATION.NEGATIVE_AMORTIZATION_RULE.NegativeAmortizationMaximumLoanBalanceAmount['__text']
 			text4_1_2 = text4_1_2 + " " + deal.getLOANS().getLOAN().getNEGATIVEAMORTIZATION().getNEGATIVEAMORTIZATIONRULE().getNegativeAmortizationMaximumLoanBalanceAmount().getValue().toPlainString();
+			 negativeAmortizationMaximumLoanBalanceAmount = deal.getLOANS().getLOAN().getNEGATIVEAMORTIZATION().getNEGATIVEAMORTIZATIONRULE().getNegativeAmortizationMaximumLoanBalanceAmount().getValue().toPlainString();
 			//DEAL.LOANS.LOAN.NEGATIVE_AMORTIZATION.NegativeAmortizationLimitMonthsCount['__text']
 			text4_1_3 = text4_1_3 + " " +Integer.toString(deal.getLOANS().getLOAN().getNEGATIVEAMORTIZATION().getNEGATIVEAMORTIZATIONRULE().getNegativeAmortizationLimitMonthsCount().getValue()); 
-			
+			 negativeAmortizationLimitMonthsCount = Integer.toString(deal.getLOANS().getLOAN().getNEGATIVEAMORTIZATION().getNEGATIVEAMORTIZATIONRULE().getNegativeAmortizationLimitMonthsCount().getValue());
 			loanTermsLoanAmount.setStatus("YES");
 			List<String> details = new LinkedList<>();
 				details.add(text4_1_2);
@@ -324,16 +344,25 @@ public class PageOneServiceImpl implements PageOneService {
 		{
 		if(deal.getLOANS().getLOAN().getBUYDOWN().getBUYDOWNRULE().getEXTENSION().getOTHER().isBuydownReflectedInNoteIndicator() && !("").equals(deal.getLOANS().getLOAN().getBUYDOWN().getBUYDOWNOCCURRENCES().getBUYDOWNOCCURRENCE().getBuydownInitialEffectiveInterestRatePercent().getValue().toPlainString()))
 		//text4_2 = DEAL.LOANS.LOAN.BUYDOWN.BUYDOWN_OCCURRENCES.BUYDOWN_OCCURRENCE.BuydownInitialEffectiveInterestRatePercent['__text'];
-			text4_2 = deal.getLOANS().getLOAN().getBUYDOWN().getBUYDOWNOCCURRENCES().getBUYDOWNOCCURRENCE().getBuydownInitialEffectiveInterestRatePercent().getValue().toPlainString() + "%";
+			//text4_2 = deal.getLOANS().getLOAN().getBUYDOWN().getBUYDOWNOCCURRENCES().getBUYDOWNOCCURRENCE().getBuydownInitialEffectiveInterestRatePercent().getValue().toPlainString() + "%";
+			buydownInitialEffectiveInterestRatePercent = deal.getLOANS().getLOAN().getBUYDOWN().getBUYDOWNOCCURRENCES().getBUYDOWNOCCURRENCE().getBuydownInitialEffectiveInterestRatePercent().getValue().toPlainString();
 		//DEAL.LOANS.LOAN.TERMS_OF_LOAN.DisclosedFullyIndexedRatePercent['__text']).equals("")
 		}
 		else if(null != deal.getLOANS().getLOAN().getTERMSOFLOAN().getDisclosedFullyIndexedRatePercent())
+		{
 			text4_2 = deal.getLOANS().getLOAN().getTERMSOFLOAN().getDisclosedFullyIndexedRatePercent().getValue().toPlainString() + "%";
-		else if(null != deal.getLOANS().getLOAN().getTERMSOFLOAN().getWeightedAverageInterestRatePercent())
+			disclosedFullyIndexedRatePercent = deal.getLOANS().getLOAN().getTERMSOFLOAN().getDisclosedFullyIndexedRatePercent().getValue().toPlainString();
+		}
+			else if(null != deal.getLOANS().getLOAN().getTERMSOFLOAN().getWeightedAverageInterestRatePercent())
+		{
 			text4_2 = deal.getLOANS().getLOAN().getTERMSOFLOAN().getWeightedAverageInterestRatePercent().getValue().toPlainString() + "%";
+			weightedAverageInterestRatePercent = deal.getLOANS().getLOAN().getTERMSOFLOAN().getWeightedAverageInterestRatePercent().getValue().toPlainString();
+		}
 		else
-			//DEAL.LOANS.LOAN.TERMS_OF_LOAN.NoteRatePercent['__text'])
+		{
 			text4_2 = deal.getLOANS().getLOAN().getTERMSOFLOAN().getNoteRatePercent().getValue().toPlainString() + "%";
+			noteRatePercent = deal.getLOANS().getLOAN().getTERMSOFLOAN().getNoteRatePercent().getValue().toPlainString();
+		}
 		loanTermsInterestRate.setInterest(text4_2);
 		
 		//Adjustable Rate AIR message
@@ -545,7 +574,7 @@ public class PageOneServiceImpl implements PageOneService {
 				String max = format.formatString((null != projectedpayment.getProjectedPaymentPrincipalAndInterestMaximumPaymentAmount()) ? projectedpayment.getProjectedPaymentPrincipalAndInterestMaximumPaymentAmount().getValue().toPlainString():"0");
 				if(column >1 && !"0".equals(min))
 				{
-					ProjectedPaymentsPI projectedPaymentsPI = projectedPayments.new ProjectedPaymentsPI();
+					ProjectedPaymentsPI projectedPaymentsPI = new ProjectedPaymentsPI();
 					if(interestOnly)
 					{
 						projectedPaymentsPI.setMinValue(min);
@@ -563,19 +592,19 @@ public class PageOneServiceImpl implements PageOneService {
 				}
 				else
 				{
-					ProjectedPaymentsPI projectedPaymentsPI2 = projectedPayments.new ProjectedPaymentsPI();
+					ProjectedPaymentsPI projectedPaymentsPI = new ProjectedPaymentsPI();
 					if(interestOnly)
 					{
-						projectedPaymentsPI2.setMinValue(min);
-						projectedPaymentsPI2.setMaxValue(max);
-						projectedPaymentsPI2.setInterestOnly("<i>interestonly</i>");
-						projectedPaymentsPrincipalInterest.add(projectedPaymentsPI2);
+						projectedPaymentsPI.setMinValue(min);
+						projectedPaymentsPI.setMaxValue(max);
+						projectedPaymentsPI.setInterestOnly("<i>interestonly</i>");
+						projectedPaymentsPrincipalInterest.add(projectedPaymentsPI);
 					}
 					else
 					{
-						projectedPaymentsPI2.setMinValue(min);
-						projectedPaymentsPI2.setMaxValue(max);
-						projectedPaymentsPrincipalInterest.add(projectedPaymentsPI2);
+						projectedPaymentsPI.setMinValue(min);
+						projectedPaymentsPI.setMaxValue(max);
+						projectedPaymentsPrincipalInterest.add(projectedPaymentsPI);
 					}
 				}
 				//5.3 (MI)
@@ -661,7 +690,7 @@ public class PageOneServiceImpl implements PageOneService {
 				if(null == lenderCredits || lenderCredits.isEmpty())
 					lenderCredits = "0";
 		
-		closingCostsDetails.add("Includes "+totalLoanCosts+" in Loan Costs + "+totalOtherCosts+" in Other Costs -"+lenderCredits);
+		closingCostsDetails.add("Includes "+totalLoanCosts+" in Loan Costs + "+totalOtherCosts+" in Other Costs "+lenderCredits);
 		closingCostsDetails.add("in Lender Credits. <i>See page 2 for details.</i>");
 		costsAtClosingClosingCosts.setDetails(closingCostsDetails);
 		
@@ -683,6 +712,7 @@ public class PageOneServiceImpl implements PageOneService {
 				else if(null != deal.getLOANS().getLOAN().getCLOSINGINFORMATION().getCLOSINGINFORMATIONDETAIL().getCashToBorrowerAtClosingAmount())
 					costsAtClosingCashToClose.setToType("true");	
 		}
+		
 		cashToCloseDetails.add("Includes Closing Costs. <i>See Calculating Cash to Close on page 3 for details.</i>");
 		costsAtClosingCashToClose.setDetails(cashToCloseDetails);
 		

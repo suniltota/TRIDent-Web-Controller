@@ -6,9 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class ClosingCostDetails implements Serializable {
 	
-	/**
-	 * 
-	 */
+	
 	private static final long serialVersionUID = -7409412092150931776L;
 	
 	@JsonProperty("LoanCosts")

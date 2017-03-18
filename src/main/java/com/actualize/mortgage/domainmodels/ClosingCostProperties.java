@@ -9,6 +9,7 @@ public class ClosingCostProperties implements Serializable {
 	 */
 	private static final long serialVersionUID = 943579811603225142L;
 	
+		private String displayLabel;
 		private String feeType; 
 		private String bpAtClosing;
 		private String bpB4Closing;
@@ -100,6 +101,12 @@ public class ClosingCostProperties implements Serializable {
 		 */
 		public void setToEntity(String toEntity) {
 			this.toEntity = toEntity;
+		}
+		public String getDisplayLabel() {
+			return displayLabel;
+		}
+		public void setDisplayLabel(String displayLabel) {
+			this.displayLabel = displayLabel;
 		}
 		
 

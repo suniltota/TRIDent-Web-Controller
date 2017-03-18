@@ -14,10 +14,12 @@ import org.mismo.residential._2009.schemas.INTEGRATEDDISCLOSURESUBSECTIONPAYMENT
 import org.mismo.residential._2009.schemas.PREPAIDITEM;
 
 import com.actualize.mortgage.domainmodels.ClosingCostProperties;
+import com.actualize.mortgage.domainmodels.EscrowsModel;
+import com.actualize.mortgage.domainmodels.PrepaidsModel;
 
 public class Convertor {
 	
-	public String convertMonthsToDisplayFormat(Integer months){
+	public static String convertMonthsToDisplayFormat(Integer months){
 	    int years = months / 12;
         int modMonths = months % 12;
         String maturity = "";
@@ -107,6 +109,17 @@ public class Convertor {
 	public static PrepaidsModel getPrepaidModel(PREPAIDITEM prepaidItem)
 	{
 		PrepaidsModel prepaidsModel = new PrepaidsModel();
+		String label = "";
+		if(null != prepaidItem.getPREPAIDITEMDETAIL().getPrepaidItemType())
+		{
+			label = prepaidItem.getPREPAIDITEMDETAIL().getPrepaidItemType().getDisplayLabelText();
+			if(null == label || "".equals(label))
+				label = prepaidItem.getPREPAIDITEMDETAIL().getPrepaidItemType().getValue().value();
+			if("Other".equalsIgnoreCase(label))
+				label = prepaidItem.getPREPAIDITEMDETAIL().getPrepaidItemTypeOtherDescription().getValue();
+			prepaidsModel.setLabel(StringFormatter.CAMEL.formatString(label));
+			prepaidsModel.setType(prepaidItem.getPREPAIDITEMDETAIL().getPrepaidItemType().getValue().value());
+		}
 			prepaidsModel.setType(null != prepaidItem.getPREPAIDITEMDETAIL().getPrepaidItemType().getValue() ? prepaidItem.getPREPAIDITEMDETAIL().getPrepaidItemType().getValue().value(): "");
 			prepaidsModel.setPrepaidItemPerDiemAmount(null != prepaidItem.getPREPAIDITEMDETAIL().getPrepaidItemPerDiemAmount() ? prepaidItem.getPREPAIDITEMDETAIL().getPrepaidItemPerDiemAmount().getValue().toPlainString(): "");
 			prepaidsModel.setPrepaidItemPaidFromDate( null != prepaidItem.getPREPAIDITEMDETAIL().getPrepaidItemPaidFromDate() ? prepaidItem.getPREPAIDITEMDETAIL().getPrepaidItemPaidFromDate().getValue(): "");
@@ -126,7 +139,7 @@ public class Convertor {
 		{
 			dLabel = null != escrowItem.getESCROWITEMDETAIL().getEscrowItemType().getDisplayLabelText() ? escrowItem.getESCROWITEMDETAIL().getEscrowItemType().getDisplayLabelText() : "";
 			if(null == dLabel || dLabel.isEmpty())
-				dLabel = escrowItem.getESCROWITEMDETAIL().getEscrowItemType().getValue().value();
+				dLabel = StringFormatter.CAMEL.formatString(escrowItem.getESCROWITEMDETAIL().getEscrowItemType().getValue().value());
 			if("Other".equalsIgnoreCase(dLabel))
 			{
 				if(null != escrowItem.getESCROWITEMDETAIL().getEscrowItemTypeOtherDescription() && !escrowItem.getESCROWITEMDETAIL().getEscrowItemTypeOtherDescription().getValue().isEmpty())
@@ -207,5 +220,19 @@ public class Convertor {
 			closingCostProperties.setSpB4Closing(StringFormatter.NODOLLARS.formatString(str));
 		}
 		return closingCostProperties;
+	}
+	
+	public static String booleanToString(boolean status)
+	{
+		if(status)
+			return "YES";
+		return "NO";
+	}
+	
+	public static boolean stringToBoolean(String status)
+	{
+		if(status.equalsIgnoreCase("YES"))
+			return true;
+		return false;
 	}
 }

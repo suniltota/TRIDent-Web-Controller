@@ -5,9 +5,6 @@ import java.util.List;
 
 public class TransactionInformation implements Serializable {
 	
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 2048295015514864504L;
 	
 	private List<Borrower> borrower;

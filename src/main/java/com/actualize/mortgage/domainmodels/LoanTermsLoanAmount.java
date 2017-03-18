@@ -13,6 +13,11 @@ public class LoanTermsLoanAmount implements	Serializable {
 	private String amount;
 	private String status;
 	private List<String> details;
+	private String noteAmount;
+	private String loanAmountIncreaseIndicator;
+	private String negativeAmoritzationIndicator;
+	private String negativeAmortizationMaximumLoanBalanceAmount;
+	private String negativeAmortizationLimitMonthsCount;
 	
 	/**
 	 * @return the amount
@@ -49,6 +54,36 @@ public class LoanTermsLoanAmount implements	Serializable {
 	 */
 	public void setDetails(List<String> details) {
 		this.details = details;
+	}
+	public String getNoteAmount() {
+		return noteAmount;
+	}
+	public void setNoteAmount(String noteAmount) {
+		this.noteAmount = noteAmount;
+	}
+	public String getLoanAmountIncreaseIndicator() {
+		return loanAmountIncreaseIndicator;
+	}
+	public void setLoanAmountIncreaseIndicator(String loanAmountIncreaseIndicator) {
+		this.loanAmountIncreaseIndicator = loanAmountIncreaseIndicator;
+	}
+	public String getNegativeAmoritzationIndicator() {
+		return negativeAmoritzationIndicator;
+	}
+	public void setNegativeAmoritzationIndicator(String negativeAmoritzationIndicator) {
+		this.negativeAmoritzationIndicator = negativeAmoritzationIndicator;
+	}
+	public String getNegativeAmortizationMaximumLoanBalanceAmount() {
+		return negativeAmortizationMaximumLoanBalanceAmount;
+	}
+	public void setNegativeAmortizationMaximumLoanBalanceAmount(String negativeAmortizationMaximumLoanBalanceAmount) {
+		this.negativeAmortizationMaximumLoanBalanceAmount = negativeAmortizationMaximumLoanBalanceAmount;
+	}
+	public String getNegativeAmortizationLimitMonthsCount() {
+		return negativeAmortizationLimitMonthsCount;
+	}
+	public void setNegativeAmortizationLimitMonthsCount(String negativeAmortizationLimitMonthsCount) {
+		this.negativeAmortizationLimitMonthsCount = negativeAmortizationLimitMonthsCount;
 	}
 
 }

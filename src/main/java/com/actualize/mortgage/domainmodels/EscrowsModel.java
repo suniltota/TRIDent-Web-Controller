@@ -1,4 +1,6 @@
-package com.actualize.mortgage.utils;
+package com.actualize.mortgage.domainmodels;
+
+import com.actualize.mortgage.utils.Expenses;
 
 public class EscrowsModel extends Expenses {
 	private String  monthlyPaymentAmount = "";

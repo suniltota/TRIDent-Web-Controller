@@ -17,6 +17,8 @@ public class Address implements Serializable {
 	private String countryCode;
 	private String postalCode;
 	private String stateCode;
+	private String unparsedLegalDescription;
+	
 	/**
 	 * @return the addressLineText
 	 */
@@ -112,6 +114,12 @@ public class Address implements Serializable {
 	 */
 	public void setStateCode(String stateCode) {
 		this.stateCode = stateCode;
+	}
+	public String getUnparsedLegalDescription() {
+		return unparsedLegalDescription;
+	}
+	public void setUnparsedLegalDescription(String unparsedLegalDescription) {
+		this.unparsedLegalDescription = unparsedLegalDescription;
 	}
 	
 	

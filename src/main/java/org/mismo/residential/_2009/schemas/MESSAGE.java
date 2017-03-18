@@ -8,10 +8,13 @@
 
 package org.mismo.residential._2009.schemas;
 
+import java.io.Serializable;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 
@@ -43,9 +46,12 @@ import javax.xml.bind.annotation.XmlType;
     "aboutversions",
     "documentsets"
 })
-public class MESSAGE {
+public class MESSAGE implements Serializable{
 
-    @XmlElement(name = "ABOUT_VERSIONS", required = true)
+ 
+	private static final long serialVersionUID = 7186408767864335762L;
+	
+	@XmlElement(name = "ABOUT_VERSIONS", required = true)
     protected ABOUTVERSIONS aboutversions;
     @XmlElement(name = "DOCUMENT_SETS", required = true)
     protected DOCUMENTSETS documentsets;

@@ -4,9 +4,6 @@ import java.io.Serializable;
 
 public class ClosingInformation implements Serializable {
 	
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 8557982875024822649L;
 	
 	private String dateIssued;
@@ -15,91 +12,91 @@ public class ClosingInformation implements Serializable {
 	private String settlementAgent;
 	private String fileNo;
 	private Address property;
+	//below field is saleContractAmount, shall be removed later
 	private String salePrice;
+	private String partyRoleType;
+	private SalesContractDetail salesContractDetail;
+	private PropertyValuationDetail propertyValuationDetail;
 	
-	/**
-	 * @return the dateIssued
-	 */
+	
 	public String getDateIssued() {
 		return dateIssued;
 	}
-	/**
-	 * @param dateIssued the dateIssued to set
-	 */
+	
 	public void setDateIssued(String dateIssued) {
 		this.dateIssued = dateIssued;
 	}
-	/**
-	 * @return the closingDate
-	 */
+	
 	public String getClosingDate() {
 		return closingDate;
 	}
-	/**
-	 * @param closingDate the closingDate to set
-	 */
+	
 	public void setClosingDate(String closingDate) {
 		this.closingDate = closingDate;
 	}
-	/**
-	 * @return the disbursementDate
-	 */
+	
 	public String getDisbursementDate() {
 		return disbursementDate;
 	}
-	/**
-	 * @param disbursementDate the disbursementDate to set
-	 */
+	
 	public void setDisbursementDate(String disbursementDate) {
 		this.disbursementDate = disbursementDate;
 	}
-	/**
-	 * @return the settlementAgent
-	 */
+	
 	public String getSettlementAgent() {
 		return settlementAgent;
 	}
-	/**
-	 * @param settlementAgent the settlementAgent to set
-	 */
+	
 	public void setSettlementAgent(String settlementAgent) {
 		this.settlementAgent = settlementAgent;
 	}
-	/**
-	 * @return the fileNo
-	 */
+	
 	public String getFileNo() {
 		return fileNo;
 	}
-	/**
-	 * @param fileNo the fileNo to set
-	 */
+	
 	public void setFileNo(String fileNo) {
 		this.fileNo = fileNo;
 	}
-	/**
-	 * @return the property
-	 */
+	
 	public Address getProperty() {
 		return property;
 	}
-	/**
-	 * @param property the property to set
-	 */
+	
 	public void setProperty(Address property) {
 		this.property = property;
 	}
-	/**
-	 * @return the salePrice
-	 */
+	
 	public String getSalePrice() {
 		return salePrice;
 	}
-	/**
-	 * @param salePrice the salePrice to set
-	 */
+	
 	public void setSalePrice(String salePrice) {
 		this.salePrice = salePrice;
+	}
+	
+	public String getPartyRoleType() {
+		return partyRoleType;
+	}
+	
+	public void setPartyRoleType(String partyRoleType) {
+		this.partyRoleType = partyRoleType;
+	}
+
+	public SalesContractDetail getSalesContractDetail() {
+		return salesContractDetail;
+	}
+
+	public void setSalesContractDetail(SalesContractDetail salesContractDetail) {
+		this.salesContractDetail = salesContractDetail;
+	}
+
+	public PropertyValuationDetail getPropertyValuationDetail() {
+		return propertyValuationDetail;
+	}
+
+	public void setPropertyValuationDetail(PropertyValuationDetail propertyValuationDetail) {
+		this.propertyValuationDetail = propertyValuationDetail;
 	}
 	
 
