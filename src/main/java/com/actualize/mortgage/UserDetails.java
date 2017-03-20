@@ -1,9 +1,6 @@
 package com.actualize.mortgage;
 
 import java.io.Serializable;
-import java.util.Date;
-
-import org.mismo.residential._2009.schemas.MESSAGE;
 
 
 public class UserDetails implements Serializable{
@@ -12,11 +9,11 @@ public class UserDetails implements Serializable{
     private static final long serialVersionUID = 100062L;
     private String loginName;
     private String password;
-    private MESSAGE message;
-    public MESSAGE getMessage() {
+    private String message;
+    public String getMessage() {
 		return message;
 	}
-	public void setMessage(MESSAGE message) {
+	public void setMessage(String message) {
 		this.message = message;
 	}
 	/**
