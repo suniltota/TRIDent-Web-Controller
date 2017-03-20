@@ -6,16 +6,16 @@ public class LoanTermsIntialEscrow implements Serializable {
 	
 	private static final long serialVersionUID = -7632316299361622429L;
 	
-	private String escrowIndicator = "";
-	private String feeType = "";
-	private String feeActualPaymentAmount = "";
-	private String integratedDisclosureSectionType = "";
-	private String escrowItemType = "";
-	private String displayLabelText = "";
-	private String feePaidToType = "";
-	private String typeOtherDescription = "";
-	private String escrowItemPaymentPaidByType = "";
-	private String escrowItemActualPaymentAmount = "";
+	private String escrowIndicator ;
+	private String feeType ;
+	private String feeActualPaymentAmount ;
+	private String integratedDisclosureSectionType ;
+	private String escrowItemType ;
+	private String displayLabelText ;
+	private String feePaidToType ;
+	private String typeOtherDescription ;
+	private String escrowItemPaymentPaidByType ;
+	private String escrowItemActualPaymentAmount ;
 	
 	public String getEscrowIndicator() {
 		return escrowIndicator;

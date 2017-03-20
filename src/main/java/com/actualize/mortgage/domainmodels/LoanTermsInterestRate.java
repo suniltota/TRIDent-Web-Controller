@@ -13,6 +13,22 @@ public class LoanTermsInterestRate implements Serializable {
 	private String interest;
 	private String status;
 	private List<String> details;
+	private String buydownTemporarySubsidyFundingIndicator;
+	private String gseBuydownReflectedInNoteIndicator;
+	private String buydownInitialEffectiveInterestRatePercent;
+	private String buydownChangeFrequencyMonthsCount;
+	private String buydownIncreaseRatePercent;
+	private String noteRatePercent;
+	private String disclosedFullyIndexedRatePercent;
+	private String interestRateIncreaseIndicator;
+	private String adjustmentRuleType;
+	private String perChangeRateAdjustmentFrequencyMonthsCount;
+	private String firstRateChangeMonthsCount;
+	private String ceilingRatePercentEarliestEffectiveMonthsCount;
+	private String ceilingRatePercent;
+	
+	
+	
 	/**
 	 * @return the interest
 	 */
@@ -48,6 +64,84 @@ public class LoanTermsInterestRate implements Serializable {
 	 */
 	public void setDetails(List<String> details) {
 		this.details = details;
+	}
+	public String getBuydownTemporarySubsidyFundingIndicator() {
+		return buydownTemporarySubsidyFundingIndicator;
+	}
+	public void setBuydownTemporarySubsidyFundingIndicator(String buydownTemporarySubsidyFundingIndicator) {
+		this.buydownTemporarySubsidyFundingIndicator = buydownTemporarySubsidyFundingIndicator;
+	}
+	public String getGseBuydownReflectedInNoteIndicator() {
+		return gseBuydownReflectedInNoteIndicator;
+	}
+	public void setGseBuydownReflectedInNoteIndicator(String gseBuydownReflectedInNoteIndicator) {
+		this.gseBuydownReflectedInNoteIndicator = gseBuydownReflectedInNoteIndicator;
+	}
+	public String getBuydownInitialEffectiveInterestRatePercent() {
+		return buydownInitialEffectiveInterestRatePercent;
+	}
+	public void setBuydownInitialEffectiveInterestRatePercent(String buydownInitialEffectiveInterestRatePercent) {
+		this.buydownInitialEffectiveInterestRatePercent = buydownInitialEffectiveInterestRatePercent;
+	}
+	public String getBuydownChangeFrequencyMonthsCount() {
+		return buydownChangeFrequencyMonthsCount;
+	}
+	public void setBuydownChangeFrequencyMonthsCount(String buydownChangeFrequencyMonthsCount) {
+		this.buydownChangeFrequencyMonthsCount = buydownChangeFrequencyMonthsCount;
+	}
+	public String getBuydownIncreaseRatePercent() {
+		return buydownIncreaseRatePercent;
+	}
+	public void setBuydownIncreaseRatePercent(String buydownIncreaseRatePercent) {
+		this.buydownIncreaseRatePercent = buydownIncreaseRatePercent;
+	}
+	public String getNoteRatePercent() {
+		return noteRatePercent;
+	}
+	public void setNoteRatePercent(String noteRatePercent) {
+		this.noteRatePercent = noteRatePercent;
+	}
+	public String getDisclosedFullyIndexedRatePercent() {
+		return disclosedFullyIndexedRatePercent;
+	}
+	public void setDisclosedFullyIndexedRatePercent(String disclosedFullyIndexedRatePercent) {
+		this.disclosedFullyIndexedRatePercent = disclosedFullyIndexedRatePercent;
+	}
+	public String getInterestRateIncreaseIndicator() {
+		return interestRateIncreaseIndicator;
+	}
+	public void setInterestRateIncreaseIndicator(String interestRateIncreaseIndicator) {
+		this.interestRateIncreaseIndicator = interestRateIncreaseIndicator;
+	}
+	public String getAdjustmentRuleType() {
+		return adjustmentRuleType;
+	}
+	public void setAdjustmentRuleType(String adjustmentRuleType) {
+		this.adjustmentRuleType = adjustmentRuleType;
+	}
+	public String getPerChangeRateAdjustmentFrequencyMonthsCount() {
+		return perChangeRateAdjustmentFrequencyMonthsCount;
+	}
+	public void setPerChangeRateAdjustmentFrequencyMonthsCount(String perChangeRateAdjustmentFrequencyMonthsCount) {
+		this.perChangeRateAdjustmentFrequencyMonthsCount = perChangeRateAdjustmentFrequencyMonthsCount;
+	}
+	public String getFirstRateChangeMonthsCount() {
+		return firstRateChangeMonthsCount;
+	}
+	public void setFirstRateChangeMonthsCount(String firstRateChangeMonthsCount) {
+		this.firstRateChangeMonthsCount = firstRateChangeMonthsCount;
+	}
+	public String getCeilingRatePercentEarliestEffectiveMonthsCount() {
+		return ceilingRatePercentEarliestEffectiveMonthsCount;
+	}
+	public void setCeilingRatePercentEarliestEffectiveMonthsCount(String ceilingRatePercentEarliestEffectiveMonthsCount) {
+		this.ceilingRatePercentEarliestEffectiveMonthsCount = ceilingRatePercentEarliestEffectiveMonthsCount;
+	}
+	public String getCeilingRatePercent() {
+		return ceilingRatePercent;
+	}
+	public void setCeilingRatePercent(String ceilingRatePercent) {
+		this.ceilingRatePercent = ceilingRatePercent;
 	}
 	
 	

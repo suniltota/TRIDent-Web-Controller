@@ -7,6 +7,7 @@ import org.mismo.residential._2009.schemas.DEAL;
 import org.mismo.residential._2009.schemas.DOCUMENT;
 import org.mismo.residential._2009.schemas.LIABILITY;
 import org.mismo.residential._2009.schemas.LOANIDENTIFIER;
+import org.mismo.residential._2009.schemas.MESSAGE;
 
 /**
  * @author bkollepara
@@ -21,6 +22,7 @@ public class DocumentType {
 	private boolean refinanceTypeLoan;
 	private boolean homeEquityLoanIndicator;
 	private boolean sellerOnly;
+	private String aboutVersionIdentifier;
 	private String loanId;
 	
 	public static boolean isStandardView(DOCUMENT document)
@@ -223,6 +225,19 @@ public class DocumentType {
 				loanId = loanidentifier.getLoanIdentifier().getValue();
 		}
 		return loanId;
+	}
+	
+	public static String getAboutVersionIdentifier(MESSAGE message)
+	{
+		return message.getABOUTVERSIONS().getABOUTVERSION().getAboutVersionIdentifier().getValue();
+	}
+
+	public String getAboutVersionIdentifier() {
+		return aboutVersionIdentifier;
+	}
+
+	public void setAboutVersionIdentifier(String aboutVersionIdentifier) {
+		this.aboutVersionIdentifier = aboutVersionIdentifier;
 	}
 
 }

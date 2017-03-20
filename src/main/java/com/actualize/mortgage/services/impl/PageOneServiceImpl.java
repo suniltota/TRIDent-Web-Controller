@@ -43,8 +43,6 @@ import com.actualize.mortgage.utils.DocumentType;
 import com.actualize.mortgage.utils.PopulateData;
 import com.actualize.mortgage.utils.StringFormatter;
 
-import datalayer.PopulateInputData;
-
 public class PageOneServiceImpl implements PageOneService {
 	
 	DEAL deal = null;
@@ -292,12 +290,11 @@ public class PageOneServiceImpl implements PageOneService {
 	public LoanTerms createLoanTerms(DOCUMENT document ) {
 		LoanTerms loanTerms = new LoanTerms();
 		deal = document.getDEALSETS().getDEALSET().getDEALS().getDEAL();
-		LoanTermsLoanAmount loanTermsLoanAmount = new LoanTermsLoanAmount();
+		LoanTermsLoanAmount loanTermsLoanAmount = PopulateData.populateLoanTermsLoanAmount(document);
+		LoanTermsPI loanTermsPI = PopulateData.populateLoanTermsPI(document);
+		LoanTermsInterestRate loanTermsInterestRate = PopulateData.populateLoanTermsInterestRate(document);
 		String loanAmount = "";
-		String negativeAmortizationMaximumLoanBalanceAmount = "";
-		String negativeAmortizationLimitMonthsCount = "";
 		String negativeAmortizationType = "";
-		String buydownInitialEffectiveInterestRatePercent = "";
 		String disclosedFullyIndexedRatePercent = "";
 		String weightedAverageInterestRatePercent = "";
 		String noteRatePercent = "";
@@ -323,10 +320,8 @@ public class PageOneServiceImpl implements PageOneService {
 			}
 			//DEAL.LOANS.LOAN.NEGATIVE_AMORTIZATION.NEGATIVE_AMORTIZATION_RULE.NegativeAmortizationMaximumLoanBalanceAmount['__text']
 			text4_1_2 = text4_1_2 + " " + deal.getLOANS().getLOAN().getNEGATIVEAMORTIZATION().getNEGATIVEAMORTIZATIONRULE().getNegativeAmortizationMaximumLoanBalanceAmount().getValue().toPlainString();
-			 negativeAmortizationMaximumLoanBalanceAmount = deal.getLOANS().getLOAN().getNEGATIVEAMORTIZATION().getNEGATIVEAMORTIZATIONRULE().getNegativeAmortizationMaximumLoanBalanceAmount().getValue().toPlainString();
 			//DEAL.LOANS.LOAN.NEGATIVE_AMORTIZATION.NegativeAmortizationLimitMonthsCount['__text']
 			text4_1_3 = text4_1_3 + " " +Integer.toString(deal.getLOANS().getLOAN().getNEGATIVEAMORTIZATION().getNEGATIVEAMORTIZATIONRULE().getNegativeAmortizationLimitMonthsCount().getValue()); 
-			 negativeAmortizationLimitMonthsCount = Integer.toString(deal.getLOANS().getLOAN().getNEGATIVEAMORTIZATION().getNEGATIVEAMORTIZATIONRULE().getNegativeAmortizationLimitMonthsCount().getValue());
 			loanTermsLoanAmount.setStatus("YES");
 			List<String> details = new LinkedList<>();
 				details.add(text4_1_2);
@@ -336,7 +331,6 @@ public class PageOneServiceImpl implements PageOneService {
 		else
 			loanTermsLoanAmount.setStatus("NO");
 		
-		LoanTermsInterestRate loanTermsInterestRate = new LoanTermsInterestRate();
 		String text4_2 ="";
 		//DEAL.LOANS.LOAN.BUYDOWN.BUYDOWN_RULE.EXTENSION.OTHER.BuydownReflectedInNoteIndicator['__text']).equalsIgnoreCase("true") 
         //&& !DEAL.LOANS.LOAN.BUYDOWN.BUYDOWN_OCCURRENCES.BUYDOWN_OCCURRENCE.BuydownInitialEffectiveInterestRatePercent['__text']).equals(""))
@@ -344,8 +338,7 @@ public class PageOneServiceImpl implements PageOneService {
 		{
 		if(deal.getLOANS().getLOAN().getBUYDOWN().getBUYDOWNRULE().getEXTENSION().getOTHER().isBuydownReflectedInNoteIndicator() && !("").equals(deal.getLOANS().getLOAN().getBUYDOWN().getBUYDOWNOCCURRENCES().getBUYDOWNOCCURRENCE().getBuydownInitialEffectiveInterestRatePercent().getValue().toPlainString()))
 		//text4_2 = DEAL.LOANS.LOAN.BUYDOWN.BUYDOWN_OCCURRENCES.BUYDOWN_OCCURRENCE.BuydownInitialEffectiveInterestRatePercent['__text'];
-			//text4_2 = deal.getLOANS().getLOAN().getBUYDOWN().getBUYDOWNOCCURRENCES().getBUYDOWNOCCURRENCE().getBuydownInitialEffectiveInterestRatePercent().getValue().toPlainString() + "%";
-			buydownInitialEffectiveInterestRatePercent = deal.getLOANS().getLOAN().getBUYDOWN().getBUYDOWNOCCURRENCES().getBUYDOWNOCCURRENCE().getBuydownInitialEffectiveInterestRatePercent().getValue().toPlainString();
+			text4_2 = deal.getLOANS().getLOAN().getBUYDOWN().getBUYDOWNOCCURRENCES().getBUYDOWNOCCURRENCE().getBuydownInitialEffectiveInterestRatePercent().getValue().toPlainString() + "%";
 		//DEAL.LOANS.LOAN.TERMS_OF_LOAN.DisclosedFullyIndexedRatePercent['__text']).equals("")
 		}
 		else if(null != deal.getLOANS().getLOAN().getTERMSOFLOAN().getDisclosedFullyIndexedRatePercent())
@@ -372,7 +365,7 @@ public class PageOneServiceImpl implements PageOneService {
 			
 			List<INTERESTRATEPERCHANGEADJUSTMENTRULE> interestrateperchangeadjustmentrules = deal.getLOANS().getLOAN().getADJUSTMENT().getINTERESTRATEADJUSTMENT().getINTERESTRATEPERCHANGEADJUSTMENTRULES().getINTERESTRATEPERCHANGEADJUSTMENTRULE();
 			interestrateperchangeadjustmentrules.forEach(interestrateperchangeadjustmentrule ->{
-				/*if("DDOFileNumber".equalsIgnoreCase(message.getABOUTVERSIONS().getABOUTVERSION().getAboutVersionIdentifier().getValue()))
+				/*if("DDOFileNumber".equalsIgnoreCase(DocumentType.g))
 				{
 					text4_2_2 = Integer.toString(interestrateperchangeadjustmentrule.getPerChangeRateAdjustmentFrequencyMonthsCount().getValue());
 				}
@@ -398,7 +391,7 @@ public class PageOneServiceImpl implements PageOneService {
 			loanTermsInterestRate.setStatus("NO");
 		}
 		
-		LoanTermsPI loanTermsPI = new LoanTermsPI();
+		
 		
 		String frequency = "";
 		String principalAmount = "";

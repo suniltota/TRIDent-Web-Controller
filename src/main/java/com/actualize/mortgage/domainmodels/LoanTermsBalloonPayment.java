@@ -13,6 +13,9 @@ public class LoanTermsBalloonPayment implements Serializable {
 	private String amount;
 	private String status;
 	private List<String> details;
+	private String balloonIndicator;
+	private String balloonPaymentAmount;
+	
 	/**
 	 * @return the amount
 	 */
@@ -48,6 +51,18 @@ public class LoanTermsBalloonPayment implements Serializable {
 	 */
 	public void setDetails(List<String> details) {
 		this.details = details;
+	}
+	public String getBalloonIndicator() {
+		return balloonIndicator;
+	}
+	public void setBalloonIndicator(String balloonIndicator) {
+		this.balloonIndicator = balloonIndicator;
+	}
+	public String getBalloonPaymentAmount() {
+		return balloonPaymentAmount;
+	}
+	public void setBalloonPaymentAmount(String balloonPaymentAmount) {
+		this.balloonPaymentAmount = balloonPaymentAmount;
 	}
 
 }

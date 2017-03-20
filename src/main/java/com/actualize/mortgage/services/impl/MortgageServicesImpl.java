@@ -106,6 +106,7 @@ public class MortgageServicesImpl implements MortgageServices{
 	public List<PDFDocument> createDocument(MESSAGE message) throws Exception {
 		List<PDFDocument> pdfDocuments = new ArrayList<>();
 		List<DOCUMENT> documents = message.getDOCUMENTSETS().getDOCUMENTSET().getDOCUMENTS().getDOCUMENT();
+			
 		for(DOCUMENT document : documents)
 		{
 			PDFDocument pdfDocument = new PDFDocument();

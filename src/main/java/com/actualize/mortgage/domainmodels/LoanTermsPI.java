@@ -14,6 +14,16 @@ public class LoanTermsPI implements Serializable {
 	private String amount;
 	private String status;
 	private List<String> details;
+	private String initialPrincipalAndInterestPaymentAmount;
+	private String fullyIndexedInitialPrincipalAndInterestPaymentAmount;
+	private String interestOnlyIndicator;
+	private String interestOnlyTermMonthsCount;
+	private String adjustmentRuleType;
+	private String perChangePrincipalAndInterestPaymentAdjustmentFrequencyMonthsCount;
+	private String firstPrincipalAndInterestPaymentChangeMonthsCount;
+	private String principalAndInterestPaymentMaximumAmountEarliestEffectiveMonthsCount;
+	private String principalAndInterestPaymentMaximumAmount;
+	
 	/**
 	 * @return the paymentFrequencyType
 	 */
@@ -61,6 +71,64 @@ public class LoanTermsPI implements Serializable {
 	 */
 	public void setDetails(List<String> details) {
 		this.details = details;
+	}
+	public String getInitialPrincipalAndInterestPaymentAmount() {
+		return initialPrincipalAndInterestPaymentAmount;
+	}
+	public void setInitialPrincipalAndInterestPaymentAmount(String initialPrincipalAndInterestPaymentAmount) {
+		this.initialPrincipalAndInterestPaymentAmount = initialPrincipalAndInterestPaymentAmount;
+	}
+	public String getFullyIndexedInitialPrincipalAndInterestPaymentAmount() {
+		return fullyIndexedInitialPrincipalAndInterestPaymentAmount;
+	}
+	public void setFullyIndexedInitialPrincipalAndInterestPaymentAmount(
+			String fullyIndexedInitialPrincipalAndInterestPaymentAmount) {
+		this.fullyIndexedInitialPrincipalAndInterestPaymentAmount = fullyIndexedInitialPrincipalAndInterestPaymentAmount;
+	}
+	public String getInterestOnlyIndicator() {
+		return interestOnlyIndicator;
+	}
+	public void setInterestOnlyIndicator(String interestOnlyIndicator) {
+		this.interestOnlyIndicator = interestOnlyIndicator;
+	}
+	public String getInterestOnlyTermMonthsCount() {
+		return interestOnlyTermMonthsCount;
+	}
+	public void setInterestOnlyTermMonthsCount(String interestOnlyTermMonthsCount) {
+		this.interestOnlyTermMonthsCount = interestOnlyTermMonthsCount;
+	}
+	public String getAdjustmentRuleType() {
+		return adjustmentRuleType;
+	}
+	public void setAdjustmentRuleType(String adjustmentRuleType) {
+		this.adjustmentRuleType = adjustmentRuleType;
+	}
+	public String getPerChangePrincipalAndInterestPaymentAdjustmentFrequencyMonthsCount() {
+		return perChangePrincipalAndInterestPaymentAdjustmentFrequencyMonthsCount;
+	}
+	public void setPerChangePrincipalAndInterestPaymentAdjustmentFrequencyMonthsCount(
+			String perChangePrincipalAndInterestPaymentAdjustmentFrequencyMonthsCount) {
+		this.perChangePrincipalAndInterestPaymentAdjustmentFrequencyMonthsCount = perChangePrincipalAndInterestPaymentAdjustmentFrequencyMonthsCount;
+	}
+	public String getFirstPrincipalAndInterestPaymentChangeMonthsCount() {
+		return firstPrincipalAndInterestPaymentChangeMonthsCount;
+	}
+	public void setFirstPrincipalAndInterestPaymentChangeMonthsCount(
+			String firstPrincipalAndInterestPaymentChangeMonthsCount) {
+		this.firstPrincipalAndInterestPaymentChangeMonthsCount = firstPrincipalAndInterestPaymentChangeMonthsCount;
+	}
+	public String getPrincipalAndInterestPaymentMaximumAmountEarliestEffectiveMonthsCount() {
+		return principalAndInterestPaymentMaximumAmountEarliestEffectiveMonthsCount;
+	}
+	public void setPrincipalAndInterestPaymentMaximumAmountEarliestEffectiveMonthsCount(
+			String principalAndInterestPaymentMaximumAmountEarliestEffectiveMonthsCount) {
+		this.principalAndInterestPaymentMaximumAmountEarliestEffectiveMonthsCount = principalAndInterestPaymentMaximumAmountEarliestEffectiveMonthsCount;
+	}
+	public String getPrincipalAndInterestPaymentMaximumAmount() {
+		return principalAndInterestPaymentMaximumAmount;
+	}
+	public void setPrincipalAndInterestPaymentMaximumAmount(String principalAndInterestPaymentMaximumAmount) {
+		this.principalAndInterestPaymentMaximumAmount = principalAndInterestPaymentMaximumAmount;
 	}
 	
 	

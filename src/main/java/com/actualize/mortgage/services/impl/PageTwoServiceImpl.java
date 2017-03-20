@@ -240,7 +240,7 @@ public class PageTwoServiceImpl implements PageTwoService{
 			String prepaidType = prepaiditem.getPREPAIDITEMDETAIL().getPrepaidItemType().getValue().value();
 			if(checkOtherPrepaids(prepaidType))
 			{
-				prepaidsList.add(PrepaidCostsTableRow(propertyTaxes, true, prepaidType));
+				prepaidsList.add(PrepaidCostsTableRow(prepaiditem, true, prepaidType));
 			}
 		}
 		
@@ -518,7 +518,7 @@ public class PageTwoServiceImpl implements PageTwoService{
 		Prepaids prepaids = new Prepaids();
 		String label = "";
 		label = StringFormatter.CAMEL.formatString(prepaidType);
-		if(prepaidType.equalsIgnoreCase("Homeowners Insurance Premium")){
+		if(prepaidType.equalsIgnoreCase("HomeownersInsurancePremium")){
 		      label = "Homeowner's Insurance Premium";
 		}
 		

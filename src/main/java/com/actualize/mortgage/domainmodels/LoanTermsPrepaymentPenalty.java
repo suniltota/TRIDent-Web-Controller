@@ -15,6 +15,9 @@ public class LoanTermsPrepaymentPenalty implements Serializable {
 	private String amount;
 	private String status;
 	private List<String> details;
+	private String prepaymentPenaltyIndicator;
+	private String prepaymentPenaltyMaximumLifeOfLoanAmount;
+	private String prepaymentPenaltyExpirationMonthsCount;
 	
 	/**
 	 * @return the amount
@@ -51,6 +54,24 @@ public class LoanTermsPrepaymentPenalty implements Serializable {
 	 */
 	public void setDetails(List<String> details) {
 		this.details = details;
+	}
+	public String getPrepaymentPenaltyIndicator() {
+		return prepaymentPenaltyIndicator;
+	}
+	public void setPrepaymentPenaltyIndicator(String prepaymentPenaltyIndicator) {
+		this.prepaymentPenaltyIndicator = prepaymentPenaltyIndicator;
+	}
+	public String getPrepaymentPenaltyMaximumLifeOfLoanAmount() {
+		return prepaymentPenaltyMaximumLifeOfLoanAmount;
+	}
+	public void setPrepaymentPenaltyMaximumLifeOfLoanAmount(String prepaymentPenaltyMaximumLifeOfLoanAmount) {
+		this.prepaymentPenaltyMaximumLifeOfLoanAmount = prepaymentPenaltyMaximumLifeOfLoanAmount;
+	}
+	public String getPrepaymentPenaltyExpirationMonthsCount() {
+		return prepaymentPenaltyExpirationMonthsCount;
+	}
+	public void setPrepaymentPenaltyExpirationMonthsCount(String prepaymentPenaltyExpirationMonthsCount) {
+		this.prepaymentPenaltyExpirationMonthsCount = prepaymentPenaltyExpirationMonthsCount;
 	}
 
 }

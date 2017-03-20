@@ -2,9 +2,17 @@ package com.actualize.mortgage.utils;
 
 import org.mismo.residential._2009.schemas.DEAL;
 import org.mismo.residential._2009.schemas.DOCUMENT;
+import org.mismo.residential._2009.schemas.MESSAGE;
 
 import com.actualize.mortgage.domainmodels.LoanInformation;
+import com.actualize.mortgage.domainmodels.LoanTermsBalloonPayment;
+import com.actualize.mortgage.domainmodels.LoanTermsETIA;
+import com.actualize.mortgage.domainmodels.LoanTermsEscrowAccount;
+import com.actualize.mortgage.domainmodels.LoanTermsInterestRate;
+import com.actualize.mortgage.domainmodels.LoanTermsIntialEscrow;
 import com.actualize.mortgage.domainmodels.LoanTermsLoanAmount;
+import com.actualize.mortgage.domainmodels.LoanTermsPI;
+import com.actualize.mortgage.domainmodels.LoanTermsPrepaymentPenalty;
 
 public class PopulateData {
 	
@@ -15,17 +23,17 @@ public class PopulateData {
 		
 		 String constructionLoanType = "";
 		 String constructionPeriodNumberOfMonthsCount = "";
-		 String constructionLoanTotalTermMonthsCount = "";
+		 String constructionLoanTotalTermMonthsCount = "";//nf
 		 String loanMaturityPeriodType = "";
 		 String loanMaturityPeriodCount = "";
 		 String integratedDisclosureHomeEquityLoanIndicator = "";
 		 String lienPriorityType = "";
-		 String adjustableRate = "";
+		 String adjustableRate = "";//nf
 		 String integratedDisclosureLoanProductDescription = "";
 		 String mortgageType = "";
 		 String mortgageTypeOtherDescription = "";
-		 String loanIdentifierType = "";
-		 String loanIdentifier = "";
+		 String loanIdentifierType = "";//nf
+		 String loanIdentifier = "";//nf
 		 String miRequiredIndicator = "";
 		 String miCertificateIdentifier = "";
 		 
@@ -78,21 +86,162 @@ public class PopulateData {
 		DEAL deal = document.getDEALSETS().getDEALSET().getDEALS().getDEAL();
 		
 		 String noteAmount = "";
-		 String loanAmountIncreaseIndicator = "";
-		 String negativeAmoritzationIndicator = "";
+		 String loanAmountIncreaseIndicator = "";//nf
+		 String negativeAmoritzationIndicator = "";//nf
 		 String negativeAmortizationMaximumLoanBalanceAmount = "";
 		 String negativeAmortizationLimitMonthsCount = "";
 		
 		if(null != deal.getLOANS().getLOAN().getTERMSOFLOAN().getNoteAmount())
 			noteAmount = deal.getLOANS().getLOAN().getTERMSOFLOAN().getNoteAmount().getValue().toPlainString();
-		if(null != deal.getLOANS().getLOAN().getNEGATIVEAMORTIZATION().getNEGATIVEAMORTIZATIONRULE() && null != deal.getLOANS().getLOAN().getNEGATIVEAMORTIZATION().getNEGATIVEAMORTIZATIONRULE().getNegativeAmortizationMaximumLoanBalanceAmount())
+		if(null != deal.getLOANS().getLOAN().getNEGATIVEAMORTIZATION() && null != deal.getLOANS().getLOAN().getNEGATIVEAMORTIZATION().getNEGATIVEAMORTIZATIONRULE().getNegativeAmortizationMaximumLoanBalanceAmount())
 			negativeAmortizationMaximumLoanBalanceAmount = deal.getLOANS().getLOAN().getNEGATIVEAMORTIZATION().getNEGATIVEAMORTIZATIONRULE().getNegativeAmortizationMaximumLoanBalanceAmount().getValue().toPlainString();
-		if(null != deal.getLOANS().getLOAN().getNEGATIVEAMORTIZATION().getNEGATIVEAMORTIZATIONRULE() && null != deal.getLOANS().getLOAN().getNEGATIVEAMORTIZATION().getNEGATIVEAMORTIZATIONRULE().getNegativeAmortizationLimitMonthsCount())
+		if(null != deal.getLOANS().getLOAN().getNEGATIVEAMORTIZATION() && null != deal.getLOANS().getLOAN().getNEGATIVEAMORTIZATION().getNEGATIVEAMORTIZATIONRULE().getNegativeAmortizationLimitMonthsCount())
 			negativeAmortizationLimitMonthsCount = Integer.toString(deal.getLOANS().getLOAN().getNEGATIVEAMORTIZATION().getNEGATIVEAMORTIZATIONRULE().getNegativeAmortizationLimitMonthsCount().getValue());
 		
 		loanTermsLoanAmount.setAmount(noteAmount);
+		loanTermsLoanAmount.setLoanAmountIncreaseIndicator(loanAmountIncreaseIndicator);
+		loanTermsLoanAmount.setNegativeAmoritzationIndicator(negativeAmoritzationIndicator);
 		loanTermsLoanAmount.setNegativeAmortizationMaximumLoanBalanceAmount(negativeAmortizationMaximumLoanBalanceAmount);
 		loanTermsLoanAmount.setNegativeAmortizationLimitMonthsCount(negativeAmortizationLimitMonthsCount);
 		return loanTermsLoanAmount;
+	}
+	
+	public static  LoanTermsInterestRate populateLoanTermsInterestRate(DOCUMENT document)
+	{
+		LoanTermsInterestRate loanTermsInterestRate = new LoanTermsInterestRate();
+		DEAL deal = document.getDEALSETS().getDEALSET().getDEALS().getDEAL();
+		 String buydownTemporarySubsidyFundingIndicator = ""; //nf
+		 String gseBuydownReflectedInNoteIndicator = ""; //nf
+		 String buydownInitialEffectiveInterestRatePercent = "";
+		 String buydownChangeFrequencyMonthsCount = "";//nf
+		 String buydownIncreaseRatePercent = "";//nf
+		 String noteRatePercent = "";//nf
+		 String disclosedFullyIndexedRatePercent = "";
+		 String interestRateIncreaseIndicator = "";//nf
+		 String adjustmentRuleType = "";//nf
+		 String perChangeRateAdjustmentFrequencyMonthsCount = "";//nf
+		 String firstRateChangeMonthsCount = "";//nf
+		 String ceilingRatePercentEarliestEffectiveMonthsCount = "";//nf
+		 String ceilingRatePercent = "";//nf
+		 
+		 if(null != deal.getLOANS().getLOAN().getTERMSOFLOAN().getDisclosedFullyIndexedRatePercent())
+			 disclosedFullyIndexedRatePercent =  deal.getLOANS().getLOAN().getTERMSOFLOAN().getDisclosedFullyIndexedRatePercent().getValue().toPlainString();
+		
+		 if(null != deal.getLOANS().getLOAN().getBUYDOWN() && deal.getLOANS().getLOAN().getBUYDOWN().getBUYDOWNRULE().getEXTENSION().getOTHER().isBuydownReflectedInNoteIndicator() && !("").equals(deal.getLOANS().getLOAN().getBUYDOWN().getBUYDOWNOCCURRENCES().getBUYDOWNOCCURRENCE().getBuydownInitialEffectiveInterestRatePercent().getValue().toPlainString()))
+			buydownInitialEffectiveInterestRatePercent = deal.getLOANS().getLOAN().getBUYDOWN().getBUYDOWNOCCURRENCES().getBUYDOWNOCCURRENCE().getBuydownInitialEffectiveInterestRatePercent().getValue().toPlainString();
+		 
+		 
+		 
+		 loanTermsInterestRate.setBuydownTemporarySubsidyFundingIndicator(buydownTemporarySubsidyFundingIndicator);
+		 loanTermsInterestRate.setGseBuydownReflectedInNoteIndicator(gseBuydownReflectedInNoteIndicator);
+		 loanTermsInterestRate.setBuydownInitialEffectiveInterestRatePercent(buydownInitialEffectiveInterestRatePercent);
+		 loanTermsInterestRate.setBuydownChangeFrequencyMonthsCount(buydownChangeFrequencyMonthsCount);
+		 loanTermsInterestRate.setBuydownIncreaseRatePercent(buydownIncreaseRatePercent);
+		 loanTermsInterestRate.setNoteRatePercent(noteRatePercent);
+		 loanTermsInterestRate.setDisclosedFullyIndexedRatePercent(disclosedFullyIndexedRatePercent);
+		 loanTermsInterestRate.setInterestRateIncreaseIndicator(interestRateIncreaseIndicator);
+		 loanTermsInterestRate.setAdjustmentRuleType(adjustmentRuleType);
+		 loanTermsInterestRate.setPerChangeRateAdjustmentFrequencyMonthsCount(perChangeRateAdjustmentFrequencyMonthsCount);
+		 loanTermsInterestRate.setFirstRateChangeMonthsCount(firstRateChangeMonthsCount);
+		 loanTermsInterestRate.setCeilingRatePercentEarliestEffectiveMonthsCount(ceilingRatePercentEarliestEffectiveMonthsCount);
+		 loanTermsInterestRate.setCeilingRatePercent(ceilingRatePercent);
+		 loanTermsInterestRate.setDisclosedFullyIndexedRatePercent(disclosedFullyIndexedRatePercent);
+		 
+		 return loanTermsInterestRate;
+	}
+	
+	public static LoanTermsPI populateLoanTermsPI(DOCUMENT document)
+	{
+		LoanTermsPI loanTermsPI = new LoanTermsPI();
+		DEAL deal = document.getDEALSETS().getDEALSET().getDEALS().getDEAL();
+		String initialPrincipalAndInterestPaymentAmount;
+		String fullyIndexedInitialPrincipalAndInterestPaymentAmount;
+		String interestOnlyIndicator;
+		String interestOnlyTermMonthsCount;
+		String adjustmentRuleType;
+		String perChangePrincipalAndInterestPaymentAdjustmentFrequencyMonthsCount;
+		String firstPrincipalAndInterestPaymentChangeMonthsCount;
+		String principalAndInterestPaymentMaximumAmountEarliestEffectiveMonthsCount;
+		String principalAndInterestPaymentMaximumAmount;
+		
+		return loanTermsPI;
+		
+	}
+	
+	public static LoanTermsPrepaymentPenalty populateLoanTermsPrepaymentPenalty(DOCUMENT document) 
+	{
+		LoanTermsPrepaymentPenalty loanTermsPrepaymentPenalty = new LoanTermsPrepaymentPenalty();
+		DEAL deal = document.getDEALSETS().getDEALSET().getDEALS().getDEAL();
+		String prepaymentPenaltyIndicator = "";
+		String prepaymentPenaltyMaximumLifeOfLoanAmount = "";//nf
+		String prepaymentPenaltyExpirationMonthsCount = "";//nf
+		if(null != deal.getLOANS().getLOAN().getLOANDETAIL().getPrepaymentPenaltyIndicator())
+			prepaymentPenaltyIndicator = Convertor.booleanToString(deal.getLOANS().getLOAN().getLOANDETAIL().getPrepaymentPenaltyIndicator().isValue());
+		
+		loanTermsPrepaymentPenalty.setPrepaymentPenaltyIndicator(prepaymentPenaltyIndicator);
+		loanTermsPrepaymentPenalty.setPrepaymentPenaltyMaximumLifeOfLoanAmount(prepaymentPenaltyMaximumLifeOfLoanAmount);
+		loanTermsPrepaymentPenalty.setPrepaymentPenaltyExpirationMonthsCount(prepaymentPenaltyExpirationMonthsCount);
+		return loanTermsPrepaymentPenalty;
+	}
+	
+	public static LoanTermsBalloonPayment populateLoanTermsBalloonPayment(DOCUMENT document)
+	{
+		LoanTermsBalloonPayment loanTermsBalloonPayment = new LoanTermsBalloonPayment();
+		DEAL deal = document.getDEALSETS().getDEALSET().getDEALS().getDEAL();
+		String balloonIndicator = "";
+		String balloonPaymentAmount = "";
+		if(null != deal.getLOANS().getLOAN().getLOANDETAIL().getBalloonIndicator())
+			balloonIndicator = Convertor.booleanToString(deal.getLOANS().getLOAN().getLOANDETAIL().getBalloonIndicator().isValue());
+		if(null != deal.getLOANS().getLOAN().getLOANDETAIL().getBalloonPaymentAmount())
+			balloonPaymentAmount = deal.getLOANS().getLOAN().getLOANDETAIL().getBalloonPaymentAmount().getValue().toPlainString();
+		
+		loanTermsBalloonPayment.setBalloonIndicator(balloonIndicator);
+		loanTermsBalloonPayment.setBalloonPaymentAmount(balloonPaymentAmount);
+			
+		return loanTermsBalloonPayment;
+		
+	}
+	
+	public static LoanTermsIntialEscrow populateLoanTermsIntialEscrow(DOCUMENT document)
+	{
+		LoanTermsIntialEscrow loanTermsIntialEscrow = new LoanTermsIntialEscrow();
+		DEAL deal = document.getDEALSETS().getDEALSET().getDEALS().getDEAL();
+		String escrowIndicator = "";
+		String feeType = "";
+		String feeActualPaymentAmount = "";
+		String integratedDisclosureSectionType = "";
+		String escrowItemType = "";
+		String displayLabelText = "";
+		String feePaidToType = "";
+		String typeOtherDescription = "";
+		String escrowItemPaymentPaidByType = "";
+		String escrowItemActualPaymentAmount = "";
+		
+		return loanTermsIntialEscrow;
+		
+	}
+	
+	public static LoanTermsETIA populateLoanTermsETIA(DOCUMENT document)
+	{
+		LoanTermsETIA  loanTermsETIA = new LoanTermsETIA();
+		DEAL deal = document.getDEALSETS().getDEALSET().getDEALS().getDEAL();
+		String projectedPaymentEstimatedTaxesInsuranceAssessmentComponentType = "";
+		String projectedPaymentEstimatedTaxesInsuranceAssessmentComponentTypeOtherDescription = "";
+		String projectedPaymentEscrowedType = "";
+		
+		return loanTermsETIA;
+		
+	}
+	
+	public static LoanTermsEscrowAccount populateLoanTermsEscrowAccount(DOCUMENT document)
+	{
+		LoanTermsEscrowAccount  loanTermsEscrowAccount = new LoanTermsEscrowAccount();
+		DEAL deal = document.getDEALSETS().getDEALSET().getDEALS().getDEAL();
+		String firstYearTotalNonEscrowPaymentDescription = "";
+		String firstYearTotalNonEscrowPaymentAmount = "";
+		
+		
+		return loanTermsEscrowAccount;
+		
 	}
 }
