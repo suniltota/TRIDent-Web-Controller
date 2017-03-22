@@ -229,7 +229,7 @@ public class DocumentType {
 	
 	public static String getAboutVersionIdentifier(MESSAGE message)
 	{
-		return null != message.getABOUTVERSIONS() ? message.getABOUTVERSIONS().getABOUTVERSION().getAboutVersionIdentifier().getValue() : "";
+		return (null != message.getABOUTVERSIONS() && null != message.getABOUTVERSIONS().getABOUTVERSION() && null != message.getABOUTVERSIONS().getABOUTVERSION().getAboutVersionIdentifier())? message.getABOUTVERSIONS().getABOUTVERSION().getAboutVersionIdentifier().getValue() : "";
 	}
 
 	public static String getAboutVersionIdentifier() {

@@ -2,8 +2,11 @@ package com.actualize.mortgage.api;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
@@ -24,6 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 
+import com.actualize.mortgage.domainmodels.IntermediateXMLData;
 import com.actualize.mortgage.domainmodels.PDFDocument;
 import com.actualize.mortgage.domainmodels.PDFResponse;
 import com.actualize.mortgage.sercurity.SessionContext;
@@ -114,4 +118,20 @@ public class ActualizeApi {
         return unmarshalledObject.getValue();
     }
 	
+	@RequestMapping(value = "/textToXml", method = { RequestMethod.POST }, produces = "application/xml")
+    public MESSAGE generateXmlFromTxtTemplate(@RequestBody String txtdoc) throws Exception {
+        Properties propFile = parsePropertiesString(txtdoc);
+        InputStream mappingFileStream = getClass().getClassLoader().getResourceAsStream("TextTemplateMap.xml");
+        IntermediateXMLData intermediateXMLData = mortgageServices.generateIntermediateXMLForTxtTemplate(mappingFileStream, propFile);
+        MESSAGE message = mortgageServices.generateMasterXML(intermediateXMLData);
+        return message;
+    }
+    
+    private Properties parsePropertiesString(String inputData) throws Exception {
+        // load() returning void rather than the Properties object
+        // so this takes 3 lines instead of "return new Properties().load(...);"
+        final Properties p = new Properties();
+        p.load(new StringReader(inputData));
+        return p;
+    }
 }
