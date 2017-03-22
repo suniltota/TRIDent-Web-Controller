@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.StringReader;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -11,9 +12,11 @@ import java.util.Properties;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.Unmarshaller;
+import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMResult;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
@@ -32,11 +35,16 @@ import com.actualize.mortgage.domainmodels.PDFDocument;
 import com.actualize.mortgage.domainmodels.PDFResponse;
 import com.actualize.mortgage.sercurity.SessionContext;
 import com.actualize.mortgage.services.MortgageServices;
+import com.lowagie.text.pdf.codec.Base64.OutputStream;
 import com.uniformdisclosure.UniformDisclosureBuilder;
 import com.uniformdisclosure.UniformDisclosureBuilderSeller;
 
 import datalayer.InputData;
 import datalayer.PopulateInputData;
+import transformer.TRIDTransformer;
+import ucdutils.UCDArcRolesParty;
+import ucdutils.UCDArcRolesSignatory;
+import xmlutils.Utils;
 
 @RestController
 @RequestMapping(value="/actualize")
@@ -87,7 +95,7 @@ public class ActualizeApi {
     }
     
     @RequestMapping(value = "/saveUCDXML", method = { RequestMethod.POST })
-    public MESSAGE saveModifiedUCDXML(@RequestBody List<PDFDocument> pdfDocument) throws Exception {
+    public String saveModifiedUCDXML(@RequestBody List<PDFDocument> pdfDocument) throws Exception {
         String currentXMLObject = sessionContext.getUserDetails().getMessage();
         Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(new InputSource(new ByteArrayInputStream(currentXMLObject.getBytes("utf-8"))));
         MESSAGE message = transformXmlToObject(document);
@@ -95,8 +103,24 @@ public class ActualizeApi {
         for(PDFDocument pdf : pdfDocument){
             message = mortgageServices.updateMismoObject(message, pdf);
         }
-        return message;
+        return transformObjectToXML(message);
     }
+    
+    public String transformObjectToXML(MESSAGE message) throws Exception{
+        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+        DocumentBuilder db = dbf.newDocumentBuilder();
+        Document document = db.newDocument();
+       JAXBContext context = JAXBContext.newInstance(message.getClass());
+       context.createMarshaller().marshal(message, document);
+       
+       TransformerFactory tf = TransformerFactory.newInstance();
+       Transformer t = tf.newTransformer();
+       DOMSource source = new DOMSource(document);
+       StreamResult result = new StreamResult(new StringWriter());
+       t.transform(source, result);
+       
+       return  result.getWriter().toString();
+   }
 	
 	public MESSAGE transformXmlToObject(Document xmlout) throws Exception{
         // Prepare document to write
