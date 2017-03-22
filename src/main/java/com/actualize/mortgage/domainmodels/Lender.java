@@ -9,19 +9,27 @@ public class Lender implements Serializable {
 	
 	private static final long serialVersionUID = 8480544187555095113L;
 	
-	private String lenderFullName;
+	private String type;
 	@JsonProperty("lenderDetails")
 	private NameModel nameModel;
 	private String partyRoleType;
 	private String partyRoleOtherDescription;
 	private Address address;
-	
-	public String getLenderFullName() {
-		return lenderFullName;
+
+	public String getType() {
+		return type;
 	}
-	
-	public void setLenderFullName(String lenderFullName) {
-		this.lenderFullName = lenderFullName;
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
+	public NameModel getNameModel() {
+		return nameModel;
+	}
+
+	public void setNameModel(NameModel nameModel) {
+		this.nameModel = nameModel;
 	}
 	
 	public Address getAddress() {

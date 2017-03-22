@@ -8,21 +8,13 @@ public class Borrower implements Serializable {
 
 	private static final long serialVersionUID = -6243514603739727710L;
 	
-	private String borrowerFullName;
+	private String type;
 	@JsonProperty("borrowerDetails")
-	private NameModel name;
+	private NameModel nameModel;
 	private String partyRoleType;
 	private String partyRoleOtherDescription;
 	private Address address;
 	
-	
-	public String getBorrowerFullName() {
-		return borrowerFullName;
-	}
-	
-	public void setBorrowerFullName(String borrowerFullName) {
-		this.borrowerFullName = borrowerFullName;
-	}
 	
 	public Address getAddress() {
 		return address;
@@ -47,12 +39,20 @@ public class Borrower implements Serializable {
 		this.partyRoleOtherDescription = partyRoleOtherDescription;
 	}
 
-	public NameModel getName() {
-		return name;
+	public String getType() {
+		return type;
 	}
 
-	public void setName(NameModel name) {
-		this.name = name;
+	public void setType(String type) {
+		this.type = type;
+	}
+
+	public NameModel getNameModel() {
+		return nameModel;
+	}
+
+	public void setNameModel(NameModel nameModel) {
+		this.nameModel = nameModel;
 	}
 	
 	

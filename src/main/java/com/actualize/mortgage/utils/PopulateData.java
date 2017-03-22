@@ -1,10 +1,14 @@
 package com.actualize.mortgage.utils;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import org.mismo.residential._2009.schemas.DEAL;
 import org.mismo.residential._2009.schemas.DOCUMENT;
-import org.mismo.residential._2009.schemas.MESSAGE;
+import org.mismo.residential._2009.schemas.LOANIDENTIFIER;
 
 import com.actualize.mortgage.domainmodels.LoanInformation;
+import com.actualize.mortgage.domainmodels.LoanInformationLoanIdentifier;
 import com.actualize.mortgage.domainmodels.LoanTermsBalloonPayment;
 import com.actualize.mortgage.domainmodels.LoanTermsETIA;
 import com.actualize.mortgage.domainmodels.LoanTermsEscrowAccount;
@@ -32,8 +36,7 @@ public class PopulateData {
 		 String integratedDisclosureLoanProductDescription = "";
 		 String mortgageType = "";
 		 String mortgageTypeOtherDescription = "";
-		 String loanIdentifierType = "";//nf
-		 String loanIdentifier = "";//nf
+		 List<LoanInformationLoanIdentifier> loanIdentifiers = new LinkedList<>();
 		 String miRequiredIndicator = "";
 		 String miCertificateIdentifier = "";
 		 
@@ -65,15 +68,29 @@ public class PopulateData {
 			 miCertificateIdentifier = deal.getLOANS().getLOAN().getMIDATA().getMIDATADETAIL().getMICertificateIdentifier().getValue();
 		 
 		 
+		 List<LOANIDENTIFIER> loanidentifiers = deal.getLOANS().getLOAN().getLOANIDENTIFIERS().getLOANIDENTIFIER();
+			loanidentifiers.forEach(loanidentifier ->{
+				if(null != loanidentifier.getLoanIdentifierType().getValue())
+				{
+					LoanInformationLoanIdentifier loanInformationLoanIdentifier = new LoanInformationLoanIdentifier();
+						loanInformationLoanIdentifier.setLoanIdentifierType(loanidentifier.getLoanIdentifierType().getValue().value());
+						loanInformationLoanIdentifier.setLoanIdentifier(loanidentifier.getLoanIdentifier().getValue());
+						loanIdentifiers.add(loanInformationLoanIdentifier);
+				}
+			});
+		 
 		 loanInformation.setConstructionLoanType(constructionLoanType);
 		 loanInformation.setConstructionPeriodNumberOfMonthsCount(constructionPeriodNumberOfMonthsCount);
+		 loanInformation.setConstructionLoanTotalTermMonthsCount(constructionLoanTotalTermMonthsCount);
 		 loanInformation.setLoanMaturityPeriodType(loanMaturityPeriodType);
 		 loanInformation.setLoanMaturityPeriodCount(loanMaturityPeriodCount);
 		 loanInformation.setIntegratedDisclosureHomeEquityLoanIndicator(integratedDisclosureHomeEquityLoanIndicator);
 		 loanInformation.setLienPriorityType(lienPriorityType);
+		 loanInformation.setAdjustableRate(adjustableRate);
 		 loanInformation.setIntegratedDisclosureLoanProductDescription(integratedDisclosureLoanProductDescription);
 		 loanInformation.setMortgageType(mortgageType);
 		 loanInformation.setMortgageTypeOtherDescription(mortgageTypeOtherDescription);
+		 loanInformation.setLoanIdentifiers(loanIdentifiers);
 		 loanInformation.setMiRequiredIndicator(miRequiredIndicator);
 		 loanInformation.setMiCertificateIdentifier(miCertificateIdentifier);
 		return loanInformation;
@@ -154,16 +171,27 @@ public class PopulateData {
 	{
 		LoanTermsPI loanTermsPI = new LoanTermsPI();
 		DEAL deal = document.getDEALSETS().getDEALSET().getDEALS().getDEAL();
-		String initialPrincipalAndInterestPaymentAmount;
-		String fullyIndexedInitialPrincipalAndInterestPaymentAmount;
-		String interestOnlyIndicator;
-		String interestOnlyTermMonthsCount;
-		String adjustmentRuleType;
-		String perChangePrincipalAndInterestPaymentAdjustmentFrequencyMonthsCount;
-		String firstPrincipalAndInterestPaymentChangeMonthsCount;
-		String principalAndInterestPaymentMaximumAmountEarliestEffectiveMonthsCount;
-		String principalAndInterestPaymentMaximumAmount;
+		String initialPrincipalAndInterestPaymentAmount = "";//nf
+		String fullyIndexedInitialPrincipalAndInterestPaymentAmount = "";//nf
+		String interestOnlyIndicator = "";//nf
+		String interestOnlyTermMonthsCount = "";//nf
+		String adjustmentRuleType = "";//nf
+		String perChangePrincipalAndInterestPaymentAdjustmentFrequencyMonthsCount = "";//nf
+		String firstPrincipalAndInterestPaymentChangeMonthsCount = "";//nf
+		String principalAndInterestPaymentMaximumAmountEarliestEffectiveMonthsCount = "";//nf
+		String principalAndInterestPaymentMaximumAmount = "";//nf
 		
+		
+		loanTermsPI.setInitialPrincipalAndInterestPaymentAmount(initialPrincipalAndInterestPaymentAmount);
+		loanTermsPI.setFullyIndexedInitialPrincipalAndInterestPaymentAmount(fullyIndexedInitialPrincipalAndInterestPaymentAmount);
+		loanTermsPI.setFirstPrincipalAndInterestPaymentChangeMonthsCount(firstPrincipalAndInterestPaymentChangeMonthsCount);
+		loanTermsPI.setInterestOnlyIndicator(interestOnlyIndicator);
+		loanTermsPI.setInterestOnlyTermMonthsCount(interestOnlyTermMonthsCount);
+		loanTermsPI.setAdjustmentRuleType(adjustmentRuleType);
+		loanTermsPI.setPerChangePrincipalAndInterestPaymentAdjustmentFrequencyMonthsCount(perChangePrincipalAndInterestPaymentAdjustmentFrequencyMonthsCount);
+		loanTermsPI.setFirstPrincipalAndInterestPaymentChangeMonthsCount(firstPrincipalAndInterestPaymentChangeMonthsCount);
+		loanTermsPI.setPrincipalAndInterestPaymentMaximumAmountEarliestEffectiveMonthsCount(principalAndInterestPaymentMaximumAmountEarliestEffectiveMonthsCount);
+		loanTermsPI.setPrincipalAndInterestPaymentMaximumAmount(principalAndInterestPaymentMaximumAmount);
 		return loanTermsPI;
 		
 	}

@@ -6,21 +6,22 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Seller implements Serializable {
 
+
 	private static final long serialVersionUID = 7085207535329224318L;
 	
-	private String sellerFullName;
+	private String type;
 	@JsonProperty("sellerDetails")
 	private NameModel nameModel;
 	private String partyRoleType;
 	private String partyRoleOtherDescription;
 	private Address address;
 
-	public String getSellerFullName() {
-		return sellerFullName;
+	public String getType() {
+		return type;
 	}
-	
-	public void setSellerFullName(String sellerFullName) {
-		this.sellerFullName = sellerFullName;
+
+	public void setType(String type) {
+		this.type = type;
 	}
 	
 	public Address getAddress() {

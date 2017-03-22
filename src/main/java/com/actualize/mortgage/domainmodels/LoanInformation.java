@@ -1,6 +1,7 @@
 package com.actualize.mortgage.domainmodels;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class LoanInformation implements Serializable {
 
@@ -26,8 +27,7 @@ public class LoanInformation implements Serializable {
 	private String integratedDisclosureLoanProductDescription;
 	private String mortgageType;
 	private String mortgageTypeOtherDescription;
-	private String loanIdentifierType;
-	private String loanIdentifier;
+	private List<LoanInformationLoanIdentifier> loanIdentifiers;
 	private String miRequiredIndicator;
 	private String miCertificateIdentifier;
 	
@@ -133,18 +133,7 @@ public class LoanInformation implements Serializable {
 	public void setMortgageTypeOtherDescription(String mortgageTypeOtherDescription) {
 		this.mortgageTypeOtherDescription = mortgageTypeOtherDescription;
 	}
-	public String getLoanIdentifierType() {
-		return loanIdentifierType;
-	}
-	public void setLoanIdentifierType(String loanIdentifierType) {
-		this.loanIdentifierType = loanIdentifierType;
-	}
-	public String getLoanIdentifier() {
-		return loanIdentifier;
-	}
-	public void setLoanIdentifier(String loanIdentifier) {
-		this.loanIdentifier = loanIdentifier;
-	}
+	
 	public String getMiRequiredIndicator() {
 		return miRequiredIndicator;
 	}
@@ -156,6 +145,12 @@ public class LoanInformation implements Serializable {
 	}
 	public void setMiCertificateIdentifier(String miCertificateIdentifier) {
 		this.miCertificateIdentifier = miCertificateIdentifier;
+	}
+	public List<LoanInformationLoanIdentifier> getLoanIdentifiers() {
+		return loanIdentifiers;
+	}
+	public void setLoanIdentifiers(List<LoanInformationLoanIdentifier> loanIdentifiers) {
+		this.loanIdentifiers = loanIdentifiers;
 	}
 	
 		

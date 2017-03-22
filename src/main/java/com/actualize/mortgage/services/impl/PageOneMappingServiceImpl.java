@@ -231,7 +231,7 @@ public class PageOneMappingServiceImpl  implements PageOneMappingService{
 				{
 					//DEAL.PARTIES.PARTY.LEGAL_ENTITY.LEGAL_ENTITY_DETAIL.FullName['__text']
 					Borrower borrower = new Borrower();
-					String bName = borrower.getBorrowerFullName();
+					String bName = borrower.getNameModel().getFirstName();
 					if(null != party.getLEGALENTITY())
 						party.getLEGALENTITY().getLEGALENTITYDETAIL().getFullName().setValue(bName);
 					
@@ -258,7 +258,7 @@ public class PageOneMappingServiceImpl  implements PageOneMappingService{
 				else if(PartyRoleBase.PROPERTY_SELLER == party.getROLES().getROLE().getROLEDETAIL().getPartyRoleType().getValue())
 				{
 					Seller seller = new Seller();
-					String sName = seller.getSellerFullName();
+					String sName = seller.getNameModel().getFirstName();
 					if(null != party.getLEGALENTITY())
 						party.getLEGALENTITY().getLEGALENTITYDETAIL().getFullName().setValue(sName);
 					
@@ -290,7 +290,7 @@ public class PageOneMappingServiceImpl  implements PageOneMappingService{
 				else if(PartyRoleBase.NOTE_PAY_TO == party.getROLES().getROLE().getROLEDETAIL().getPartyRoleType().getValue())
 				{
 					Lender lender = new Lender();
-					String lName = lender.getLenderFullName();
+					String lName = lender.getNameModel().getFirstName();
 					if(null != party.getLEGALENTITY())
 						party.getLEGALENTITY().getLEGALENTITYDETAIL().getFullName().setValue(lName);
 

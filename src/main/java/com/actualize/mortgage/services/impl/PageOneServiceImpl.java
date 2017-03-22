@@ -16,6 +16,7 @@ import org.mismo.residential._2009.schemas.PARTY;
 import org.mismo.residential._2009.schemas.PRINCIPALANDINTERESTPAYMENTPERCHANGEADJUSTMENTRULE;
 import org.mismo.residential._2009.schemas.PROJECTEDPAYMENT;
 import org.mismo.residential._2009.schemas.PartyRoleBase;
+import org.springframework.security.access.method.P;
 
 import com.actualize.mortgage.domainmodels.Address;
 import com.actualize.mortgage.domainmodels.Borrower;
@@ -31,6 +32,7 @@ import com.actualize.mortgage.domainmodels.LoanTermsInterestRate;
 import com.actualize.mortgage.domainmodels.LoanTermsLoanAmount;
 import com.actualize.mortgage.domainmodels.LoanTermsPI;
 import com.actualize.mortgage.domainmodels.LoanTermsPrepaymentPenalty;
+import com.actualize.mortgage.domainmodels.NameModel;
 import com.actualize.mortgage.domainmodels.ProjectedPayments;
 import com.actualize.mortgage.domainmodels.ProjectedPaymentsETIA;
 import com.actualize.mortgage.domainmodels.ProjectedPaymentsPI;
@@ -216,30 +218,38 @@ public class PageOneServiceImpl implements PageOneService {
 					//DEAL.PARTIES.PARTY.LEGAL_ENTITY.LEGAL_ENTITY_DETAIL.FullName['__text']
 					Borrower borrower = new Borrower();
 					Address bproperty = new Address();
-					String bName = party.getLEGALENTITY().getLEGALENTITYDETAIL().getFullName().getValue();
-					borrower.setBorrowerFullName(bName);
-					ADDRESS bAddress = party.getADDRESSES().getADDRESS();
-					bproperty.setAddressLineText(bAddress.getAddressLineText()== null ? "" :bAddress.getAddressLineText().getValue());
-					bproperty.setAddressType(bAddress.getAddressType()== null ? "" :bAddress.getAddressType().getValue().value());
-					bproperty.setAddressUnitDesignatorType(bAddress.getAddressUnitDesignatorType()== null ? "" :bAddress.getAddressUnitDesignatorType().getValue().value());
-					bproperty.setAddressUnitIdentifier(bAddress.getAddressUnitIdentifier()== null ? "" :bAddress.getAddressUnitIdentifier().getValue());
-					bproperty.setCityName(bAddress.getCityName()== null ? "" :bAddress.getCityName().getValue());
-					bproperty.setCountryCode(bAddress.getCountryCode()== null ? "" :bAddress.getCountryCode().getValue());
-					bproperty.setPostalCode(bAddress.getPostalCode()== null ? "" :bAddress.getPostalCode().getValue());
-					bproperty.setStateCode(bAddress.getStateCode()== null ? "" :bAddress.getStateCode().getValue());
-					borrower.setAddress(bproperty);
-					borrowers.add(borrower);
+					NameModel nameModel =  new NameModel();
+					if(party.getLEGALENTITY() !=null)
+					{
+						String bName = party.getLEGALENTITY().getLEGALENTITYDETAIL().getFullName().getValue();
+						borrower.setType("O");
+						nameModel.setFirstName(bName);
+						ADDRESS bAddress = party.getADDRESSES().getADDRESS();
+						bproperty.setAddressLineText(bAddress.getAddressLineText()== null ? "" :bAddress.getAddressLineText().getValue());
+						bproperty.setAddressType(bAddress.getAddressType()== null ? "" :bAddress.getAddressType().getValue().value());
+						bproperty.setAddressUnitDesignatorType(bAddress.getAddressUnitDesignatorType()== null ? "" :bAddress.getAddressUnitDesignatorType().getValue().value());
+						bproperty.setAddressUnitIdentifier(bAddress.getAddressUnitIdentifier()== null ? "" :bAddress.getAddressUnitIdentifier().getValue());
+						bproperty.setCityName(bAddress.getCityName()== null ? "" :bAddress.getCityName().getValue());
+						bproperty.setCountryCode(bAddress.getCountryCode()== null ? "" :bAddress.getCountryCode().getValue());
+						bproperty.setPostalCode(bAddress.getPostalCode()== null ? "" :bAddress.getPostalCode().getValue());
+						bproperty.setStateCode(bAddress.getStateCode()== null ? "" :bAddress.getStateCode().getValue());
+						borrower.setAddress(bproperty);
+						borrower.setNameModel(nameModel);
+						borrowers.add(borrower);
+					}
 				}
 				else if(PartyRoleBase.PROPERTY_SELLER == party.getROLES().getROLE().getROLEDETAIL().getPartyRoleType().getValue())
 				{
 					Seller seller = new Seller();
 					Address sproperty = new Address();
+					NameModel nameModel =  new NameModel();
 					String sName = "";
 					
 					if(party.getLEGALENTITY() !=null)
 					{
 						sName = party.getLEGALENTITY().getLEGALENTITYDETAIL().getFullName().getValue();
-						seller.setSellerFullName(sName);
+						nameModel.setFirstName(sName);
+						seller.setType("O");
 						ADDRESS sAddress = party.getADDRESSES().getADDRESS();
 						sproperty.setAddressLineText(sAddress.getAddressLineText()== null ? "" :sAddress.getAddressLineText().getValue());
 						sproperty.setAddressType(sAddress.getAddressType()== null ? "" :sAddress.getAddressType().getValue().value());
@@ -250,19 +260,23 @@ public class PageOneServiceImpl implements PageOneService {
 						sproperty.setPostalCode(sAddress.getPostalCode()== null ? "" :sAddress.getPostalCode().getValue());
 						sproperty.setStateCode(sAddress.getStateCode()== null ? "" :sAddress.getStateCode().getValue());
 						seller.setAddress(sproperty);
+						seller.setNameModel(nameModel);
+						sellers.add(seller);
 					}
-					sellers.add(seller);
+					
 				}
 				else if(PartyRoleBase.NOTE_PAY_TO == party.getROLES().getROLE().getROLEDETAIL().getPartyRoleType().getValue())
 				{
 					Lender lender = new Lender();
 					Address lproperty = new Address();
+					NameModel nameModel =  new NameModel();
 					String lName = "";
 					
 					if(null != party.getLEGALENTITY())
 					{
 						lName = party.getLEGALENTITY().getLEGALENTITYDETAIL().getFullName().getValue();
-						lender.setLenderFullName(lName);
+						nameModel.setFirstName(lName);
+						lender.setType("O");
 						ADDRESS lAddress = party.getADDRESSES().getADDRESS();
 						lproperty.setAddressLineText(lAddress.getAddressLineText()== null ? "" :lAddress.getAddressLineText().getValue());
 						lproperty.setAddressType(lAddress.getAddressType()== null ? "" :lAddress.getAddressType().getValue().value());
@@ -273,8 +287,10 @@ public class PageOneServiceImpl implements PageOneService {
 						lproperty.setPostalCode(lAddress.getPostalCode()== null ? "" :lAddress.getPostalCode().getValue());
 						lproperty.setStateCode(lAddress.getStateCode()== null ? "" :lAddress.getStateCode().getValue());
 						lender.setAddress(lproperty);
+						lender.setNameModel(nameModel);
 						lenders.add(lender);
 					}
+					
 				}
 			}
 		});
@@ -391,8 +407,6 @@ public class PageOneServiceImpl implements PageOneService {
 			loanTermsInterestRate.setStatus("NO");
 		}
 		
-		
-		
 		String frequency = "";
 		String principalAmount = "";
 		List<String> piDetails = new LinkedList<>();
@@ -462,7 +476,7 @@ public class PageOneServiceImpl implements PageOneService {
 		loanTermsPI.setPaymentFrequencyType(frequency);
 		loanTermsPI.setAmount(principalAmount);
 		
-		LoanTermsPrepaymentPenalty loanTermsPrepaymentPenalty = new LoanTermsPrepaymentPenalty();
+		LoanTermsPrepaymentPenalty loanTermsPrepaymentPenalty = PopulateData.populateLoanTermsPrepaymentPenalty(document);
 		List<String> prepaymentDetails = new LinkedList<>();
 //DEAL.LOANS.LOAN.LOAN_DETAIL.PrepaymentPenaltyIndicator['__text']).equalsIgnoreCase("true")){
 		if(deal.getLOANS().getLOAN().getLOANDETAIL().getPrepaymentPenaltyIndicator().isValue())
@@ -478,7 +492,7 @@ public class PageOneServiceImpl implements PageOneService {
 		}
 		else
 			loanTermsPrepaymentPenalty.setStatus("NO");
-		LoanTermsBalloonPayment loanTermsBalloonPayment = new LoanTermsBalloonPayment();
+		LoanTermsBalloonPayment loanTermsBalloonPayment = PopulateData.populateLoanTermsBalloonPayment(document);
 		List<String> bIndicatorDetails = new LinkedList<>();
 		//DEAL.LOANS.LOAN.LOAN_DETAIL.BalloonIndicator['__text']
 		if(deal.getLOANS().getLOAN().getLOANDETAIL().getBalloonIndicator().isValue())
@@ -575,7 +589,7 @@ public class PageOneServiceImpl implements PageOneService {
 						projectedPaymentsPI.setInterestOnly("<i>interestonly</i>");
 						projectedPaymentsPrincipalInterest.add(projectedPaymentsPI);
 					}
-						else
+					else
 					{
 							projectedPaymentsPI.setMinValue(min);
 							projectedPaymentsPI.setMaxValue(max);

@@ -4,15 +4,6 @@
         <wb-resource deploy-path="/" source-path="/src/main/webapp" tag="defaultRootSource"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/resources"/>
-        <dependent-module archiveName="UniformDisclosure-1.0-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/UniformDisclosure/UniformDisclosure">
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
-        <dependent-module archiveName="UCDBuilder-1.0-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/UCDBuilder/UCDBuilder">
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
-        <dependent-module archiveName="LoanEstimate-1.0-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/LoanEstimate/LoanEstimate">
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
         <property name="context-root" value="actualize"/>
         <property name="java-output-path" value="/web/target/classes"/>
     </wb-module>
