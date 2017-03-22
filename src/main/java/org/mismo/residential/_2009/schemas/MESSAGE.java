@@ -41,11 +41,7 @@ import javax.xml.bind.annotation.XmlType;
  * 
  * 
  */
-@XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "MESSAGE", propOrder = {
-    "aboutversions",
-    "documentsets"
-})
+@XmlRootElement(name = "MESSAGE")
 public class MESSAGE implements Serializable{
 
  
@@ -57,11 +53,7 @@ public class MESSAGE implements Serializable{
     protected DOCUMENTSETS documentsets;
     @XmlAttribute(name = "MISMOReferenceModelIdentifier")
     protected String mismoReferenceModelIdentifier;
-    @XmlAttribute(name = "xmlns:gse")
-    protected String gseNameSpace = "http://www.datamodelextension.org";
-    @XmlAttribute(name = "xmlns:xlink")
-    protected String xlinkNameSpace = "http://www.w3.org/1999/xlink";
-    
+   
     /**
      * Gets the value of the aboutversions property.
      * 
@@ -132,34 +124,6 @@ public class MESSAGE implements Serializable{
      */
     public void setMISMOReferenceModelIdentifier(String value) {
         this.mismoReferenceModelIdentifier = value;
-    }
-    
-    /**
-     * @return the gseNameSpace
-     */
-    public String getGseNameSpace() {
-        return gseNameSpace;
-    }
-
-    /**
-     * @param gseNameSpace the gseNameSpace to set
-     */
-    public void setGseNameSpace(String gseNameSpace) {
-        this.gseNameSpace = gseNameSpace;
-    }
-
-    /**
-     * @return the xlinkNameSpace
-     */
-    public String getXlinkNameSpace() {
-        return xlinkNameSpace;
-    }
-
-    /**
-     * @param xlinkNameSpace the xlinkNameSpace to set
-     */
-    public void setXlinkNameSpace(String xlinkNameSpace) {
-        this.xlinkNameSpace = xlinkNameSpace;
     }
 
 }

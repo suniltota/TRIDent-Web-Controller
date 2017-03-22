@@ -139,16 +139,21 @@ public class MortgageServicesImpl implements MortgageServices{
 		return pageTwo;
 	}
 
-	@Override
-	public void updateMismoObject(MESSAGE currentXMLObject, PDFDocument modifiedJSONObject) throws Exception {
-		
-		MESSAGE message = currentXMLObject;
-		List<DOCUMENT> documents = currentXMLObject.getDOCUMENTSETS().getDOCUMENTSET().getDOCUMENTS().getDOCUMENT();
-			for(DOCUMENT document : documents)
-			{
-				
-			}
-		}
+    @Override
+    public MESSAGE updateMismoObject(MESSAGE currentXMLObject, PDFDocument modifiedJSONObject) throws Exception {
+
+        MESSAGE message = currentXMLObject;
+        List<DOCUMENT> documents = currentXMLObject.getDOCUMENTSETS().getDOCUMENTSET().getDOCUMENTS().getDOCUMENT();
+        for (DOCUMENT document : documents) {
+            document = pageOneMappingService.mapClosingInformation(document, modifiedJSONObject);
+            document = pageOneMappingService.mapLoanInformation(document, modifiedJSONObject);
+            document = pageOneMappingService.mapTransactionInformation(document, modifiedJSONObject);
+            document = pageOneMappingService.mapLoanTerms(document, modifiedJSONObject);
+            document = pageOneMappingService.mapProjectedPayments(document, modifiedJSONObject);
+            document = pageOneMappingService.mapCostsAtClosing(document, modifiedJSONObject);
+        }
+        return message;
+    }
 
 	@Override
 	public MESSAGE mapPageOne(MESSAGE currentXMLObject, PDFDocument modifiedJSONObject) throws Exception {

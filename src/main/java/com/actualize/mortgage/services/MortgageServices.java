@@ -16,7 +16,7 @@ public interface MortgageServices {
 	public DocumentType documentDetail(DOCUMENT document) throws Exception;
 	public PageOne populatePageOne(DOCUMENT document) throws Exception;
 	public PageTwo populatePageTwo(DOCUMENT document) throws Exception;
-	public void updateMismoObject(MESSAGE currentXMLObject,PDFDocument modifiedJSONObject) throws Exception;
+	public MESSAGE updateMismoObject(MESSAGE currentXMLObject,PDFDocument modifiedJSONObject) throws Exception;
 	public MESSAGE mapPageOne(MESSAGE currentXMLObject,PDFDocument modifiedJSONObject) throws Exception;
 	public MESSAGE mapPageTwo(MESSAGE currentXMLObject,PDFDocument modifiedJSONObject) throws Exception;
 }

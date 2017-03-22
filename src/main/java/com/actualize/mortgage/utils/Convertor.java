@@ -235,4 +235,10 @@ public class Convertor {
 			return true;
 		return false;
 	}
+	
+	public int convertYearsToMonthsFormat(String yearsdata){
+		    String[] years = yearsdata.split(" ");
+	        int month = Math.round(Integer.parseInt(years[0])*12);
+	        return month;
+	}
 }

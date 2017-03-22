@@ -10,8 +10,7 @@ import javax.xml.bind.JAXBElement;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.OutputKeys;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.Transformer;import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
@@ -60,11 +59,9 @@ public class ActualizeApi {
     }
 	
     @RequestMapping(value = "/saveUCD", method = { RequestMethod.POST })
-    public List<PDFResponse> saveModifiedUCD(@RequestBody List<PDFDocument> pdfDocument) throws Exception {
-        String currentXMLObject = sessionContext.getUserDetails().getMessage();
-
+    public List<PDFResponse> saveModifiedUCD(@RequestBody String xmldoc) throws Exception {
         PopulateInputData reader = new PopulateInputData();
-        List<InputData> inputData = reader.getData(new ByteArrayInputStream(currentXMLObject.getBytes("utf-8")));
+        List<InputData> inputData = reader.getData(new ByteArrayInputStream(xmldoc.getBytes("utf-8")));
         ByteArrayOutputStream pdfOutStream = null;
         List<PDFResponse> pdfResponseList = new ArrayList<>();
         for (InputData data : inputData) {
@@ -83,6 +80,18 @@ public class ActualizeApi {
             pdfResponseList.add(outputResponse);
         }
         return pdfResponseList;
+    }
+    
+    @RequestMapping(value = "/saveUCDXML", method = { RequestMethod.POST })
+    public MESSAGE saveModifiedUCDXML(@RequestBody List<PDFDocument> pdfDocument) throws Exception {
+        String currentXMLObject = sessionContext.getUserDetails().getMessage();
+        Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(new InputSource(new ByteArrayInputStream(currentXMLObject.getBytes("utf-8"))));
+        MESSAGE message = transformXmlToObject(document);
+        
+        for(PDFDocument pdf : pdfDocument){
+            message = mortgageServices.updateMismoObject(message, pdf);
+        }
+        return message;
     }
 	
 	public MESSAGE transformXmlToObject(Document xmlout) throws Exception{
