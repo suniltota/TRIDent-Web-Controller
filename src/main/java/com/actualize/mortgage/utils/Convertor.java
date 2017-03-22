@@ -70,6 +70,7 @@ public class Convertor {
 				{
 					if(null != integrateddisclosuresubsectionpayment.getIntegratedDisclosureSubsectionPaymentAmount())
 						amount = integrateddisclosuresubsectionpayment.getIntegratedDisclosureSubsectionPaymentAmount().getValue().toPlainString();
+						amount = amount.replaceAll("-", "");
 				}
 			}
 		}
@@ -85,7 +86,7 @@ public class Convertor {
 		{
 			if(null != integrateddisclosuresectionsummary.getINTEGRATEDDISCLOSURESECTIONSUMMARYDETAIL().getIntegratedDisclosureSectionType() && null != integrateddisclosuresectionsummary.getINTEGRATEDDISCLOSURESECTIONSUMMARYDETAIL().getIntegratedDisclosureSectionTotalAmount() )
 			{
-				integratedDisclosureSectionTypeValues.put(integrateddisclosuresectionsummary.getINTEGRATEDDISCLOSURESECTIONSUMMARYDETAIL().getIntegratedDisclosureSectionType().getValue().value(), StringFormatter.NODOLLARS.formatString(integrateddisclosuresectionsummary.getINTEGRATEDDISCLOSURESECTIONSUMMARYDETAIL().getIntegratedDisclosureSectionTotalAmount().getValue().toPlainString()));
+				integratedDisclosureSectionTypeValues.put(integrateddisclosuresectionsummary.getINTEGRATEDDISCLOSURESECTIONSUMMARYDETAIL().getIntegratedDisclosureSectionType().getValue().value(), StringFormatter.DOLLARS.formatString(integrateddisclosuresectionsummary.getINTEGRATEDDISCLOSURESECTIONSUMMARYDETAIL().getIntegratedDisclosureSectionTotalAmount().getValue().toPlainString()));
 			}
 		}
 		

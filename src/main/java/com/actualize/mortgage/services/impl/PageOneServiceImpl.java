@@ -365,23 +365,23 @@ public class PageOneServiceImpl implements PageOneService {
 			
 			List<INTERESTRATEPERCHANGEADJUSTMENTRULE> interestrateperchangeadjustmentrules = deal.getLOANS().getLOAN().getADJUSTMENT().getINTERESTRATEADJUSTMENT().getINTERESTRATEPERCHANGEADJUSTMENTRULES().getINTERESTRATEPERCHANGEADJUSTMENTRULE();
 			interestrateperchangeadjustmentrules.forEach(interestrateperchangeadjustmentrule ->{
-				/*if("DDOFileNumber".equalsIgnoreCase(DocumentType.g))
+				if("DDOFileNumber".equalsIgnoreCase(DocumentType.getAboutVersionIdentifier()))
 				{
 					text4_2_2 = Integer.toString(interestrateperchangeadjustmentrule.getPerChangeRateAdjustmentFrequencyMonthsCount().getValue());
 				}
 				else
-				{*/
+				{
 					//"First".equalsIgnoreCase(DEAL.LOANS.LOAN.ADJUSTMENT.INTEREST_RATE_ADJUSTMENT.INTEREST_RATE_PER_CHANGE_ADJUSTMENT_RULES.INTEREST_RATE_PER_CHANGE_ADJUSTMENT_RULE.AdjustmentRuleType['__text'])
 					if("First".equalsIgnoreCase(interestrateperchangeadjustmentrule.getAdjustmentRuleType().getValue().value()))
 					{
 						text4_2_2 = Integer.toString(interestrateperchangeadjustmentrule.getPerChangeRateAdjustmentFrequencyMonthsCount().getValue());
 					}
-				//}
+				}
 			});
 		//StringFormatter.ROUNDUPYEARS.formatString(DEAL.LOANS.LOAN.ADJUSTMENT.INTEREST_RATE_ADJUSTMENT.INTEREST_RATE_LIFETIME_ADJUSTMENT_RULE.FirstRateChangeMonthsCount['__text']
 		text4_2_2 = StringFormatter.YEARS.formatString(text4_2_2);
 		List<String> detail = new LinkedList<>();
-			detail.add("Adjusts <b>every "+ ("1".equals(text4_2_2) ? "year" : (text4_2_2 + " years") +"</b> starting in year "+ StringFormatter.ROUNDUPYEARS.formatString(Integer.toString(deal.getLOANS().getLOAN().getADJUSTMENT().getINTERESTRATEADJUSTMENT().getINTERESTRATELIFETIMEADJUSTMENTRULE().getFirstRateChangeMonthsCount().getValue()))));
+			detail.add("Adjusts <b>every "+ ("1".equals(text4_2_2) ? "year" : (text4_2_2 + " years")) +"</b> starting in year "+ StringFormatter.ROUNDUPYEARS.formatString(Integer.toString(deal.getLOANS().getLOAN().getADJUSTMENT().getINTERESTRATEADJUSTMENT().getINTERESTRATELIFETIMEADJUSTMENTRULE().getFirstRateChangeMonthsCount().getValue())));
 			detail.add("Can go <b>as high as " + StringFormatter.PERCENT.formatString(deal.getLOANS().getLOAN().getADJUSTMENT().getINTERESTRATEADJUSTMENT().getINTERESTRATELIFETIMEADJUSTMENTRULE().getCeilingRatePercent().getValue().toPlainString())+"</b> in year "+StringFormatter.YEARS.formatString(Integer.toString(deal.getLOANS().getLOAN().getADJUSTMENT().getINTERESTRATEADJUSTMENT().getINTERESTRATELIFETIMEADJUSTMENTRULE().getCeilingRatePercentEarliestEffectiveMonthsCount().getValue())));
 			detail.add("See <b>AIR Table on page 4</b> for details");
 		loanTermsInterestRate.setDetails(detail);
@@ -455,10 +455,10 @@ public class PageOneServiceImpl implements PageOneService {
 				}
 				loanTermsPI.setDetails(piDetails);
 			}
-			else
-				loanTermsPI.setStatus("NO");
+			
 		}
-		
+		else
+			loanTermsPI.setStatus("NO");
 		loanTermsPI.setPaymentFrequencyType(frequency);
 		loanTermsPI.setAmount(principalAmount);
 		
@@ -673,17 +673,17 @@ public class PageOneServiceImpl implements PageOneService {
 				costsAtClosingClosingCosts.setAmount(integratedDisclosureSectionTypeValues.get("TotalClosingCosts"));
 				totalLoanCosts = integratedDisclosureSectionTypeValues.get("TotalLoanCosts");
 				if(null == totalLoanCosts || totalLoanCosts.isEmpty())
-					totalLoanCosts = "0";
+					totalLoanCosts = "$0";
 				
 				totalOtherCosts = integratedDisclosureSectionTypeValues.get("TotalOtherCosts");
 				if(null == totalOtherCosts || totalOtherCosts.isEmpty())
-					totalOtherCosts = "0";
+					totalOtherCosts = "$0";
 			
-				lenderCredits = StringFormatter.NODOLLARS.formatString(Convertor.getLenderCredits("LenderCredits", document));
+				lenderCredits = StringFormatter.DOLLARS.formatString(Convertor.getLenderCredits("LenderCredits", document));
 				if(null == lenderCredits || lenderCredits.isEmpty())
-					lenderCredits = "0";
+					lenderCredits = "$0";
 		
-		closingCostsDetails.add("Includes "+totalLoanCosts+" in Loan Costs + "+totalOtherCosts+" in Other Costs "+lenderCredits);
+		closingCostsDetails.add("Includes "+totalLoanCosts+" in Loan Costs + "+totalOtherCosts+" in Other Costs -"+lenderCredits);
 		closingCostsDetails.add("in Lender Credits. <i>See page 2 for details.</i>");
 		costsAtClosingClosingCosts.setDetails(closingCostsDetails);
 		

@@ -22,7 +22,7 @@ public class DocumentType {
 	private boolean refinanceTypeLoan;
 	private boolean homeEquityLoanIndicator;
 	private boolean sellerOnly;
-	private String aboutVersionIdentifier;
+	private static String aboutVersionIdentifier;
 	private String loanId;
 	
 	public static boolean isStandardView(DOCUMENT document)
@@ -229,15 +229,15 @@ public class DocumentType {
 	
 	public static String getAboutVersionIdentifier(MESSAGE message)
 	{
-		return message.getABOUTVERSIONS().getABOUTVERSION().getAboutVersionIdentifier().getValue();
+		return null != message.getABOUTVERSIONS() ? message.getABOUTVERSIONS().getABOUTVERSION().getAboutVersionIdentifier().getValue() : "";
 	}
 
-	public String getAboutVersionIdentifier() {
+	public static String getAboutVersionIdentifier() {
 		return aboutVersionIdentifier;
 	}
 
-	public void setAboutVersionIdentifier(String aboutVersionIdentifier) {
-		this.aboutVersionIdentifier = aboutVersionIdentifier;
+	public static void setAboutVersionIdentifier(String VersionIdentifier) {
+		aboutVersionIdentifier = VersionIdentifier;
 	}
 
 }

@@ -373,19 +373,18 @@ public class PageTwoServiceImpl implements PageTwoService{
 		
 		if(sectionType.equalsIgnoreCase(fee.getFEEDETAIL().getIntegratedDisclosureSectionType().getValue().value()))
 		{
-			if(null != fee.getFEEDETAIL().getFeePaidToType())
-			{
-				if (("LoanDiscountPoints").equalsIgnoreCase(fee.getFEEDETAIL().getFeeType().getValue().value())){
-					if(null !=fee.getFEEDETAIL().getFeeTotalPercent() && !"0.0000".equalsIgnoreCase(fee.getFEEDETAIL().getFeeTotalPercent().getValue().toPlainString())){
-						closingCostProperties = FeeCostsTableRow(fee, true, StringFormatter.PERCENTWITHOUTPRECEEDING.formatString(fee.getFEEDETAIL().getFeeTotalPercent().getValue().toPlainString()) + " of Loan Amount (Points)", null);
-					}
-					else{
-						closingCostProperties = FeeCostsTableRow(fee, true, "      % of Loan Amount (Points)",null);
-					}
+			if (("LoanDiscountPoints").equalsIgnoreCase(fee.getFEEDETAIL().getFeeType().getValue().value()))
+				if(null !=fee.getFEEDETAIL().getFeeTotalPercent() && !"0.0000".equalsIgnoreCase(fee.getFEEDETAIL().getFeeTotalPercent().getValue().toPlainString())&& null != fee.getFEEDETAIL().getFeePaidToType())
+				{
+					closingCostProperties = FeeCostsTableRow(fee, true, " of Loan Amount (Points)", null);
+					closingCostProperties.setToEntity(StringFormatter.PERCENTWITHOUTPRECEEDING.formatString(fee.getFEEDETAIL().getFeeTotalPercent().getValue().toPlainString()));
 				}
 				else
-					closingCostProperties = FeeCostsTableRow(fee, true, null, null);
-			}
+				{
+					closingCostProperties = FeeCostsTableRow(fee, true, "% of Loan Amount (Points)",null);
+				}
+			else
+				closingCostProperties = FeeCostsTableRow(fee, true, null, null);
 		}
 		return closingCostProperties;
 	}
@@ -409,10 +408,11 @@ public class PageTwoServiceImpl implements PageTwoService{
 			if(("").equals(strLabel) || null == strLabel) 
 				strLabel = 	StringFormatter.CAMEL.formatString(null != fee.getFEEDETAIL().getFeeType() ? fee.getFEEDETAIL().getFeeType().getValue().value():"");
 		}
-		else if("Other".equalsIgnoreCase(label))
-			strLabel = fee.getFEEDETAIL().getFeeType().getDisplayLabelText();
 		else
 			strLabel = label;
+		
+		if("Other".equalsIgnoreCase(strLabel) && null != fee.getFEEDETAIL().getFeeTypeOtherDescription())
+			strLabel = StringFormatter.CAMEL.formatString(fee.getFEEDETAIL().getFeeTypeOtherDescription().getValue());
 			
 			str += StringFormatter.STRINGCLEAN.formatString(null != fee.getFEEDETAIL().getFeePaidToTypeOtherDescription() ? fee.getFEEDETAIL().getFeePaidToTypeOtherDescription().toString():"");
 		if (null != fee.getFEEDETAIL().getOptionalCostIndicator() && fee.getFEEDETAIL().getOptionalCostIndicator().isValue() && null != fee.getFEEDETAIL().getFeePaidToTypeOtherDescription() && !fee.getFEEDETAIL().getFeePaidToTypeOtherDescription().toString().toLowerCase().contains("optional"))

@@ -114,6 +114,7 @@ public class MortgageServicesImpl implements MortgageServices{
 			PageOne pageOne = new PageOne();
 			PageTwo pageTwo = new PageTwo();
 			documentType = documentDetail(document);
+			documentType.setAboutVersionIdentifier(DocumentType.getAboutVersionIdentifier(message));
 			pageOne = populatePageOne(document);
 			pageTwo = populatePageTwo(document);
 			pdfDocument.setDocumentType(documentType);
