@@ -133,7 +133,7 @@ public class PageOneMappingServiceImpl  implements PageOneMappingService{
 		if(LoanPurposeBase.PURCHASE == deal.getLOANS().getLOAN().getTERMSOFLOAN().getLoanPurposeType().getValue())
 		{
 			collaterals.forEach(collateral ->{
-				collateral.getSUBJECTPROPERTY().getSALESCONTRACTS().getSALESCONTRACT().getSALESCONTRACTDETAIL().getSalesContractAmount().setValue(new BigDecimal(closingInformation.getSalePrice()));
+				collateral.getSUBJECTPROPERTY().getSALESCONTRACTS().getSALESCONTRACT().getSALESCONTRACTDETAIL().getSalesContractAmount().setValue(new BigDecimal(closingInformation.getSalePrice().replaceAll(",", "")));
 			});
 		}
 		
@@ -334,7 +334,7 @@ public class PageOneMappingServiceImpl  implements PageOneMappingService{
 		
 		text4_2_2 = "";
 		//Loan Amount
-		deal.getLOANS().getLOAN().getTERMSOFLOAN().getNoteAmount().setValue(new BigDecimal(loanTermsLoanAmount.getAmount()));	
+		deal.getLOANS().getLOAN().getTERMSOFLOAN().getNoteAmount().setValue(new BigDecimal(loanTermsLoanAmount.getAmount().replaceAll(",", "")));	
 		if(loanTermsLoanAmount.getStatus().equalsIgnoreCase("YES"))
 		{
 			deal.getLOANS().getLOAN().getLOANDETAIL().getNegativeAmortizationIndicator().setValue(true);
@@ -372,14 +372,14 @@ public class PageOneMappingServiceImpl  implements PageOneMappingService{
 		if(null != deal.getLOANS().getLOAN().getBUYDOWN())
 		{
 			if(deal.getLOANS().getLOAN().getBUYDOWN().getBUYDOWNRULE().getEXTENSION().getOTHER().isBuydownReflectedInNoteIndicator() && !("").equals(deal.getLOANS().getLOAN().getBUYDOWN().getBUYDOWNOCCURRENCES().getBUYDOWNOCCURRENCE().getBuydownInitialEffectiveInterestRatePercent().getValue().toPlainString()))
-			    deal.getLOANS().getLOAN().getBUYDOWN().getBUYDOWNOCCURRENCES().getBUYDOWNOCCURRENCE().getBuydownInitialEffectiveInterestRatePercent().setValue(new BigDecimal(interestrate[0]));
+			    deal.getLOANS().getLOAN().getBUYDOWN().getBUYDOWNOCCURRENCES().getBUYDOWNOCCURRENCE().getBuydownInitialEffectiveInterestRatePercent().setValue(new BigDecimal(interestrate[0].replaceAll(",", "")));
 		}
 		else if(null != deal.getLOANS().getLOAN().getTERMSOFLOAN().getDisclosedFullyIndexedRatePercent())
-			deal.getLOANS().getLOAN().getTERMSOFLOAN().getDisclosedFullyIndexedRatePercent().setValue(new BigDecimal(interestrate[0]));
+			deal.getLOANS().getLOAN().getTERMSOFLOAN().getDisclosedFullyIndexedRatePercent().setValue(new BigDecimal(interestrate[0].replaceAll(",", "")));
 		else if(null != deal.getLOANS().getLOAN().getTERMSOFLOAN().getWeightedAverageInterestRatePercent())
-			deal.getLOANS().getLOAN().getTERMSOFLOAN().getWeightedAverageInterestRatePercent().setValue(new BigDecimal(interestrate[0]));
+			deal.getLOANS().getLOAN().getTERMSOFLOAN().getWeightedAverageInterestRatePercent().setValue(new BigDecimal(interestrate[0].replaceAll(",", "")));
 		else
-			deal.getLOANS().getLOAN().getTERMSOFLOAN().getNoteRatePercent().setValue(new BigDecimal(interestrate[0]));
+			deal.getLOANS().getLOAN().getTERMSOFLOAN().getNoteRatePercent().setValue(new BigDecimal(interestrate[0].replaceAll(",", "")));
 		//loanTermsInterestRate.setInterest(text4_2);
 		
 		//Adjustable Rate AIR message
@@ -419,12 +419,14 @@ public class PageOneMappingServiceImpl  implements PageOneMappingService{
 		}
 		
 		//DEAL.LOANS.LOAN.PAYMENT.PAYMENT_RULE.InitialPrincipalAndInterestPaymentAmount['__text']).equalsIgnoreCase("")
-		if(null != loanTermsPI.getAmount() && !"".equalsIgnoreCase(loanTermsPI.getAmount()))
-			deal.getLOANS().getLOAN().getPAYMENT().getPAYMENTRULE().getInitialPrincipalAndInterestPaymentAmount().setValue(new BigDecimal(loanTermsPI.getAmount()));
+		if(null != loanTermsPI.getAmount() && !"".equalsIgnoreCase(loanTermsPI.getAmount()) && null != deal.getLOANS().getLOAN().getPAYMENT().getPAYMENTRULE().getInitialPrincipalAndInterestPaymentAmount())
+			deal.getLOANS().getLOAN().getPAYMENT().getPAYMENTRULE().getInitialPrincipalAndInterestPaymentAmount().setValue(new BigDecimal(loanTermsPI.getAmount().replaceAll(",", "")));
 		/*if(!"".equalsIgnoreCase(principalAmount))
 			principalAmount = StringFormatter.NODOLLARS.formatString(principalAmount);*/
 		else
-			deal.getLOANS().getLOAN().getPAYMENT().getPAYMENTRULE().getFullyIndexedInitialPrincipalAndInterestPaymentAmount().setValue(new BigDecimal(loanTermsPI.getAmount()));
+			deal.getLOANS().getLOAN().getPAYMENT().getPAYMENTRULE().getFullyIndexedInitialPrincipalAndInterestPaymentAmount().setValue(new BigDecimal(loanTermsPI.getAmount().replaceAll(",", "")));
+		
+		
 		
 		//DEAL.LOANS.LOAN.LOAN_DETAIL.PaymentIncreaseIndicator['__text']).equalsIgnoreCase("true")
 		if("YES".equalsIgnoreCase(loanTermsPI.getStatus()))
@@ -655,16 +657,19 @@ public class PageOneMappingServiceImpl  implements PageOneMappingService{
 				}
 				//5.3 (MI)
 				String miamount = ppsvalues[1];
-				if(null != projectedpayment.getProjectedPaymentMIPaymentAmount()){
+				miamount = miamount.replaceAll(",", "");
+				miamount = miamount.replaceAll(" ", "");
+				if(null != projectedpayment.getProjectedPaymentMIPaymentAmount() && !"-----".equalsIgnoreCase(miamount)){
 					if (miamount == "0" || miamount == "0.00")
 					    projectedpayment.getProjectedPaymentMIPaymentAmount().setValue(new BigDecimal("0.00"));
 					else 
-						projectedpayment.getProjectedPaymentMIPaymentAmount().setValue(new BigDecimal(miamount.replaceAll(",", "")));
+						projectedpayment.getProjectedPaymentMIPaymentAmount().setValue(new BigDecimal(miamount));
 				}
 					
 				//5.4 (Escrow)
 				String escrowamount = ppsvalues[2];
-				
+				escrowamount = escrowamount.replaceAll(",", "");
+				escrowamount = escrowamount.replaceAll(" ", "");
 					if (escrowamount == "0")
 						projectedpayment.getProjectedPaymentEstimatedEscrowPaymentAmount().setValue(new BigDecimal("0.00"));
 					else
@@ -674,7 +679,8 @@ public class PageOneMappingServiceImpl  implements PageOneMappingService{
 					
 					String[] etp = null;
 					String etpayments =  ppsvalues[3];
-					
+					etpayments = etpayments.replaceAll(",", "");
+					etpayments = etpayments.replaceAll(" ", "");
 					if(etpayments.indexOf("-") != -1) {
 						etp = etpayments.split("-");
 						String Min = etp[0].trim();
@@ -833,7 +839,7 @@ public class PageOneMappingServiceImpl  implements PageOneMappingService{
 					if(null != ids.getINTEGRATEDDISCLOSURESECTIONSUMMARYDETAIL().getIntegratedDisclosureSectionType()){
 						if("TotalClosingCosts".equalsIgnoreCase(ids.getINTEGRATEDDISCLOSURESECTIONSUMMARYDETAIL().getIntegratedDisclosureSectionType().getValue().toString())
 								&& "ClosingCostsSubtotal".equalsIgnoreCase(ids.getINTEGRATEDDISCLOSURESECTIONSUMMARYDETAIL().getIntegratedDisclosureSubsectionType().getValue().toString())){
-							ids.getINTEGRATEDDISCLOSURESECTIONSUMMARYDETAIL().getIntegratedDisclosureSectionTotalAmount().setValue(new BigDecimal(costsAtClosingClosingCosts.getAmount()));
+							ids.getINTEGRATEDDISCLOSURESECTIONSUMMARYDETAIL().getIntegratedDisclosureSectionTotalAmount().setValue(new BigDecimal(costsAtClosingClosingCosts.getAmount().replaceAll(",", "")));
 						}
 					}
 				}
@@ -875,51 +881,11 @@ public class PageOneMappingServiceImpl  implements PageOneMappingService{
 						}
 					}
 				}
-			     
 		}				
 		closingCostsDetails.add("Includes "+totalLoanCosts+" in Loan Costs + "+totalOtherCosts+" in Other Costs -"+lenderCredits);
 		closingCostsDetails.add("in Lender Credits. <i>See page 2 for details.</i>");
 		costsAtClosingClosingCosts.setDetails(closingCostsDetails);
 		
-		
-		//6.2
-		//DEAL.LOANS.LOAN.CLOSING_INFORMATION.CLOSING_INFORMATION_DETAIL.CashFromBorrowerAtClosingAmount
-		if(null != deal.getLOANS().getLOAN().getCLOSINGINFORMATION().getCLOSINGINFORMATIONDETAIL().getCashFromBorrowerAtClosingAmount())
-			//costsAtClosingCashToClose.setAmount(StringFormatter.NODOLLARS.formatString(deal.getLOANS().getLOAN().getCLOSINGINFORMATION().getCLOSINGINFORMATIONDETAIL().getCashFromBorrowerAtClosingAmount().getValue().toPlainString()));
-		    deal.getLOANS().getLOAN().getCLOSINGINFORMATION().getCLOSINGINFORMATIONDETAIL().getCashFromBorrowerAtClosingAmount().setValue(new BigDecimal(costsAtClosingCashToClose.getAmount()));
-		else if(null != deal.getLOANS().getLOAN().getCLOSINGINFORMATION().getCLOSINGINFORMATIONDETAIL().getCashToBorrowerAtClosingAmount())
-			if(DocumentType.isStandardView(document))
-				//costsAtClosingCashToClose.setAmount(StringFormatter.NODOLLARS.formatString(deal.getLOANS().getLOAN().getCLOSINGINFORMATION().getCLOSINGINFORMATIONDETAIL().getCashToBorrowerAtClosingAmount().getValue().toPlainString()));
-				deal.getLOANS().getLOAN().getCLOSINGINFORMATION().getCLOSINGINFORMATIONDETAIL().getCashToBorrowerAtClosingAmount().setValue(new BigDecimal(costsAtClosingCashToClose.getAmount()));
-			else
-				//costsAtClosingCashToClose.setAmount(StringFormatter.NODOLLARS.formatString(deal.getLOANS().getLOAN().getCLOSINGINFORMATION().getCLOSINGINFORMATIONDETAIL().getCashToBorrowerAtClosingAmount().getValue().toPlainString()));
-				deal.getLOANS().getLOAN().getCLOSINGINFORMATION().getCLOSINGINFORMATIONDETAIL().getCashToBorrowerAtClosingAmount().setValue(new BigDecimal(costsAtClosingCashToClose.getAmount()));
-		
-		if(DocumentType.isStandardView(document))
-		{
-			costsAtClosingCashToClose.setDocType("true");
-			/*if(null != deal.getLOANS().getLOAN().getCLOSINGINFORMATION().getCLOSINGINFORMATIONDETAIL().getCashFromBorrowerAtClosingAmount())
-				costsAtClosingCashToClose.setFromType("true");
-				else if(null != deal.getLOANS().getLOAN().getCLOSINGINFORMATION().getCLOSINGINFORMATIONDETAIL().getCashToBorrowerAtClosingAmount())
-					costsAtClosingCashToClose.setToType("true");	*/
-			
-			//deal.getLOANS().getLOAN().getCLOSINGINFORMATION().getCLOSINGINFORMATIONDETAIL().getCashFromBorrowerAtClosingAmount().setValue(new BigDecimal(costsAtClosingCashToClose.getFromType() == "true" ? costsAtClosingCashToClose.getAmount() : "0.00"));
-			//deal.getLOANS().getLOAN().getCLOSINGINFORMATION().getCLOSINGINFORMATIONDETAIL().getCashToBorrowerAtClosingAmount().setValue(new BigDecimal(costsAtClosingCashToClose.getToType() == "true" ? costsAtClosingCashToClose.getAmount() : "0.00"));
-			
-			if(costsAtClosingCashToClose.getFromType() == "true")	{
-				deal.getLOANS().getLOAN().getCLOSINGINFORMATION().getCLOSINGINFORMATIONDETAIL().getCashFromBorrowerAtClosingAmount().setValue(new BigDecimal(costsAtClosingCashToClose.getAmount()));
-				deal.getLOANS().getLOAN().getCLOSINGINFORMATION().getCLOSINGINFORMATIONDETAIL().getCashToBorrowerAtClosingAmount().setValue(new BigDecimal("0.00"));
-			}
-			else if(costsAtClosingCashToClose.getToType() == "true"){
-				deal.getLOANS().getLOAN().getCLOSINGINFORMATION().getCLOSINGINFORMATIONDETAIL().getCashFromBorrowerAtClosingAmount().setValue(new BigDecimal("0.00"));
-				deal.getLOANS().getLOAN().getCLOSINGINFORMATION().getCLOSINGINFORMATIONDETAIL().getCashToBorrowerAtClosingAmount().setValue(new BigDecimal(costsAtClosingCashToClose.getAmount()));
-			}
-		}
-		cashToCloseDetails.add("Includes Closing Costs. <i>See Calculating Cash to Close on page 3 for details.</i>");
-		costsAtClosingCashToClose.setDetails(cashToCloseDetails);
-		
-		costsAtClosing.setCostsAtClosingClosingCosts(costsAtClosingClosingCosts);
-		costsAtClosing.setCostsAtClosingCashToClose(costsAtClosingCashToClose);
 		
 		return document;
 	}

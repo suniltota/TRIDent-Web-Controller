@@ -58,7 +58,7 @@ public class ActualizeApi {
 		 return  mortgageServices.createDocument(messageXMLObject);
     }
 	
-    @RequestMapping(value = "/saveUCD", method = { RequestMethod.POST })
+    @RequestMapping(value = "/generatePDF", method = { RequestMethod.POST })
     public List<PDFResponse> saveModifiedUCD(@RequestBody String xmldoc) throws Exception {
         PopulateInputData reader = new PopulateInputData();
         List<InputData> inputData = reader.getData(new ByteArrayInputStream(xmldoc.getBytes("utf-8")));
