@@ -142,13 +142,13 @@ public class ActualizeApi {
         return unmarshalledObject.getValue();
     }
 	
-	@RequestMapping(value = "/textToXml", method = { RequestMethod.POST }, produces = "application/xml")
-    public MESSAGE generateXmlFromTxtTemplate(@RequestBody String txtdoc) throws Exception {
+	@RequestMapping(value = "/textToXml", method = { RequestMethod.POST })
+    public String generateXmlFromTxtTemplate(@RequestBody String txtdoc) throws Exception {
         Properties propFile = parsePropertiesString(txtdoc);
         InputStream mappingFileStream = getClass().getClassLoader().getResourceAsStream("TextTemplateMap.xml");
         IntermediateXMLData intermediateXMLData = mortgageServices.generateIntermediateXMLForTxtTemplate(mappingFileStream, propFile);
         MESSAGE message = mortgageServices.generateMasterXML(intermediateXMLData);
-        return message;
+        return transformObjectToXML(message);
     }
     
     private Properties parsePropertiesString(String inputData) throws Exception {
