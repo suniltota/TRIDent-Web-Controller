@@ -136,11 +136,11 @@ public class Convertor {
 	public static EscrowsModel getEscrowModel(ESCROWITEM escrowItem){
 		EscrowsModel escrowsModel = new EscrowsModel();
 		String dLabel = "";
-		if(null != escrowItem.getESCROWITEMDETAIL().getEscrowItemType().getValue())
+		if(null != escrowItem.getESCROWITEMDETAIL().getEscrowItemType())
 		{
 			dLabel = null != escrowItem.getESCROWITEMDETAIL().getEscrowItemType().getDisplayLabelText() ? escrowItem.getESCROWITEMDETAIL().getEscrowItemType().getDisplayLabelText() : "";
 			if(null == dLabel || dLabel.isEmpty())
-				dLabel = StringFormatter.CAMEL.formatString(escrowItem.getESCROWITEMDETAIL().getEscrowItemType().getValue().value());
+				dLabel = null != escrowItem.getESCROWITEMDETAIL().getEscrowItemType().getValue() ? StringFormatter.CAMEL.formatString(escrowItem.getESCROWITEMDETAIL().getEscrowItemType().getValue().value()):"";
 			if("Other".equalsIgnoreCase(dLabel))
 			{
 				if(null != escrowItem.getESCROWITEMDETAIL().getEscrowItemTypeOtherDescription() && !escrowItem.getESCROWITEMDETAIL().getEscrowItemTypeOtherDescription().getValue().isEmpty())
@@ -149,7 +149,7 @@ public class Convertor {
 			else
 				escrowsModel.setLabel(dLabel);
 				
-			escrowsModel.setType(escrowItem.getESCROWITEMDETAIL().getEscrowItemType().getValue().value());		
+			escrowsModel.setType(null != escrowItem.getESCROWITEMDETAIL().getEscrowItemType().getValue() ? escrowItem.getESCROWITEMDETAIL().getEscrowItemType().getValue().value():null);		
 		}
 			
 			escrowsModel.setMonthlyPaymentAmount(null != escrowItem.getESCROWITEMDETAIL().getEscrowMonthlyPaymentAmount() ? escrowItem.getESCROWITEMDETAIL().getEscrowMonthlyPaymentAmount().getValue().toPlainString(): "");

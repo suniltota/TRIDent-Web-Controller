@@ -277,12 +277,15 @@ public class PageTwoServiceImpl implements PageTwoService{
 		for (ESCROWITEM escrowItem : escrowsItems)
 		{
 			EscrowsModel escrow = Convertor.getEscrowModel(escrowItem);
-			if (escrow.getLabel().equals("Property Tax")) {
-				propertyTaxesEscrow = escrow;
-				break;
-			} 
-			else if (propertyTaxesEscrow == null && isPropertyTax(escrow.getType())) {
-				propertyTaxesEscrow = escrow;
+			if(null != escrow.getType())
+			{
+				if (escrow.getLabel().equals("Property Tax")) {
+					propertyTaxesEscrow = escrow;
+					break;
+				} 
+				else if (propertyTaxesEscrow == null && isPropertyTax(escrow.getType())) {
+					propertyTaxesEscrow = escrow;
+				}
 			}
 		}
 			if (propertyTaxesEscrow == null)
@@ -302,7 +305,7 @@ public class PageTwoServiceImpl implements PageTwoService{
 			for (ESCROWITEM escrowItem : escrowsItems)
 			{
 				EscrowsModel escrow = Convertor.getEscrowModel(escrowItem);
-				if(checkOtherEscrows(escrow.getType()))
+				if(null != escrow.getType() && checkOtherEscrows(escrow.getType()))
 				{
 					IEPatClosing iepAtClosing = new IEPatClosing();
 					iepAtClosing =	EscrowCostsTableRow(escrow, true, escrow.getLabel());
@@ -546,6 +549,7 @@ public class PageTwoServiceImpl implements PageTwoService{
 	
 	private boolean isPropertyTax(String type)
 	{
+		if(null != type)
 		return	   type.equalsIgnoreCase("BoroughPropertyTax")
 				|| type.equalsIgnoreCase("CityPropertyTax")
 				|| type.equalsIgnoreCase("CountyPropertyTax")
@@ -553,6 +557,7 @@ public class PageTwoServiceImpl implements PageTwoService{
 				|| type.equalsIgnoreCase("PropertyTaxes")
 				|| type.equalsIgnoreCase("StatePropertyTax")
 				|| type.equalsIgnoreCase("TownPropertyTax");
+		return false;
 	}
 	
 	private Prepaids PrepaidCostsTableRow(PREPAIDITEM prepaidItem, boolean to, String label) 
