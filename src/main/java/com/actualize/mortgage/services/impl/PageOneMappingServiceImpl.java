@@ -223,53 +223,59 @@ public class PageOneMappingServiceImpl  implements PageOneMappingService{
 		//TransactionInformation transactionInformation = new TransactionInformation();
 		deal = document.getDEALSETS().getDEALSET().getDEALS().getDEAL();
 		List<PARTY> parties = deal.getPARTIES().getPARTY();
-		parties.forEach(party ->{
+		int borrowerNo = 0;
+		int sellerNo = 0;
+		int lenderNo = 0;
+		List<Borrower> borrowers = pdfDocument.getPageOne().getTransactionInformation().getBorrower();
+		List<Seller> sellers = pdfDocument.getPageOne().getTransactionInformation().getSeller();
+		List<Lender> lenders = pdfDocument.getPageOne().getTransactionInformation().getLender();
+		for(PARTY party : parties){
 			if(null != party.getROLES())
 			{
 				if(null != party.getROLES().getROLE().getROLEDETAIL())
-				if( PartyRoleBase.BORROWER == party.getROLES().getROLE().getROLEDETAIL().getPartyRoleType().getValue())
 				{
-					//DEAL.PARTIES.PARTY.LEGAL_ENTITY.LEGAL_ENTITY_DETAIL.FullName['__text']
-					Borrower borrower = new Borrower();
-					String bName = borrower.getNameModel().getFirstName();
-					if(null != party.getLEGALENTITY())
-						party.getLEGALENTITY().getLEGALENTITYDETAIL().getFullName().setValue(bName);
-					
-					Address bproperty = new Address();
-					ADDRESS bAddress = null;
-					if(null != party.getADDRESSES())
-						bAddress = party.getADDRESSES().getADDRESS();
-					
-					if(null != bproperty.getAddressLineText() && !"".equalsIgnoreCase(bproperty.getAddressLineText()))
-						bAddress.getAddressLineText().setValue(bproperty.getAddressLineText());
-					/*if(null != bproperty.getAddressType() && !"".equalsIgnoreCase(bproperty.getAddressType()))
-						bAddress.getAddressType().setValue(bproperty.getAddressType()== null ? AddressBase.fromValue(null) : AddressBase.fromValue(bproperty.getAddressType()));
-					bAddress.getAddressUnitDesignatorType().setValue(bproperty.getAddressUnitDesignatorType() == null ? AddressUnitDesignatorBase.fromValue(null) : AddressUnitDesignatorBase.fromValue(bproperty.getAddressUnitDesignatorType()));
-					bAddress.getAddressUnitIdentifier().setValue(bproperty.getAddressUnitIdentifier()== null ? "" :bproperty.getAddressUnitIdentifier());*/
-					if(null != bproperty.getCityName() && !"".equalsIgnoreCase(bproperty.getCityName()))
-						bAddress.getCityName().setValue(bproperty.getCityName());
-					if(null != bproperty.getCountryCode() && !"".equalsIgnoreCase(bproperty.getCountryCode()))
-						bAddress.getCountryCode().setValue(bproperty.getCountryCode());
-					if(null != bproperty.getPostalCode() && !"".equalsIgnoreCase(bproperty.getPostalCode()))
-						bAddress.getPostalCode().setValue(bproperty.getPostalCode());
-					if(null != bproperty.getStateCode() && !"".equalsIgnoreCase(bproperty.getStateCode()))
-						bAddress.getStateCode().setValue(bproperty.getStateCode());
-				}
+					if( PartyRoleBase.BORROWER == party.getROLES().getROLE().getROLEDETAIL().getPartyRoleType().getValue())
+					{
+						if(null != party.getLEGALENTITY())
+						{
+							String bName = borrowers.get(borrowerNo).getNameModel().getFirstName();
+							party.getLEGALENTITY().getLEGALENTITYDETAIL().getFullName().setValue(bName);
+							
+							Address bproperty = borrowers.get(borrowerNo).getAddress();
+							ADDRESS bAddress = null;
+							if(null != party.getADDRESSES())
+								bAddress = party.getADDRESSES().getADDRESS();
+							
+							if(null != bproperty.getAddressLineText() && !"".equalsIgnoreCase(bproperty.getAddressLineText()))
+								bAddress.getAddressLineText().setValue(bproperty.getAddressLineText());
+							/*if(null != bproperty.getAddressType() && !"".equalsIgnoreCase(bproperty.getAddressType()))
+								bAddress.getAddressType().setValue(bproperty.getAddressType()== null ? AddressBase.fromValue(null) : AddressBase.fromValue(bproperty.getAddressType()));
+							bAddress.getAddressUnitDesignatorType().setValue(bproperty.getAddressUnitDesignatorType() == null ? AddressUnitDesignatorBase.fromValue(null) : AddressUnitDesignatorBase.fromValue(bproperty.getAddressUnitDesignatorType()));
+							bAddress.getAddressUnitIdentifier().setValue(bproperty.getAddressUnitIdentifier()== null ? "" :bproperty.getAddressUnitIdentifier());*/
+							if(null != bproperty.getCityName() && !"".equalsIgnoreCase(bproperty.getCityName()))
+								bAddress.getCityName().setValue(bproperty.getCityName());
+							if(null != bproperty.getCountryCode() && !"".equalsIgnoreCase(bproperty.getCountryCode()))
+								bAddress.getCountryCode().setValue(bproperty.getCountryCode());
+							if(null != bproperty.getPostalCode() && !"".equalsIgnoreCase(bproperty.getPostalCode()))
+								bAddress.getPostalCode().setValue(bproperty.getPostalCode());
+							if(null != bproperty.getStateCode() && !"".equalsIgnoreCase(bproperty.getStateCode()))
+								bAddress.getStateCode().setValue(bproperty.getStateCode());
+							borrowerNo++;
+						}
+					}
 				else if(PartyRoleBase.PROPERTY_SELLER == party.getROLES().getROLE().getROLEDETAIL().getPartyRoleType().getValue())
 				{
-					Seller seller = new Seller();
-					String sName = seller.getNameModel().getFirstName();
-					if(null != party.getLEGALENTITY())
-						party.getLEGALENTITY().getLEGALENTITYDETAIL().getFullName().setValue(sName);
-					
-					Address sproperty = new Address();
-					ADDRESS sAddress = null;
-					if(null != party.getADDRESSES())
-						sAddress = party.getADDRESSES().getADDRESS();
-					
-					
+				
 					if(party.getLEGALENTITY() !=null)
 					{
+						String sName = sellers.get(sellerNo).getNameModel().getFirstName();
+							party.getLEGALENTITY().getLEGALENTITYDETAIL().getFullName().setValue(sName);
+						
+						Address sproperty = sellers.get(sellerNo).getAddress();
+						ADDRESS sAddress = null;
+						if(null != party.getADDRESSES())
+							sAddress = party.getADDRESSES().getADDRESS();
+						
 						if(null != sproperty.getAddressLineText() && !"".equalsIgnoreCase(sproperty.getAddressLineText()))
 							sAddress.getAddressLineText().setValue(sproperty.getAddressLineText());
 						/*sAddress.getAddressType().setValue(sproperty.getAddressType()== null ? AddressBase.fromValue(null) : AddressBase.fromValue(sproperty.getAddressType()));
@@ -284,24 +290,21 @@ public class PageOneMappingServiceImpl  implements PageOneMappingService{
 							sAddress.getPostalCode().setValue(sproperty.getPostalCode());
 						if(null != sproperty.getStateCode() && !"".equalsIgnoreCase(sproperty.getStateCode()))
 							sAddress.getStateCode().setValue(sproperty.getStateCode());
-						
 					}
+					sellerNo++;
 				}
 				else if(PartyRoleBase.NOTE_PAY_TO == party.getROLES().getROLE().getROLEDETAIL().getPartyRoleType().getValue())
 				{
-					Lender lender = new Lender();
-					String lName = lender.getNameModel().getFirstName();
-					if(null != party.getLEGALENTITY())
-						party.getLEGALENTITY().getLEGALENTITYDETAIL().getFullName().setValue(lName);
-
-					Address lproperty = new Address();
-					
-					ADDRESS lAddress = null;
-					if(null != party.getADDRESSES())
-						lAddress = party.getADDRESSES().getADDRESS();
-					
 					if(null != party.getLEGALENTITY())
 					{
+						String lName = lenders.get(lenderNo).getNameModel().getFirstName();
+						party.getLEGALENTITY().getLEGALENTITYDETAIL().getFullName().setValue(lName);
+						Address lproperty = lenders.get(lenderNo).getAddress();
+						
+						ADDRESS lAddress = null;
+						if(null != party.getADDRESSES())
+							lAddress = party.getADDRESSES().getADDRESS();
+					
 						if(null != lproperty.getAddressLineText() && !"".equalsIgnoreCase(lproperty.getAddressLineText()))
 							lAddress.getAddressLineText().setValue(lproperty.getAddressLineText());
 						/*lAddress.getAddressType().setValue(lproperty.getAddressType()== null ? AddressBase.fromValue(null) :AddressBase.fromValue(lproperty.getAddressType()));
@@ -316,12 +319,13 @@ public class PageOneMappingServiceImpl  implements PageOneMappingService{
 							lAddress.getPostalCode().setValue(lproperty.getPostalCode());
 						if(null != lproperty.getStateCode() && !"".equalsIgnoreCase(lproperty.getStateCode()))
 							lAddress.getStateCode().setValue(lproperty.getStateCode());
-						
+							
+						lenderNo++;
+						}
 					}
 				}
 			}
-		});
-		 
+		}
 		document.getDEALSETS().getDEALSET().getDEALS().setDEAL(deal);
 		return document;
 	}
@@ -365,8 +369,8 @@ public class PageOneMappingServiceImpl  implements PageOneMappingService{
 		LoanTermsInterestRate loanTermsInterestRate = loanTerms.getLoanTermsInterestRate();
 		String[] interestrate = loanTermsInterestRate.getInterest().split("%");
 		
-		TERMSOFLOAN termsofloan = new TERMSOFLOAN();
-		String text4_2 ="";
+		//TERMSOFLOAN termsofloan = new TERMSOFLOAN();
+		//String text4_2 ="";
 		//DEAL.LOANS.LOAN.BUYDOWN.BUYDOWN_RULE.EXTENSION.OTHER.BuydownReflectedInNoteIndicator['__text']).equalsIgnoreCase("true") 
         //&& !DEAL.LOANS.LOAN.BUYDOWN.BUYDOWN_OCCURRENCES.BUYDOWN_OCCURRENCE.BuydownInitialEffectiveInterestRatePercent['__text']).equals(""))
 		if(null != deal.getLOANS().getLOAN().getBUYDOWN())
@@ -409,8 +413,6 @@ public class PageOneMappingServiceImpl  implements PageOneMappingService{
 		
 		LoanTermsPI loanTermsPI = loanTerms.getLoanTermsPI();
 		
-		String frequency = "";
-		String principalAmount = "";
 		List<String> piDetails = new LinkedList<>();
 		//DEAL.LOANS.LOAN.PAYMENT.PAYMENT_RULE.PaymentFrequencyType['__text']).equalsIgnoreCase("")
 		if(null != loanTermsPI.getPaymentFrequencyType())
@@ -425,8 +427,6 @@ public class PageOneMappingServiceImpl  implements PageOneMappingService{
 			principalAmount = StringFormatter.NODOLLARS.formatString(principalAmount);*/
 		else
 			deal.getLOANS().getLOAN().getPAYMENT().getPAYMENTRULE().getFullyIndexedInitialPrincipalAndInterestPaymentAmount().setValue(new BigDecimal(loanTermsPI.getAmount().replaceAll(",", "")));
-		
-		
 		
 		//DEAL.LOANS.LOAN.LOAN_DETAIL.PaymentIncreaseIndicator['__text']).equalsIgnoreCase("true")
 		if("YES".equalsIgnoreCase(loanTermsPI.getStatus()))

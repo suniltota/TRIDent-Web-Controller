@@ -64,7 +64,7 @@ public class PopulateData {
 		 
 		 if(null != deal.getLOANS().getLOAN().getLOANDETAIL().getMIRequiredIndicator())
 			 miRequiredIndicator = Convertor.booleanToString(deal.getLOANS().getLOAN().getLOANDETAIL().getMIRequiredIndicator().isValue());
-		 if(null != deal.getLOANS().getLOAN().getMIDATA().getMIDATADETAIL().getMICertificateIdentifier())
+		 if(null != deal.getLOANS().getLOAN().getMIDATA() && null != deal.getLOANS().getLOAN().getMIDATA().getMIDATADETAIL().getMICertificateIdentifier())
 			 miCertificateIdentifier = deal.getLOANS().getLOAN().getMIDATA().getMIDATADETAIL().getMICertificateIdentifier().getValue();
 		 
 		 

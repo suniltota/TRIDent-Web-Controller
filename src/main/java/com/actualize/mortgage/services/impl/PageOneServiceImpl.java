@@ -16,7 +16,6 @@ import org.mismo.residential._2009.schemas.PARTY;
 import org.mismo.residential._2009.schemas.PRINCIPALANDINTERESTPAYMENTPERCHANGEADJUSTMENTRULE;
 import org.mismo.residential._2009.schemas.PROJECTEDPAYMENT;
 import org.mismo.residential._2009.schemas.PartyRoleBase;
-import org.springframework.security.access.method.P;
 
 import com.actualize.mortgage.domainmodels.Address;
 import com.actualize.mortgage.domainmodels.Borrower;
@@ -752,29 +751,29 @@ public class PageOneServiceImpl implements PageOneService {
 			for (ESTIMATEDPROPERTYCOSTCOMPONENT estimatedpropertycostcomponent:estimatedpropertycostcomponents) {
 				switch (estimatedpropertycostcomponent.getProjectedPaymentEstimatedTaxesInsuranceAssessmentComponentType().getValue().value()) {
 				case "PropertyTaxes":
-					if ("Escrowed".equals(estimatedpropertycostcomponent.getProjectedPaymentEscrowedType().getValue().value()))
+					if (null != estimatedpropertycostcomponent.getProjectedPaymentEscrowedType() && "Escrowed".equals(estimatedpropertycostcomponent.getProjectedPaymentEscrowedType().getValue().value()))
 						countPIYes++;
-					else if ("NotEscrowed".equals(estimatedpropertycostcomponent.getProjectedPaymentEscrowedType().getValue().value()))
+					else if (null != estimatedpropertycostcomponent.getProjectedPaymentEscrowedType() && "NotEscrowed".equals(estimatedpropertycostcomponent.getProjectedPaymentEscrowedType().getValue().value()))
 						countPINo++;
-					else if ("SomeEscrowed".equals(estimatedpropertycostcomponent.getProjectedPaymentEscrowedType().getValue().value()))
+					else if (null != estimatedpropertycostcomponent.getProjectedPaymentEscrowedType() && "SomeEscrowed".equals(estimatedpropertycostcomponent.getProjectedPaymentEscrowedType().getValue().value()))
 						countPISome++;
 					break;
 				case "HomeownersInsurance":
-					if ("Escrowed".equals(estimatedpropertycostcomponent.getProjectedPaymentEscrowedType().getValue().value()))
+					if (null != estimatedpropertycostcomponent.getProjectedPaymentEscrowedType() && "Escrowed".equals(estimatedpropertycostcomponent.getProjectedPaymentEscrowedType().getValue().value()))
 						countHIYes++;
-					else if ("NotEscrowed".equals(estimatedpropertycostcomponent.getProjectedPaymentEscrowedType().getValue().value()))
+					else if (null != estimatedpropertycostcomponent.getProjectedPaymentEscrowedType() && "NotEscrowed".equals(estimatedpropertycostcomponent.getProjectedPaymentEscrowedType().getValue().value()))
 						countHINo++;
-					else if ("SomeEscrowed".equals(estimatedpropertycostcomponent.getProjectedPaymentEscrowedType().getValue().value()))
+					else if (null != estimatedpropertycostcomponent.getProjectedPaymentEscrowedType() && "SomeEscrowed".equals(estimatedpropertycostcomponent.getProjectedPaymentEscrowedType().getValue().value()))
 						countHISome++;
 					break;
 				default: // All other escrows go here
 				    if("".equalsIgnoreCase(otherStr))
-				    	otherStr = StringFormatter.STRINGCLEAN.formatString(estimatedpropertycostcomponent.getProjectedPaymentEstimatedTaxesInsuranceAssessmentComponentTypeOtherDescription().getValue());
-					if ("Escrowed".equals(estimatedpropertycostcomponent.getProjectedPaymentEscrowedType().getValue().value()))
+				    	otherStr = null != estimatedpropertycostcomponent.getProjectedPaymentEstimatedTaxesInsuranceAssessmentComponentTypeOtherDescription() ? StringFormatter.STRINGCLEAN.formatString(estimatedpropertycostcomponent.getProjectedPaymentEstimatedTaxesInsuranceAssessmentComponentTypeOtherDescription().getValue()):"";
+					if (null !=estimatedpropertycostcomponent.getProjectedPaymentEscrowedType() && "Escrowed".equals(estimatedpropertycostcomponent.getProjectedPaymentEscrowedType().getValue().value()))
 						countOtherYes++;
-					else if ("NotEscrowed".equals(estimatedpropertycostcomponent.getProjectedPaymentEscrowedType().getValue().value()))
+					else if (null != estimatedpropertycostcomponent.getProjectedPaymentEscrowedType() && "NotEscrowed".equals(estimatedpropertycostcomponent.getProjectedPaymentEscrowedType().getValue().value()))
 						countOtherNo++;
-					else if ("SomeEscrowed".equals(estimatedpropertycostcomponent.getProjectedPaymentEscrowedType().getValue().value()))
+					else if (null != estimatedpropertycostcomponent.getProjectedPaymentEscrowedType() && "SomeEscrowed".equals(estimatedpropertycostcomponent.getProjectedPaymentEscrowedType().getValue().value()))
 						countOtherSome++;
 					break;
 				}
