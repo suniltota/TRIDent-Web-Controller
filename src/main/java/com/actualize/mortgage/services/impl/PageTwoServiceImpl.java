@@ -409,7 +409,7 @@ public class PageTwoServiceImpl implements PageTwoService{
 				strLabel = 	StringFormatter.CAMEL.formatString(null != fee.getFEEDETAIL().getFeeType() ? fee.getFEEDETAIL().getFeeType().getValue().value():"");
 		}
 		else
-			strLabel = label;
+			strLabel = StringFormatter.CAMEL.formatString(label);
 		
 		if("Other".equalsIgnoreCase(strLabel) && null != fee.getFEEDETAIL().getFeeTypeOtherDescription())
 			strLabel = StringFormatter.CAMEL.formatString(fee.getFEEDETAIL().getFeeTypeOtherDescription().getValue());

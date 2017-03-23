@@ -10,7 +10,14 @@ public class NameModel implements Serializable{
 	private String lastName;
 	private String middleName;
 	private String suffixName;
+	private String fullName;
 	
+	public String getFullName() {
+		return fullName;
+	}
+	public void setFullName(String fullName) {
+		this.fullName = fullName;
+	}
 	public String getFirstName() {
 		return firstName;
 	}

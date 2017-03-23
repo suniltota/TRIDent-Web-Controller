@@ -204,11 +204,10 @@ public class PageOneServiceImpl implements PageOneService {
 		List<Borrower> borrowers = new LinkedList<>();
 		List<Seller> sellers = new LinkedList<>();
 		List<Lender> lenders = new LinkedList<>();
-		
 		deal = document.getDEALSETS().getDEALSET().getDEALS().getDEAL();
 		
 		List<PARTY> parties = deal.getPARTIES().getPARTY();
-		parties.forEach(party ->{
+		for(PARTY party :parties){
 			if(null != party.getROLES())
 			{
 				if(null != party.getROLES().getROLE().getROLEDETAIL())
@@ -218,20 +217,53 @@ public class PageOneServiceImpl implements PageOneService {
 					Borrower borrower = new Borrower();
 					Address bproperty = new Address();
 					NameModel nameModel =  new NameModel();
-					if(party.getLEGALENTITY() !=null)
+					if(null != party.getLEGALENTITY())
 					{
 						String bName = party.getLEGALENTITY().getLEGALENTITYDETAIL().getFullName().getValue();
 						borrower.setType("O");
 						nameModel.setFirstName(bName);
 						ADDRESS bAddress = party.getADDRESSES().getADDRESS();
-						bproperty.setAddressLineText(bAddress.getAddressLineText()== null ? "" :bAddress.getAddressLineText().getValue());
-						bproperty.setAddressType(bAddress.getAddressType()== null ? "" :bAddress.getAddressType().getValue().value());
-						bproperty.setAddressUnitDesignatorType(bAddress.getAddressUnitDesignatorType()== null ? "" :bAddress.getAddressUnitDesignatorType().getValue().value());
-						bproperty.setAddressUnitIdentifier(bAddress.getAddressUnitIdentifier()== null ? "" :bAddress.getAddressUnitIdentifier().getValue());
-						bproperty.setCityName(bAddress.getCityName()== null ? "" :bAddress.getCityName().getValue());
-						bproperty.setCountryCode(bAddress.getCountryCode()== null ? "" :bAddress.getCountryCode().getValue());
-						bproperty.setPostalCode(bAddress.getPostalCode()== null ? "" :bAddress.getPostalCode().getValue());
-						bproperty.setStateCode(bAddress.getStateCode()== null ? "" :bAddress.getStateCode().getValue());
+						if(null != bAddress)
+						{
+							bproperty.setAddressLineText(bAddress.getAddressLineText()== null ? "" :bAddress.getAddressLineText().getValue());
+							bproperty.setAddressType(bAddress.getAddressType()== null ? "" :bAddress.getAddressType().getValue().value());
+							bproperty.setAddressUnitDesignatorType(bAddress.getAddressUnitDesignatorType()== null ? "" :bAddress.getAddressUnitDesignatorType().getValue().value());
+							bproperty.setAddressUnitIdentifier(bAddress.getAddressUnitIdentifier()== null ? "" :bAddress.getAddressUnitIdentifier().getValue());
+							bproperty.setCityName(bAddress.getCityName()== null ? "" :bAddress.getCityName().getValue());
+							bproperty.setCountryCode(bAddress.getCountryCode()== null ? "" :bAddress.getCountryCode().getValue());
+							bproperty.setPostalCode(bAddress.getPostalCode()== null ? "" :bAddress.getPostalCode().getValue());
+							bproperty.setStateCode(bAddress.getStateCode()== null ? "" :bAddress.getStateCode().getValue());
+						}
+						borrower.setAddress(bproperty);
+						borrower.setNameModel(nameModel);
+						borrowers.add(borrower);
+					}
+					else if(null != party.getINDIVIDUAL())
+					{
+						String firstName = null != party.getINDIVIDUAL().getNAME().getFirstName() ? party.getINDIVIDUAL().getNAME().getFirstName().getValue():"";
+						String lastName = null != party.getINDIVIDUAL().getNAME().getLastName() ? party.getINDIVIDUAL().getNAME().getLastName().getValue():"";
+						String middleName = null != party.getINDIVIDUAL().getNAME().getMiddleName() ? party.getINDIVIDUAL().getNAME().getMiddleName().getValue():"";
+						String suffixName = null != party.getINDIVIDUAL().getNAME().getSuffixName() ? party.getINDIVIDUAL().getNAME().getSuffixName().getValue():"";
+						String fullName = null != party.getINDIVIDUAL().getNAME().getFullName() ?party.getINDIVIDUAL().getNAME().getFullName().getValue():"";
+						nameModel.setFirstName(firstName);
+						nameModel.setLastName(lastName);
+						nameModel.setMiddleName(middleName);
+						nameModel.setSuffixName(suffixName);
+						nameModel.setFullName(fullName);
+
+						borrower.setType("I");
+						ADDRESS bAddress = party.getADDRESSES().getADDRESS();
+						if(null != bAddress)
+						{
+							bproperty.setAddressLineText(bAddress.getAddressLineText()== null ? "" :bAddress.getAddressLineText().getValue());
+							bproperty.setAddressType(bAddress.getAddressType()== null ? "" :bAddress.getAddressType().getValue().value());
+							bproperty.setAddressUnitDesignatorType(bAddress.getAddressUnitDesignatorType()== null ? "" :bAddress.getAddressUnitDesignatorType().getValue().value());
+							bproperty.setAddressUnitIdentifier(bAddress.getAddressUnitIdentifier()== null ? "" :bAddress.getAddressUnitIdentifier().getValue());
+							bproperty.setCityName(bAddress.getCityName()== null ? "" :bAddress.getCityName().getValue());
+							bproperty.setCountryCode(bAddress.getCountryCode()== null ? "" :bAddress.getCountryCode().getValue());
+							bproperty.setPostalCode(bAddress.getPostalCode()== null ? "" :bAddress.getPostalCode().getValue());
+							bproperty.setStateCode(bAddress.getStateCode()== null ? "" :bAddress.getStateCode().getValue());
+						}
 						borrower.setAddress(bproperty);
 						borrower.setNameModel(nameModel);
 						borrowers.add(borrower);
@@ -250,18 +282,52 @@ public class PageOneServiceImpl implements PageOneService {
 						nameModel.setFirstName(sName);
 						seller.setType("O");
 						ADDRESS sAddress = party.getADDRESSES().getADDRESS();
-						sproperty.setAddressLineText(sAddress.getAddressLineText()== null ? "" :sAddress.getAddressLineText().getValue());
-						sproperty.setAddressType(sAddress.getAddressType()== null ? "" :sAddress.getAddressType().getValue().value());
-						sproperty.setAddressUnitDesignatorType(sAddress.getAddressUnitDesignatorType()== null ? "" :sAddress.getAddressUnitDesignatorType().getValue().value());
-						sproperty.setAddressUnitIdentifier(sAddress.getAddressUnitIdentifier()== null ? "" :sAddress.getAddressUnitIdentifier().getValue());
-						sproperty.setCityName(sAddress.getCityName()== null ? "" :sAddress.getCityName().getValue());
-						sproperty.setCountryCode(sAddress.getCountryCode()== null ? "" :sAddress.getCountryCode().getValue());
-						sproperty.setPostalCode(sAddress.getPostalCode()== null ? "" :sAddress.getPostalCode().getValue());
-						sproperty.setStateCode(sAddress.getStateCode()== null ? "" :sAddress.getStateCode().getValue());
+						if(null != sAddress)
+						{
+							sproperty.setAddressLineText(sAddress.getAddressLineText()== null ? "" :sAddress.getAddressLineText().getValue());
+							sproperty.setAddressType(sAddress.getAddressType()== null ? "" :sAddress.getAddressType().getValue().value());
+							sproperty.setAddressUnitDesignatorType(sAddress.getAddressUnitDesignatorType()== null ? "" :sAddress.getAddressUnitDesignatorType().getValue().value());
+							sproperty.setAddressUnitIdentifier(sAddress.getAddressUnitIdentifier()== null ? "" :sAddress.getAddressUnitIdentifier().getValue());
+							sproperty.setCityName(sAddress.getCityName()== null ? "" :sAddress.getCityName().getValue());
+							sproperty.setCountryCode(sAddress.getCountryCode()== null ? "" :sAddress.getCountryCode().getValue());
+							sproperty.setPostalCode(sAddress.getPostalCode()== null ? "" :sAddress.getPostalCode().getValue());
+							sproperty.setStateCode(sAddress.getStateCode()== null ? "" :sAddress.getStateCode().getValue());
+						}
 						seller.setAddress(sproperty);
 						seller.setNameModel(nameModel);
 						sellers.add(seller);
 					}
+					else if(party.getINDIVIDUAL() !=null)
+					{
+						String firstName = null != party.getINDIVIDUAL().getNAME().getFirstName() ? party.getINDIVIDUAL().getNAME().getFirstName().getValue():"";
+						String lastName = null != party.getINDIVIDUAL().getNAME().getLastName() ? party.getINDIVIDUAL().getNAME().getLastName().getValue():"";
+						String middleName = null != party.getINDIVIDUAL().getNAME().getMiddleName() ? party.getINDIVIDUAL().getNAME().getMiddleName().getValue():"";
+						String suffixName = null != party.getINDIVIDUAL().getNAME().getSuffixName() ? party.getINDIVIDUAL().getNAME().getSuffixName().getValue():"";
+						String fullName = null != party.getINDIVIDUAL().getNAME().getFullName() ?party.getINDIVIDUAL().getNAME().getFullName().getValue():"";
+						nameModel.setFirstName(firstName);
+						nameModel.setLastName(lastName);
+						nameModel.setMiddleName(middleName);
+						nameModel.setSuffixName(suffixName);
+						nameModel.setFullName(fullName);
+						
+						seller.setType("I");
+						ADDRESS sAddress = party.getADDRESSES().getADDRESS();
+						if(null != sAddress)
+						{
+							sproperty.setAddressLineText(sAddress.getAddressLineText()== null ? "" :sAddress.getAddressLineText().getValue());
+							sproperty.setAddressType(sAddress.getAddressType()== null ? "" :sAddress.getAddressType().getValue().value());
+							sproperty.setAddressUnitDesignatorType(sAddress.getAddressUnitDesignatorType()== null ? "" :sAddress.getAddressUnitDesignatorType().getValue().value());
+							sproperty.setAddressUnitIdentifier(sAddress.getAddressUnitIdentifier()== null ? "" :sAddress.getAddressUnitIdentifier().getValue());
+							sproperty.setCityName(sAddress.getCityName()== null ? "" :sAddress.getCityName().getValue());
+							sproperty.setCountryCode(sAddress.getCountryCode()== null ? "" :sAddress.getCountryCode().getValue());
+							sproperty.setPostalCode(sAddress.getPostalCode()== null ? "" :sAddress.getPostalCode().getValue());
+							sproperty.setStateCode(sAddress.getStateCode()== null ? "" :sAddress.getStateCode().getValue());
+						}
+						seller.setAddress(sproperty);
+						seller.setNameModel(nameModel);
+						sellers.add(seller);
+						
+					}	
 					
 				}
 				else if(PartyRoleBase.NOTE_PAY_TO == party.getROLES().getROLE().getROLEDETAIL().getPartyRoleType().getValue())
@@ -277,14 +343,17 @@ public class PageOneServiceImpl implements PageOneService {
 						nameModel.setFirstName(lName);
 						lender.setType("O");
 						ADDRESS lAddress = party.getADDRESSES().getADDRESS();
-						lproperty.setAddressLineText(lAddress.getAddressLineText()== null ? "" :lAddress.getAddressLineText().getValue());
-						lproperty.setAddressType(lAddress.getAddressType()== null ? "" :lAddress.getAddressType().getValue().value());
-						lproperty.setAddressUnitDesignatorType(lAddress.getAddressUnitDesignatorType()== null ? "" :lAddress.getAddressUnitDesignatorType().getValue().value());
-						lproperty.setAddressUnitIdentifier(lAddress.getAddressUnitIdentifier()== null ? "" :lAddress.getAddressUnitIdentifier().getValue());
-						lproperty.setCityName(lAddress.getCityName()== null ? "" :lAddress.getCityName().getValue());
-						lproperty.setCountryCode(lAddress.getCountryCode()== null ? "" :lAddress.getCountryCode().getValue());
-						lproperty.setPostalCode(lAddress.getPostalCode()== null ? "" :lAddress.getPostalCode().getValue());
-						lproperty.setStateCode(lAddress.getStateCode()== null ? "" :lAddress.getStateCode().getValue());
+						if(null != lAddress)
+						{
+							lproperty.setAddressLineText(lAddress.getAddressLineText()== null ? "" :lAddress.getAddressLineText().getValue());
+							lproperty.setAddressType(lAddress.getAddressType()== null ? "" :lAddress.getAddressType().getValue().value());
+							lproperty.setAddressUnitDesignatorType(lAddress.getAddressUnitDesignatorType()== null ? "" :lAddress.getAddressUnitDesignatorType().getValue().value());
+							lproperty.setAddressUnitIdentifier(lAddress.getAddressUnitIdentifier()== null ? "" :lAddress.getAddressUnitIdentifier().getValue());
+							lproperty.setCityName(lAddress.getCityName()== null ? "" :lAddress.getCityName().getValue());
+							lproperty.setCountryCode(lAddress.getCountryCode()== null ? "" :lAddress.getCountryCode().getValue());
+							lproperty.setPostalCode(lAddress.getPostalCode()== null ? "" :lAddress.getPostalCode().getValue());
+							lproperty.setStateCode(lAddress.getStateCode()== null ? "" :lAddress.getStateCode().getValue());
+						}
 						lender.setAddress(lproperty);
 						lender.setNameModel(nameModel);
 						lenders.add(lender);
@@ -292,7 +361,7 @@ public class PageOneServiceImpl implements PageOneService {
 					
 				}
 			}
-		});
+		}
 		
 		transactionInformation.setBorrower(borrowers);
 		transactionInformation.setSeller(sellers);
@@ -358,17 +427,17 @@ public class PageOneServiceImpl implements PageOneService {
 		}
 		else if(null != deal.getLOANS().getLOAN().getTERMSOFLOAN().getDisclosedFullyIndexedRatePercent())
 		{
-			text4_2 = deal.getLOANS().getLOAN().getTERMSOFLOAN().getDisclosedFullyIndexedRatePercent().getValue().toPlainString() + "%";
+			text4_2 = deal.getLOANS().getLOAN().getTERMSOFLOAN().getDisclosedFullyIndexedRatePercent().getValue().toPlainString();
 			disclosedFullyIndexedRatePercent = deal.getLOANS().getLOAN().getTERMSOFLOAN().getDisclosedFullyIndexedRatePercent().getValue().toPlainString();
 		}
 			else if(null != deal.getLOANS().getLOAN().getTERMSOFLOAN().getWeightedAverageInterestRatePercent())
 		{
-			text4_2 = deal.getLOANS().getLOAN().getTERMSOFLOAN().getWeightedAverageInterestRatePercent().getValue().toPlainString() + "%";
+			text4_2 = deal.getLOANS().getLOAN().getTERMSOFLOAN().getWeightedAverageInterestRatePercent().getValue().toPlainString();
 			weightedAverageInterestRatePercent = deal.getLOANS().getLOAN().getTERMSOFLOAN().getWeightedAverageInterestRatePercent().getValue().toPlainString();
 		}
 		else
 		{
-			text4_2 = deal.getLOANS().getLOAN().getTERMSOFLOAN().getNoteRatePercent().getValue().toPlainString() + "%";
+			text4_2 = deal.getLOANS().getLOAN().getTERMSOFLOAN().getNoteRatePercent().getValue().toPlainString();
 			noteRatePercent = deal.getLOANS().getLOAN().getTERMSOFLOAN().getNoteRatePercent().getValue().toPlainString();
 		}
 		loanTermsInterestRate.setInterest(text4_2);
@@ -585,7 +654,7 @@ public class PageOneServiceImpl implements PageOneService {
 					{
 						projectedPaymentsPI.setMinValue(min);
 						projectedPaymentsPI.setMaxValue(max);
-						projectedPaymentsPI.setInterestOnly("<i>interestonly</i>");
+						projectedPaymentsPI.setInterestOnly("interestonly");
 						projectedPaymentsPrincipalInterest.add(projectedPaymentsPI);
 					}
 					else
@@ -603,7 +672,7 @@ public class PageOneServiceImpl implements PageOneService {
 					{
 						projectedPaymentsPI.setMinValue(min);
 						projectedPaymentsPI.setMaxValue(max);
-						projectedPaymentsPI.setInterestOnly("<i>interestonly</i>");
+						projectedPaymentsPI.setInterestOnly("interestonly");
 						projectedPaymentsPrincipalInterest.add(projectedPaymentsPI);
 					}
 					else

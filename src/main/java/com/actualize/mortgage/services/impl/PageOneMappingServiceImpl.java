@@ -43,6 +43,7 @@ import com.actualize.mortgage.domainmodels.LoanTermsInterestRate;
 import com.actualize.mortgage.domainmodels.LoanTermsLoanAmount;
 import com.actualize.mortgage.domainmodels.LoanTermsPI;
 import com.actualize.mortgage.domainmodels.LoanTermsPrepaymentPenalty;
+import com.actualize.mortgage.domainmodels.NameModel;
 import com.actualize.mortgage.domainmodels.PDFDocument;
 import com.actualize.mortgage.domainmodels.ProjectedPayments;
 import com.actualize.mortgage.domainmodels.ProjectedPaymentsETIA;
@@ -133,7 +134,8 @@ public class PageOneMappingServiceImpl  implements PageOneMappingService{
 		if(LoanPurposeBase.PURCHASE == deal.getLOANS().getLOAN().getTERMSOFLOAN().getLoanPurposeType().getValue())
 		{
 			collaterals.forEach(collateral ->{
-				collateral.getSUBJECTPROPERTY().getSALESCONTRACTS().getSALESCONTRACT().getSALESCONTRACTDETAIL().getSalesContractAmount().setValue(new BigDecimal(closingInformation.getSalePrice().replaceAll(",", "")));
+				if(!"".equals(closingInformation.getSalePrice()))
+						collateral.getSUBJECTPROPERTY().getSALESCONTRACTS().getSALESCONTRACT().getSALESCONTRACTDETAIL().getSalesContractAmount().setValue(new BigDecimal(closingInformation.getSalePrice().replaceAll(",", "")));
 			});
 		}
 		
@@ -153,7 +155,6 @@ public class PageOneMappingServiceImpl  implements PageOneMappingService{
 		loanId = loanInformation.getLoanId();
 		loanMic = loanInformation.getMic();
 		int loanterm = convertor.convertYearsToMonthsFormat(loanTotalTerm);
-		TERMSOFLOAN termsofloan = new TERMSOFLOAN();
 		
 		//Loan Terms
 		if(deal.getLOANS().getLOAN().getLOANDETAIL().getConstructionLoanIndicator().isValue() && "ConstructionToPermanent".equalsIgnoreCase(deal.getLOANS().getLOAN().getCONSTRUCTION().getConstructionLoanType().getValue().value()))
@@ -236,8 +237,9 @@ public class PageOneMappingServiceImpl  implements PageOneMappingService{
 				{
 					if( PartyRoleBase.BORROWER == party.getROLES().getROLE().getROLEDETAIL().getPartyRoleType().getValue())
 					{
-						if(null != party.getLEGALENTITY())
+						if(null != party.getLEGALENTITY() && "O".equalsIgnoreCase(borrowers.get(borrowerNo).getType()))
 						{
+					
 							String bName = borrowers.get(borrowerNo).getNameModel().getFirstName();
 							party.getLEGALENTITY().getLEGALENTITYDETAIL().getFullName().setValue(bName);
 							
@@ -262,11 +264,45 @@ public class PageOneMappingServiceImpl  implements PageOneMappingService{
 								bAddress.getStateCode().setValue(bproperty.getStateCode());
 							borrowerNo++;
 						}
-					}
+						else if(null != party.getINDIVIDUAL() && "I".equalsIgnoreCase(borrowers.get(borrowerNo).getType()))
+						{
+							NameModel name = borrowers.get(borrowerNo).getNameModel();
+							
+							if(null != name.getFirstName() && null != party.getINDIVIDUAL().getNAME().getFirstName())
+								party.getINDIVIDUAL().getNAME().getFirstName().setValue(name.getFirstName());
+							if(null != name.getLastName() && null != party.getINDIVIDUAL().getNAME().getLastName())
+								party.getINDIVIDUAL().getNAME().getLastName().setValue(name.getLastName());
+							if(null != name.getMiddleName() && null != party.getINDIVIDUAL().getNAME().getMiddleName())
+								party.getINDIVIDUAL().getNAME().getMiddleName().setValue(name.getMiddleName());
+							if(null != name.getSuffixName() && null != party.getINDIVIDUAL().getNAME().getSuffixName())
+								party.getINDIVIDUAL().getNAME().getSuffixName().setValue(name.getSuffixName());
+							
+							Address bproperty = borrowers.get(borrowerNo).getAddress();
+							ADDRESS bAddress = null;
+							if(null != party.getADDRESSES())
+								bAddress = party.getADDRESSES().getADDRESS();
+							
+							if(null != bproperty.getAddressLineText() && !"".equalsIgnoreCase(bproperty.getAddressLineText()))
+								bAddress.getAddressLineText().setValue(bproperty.getAddressLineText());
+							/*if(null != bproperty.getAddressType() && !"".equalsIgnoreCase(bproperty.getAddressType()))
+								bAddress.getAddressType().setValue(bproperty.getAddressType()== null ? AddressBase.fromValue(null) : AddressBase.fromValue(bproperty.getAddressType()));
+							bAddress.getAddressUnitDesignatorType().setValue(bproperty.getAddressUnitDesignatorType() == null ? AddressUnitDesignatorBase.fromValue(null) : AddressUnitDesignatorBase.fromValue(bproperty.getAddressUnitDesignatorType()));
+							bAddress.getAddressUnitIdentifier().setValue(bproperty.getAddressUnitIdentifier()== null ? "" :bproperty.getAddressUnitIdentifier());*/
+							if(null != bproperty.getCityName() && !"".equalsIgnoreCase(bproperty.getCityName()))
+								bAddress.getCityName().setValue(bproperty.getCityName());
+							if(null != bproperty.getCountryCode() && !"".equalsIgnoreCase(bproperty.getCountryCode()))
+								bAddress.getCountryCode().setValue(bproperty.getCountryCode());
+							if(null != bproperty.getPostalCode() && !"".equalsIgnoreCase(bproperty.getPostalCode()))
+								bAddress.getPostalCode().setValue(bproperty.getPostalCode());
+							if(null != bproperty.getStateCode() && !"".equalsIgnoreCase(bproperty.getStateCode()))
+								bAddress.getStateCode().setValue(bproperty.getStateCode());
+							borrowerNo++;
+							}
+						}
 				else if(PartyRoleBase.PROPERTY_SELLER == party.getROLES().getROLE().getROLEDETAIL().getPartyRoleType().getValue())
 				{
 				
-					if(party.getLEGALENTITY() !=null)
+					if(party.getLEGALENTITY() !=null && "O".equalsIgnoreCase(sellers.get(sellerNo).getType()))
 					{
 						String sName = sellers.get(sellerNo).getNameModel().getFirstName();
 							party.getLEGALENTITY().getLEGALENTITYDETAIL().getFullName().setValue(sName);
@@ -290,12 +326,47 @@ public class PageOneMappingServiceImpl  implements PageOneMappingService{
 							sAddress.getPostalCode().setValue(sproperty.getPostalCode());
 						if(null != sproperty.getStateCode() && !"".equalsIgnoreCase(sproperty.getStateCode()))
 							sAddress.getStateCode().setValue(sproperty.getStateCode());
+						sellerNo++;
 					}
-					sellerNo++;
+					
+					else if(null != party.getINDIVIDUAL() && "I".equalsIgnoreCase(sellers.get(sellerNo).getType()))
+					{
+						Address sproperty = sellers.get(sellerNo).getAddress();
+						ADDRESS sAddress = null;
+						NameModel name = sellers.get(sellerNo).getNameModel();
+						
+						if(null != name.getFirstName() && null != party.getINDIVIDUAL().getNAME().getFirstName())
+							party.getINDIVIDUAL().getNAME().getFirstName().setValue(name.getFirstName());
+						if(null != name.getLastName() && null != party.getINDIVIDUAL().getNAME().getLastName())
+							party.getINDIVIDUAL().getNAME().getLastName().setValue(name.getLastName());
+						if(null != name.getMiddleName() && null != party.getINDIVIDUAL().getNAME().getMiddleName())
+							party.getINDIVIDUAL().getNAME().getMiddleName().setValue(name.getMiddleName());
+						if(null != name.getSuffixName() && null != party.getINDIVIDUAL().getNAME().getSuffixName())
+							party.getINDIVIDUAL().getNAME().getSuffixName().setValue(name.getSuffixName());
+						
+						if(null != party.getADDRESSES())
+							sAddress = party.getADDRESSES().getADDRESS();
+						
+						if(null != sproperty.getAddressLineText() && !"".equalsIgnoreCase(sproperty.getAddressLineText()))
+							sAddress.getAddressLineText().setValue(sproperty.getAddressLineText());
+						/*sAddress.getAddressType().setValue(sproperty.getAddressType()== null ? AddressBase.fromValue(null) : AddressBase.fromValue(sproperty.getAddressType()));
+						sAddress.getAddressUnitDesignatorType().setValue(sproperty.getAddressUnitDesignatorType() == null ? AddressUnitDesignatorBase.fromValue(null) : AddressUnitDesignatorBase.fromValue(sproperty.getAddressUnitDesignatorType()));*/
+						if(null != sproperty.getAddressUnitIdentifier() && !"".equalsIgnoreCase(sproperty.getAddressUnitIdentifier()))
+							sAddress.getAddressUnitIdentifier().setValue(sproperty.getAddressUnitIdentifier());
+						if(null != sproperty.getCityName() && !"".equalsIgnoreCase(sproperty.getCityName()))
+							sAddress.getCityName().setValue(sproperty.getCityName());
+						if(null != sproperty.getCountryCode() && !"".equalsIgnoreCase(sproperty.getCountryCode()))
+							sAddress.getCountryCode().setValue(sproperty.getCountryCode());
+						if(null != sproperty.getPostalCode() && !"".equalsIgnoreCase(sproperty.getPostalCode()))
+							sAddress.getPostalCode().setValue(sproperty.getPostalCode());
+						if(null != sproperty.getStateCode() && !"".equalsIgnoreCase(sproperty.getStateCode()))
+							sAddress.getStateCode().setValue(sproperty.getStateCode());
+						sellerNo++;
+					}
 				}
 				else if(PartyRoleBase.NOTE_PAY_TO == party.getROLES().getROLE().getROLEDETAIL().getPartyRoleType().getValue())
 				{
-					if(null != party.getLEGALENTITY())
+					if(null != party.getLEGALENTITY() && "O".equalsIgnoreCase(lenders.get(lenderNo).getType()))
 					{
 						String lName = lenders.get(lenderNo).getNameModel().getFirstName();
 						party.getLEGALENTITY().getLEGALENTITYDETAIL().getFullName().setValue(lName);
@@ -731,45 +802,45 @@ public class PageOneMappingServiceImpl  implements PageOneMappingService{
 				for (ESTIMATEDPROPERTYCOSTCOMPONENT estimatedpropertycostcomponent:estimatedpropertycostcomponents) {
 					switch (estimatedpropertycostcomponent.getProjectedPaymentEstimatedTaxesInsuranceAssessmentComponentType().getValue().value()) {
 					case "PropertyTaxes":
-						if ("YES".equals(projectedPaymentsETIA.getPropertyTaxesInEscrow())){
+						if ("YES".equals(projectedPaymentsETIA.getPropertyTaxesInEscrow()) && null != estimatedpropertycostcomponent.getProjectedPaymentEscrowedType() ){
 						    estimatedpropertycostcomponent.getProjectedPaymentEscrowedType().setValue(ProjectedPaymentEscrowedBase.fromValue("Escrowed"));
 						    estimatedpropertycostcomponent.getProjectedPaymentEstimatedTaxesInsuranceAssessmentComponentType().setValue(ProjectedPaymentEstimatedTaxesInsuranceAssessmentComponentBase.fromValue("PropertyTaxes"));
 						}
-						else if ("NO".equals(projectedPaymentsETIA.getPropertyTaxesInEscrow())){
+						else if ("NO".equals(projectedPaymentsETIA.getPropertyTaxesInEscrow()) && null != estimatedpropertycostcomponent.getProjectedPaymentEscrowedType() ){
 						    estimatedpropertycostcomponent.getProjectedPaymentEscrowedType().setValue(ProjectedPaymentEscrowedBase.fromValue("NotEscrowed"));
 						    estimatedpropertycostcomponent.getProjectedPaymentEstimatedTaxesInsuranceAssessmentComponentType().setValue(ProjectedPaymentEstimatedTaxesInsuranceAssessmentComponentBase.fromValue("PropertyTaxes"));
 						}
-						else if ("SOME".equals(projectedPaymentsETIA.getPropertyTaxesInEscrow())){
+						else if ("SOME".equals(projectedPaymentsETIA.getPropertyTaxesInEscrow()) && null != estimatedpropertycostcomponent.getProjectedPaymentEscrowedType() ){
 						    estimatedpropertycostcomponent.getProjectedPaymentEscrowedType().setValue(ProjectedPaymentEscrowedBase.fromValue("SomeEscrowed"));
 						    estimatedpropertycostcomponent.getProjectedPaymentEstimatedTaxesInsuranceAssessmentComponentType().setValue(ProjectedPaymentEstimatedTaxesInsuranceAssessmentComponentBase.fromValue("PropertyTaxes"));
 						}
 						break;
 					case "HomeownersInsurance":
-						if ("YES".equals(projectedPaymentsETIA.getHomeownersInsuranceInEscrow())){
+						if ("YES".equals(projectedPaymentsETIA.getHomeownersInsuranceInEscrow()) && null != estimatedpropertycostcomponent.getProjectedPaymentEscrowedType() ){
 						    estimatedpropertycostcomponent.getProjectedPaymentEscrowedType().setValue(ProjectedPaymentEscrowedBase.fromValue("Escrowed"));
 						    estimatedpropertycostcomponent.getProjectedPaymentEstimatedTaxesInsuranceAssessmentComponentType().setValue(ProjectedPaymentEstimatedTaxesInsuranceAssessmentComponentBase.fromValue("HomeownersInsurance"));
 						}
-						else if ("NO".equals(projectedPaymentsETIA.getHomeownersInsuranceInEscrow())){
+						else if ("NO".equals(projectedPaymentsETIA.getHomeownersInsuranceInEscrow()) && null != estimatedpropertycostcomponent.getProjectedPaymentEscrowedType()){
 						    estimatedpropertycostcomponent.getProjectedPaymentEscrowedType().setValue(ProjectedPaymentEscrowedBase.fromValue("NotEscrowed"));
 						    estimatedpropertycostcomponent.getProjectedPaymentEstimatedTaxesInsuranceAssessmentComponentType().setValue(ProjectedPaymentEstimatedTaxesInsuranceAssessmentComponentBase.fromValue("HomeownersInsurance"));
 						}
-						else if ("SOME".equals(projectedPaymentsETIA.getHomeownersInsuranceInEscrow())){
+						else if ("SOME".equals(projectedPaymentsETIA.getHomeownersInsuranceInEscrow()) && null != estimatedpropertycostcomponent.getProjectedPaymentEscrowedType()){
 						    estimatedpropertycostcomponent.getProjectedPaymentEscrowedType().setValue(ProjectedPaymentEscrowedBase.fromValue("SomeEscrowed"));
 						    estimatedpropertycostcomponent.getProjectedPaymentEstimatedTaxesInsuranceAssessmentComponentType().setValue(ProjectedPaymentEstimatedTaxesInsuranceAssessmentComponentBase.fromValue("HomeownersInsurance"));
 						}
 						break;
 					default: // All other escrows go here
-					    if("".equalsIgnoreCase(projectedPaymentsETIA.getOtherDescription()))
+					    if("".equalsIgnoreCase(projectedPaymentsETIA.getOtherDescription()) && null != estimatedpropertycostcomponent.getProjectedPaymentEstimatedTaxesInsuranceAssessmentComponentTypeOtherDescription())
 					    	estimatedpropertycostcomponent.getProjectedPaymentEstimatedTaxesInsuranceAssessmentComponentTypeOtherDescription().setValue(projectedPaymentsETIA.getOtherDescription());
-					    if ("YES".equals(projectedPaymentsETIA.getOtherInEscrow())){
+					    if ("YES".equals(projectedPaymentsETIA.getOtherInEscrow()) && null != estimatedpropertycostcomponent.getProjectedPaymentEscrowedType()){
 						    estimatedpropertycostcomponent.getProjectedPaymentEscrowedType().setValue(ProjectedPaymentEscrowedBase.fromValue("Escrowed"));
 						    estimatedpropertycostcomponent.getProjectedPaymentEstimatedTaxesInsuranceAssessmentComponentType().setValue(ProjectedPaymentEstimatedTaxesInsuranceAssessmentComponentBase.fromValue("Other"));
 						}
-						else if ("NO".equals(projectedPaymentsETIA.getOtherInEscrow())){
+						else if ("NO".equals(projectedPaymentsETIA.getOtherInEscrow()) && null != estimatedpropertycostcomponent.getProjectedPaymentEscrowedType()){
 						    estimatedpropertycostcomponent.getProjectedPaymentEscrowedType().setValue(ProjectedPaymentEscrowedBase.fromValue("NotEscrowed"));
 						    estimatedpropertycostcomponent.getProjectedPaymentEstimatedTaxesInsuranceAssessmentComponentType().setValue(ProjectedPaymentEstimatedTaxesInsuranceAssessmentComponentBase.fromValue("Other"));
 						}
-						else if ("SOME".equals(projectedPaymentsETIA.getOtherInEscrow())){
+						else if ("SOME".equals(projectedPaymentsETIA.getOtherInEscrow()) && null != estimatedpropertycostcomponent.getProjectedPaymentEscrowedType()){
 						    estimatedpropertycostcomponent.getProjectedPaymentEscrowedType().setValue(ProjectedPaymentEscrowedBase.fromValue("SomeEscrowed"));
 						    estimatedpropertycostcomponent.getProjectedPaymentEstimatedTaxesInsuranceAssessmentComponentType().setValue(ProjectedPaymentEstimatedTaxesInsuranceAssessmentComponentBase.fromValue("Other"));
 						}

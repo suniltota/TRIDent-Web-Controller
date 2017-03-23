@@ -136,7 +136,7 @@ public class Convertor {
 	public static EscrowsModel getEscrowModel(ESCROWITEM escrowItem){
 		EscrowsModel escrowsModel = new EscrowsModel();
 		String dLabel = "";
-		if(null != escrowItem.getESCROWITEMDETAIL().getEscrowItemType())
+		if(null != escrowItem.getESCROWITEMDETAIL().getEscrowItemType().getValue())
 		{
 			dLabel = null != escrowItem.getESCROWITEMDETAIL().getEscrowItemType().getDisplayLabelText() ? escrowItem.getESCROWITEMDETAIL().getEscrowItemType().getDisplayLabelText() : "";
 			if(null == dLabel || dLabel.isEmpty())
