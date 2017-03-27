@@ -1,5 +1,6 @@
 package com.actualize.mortgage.services.impl;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -205,7 +206,7 @@ public class PageOneServiceImpl implements PageOneService {
 		List<Seller> sellers = new LinkedList<>();
 		List<Lender> lenders = new LinkedList<>();
 		deal = document.getDEALSETS().getDEALSET().getDEALS().getDEAL();
-		
+		int i = 0;
 		List<PARTY> parties = deal.getPARTIES().getPARTY();
 		for(PARTY party :parties){
 			if(null != party.getROLES())
@@ -366,7 +367,6 @@ public class PageOneServiceImpl implements PageOneService {
 		transactionInformation.setBorrower(borrowers);
 		transactionInformation.setSeller(sellers);
 		transactionInformation.setLender(lenders);
-		
 		return transactionInformation;
 	}
 
@@ -635,15 +635,17 @@ public class PageOneServiceImpl implements PageOneService {
 				
 				// Calculate interest only flag
 				interestOnly = deal.getLOANS().getLOAN().getLOANDETAIL().getInterestOnlyIndicator().isValue();
-				if (!interestOnly) {
+				
 					try {
 						int startYear = Integer.parseInt(projectedpayment.getProjectedPaymentCalculationPeriodStartNumber().getValue().toPlainString());
 			            if((startYear-1)*12 < interestOnlyTermMonthsCount && deal.getLOANS().getLOAN().getLOANDETAIL().getInterestOnlyIndicator().isValue()) 
 			            	interestOnly = true;
+			            else 
+			            	interestOnly = false;
 					} catch (Exception e) {
 						// do nothing
 					}
-				}
+				
 				
 				String min = format.formatString((null != projectedpayment.getProjectedPaymentPrincipalAndInterestMinimumPaymentAmount()) ? projectedpayment.getProjectedPaymentPrincipalAndInterestMinimumPaymentAmount().getValue().toPlainString():"0");
 				String max = format.formatString((null != projectedpayment.getProjectedPaymentPrincipalAndInterestMaximumPaymentAmount()) ? projectedpayment.getProjectedPaymentPrincipalAndInterestMaximumPaymentAmount().getValue().toPlainString():"0");
@@ -654,14 +656,14 @@ public class PageOneServiceImpl implements PageOneService {
 					{
 						projectedPaymentsPI.setMinValue(min);
 						projectedPaymentsPI.setMaxValue(max);
-						projectedPaymentsPI.setInterestOnly("interestonly");
+						projectedPaymentsPI.setInterestOnly("Interest Only");
 						projectedPaymentsPrincipalInterest.add(projectedPaymentsPI);
 					}
 					else
 					{
-							projectedPaymentsPI.setMinValue(min);
-							projectedPaymentsPI.setMaxValue(max);
-							projectedPaymentsPrincipalInterest.add(projectedPaymentsPI);
+						projectedPaymentsPI.setMinValue(min);
+						projectedPaymentsPI.setMaxValue(max);
+						projectedPaymentsPrincipalInterest.add(projectedPaymentsPI);
 					}
 					
 				}
@@ -672,7 +674,7 @@ public class PageOneServiceImpl implements PageOneService {
 					{
 						projectedPaymentsPI.setMinValue(min);
 						projectedPaymentsPI.setMaxValue(max);
-						projectedPaymentsPI.setInterestOnly("interestonly");
+						projectedPaymentsPI.setInterestOnly("Interest Only");
 						projectedPaymentsPrincipalInterest.add(projectedPaymentsPI);
 					}
 					else
