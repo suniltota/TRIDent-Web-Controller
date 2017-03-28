@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
@@ -39,12 +40,20 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "ESTIMATED_PROPERTY_COST_COMPONENTS", propOrder = {
-    "estimatedpropertycostcomponent"
+		"gseDisplayLabelText",
+		"estimatedpropertycostcomponent"
 })
 public class ESTIMATEDPROPERTYCOSTCOMPONENTS {
 
     @XmlElement(name = "ESTIMATED_PROPERTY_COST_COMPONENT")
     protected List<ESTIMATEDPROPERTYCOSTCOMPONENT> estimatedpropertycostcomponent;
+    
+    @XmlAttribute(name = "DisplayLabelText", namespace = "http://www.datamodelextension.org")
+    protected String gseDisplayLabelText;
+
+    public String getGseDisplayLabelText() {
+		return gseDisplayLabelText;
+	}
 
     /**
      * Gets the value of the estimatedpropertycostcomponent property.

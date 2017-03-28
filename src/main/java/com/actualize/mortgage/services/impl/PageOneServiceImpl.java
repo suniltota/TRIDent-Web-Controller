@@ -764,7 +764,7 @@ public class PageOneServiceImpl implements PageOneService {
 					totalOtherCosts = "$0";
 			
 				lenderCredits = StringFormatter.DOLLARS.formatString(Convertor.getLenderCredits("LenderCredits", document));
-				if(null == lenderCredits || lenderCredits.isEmpty())
+				if(null == lenderCredits || lenderCredits.isEmpty()|| "0".equals(lenderCredits))
 					lenderCredits = "$0";
 		
 		closingCostsDetails.add("Includes "+totalLoanCosts+" in Loan Costs + "+totalOtherCosts+" in Other Costs -"+lenderCredits);
@@ -819,6 +819,7 @@ public class PageOneServiceImpl implements PageOneService {
 		if(null != deal.getLOANS().getLOAN().getDOCUMENTSPECIFICDATASETS().getDOCUMENTSPECIFICDATASET().getINTEGRATEDDISCLOSURE().getESTIMATEDPROPERTYCOST().getESTIMATEDPROPERTYCOSTCOMPONENTS())
 		{
 			List<ESTIMATEDPROPERTYCOSTCOMPONENT> estimatedpropertycostcomponents = deal.getLOANS().getLOAN().getDOCUMENTSPECIFICDATASETS().getDOCUMENTSPECIFICDATASET().getINTEGRATEDDISCLOSURE().getESTIMATEDPROPERTYCOST().getESTIMATEDPROPERTYCOSTCOMPONENTS().getESTIMATEDPROPERTYCOSTCOMPONENT();
+			otherStr = deal.getLOANS().getLOAN().getDOCUMENTSPECIFICDATASETS().getDOCUMENTSPECIFICDATASET().getINTEGRATEDDISCLOSURE().getESTIMATEDPROPERTYCOST().getESTIMATEDPROPERTYCOSTCOMPONENTS().getGseDisplayLabelText();
 			for (ESTIMATEDPROPERTYCOSTCOMPONENT estimatedpropertycostcomponent:estimatedpropertycostcomponents) {
 				switch (estimatedpropertycostcomponent.getProjectedPaymentEstimatedTaxesInsuranceAssessmentComponentType().getValue().value()) {
 				case "PropertyTaxes":
@@ -838,7 +839,7 @@ public class PageOneServiceImpl implements PageOneService {
 						countHISome++;
 					break;
 				default: // All other escrows go here
-				    if("".equalsIgnoreCase(otherStr))
+				    if("".equalsIgnoreCase(otherStr) || null == otherStr)
 				    	otherStr = null != estimatedpropertycostcomponent.getProjectedPaymentEstimatedTaxesInsuranceAssessmentComponentTypeOtherDescription() ? StringFormatter.STRINGCLEAN.formatString(estimatedpropertycostcomponent.getProjectedPaymentEstimatedTaxesInsuranceAssessmentComponentTypeOtherDescription().getValue()):"";
 					if (null !=estimatedpropertycostcomponent.getProjectedPaymentEscrowedType() && "Escrowed".equals(estimatedpropertycostcomponent.getProjectedPaymentEscrowedType().getValue().value()))
 						countOtherYes++;
