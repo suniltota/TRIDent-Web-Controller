@@ -17,6 +17,7 @@ public class ClosingCostProperties implements Serializable {
 		private String spB4Closing;
 		private String paidByOthers;
 		private String toEntity;
+		private String lenderStatus;
 		
 		/**
 		 * @return the feeType
@@ -107,6 +108,12 @@ public class ClosingCostProperties implements Serializable {
 		}
 		public void setDisplayLabel(String displayLabel) {
 			this.displayLabel = displayLabel;
+		}
+		public String getLenderStatus() {
+			return lenderStatus;
+		}
+		public void setLenderStatus(String lenderStatus) {
+			this.lenderStatus = lenderStatus;
 		}
 		
 

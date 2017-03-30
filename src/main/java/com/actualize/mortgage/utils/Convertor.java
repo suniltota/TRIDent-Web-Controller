@@ -129,6 +129,7 @@ public class Convertor {
 			prepaidsModel.setIntegratedDisclosureSectionType(null != prepaidItem.getPREPAIDITEMDETAIL().getIntegratedDisclosureSectionType() ? prepaidItem.getPREPAIDITEMDETAIL().getIntegratedDisclosureSectionType().getValue().value() :"");
 			prepaidsModel.setPaidToType(null != prepaidItem.getPREPAIDITEMDETAIL().getFeePaidToType() ? prepaidItem.getPREPAIDITEMDETAIL().getFeePaidToType().getValue().value() : "" );
 			prepaidsModel.setPaymentToEntity(null != prepaidItem.getPREPAIDITEMPAIDTO() ? prepaidItem.getPREPAIDITEMPAIDTO().getLEGALENTITY().getLEGALENTITYDETAIL().getFullName().getValue() : "" );
+		
 		return prepaidsModel;
 		
 	}
@@ -174,6 +175,11 @@ public class Convertor {
 							escrowsModel.setSellerAtClosingAmount(null != escrowitempayment.getEscrowItemActualPaymentAmount() ? escrowitempayment.getEscrowItemActualPaymentAmount().getValue().toPlainString():"");
 					else
 						escrowsModel.setOtherAmount(null != escrowitempayment.getEscrowItemActualPaymentAmount() ? escrowitempayment.getEscrowItemActualPaymentAmount().getValue().toPlainString():"");
+					
+					if("Lender".equalsIgnoreCase(paidBy))
+						escrowsModel.setLenderStatus("YES");
+					else
+						escrowsModel.setLenderStatus("NO");
 				}
 			}
 			
@@ -238,8 +244,14 @@ public class Convertor {
 	}
 	
 	public int convertYearsToMonthsFormat(String yearsdata){
-		    String[] years = yearsdata.split(" ");
-	        int month = Math.round(Integer.parseInt(years[0])*12);
+		if(null != yearsdata || "".equals(yearsdata.trim()))
+		{
+			String[] years = yearsdata.split(" ");
+			int month = Math.round(Integer.parseInt(years[0])*12);
 	        return month;
+		}
+		
+			return 0;
+	        
 	}
 }

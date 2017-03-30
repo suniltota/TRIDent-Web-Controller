@@ -379,12 +379,12 @@ public class PageTwoServiceImpl implements PageTwoService{
 			if (("LoanDiscountPoints").equalsIgnoreCase(fee.getFEEDETAIL().getFeeType().getValue().value()))
 				if(null !=fee.getFEEDETAIL().getFeeTotalPercent() && !"0.0000".equalsIgnoreCase(fee.getFEEDETAIL().getFeeTotalPercent().getValue().toPlainString())&& null != fee.getFEEDETAIL().getFeePaidToType())
 				{
-					closingCostProperties = FeeCostsTableRow(fee, true, " of Loan Amount (Points)", null);
+					closingCostProperties = FeeCostsTableRow(fee, true, "of Loan Amount (Points)", null);
 					closingCostProperties.setToEntity(StringFormatter.PERCENTWITHOUTPRECEEDING.formatString(fee.getFEEDETAIL().getFeeTotalPercent().getValue().toPlainString()));
 				}
 				else
 				{
-					closingCostProperties = FeeCostsTableRow(fee, true, "% of Loan Amount (Points)",null);
+					closingCostProperties = FeeCostsTableRow(fee, true, "of Loan Amount (Points)",null);
 				}
 			else
 				closingCostProperties = FeeCostsTableRow(fee, true, null, null);
@@ -462,6 +462,12 @@ public class PageTwoServiceImpl implements PageTwoService{
 							sellerAtClosingAmount = feepay.getFeeActualPaymentAmount().getValue().toPlainString();
 					else
 						otherAmount = feepay.getFeeActualPaymentAmount().getValue().toPlainString();
+					
+					if("Lender".equalsIgnoreCase(paidBy))
+						closingCostProperties.setLenderStatus("YES");
+					else
+						closingCostProperties.setLenderStatus("NO");
+				
 				}
 			}
 		}
@@ -478,9 +484,8 @@ public class PageTwoServiceImpl implements PageTwoService{
 			if (!str.equals("") && StringFormatter.doubleValue(str) != 0)
 				closingCostProperties.setSpB4Closing(StringFormatter.NODOLLARS.formatString(str));
 		str = otherAmount;
-		String prefix = otherAmount.equalsIgnoreCase("Lender") ? "(L)": "";
 		if (!str.equals("") && StringFormatter.doubleValue(str) != 0)
-			closingCostProperties.setPaidByOthers(prefix	+ StringFormatter.NODOLLARS.formatString(str));
+			closingCostProperties.setPaidByOthers(StringFormatter.NODOLLARS.formatString(str));
 		
 		return closingCostProperties;
 	}
@@ -510,6 +515,10 @@ public class PageTwoServiceImpl implements PageTwoService{
 						else
 							tlCosts.setBpB4Closing(StringFormatter.NODOLLARS.formatString(integrateddisclosuresubsectionpayment.getIntegratedDisclosureSubsectionPaymentAmount().getValue().toPlainString()));
 					}
+					if("Lender".equalsIgnoreCase(integrateddisclosuresubsectionpayment.getIntegratedDisclosureSubsectionPaidByType().getValue().value()))
+						tlCosts.setLenderStatus("YES");
+					else
+						tlCosts.setLenderStatus("NO");
 				}
 			}
 		return tlCosts;
@@ -608,6 +617,11 @@ public class PageTwoServiceImpl implements PageTwoService{
 							sellerAtClosingAmount = prepaidPayment.getPrepaidItemActualPaymentAmount().getValue().toPlainString();
 					else
 						otherAmount = prepaidPayment.getPrepaidItemActualPaymentAmount().getValue().toPlainString();
+				
+					if("Lender".equalsIgnoreCase(paidBy))
+						prepaids.setLenderStatus("YES");
+					else
+						prepaids.setLenderStatus("NO");
 				}
 		
 			}
@@ -629,7 +643,7 @@ public class PageTwoServiceImpl implements PageTwoService{
 		String prefix = otherAmount.equalsIgnoreCase("Lender") ? "(L)": "";
 		if (!value.equals("") && StringFormatter.doubleValue(value) != 0)
 		prepaids.setPaidByOthers(prefix	+ StringFormatter.NODOLLARS.formatString(value));
-	
+		
 		return prepaids;
 		
 	}
@@ -716,8 +730,8 @@ public class PageTwoServiceImpl implements PageTwoService{
 		otherAmount = found.getOtherAmount();
 		String prefix = otherAmount.equalsIgnoreCase("Lender") ? "(L)": "";
 		if (!otherAmount.equals("") && StringFormatter.doubleValue(otherAmount) != 0)
-		iepAtClosing.setPaidByOthers(prefix	+ StringFormatter.NODOLLARS.formatString(otherAmount));
-	
+		iepAtClosing.setPaidByOthers(StringFormatter.NODOLLARS.formatString(otherAmount));
+		iepAtClosing.setLenderStatus(found.getLenderStatus());	
 		return iepAtClosing;
 	
 	}

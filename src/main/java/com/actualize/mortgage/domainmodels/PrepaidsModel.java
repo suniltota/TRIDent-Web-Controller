@@ -15,6 +15,7 @@ public class PrepaidsModel extends Expenses {
 	private String SellerAtClosingAmount = "";
 	private String OtherEntity = "";
 	private String OtherAmount = "";
+	private String lenderStatus;
 	
 	public String getPrepaidItemMonthsPaidCount() {
 		return PrepaidItemMonthsPaidCount;
@@ -81,6 +82,12 @@ public class PrepaidsModel extends Expenses {
 	}
 	public void setOtherAmount(String amount) {
 		OtherAmount = amount;
+	}
+	public String getLenderStatus() {
+		return lenderStatus;
+	}
+	public void setLenderStatus(String lenderStatus) {
+		this.lenderStatus = lenderStatus;
 	}
 
 }

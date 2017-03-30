@@ -11,6 +11,7 @@ public class EscrowsModel extends Expenses {
 	private String  sellerOutsideClosingAmount = "";
 	private String  otherAmount = "";
 	private String  otherEntity = "";
+	private String lenderStatus = "";
 
 	public String getMonthlyPaymentAmount() {
 		return monthlyPaymentAmount;
@@ -63,5 +64,13 @@ public class EscrowsModel extends Expenses {
 	}
 	public void setOtherEntity(String otherEntity) {
 		this.otherEntity = otherEntity;
+	}
+
+	public String getLenderStatus() {
+		return lenderStatus;
+	}
+
+	public void setLenderStatus(String lenderStatus) {
+		this.lenderStatus = lenderStatus;
 	}
 }
