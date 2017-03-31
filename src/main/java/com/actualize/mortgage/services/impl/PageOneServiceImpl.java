@@ -1,6 +1,5 @@
 package com.actualize.mortgage.services.impl;
 
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -416,14 +415,10 @@ public class PageOneServiceImpl implements PageOneService {
 			loanTermsLoanAmount.setStatus("NO");
 		
 		String text4_2 ="";
-		//DEAL.LOANS.LOAN.BUYDOWN.BUYDOWN_RULE.EXTENSION.OTHER.BuydownReflectedInNoteIndicator['__text']).equalsIgnoreCase("true") 
-        //&& !DEAL.LOANS.LOAN.BUYDOWN.BUYDOWN_OCCURRENCES.BUYDOWN_OCCURRENCE.BuydownInitialEffectiveInterestRatePercent['__text']).equals(""))
 		if(null != deal.getLOANS().getLOAN().getBUYDOWN())
 		{
 		if(deal.getLOANS().getLOAN().getBUYDOWN().getBUYDOWNRULE().getEXTENSION().getOTHER().isBuydownReflectedInNoteIndicator() && !("").equals(deal.getLOANS().getLOAN().getBUYDOWN().getBUYDOWNOCCURRENCES().getBUYDOWNOCCURRENCE().getBuydownInitialEffectiveInterestRatePercent().getValue().toPlainString()))
-		//text4_2 = DEAL.LOANS.LOAN.BUYDOWN.BUYDOWN_OCCURRENCES.BUYDOWN_OCCURRENCE.BuydownInitialEffectiveInterestRatePercent['__text'];
 			text4_2 = deal.getLOANS().getLOAN().getBUYDOWN().getBUYDOWNOCCURRENCES().getBUYDOWNOCCURRENCE().getBuydownInitialEffectiveInterestRatePercent().getValue().toPlainString();
-		//DEAL.LOANS.LOAN.TERMS_OF_LOAN.DisclosedFullyIndexedRatePercent['__text']).equals("")
 		}
 		else if(null != deal.getLOANS().getLOAN().getTERMSOFLOAN().getDisclosedFullyIndexedRatePercent())
 		{
@@ -584,6 +579,9 @@ public class PageOneServiceImpl implements PageOneService {
 		loanTerms.setLoanTermsPI(loanTermsPI);
 		loanTerms.setLoanTermsPrepaymentPenalty(loanTermsPrepaymentPenalty);
 		loanTerms.setLoanTermsBalloonPayment(loanTermsBalloonPayment);
+		loanTerms.setLoanTermsIntialEscrow(PopulateData.populateLoanTermsIntialEscrow(document));
+		loanTerms.setLoanTermsETIA(PopulateData.populateLoanTermsETIA(document));
+		loanTerms.setLoanTermsEscrowAccount(PopulateData.populateLoanTermsEscrowAccount(document));
 		
 		return loanTerms;
 	}

@@ -14,7 +14,6 @@ public class LoanTermsLoanAmount implements	Serializable {
 	private String status;
 	private List<String> details;
 	private String noteAmount;
-	private String loanAmountIncreaseIndicator;
 	private String negativeAmoritzationIndicator;
 	private String negativeAmortizationMaximumLoanBalanceAmount;
 	private String negativeAmortizationLimitMonthsCount;
@@ -60,12 +59,6 @@ public class LoanTermsLoanAmount implements	Serializable {
 	}
 	public void setNoteAmount(String noteAmount) {
 		this.noteAmount = noteAmount;
-	}
-	public String getLoanAmountIncreaseIndicator() {
-		return loanAmountIncreaseIndicator;
-	}
-	public void setLoanAmountIncreaseIndicator(String loanAmountIncreaseIndicator) {
-		this.loanAmountIncreaseIndicator = loanAmountIncreaseIndicator;
 	}
 	public String getNegativeAmoritzationIndicator() {
 		return negativeAmoritzationIndicator;

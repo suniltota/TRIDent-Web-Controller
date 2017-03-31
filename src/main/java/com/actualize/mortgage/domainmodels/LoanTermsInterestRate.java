@@ -21,7 +21,7 @@ public class LoanTermsInterestRate implements Serializable {
 	private String noteRatePercent;
 	private String disclosedFullyIndexedRatePercent;
 	private String interestRateIncreaseIndicator;
-	private String adjustmentRuleType;
+	private String adjustmentRuleTypeFirst;
 	private String perChangeRateAdjustmentFrequencyMonthsCount;
 	private String firstRateChangeMonthsCount;
 	private String ceilingRatePercentEarliestEffectiveMonthsCount;
@@ -113,11 +113,11 @@ public class LoanTermsInterestRate implements Serializable {
 	public void setInterestRateIncreaseIndicator(String interestRateIncreaseIndicator) {
 		this.interestRateIncreaseIndicator = interestRateIncreaseIndicator;
 	}
-	public String getAdjustmentRuleType() {
-		return adjustmentRuleType;
+	public String getAdjustmentRuleTypeFirst() {
+		return adjustmentRuleTypeFirst;
 	}
-	public void setAdjustmentRuleType(String adjustmentRuleType) {
-		this.adjustmentRuleType = adjustmentRuleType;
+	public void setAdjustmentRuleTypeFirst(String adjustmentRuleTypeFirst) {
+		this.adjustmentRuleTypeFirst = adjustmentRuleTypeFirst;
 	}
 	public String getPerChangeRateAdjustmentFrequencyMonthsCount() {
 		return perChangeRateAdjustmentFrequencyMonthsCount;

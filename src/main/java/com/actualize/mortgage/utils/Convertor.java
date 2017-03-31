@@ -9,12 +9,15 @@ import org.mismo.residential._2009.schemas.DOCUMENT;
 import org.mismo.residential._2009.schemas.ESCROWITEM;
 import org.mismo.residential._2009.schemas.ESCROWITEMPAYMENT;
 import org.mismo.residential._2009.schemas.FEE;
+import org.mismo.residential._2009.schemas.FEEPAYMENT;
+import org.mismo.residential._2009.schemas.FEEPAYMENTS;
 import org.mismo.residential._2009.schemas.INTEGRATEDDISCLOSURESECTIONSUMMARY;
 import org.mismo.residential._2009.schemas.INTEGRATEDDISCLOSURESUBSECTIONPAYMENT;
 import org.mismo.residential._2009.schemas.PREPAIDITEM;
 
 import com.actualize.mortgage.domainmodels.ClosingCostProperties;
 import com.actualize.mortgage.domainmodels.EscrowsModel;
+import com.actualize.mortgage.domainmodels.FeeModel;
 import com.actualize.mortgage.domainmodels.PrepaidsModel;
 
 public class Convertor {
@@ -152,6 +155,9 @@ public class Convertor {
 				
 			escrowsModel.setType(null != escrowItem.getESCROWITEMDETAIL().getEscrowItemType().getValue() ? escrowItem.getESCROWITEMDETAIL().getEscrowItemType().getValue().value():null);		
 		}
+		
+		if(null != escrowItem.getESCROWITEMDETAIL().getFeePaidToType())
+			escrowsModel.setPaidToType(escrowItem.getESCROWITEMDETAIL().getFeePaidToType().getValue().value());
 			
 			escrowsModel.setMonthlyPaymentAmount(null != escrowItem.getESCROWITEMDETAIL().getEscrowMonthlyPaymentAmount() ? escrowItem.getESCROWITEMDETAIL().getEscrowMonthlyPaymentAmount().getValue().toPlainString(): "");
 			escrowsModel.setCollectedNumberOfMonthsCount(null != escrowItem.getESCROWITEMDETAIL().getEscrowCollectedNumberOfMonthsCount() ? Integer.toString(escrowItem.getESCROWITEMDETAIL().getEscrowCollectedNumberOfMonthsCount().getValue()):"");
@@ -163,6 +169,7 @@ public class Convertor {
 				if( null != escrowitempayment.getEscrowItemPaymentPaidByType())
 				{
 					String paidBy = escrowitempayment.getEscrowItemPaymentPaidByType().getValue().value();
+					escrowsModel.setPaymentPaidByType(paidBy);
 					if( "Buyer".equalsIgnoreCase(paidBy)) 
 						if("BeforeClosing".equalsIgnoreCase(escrowitempayment.getEscrowItemPaymentTimingType().getValue().value()))
 							escrowsModel.setBuyerOutsideClosingAmount(null != escrowitempayment.getEscrowItemActualPaymentAmount() ? escrowitempayment.getEscrowItemActualPaymentAmount().getValue().toPlainString():"");
@@ -184,8 +191,69 @@ public class Convertor {
 			}
 			
 		return escrowsModel;
+	}
+	
+	public static FeeModel getFeeModel(FEE fee)
+	{
+		FeeModel feeModel = new FeeModel();
+		String dLabel = "";
+		if(null != fee.getFEEDETAIL().getFeeType())
+		{
+			dLabel = null != fee.getFEEDETAIL().getFeeType().getDisplayLabelText() ? fee.getFEEDETAIL().getFeeType().getDisplayLabelText()  : "";
+			if(null == dLabel || dLabel.isEmpty())
+				dLabel = null != fee.getFEEDETAIL().getFeeType().getValue() ? StringFormatter.CAMEL.formatString(fee.getFEEDETAIL().getFeeType().getValue().value()):"";
+			if("Other".equalsIgnoreCase(dLabel))
+			{
+				if(null != fee.getFEEDETAIL().getFeePaidToTypeOtherDescription() && !fee.getFEEDETAIL().getFeePaidToTypeOtherDescription().getValue().value().isEmpty())
+					feeModel.setLabel(fee.getFEEDETAIL().getFeePaidToTypeOtherDescription().getValue().value());
+			}
+			else
+				feeModel.setLabel(dLabel);
+				
+			feeModel.setType(null != fee.getFEEDETAIL().getFeeType().getValue() ? fee.getFEEDETAIL().getFeeType().getValue().value():null);		
+		}
+		
+		if(null != fee.getFEEDETAIL().getFeePaidToType())
+			feeModel.setPaidToType(fee.getFEEDETAIL().getFeePaidToType().getValue().value());
+		if(null != fee.getFEEDETAIL().getFeeActualTotalAmount())
+			feeModel.setTotalAmount(fee.getFEEDETAIL().getFeeActualTotalAmount().getValue().toPlainString());
+		if(null != fee.getFEEDETAIL().getOptionalCostIndicator())
+			feeModel.setOptionalCostIndicator(fee.getFEEDETAIL().getOptionalCostIndicator().isValue());
+		List<FEEPAYMENTS> feePaymentsList =	fee.getFEEPAYMENTS();
+		
+		for(FEEPAYMENTS feePayments : feePaymentsList)
+		{
+			List<FEEPAYMENT> feePaymentList =	feePayments.getFEEPAYMENT();
+			for(FEEPAYMENT feePayment : feePaymentList)
+			{
+				if( null != feePayment.getFeePaymentPaidByType())
+				{
+					String paidBy = feePayment.getFeePaymentPaidByType().getValue().value();
+					feeModel.setPaymentPaidByType(paidBy);
+					if( "Buyer".equalsIgnoreCase(paidBy)) 
+						if(feePayment.getFeePaymentPaidOutsideOfClosingIndicator().isValue())
+							feeModel.setBuyerOutsideClosingAmount(null != feePayment.getFeeActualPaymentAmount() ? feePayment.getFeeActualPaymentAmount().getValue().toPlainString():"");
+						else
+							feeModel.setBuyerAtClosingAmount(null != feePayment.getFeeActualPaymentAmount() ? feePayment.getFeeActualPaymentAmount().getValue().toPlainString():"");
+					else if("Seller".equalsIgnoreCase(paidBy))
+						if(feePayment.getFeePaymentPaidOutsideOfClosingIndicator().isValue())
+							feeModel.setSellerOutsideClosingAmount(null != feePayment.getFeeActualPaymentAmount() ? feePayment.getFeeActualPaymentAmount().getValue().toPlainString():"");
+						else
+							feeModel.setSellerAtClosingAmount(null != feePayment.getFeeActualPaymentAmount() ? feePayment.getFeeActualPaymentAmount().getValue().toPlainString():"");
+					else
+						feeModel.setOtherAmount(null != feePayment.getFeeActualPaymentAmount() ? feePayment.getFeeActualPaymentAmount().getValue().toPlainString():"");
+					if("Lender".equalsIgnoreCase(paidBy))
+						feeModel.setLenderStatus("YES");
+					else
+						feeModel.setLenderStatus("NO");
+				}
+			}
+		}
+		
+		return feeModel;
 		
 	}
+	
 	
 	public static ClosingCostProperties createIDSectionSummary(INTEGRATEDDISCLOSURESECTIONSUMMARY integrateddisclosuresectionsummary)
 	{

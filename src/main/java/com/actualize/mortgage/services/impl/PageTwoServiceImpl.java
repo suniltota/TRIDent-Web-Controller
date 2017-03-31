@@ -728,7 +728,6 @@ public class PageTwoServiceImpl implements PageTwoService{
 		if (!sellerOutsideClosingAmount.equals("") && StringFormatter.doubleValue(sellerOutsideClosingAmount) != 0)
 			iepAtClosing.setSpB4Closing(StringFormatter.NODOLLARS.formatString(sellerOutsideClosingAmount));
 		otherAmount = found.getOtherAmount();
-		String prefix = otherAmount.equalsIgnoreCase("Lender") ? "(L)": "";
 		if (!otherAmount.equals("") && StringFormatter.doubleValue(otherAmount) != 0)
 		iepAtClosing.setPaidByOthers(StringFormatter.NODOLLARS.formatString(otherAmount));
 		iepAtClosing.setLenderStatus(found.getLenderStatus());	

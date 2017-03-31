@@ -1,6 +1,7 @@
 package com.actualize.mortgage.domainmodels;
 
 import java.io.Serializable;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -24,7 +25,7 @@ public class LoanTerms implements Serializable {
 	@JsonProperty("intialEscrow")
 	private LoanTermsIntialEscrow loanTermsIntialEscrow;
 	@JsonProperty("ETIA")
-	private LoanTermsETIA loanTermsETIA;
+	private List<LoanTermsETIA> loanTermsETIA;
 	@JsonProperty("escrowAccount")
 	private LoanTermsEscrowAccount loanTermsEscrowAccount;
 	/**
@@ -93,17 +94,17 @@ public class LoanTerms implements Serializable {
 	public void setLoanTermsIntialEscrow(LoanTermsIntialEscrow loanTermsIntialEscrow) {
 		this.loanTermsIntialEscrow = loanTermsIntialEscrow;
 	}
-	public LoanTermsETIA getLoanTermsETIA() {
-		return loanTermsETIA;
-	}
-	public void setLoanTermsETIA(LoanTermsETIA loanTermsETIA) {
-		this.loanTermsETIA = loanTermsETIA;
-	}
 	public LoanTermsEscrowAccount getLoanTermsEscrowAccount() {
 		return loanTermsEscrowAccount;
 	}
 	public void setLoanTermsEscrowAccount(LoanTermsEscrowAccount loanTermsEscrowAccount) {
 		this.loanTermsEscrowAccount = loanTermsEscrowAccount;
+	}
+	public List<LoanTermsETIA> getLoanTermsETIA() {
+		return loanTermsETIA;
+	}
+	public void setLoanTermsETIA(List<LoanTermsETIA> loanTermsETIA) {
+		this.loanTermsETIA = loanTermsETIA;
 	}
 	
 }

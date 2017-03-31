@@ -23,7 +23,7 @@ public class LoanInformation implements Serializable {
 	private String loanMaturityPeriodCount;
 	private String integratedDisclosureHomeEquityLoanIndicator;
 	private String lienPriorityType;
-	private String adjustableRate;
+	private String amortizationType;
 	private String integratedDisclosureLoanProductDescription;
 	private String mortgageType;
 	private String mortgageTypeOtherDescription;
@@ -109,12 +109,6 @@ public class LoanInformation implements Serializable {
 	public void setLienPriorityType(String lienPriorityType) {
 		this.lienPriorityType = lienPriorityType;
 	}
-	public String getAdjustableRate() {
-		return adjustableRate;
-	}
-	public void setAdjustableRate(String adjustableRate) {
-		this.adjustableRate = adjustableRate;
-	}
 	public String getIntegratedDisclosureLoanProductDescription() {
 		return integratedDisclosureLoanProductDescription;
 	}
@@ -151,6 +145,12 @@ public class LoanInformation implements Serializable {
 	}
 	public void setLoanIdentifiers(List<LoanInformationLoanIdentifier> loanIdentifiers) {
 		this.loanIdentifiers = loanIdentifiers;
+	}
+	public String getAmortizationType() {
+		return amortizationType;
+	}
+	public void setAmortizationType(String amortizationType) {
+		this.amortizationType = amortizationType;
 	}
 	
 		

@@ -32,5 +32,4 @@ public class LoanTermsETIA implements Serializable {
 	}
 	
 	
-
 }
