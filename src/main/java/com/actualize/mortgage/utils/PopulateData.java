@@ -3,17 +3,29 @@ package com.actualize.mortgage.utils;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.mismo.residential._2009.schemas.CASHTOCLOSEITEM;
+import org.mismo.residential._2009.schemas.CLOSINGADJUSTMENTITEM;
+import org.mismo.residential._2009.schemas.CLOSINGADJUSTMENTITEMDETAIL;
 import org.mismo.residential._2009.schemas.DEAL;
 import org.mismo.residential._2009.schemas.DOCUMENT;
 import org.mismo.residential._2009.schemas.ESCROWITEM;
 import org.mismo.residential._2009.schemas.ESTIMATEDPROPERTYCOSTCOMPONENT;
 import org.mismo.residential._2009.schemas.FEE;
 import org.mismo.residential._2009.schemas.INTERESTRATEPERCHANGEADJUSTMENTRULE;
+import org.mismo.residential._2009.schemas.LIABILITY;
+import org.mismo.residential._2009.schemas.LIABILITYDETAIL;
 import org.mismo.residential._2009.schemas.LOAN;
 import org.mismo.residential._2009.schemas.LOANIDENTIFIER;
+import org.mismo.residential._2009.schemas.PAIDBY;
+import org.mismo.residential._2009.schemas.PAYOFF;
+import org.mismo.residential._2009.schemas.PRORATIONITEM;
 
+import com.actualize.mortgage.domainmodels.AdjustmentsModel;
+import com.actualize.mortgage.domainmodels.CashToCloseModel;
 import com.actualize.mortgage.domainmodels.EscrowsModel;
 import com.actualize.mortgage.domainmodels.FeeModel;
+import com.actualize.mortgage.domainmodels.ID_SubsectionModel;
+import com.actualize.mortgage.domainmodels.LiabilitiesModel;
 import com.actualize.mortgage.domainmodels.LoanInformation;
 import com.actualize.mortgage.domainmodels.LoanInformationLoanIdentifier;
 import com.actualize.mortgage.domainmodels.LoanTermsBalloonPayment;
@@ -24,6 +36,7 @@ import com.actualize.mortgage.domainmodels.LoanTermsIntialEscrow;
 import com.actualize.mortgage.domainmodels.LoanTermsLoanAmount;
 import com.actualize.mortgage.domainmodels.LoanTermsPI;
 import com.actualize.mortgage.domainmodels.LoanTermsPrepaymentPenalty;
+import com.actualize.mortgage.domainmodels.ProrationsModel;
 
 public class PopulateData {
 	
@@ -181,12 +194,12 @@ public class PopulateData {
 						perChangeRateAdjustmentFrequencyMonthsCount = Integer.toString(interestrateperchangeadjustmentrule.getPerChangeRateAdjustmentFrequencyMonthsCount().getValue());
 			}
 		 }
-		 if(null != deal.getLOANS().getLOAN().getADJUSTMENT().getINTERESTRATEADJUSTMENT().getINTERESTRATELIFETIMEADJUSTMENTRULE() && null != deal.getLOANS().getLOAN().getADJUSTMENT().getINTERESTRATEADJUSTMENT().getINTERESTRATELIFETIMEADJUSTMENTRULE().getFirstRateChangeMonthsCount())
+		 if(null != deal.getLOANS().getLOAN().getADJUSTMENT() && null != deal.getLOANS().getLOAN().getADJUSTMENT().getINTERESTRATEADJUSTMENT() && null != deal.getLOANS().getLOAN().getADJUSTMENT().getINTERESTRATEADJUSTMENT().getINTERESTRATELIFETIMEADJUSTMENTRULE() && null != deal.getLOANS().getLOAN().getADJUSTMENT().getINTERESTRATEADJUSTMENT().getINTERESTRATELIFETIMEADJUSTMENTRULE().getFirstRateChangeMonthsCount())
 			 firstRateChangeMonthsCount = Integer.toString(deal.getLOANS().getLOAN().getADJUSTMENT().getINTERESTRATEADJUSTMENT().getINTERESTRATELIFETIMEADJUSTMENTRULE().getFirstRateChangeMonthsCount().getValue());
 		 
-		 if(null != deal.getLOANS().getLOAN().getADJUSTMENT().getINTERESTRATEADJUSTMENT().getINTERESTRATELIFETIMEADJUSTMENTRULE() && null != deal.getLOANS().getLOAN().getADJUSTMENT().getINTERESTRATEADJUSTMENT().getINTERESTRATELIFETIMEADJUSTMENTRULE().getCeilingRatePercent())
+		 if(null != deal.getLOANS().getLOAN().getADJUSTMENT() && null != deal.getLOANS().getLOAN().getADJUSTMENT().getINTERESTRATEADJUSTMENT() && null != deal.getLOANS().getLOAN().getADJUSTMENT().getINTERESTRATEADJUSTMENT().getINTERESTRATELIFETIMEADJUSTMENTRULE() && null != deal.getLOANS().getLOAN().getADJUSTMENT().getINTERESTRATEADJUSTMENT().getINTERESTRATELIFETIMEADJUSTMENTRULE().getCeilingRatePercent())
 		 	 ceilingRatePercent = deal.getLOANS().getLOAN().getADJUSTMENT().getINTERESTRATEADJUSTMENT().getINTERESTRATELIFETIMEADJUSTMENTRULE().getCeilingRatePercent().getValue().toPlainString();
-		 if(null != deal.getLOANS().getLOAN().getADJUSTMENT().getINTERESTRATEADJUSTMENT().getINTERESTRATELIFETIMEADJUSTMENTRULE() && null != deal.getLOANS().getLOAN().getADJUSTMENT().getINTERESTRATEADJUSTMENT().getINTERESTRATELIFETIMEADJUSTMENTRULE().getCeilingRatePercentEarliestEffectiveMonthsCount())
+		 if(null != deal.getLOANS().getLOAN().getADJUSTMENT() && null != deal.getLOANS().getLOAN().getADJUSTMENT().getINTERESTRATEADJUSTMENT() && null != deal.getLOANS().getLOAN().getADJUSTMENT().getINTERESTRATEADJUSTMENT().getINTERESTRATELIFETIMEADJUSTMENTRULE() && null != deal.getLOANS().getLOAN().getADJUSTMENT().getINTERESTRATEADJUSTMENT().getINTERESTRATELIFETIMEADJUSTMENTRULE().getCeilingRatePercentEarliestEffectiveMonthsCount())
 			 ceilingRatePercentEarliestEffectiveMonthsCount = Integer.toString(deal.getLOANS().getLOAN().getADJUSTMENT().getINTERESTRATEADJUSTMENT().getINTERESTRATELIFETIMEADJUSTMENTRULE().getCeilingRatePercentEarliestEffectiveMonthsCount().getValue());
 		 
 		 
@@ -233,7 +246,7 @@ public class PopulateData {
 			interestOnlyIndicator = Convertor.booleanToString(deal.getLOANS().getLOAN().getLOANDETAIL().getInterestOnlyIndicator().isValue());
 		if(null != deal.getLOANS().getLOAN().getINTERESTONLY() && null != deal.getLOANS().getLOAN().getINTERESTONLY().getInterestOnlyTermMonthsCount())
 			interestOnlyTermMonthsCount = Integer.toString(deal.getLOANS().getLOAN().getINTERESTONLY().getInterestOnlyTermMonthsCount().getValue());
-		if(null != deal.getLOANS().getLOAN().getADJUSTMENT().getPRINCIPALANDINTERESTPAYMENTADJUSTMENT() && null != deal.getLOANS().getLOAN().getADJUSTMENT().getPRINCIPALANDINTERESTPAYMENTADJUSTMENT().getPRINCIPALANDINTERESTPAYMENTLIFETIMEADJUSTMENTRULE())
+		if(null != deal.getLOANS().getLOAN().getADJUSTMENT() && null != deal.getLOANS().getLOAN().getADJUSTMENT().getPRINCIPALANDINTERESTPAYMENTADJUSTMENT() && null != deal.getLOANS().getLOAN().getADJUSTMENT().getPRINCIPALANDINTERESTPAYMENTADJUSTMENT().getPRINCIPALANDINTERESTPAYMENTLIFETIMEADJUSTMENTRULE())
 		{
 			if(null != deal.getLOANS().getLOAN().getADJUSTMENT().getPRINCIPALANDINTERESTPAYMENTADJUSTMENT().getPRINCIPALANDINTERESTPAYMENTLIFETIMEADJUSTMENTRULE().getFirstPrincipalAndInterestPaymentChangeMonthsCount())
 				firstPrincipalAndInterestPaymentChangeMonthsCount = Integer.toString(deal.getLOANS().getLOAN().getADJUSTMENT().getPRINCIPALANDINTERESTPAYMENTADJUSTMENT().getPRINCIPALANDINTERESTPAYMENTLIFETIMEADJUSTMENTRULE().getFirstPrincipalAndInterestPaymentChangeMonthsCount().getValue());
@@ -242,7 +255,7 @@ public class PopulateData {
 			if(null != deal.getLOANS().getLOAN().getADJUSTMENT().getPRINCIPALANDINTERESTPAYMENTADJUSTMENT().getPRINCIPALANDINTERESTPAYMENTLIFETIMEADJUSTMENTRULE().getPrincipalAndInterestPaymentMaximumAmountEarliestEffectiveMonthsCount())
 				principalAndInterestPaymentMaximumAmountEarliestEffectiveMonthsCount = Integer.toString(deal.getLOANS().getLOAN().getADJUSTMENT().getPRINCIPALANDINTERESTPAYMENTADJUSTMENT().getPRINCIPALANDINTERESTPAYMENTLIFETIMEADJUSTMENTRULE().getPrincipalAndInterestPaymentMaximumAmountEarliestEffectiveMonthsCount().getValue());
 		}
-		if(null != deal.getLOANS().getLOAN().getADJUSTMENT().getPRINCIPALANDINTERESTPAYMENTADJUSTMENT() && null != deal.getLOANS().getLOAN().getADJUSTMENT().getPRINCIPALANDINTERESTPAYMENTADJUSTMENT().getPRINCIPALANDINTERESTPAYMENTPERCHANGEADJUSTMENTRULES().getPRINCIPALANDINTERESTPAYMENTPERCHANGEADJUSTMENTRULE())
+		if(null != deal.getLOANS().getLOAN().getADJUSTMENT() && null != deal.getLOANS().getLOAN().getADJUSTMENT().getPRINCIPALANDINTERESTPAYMENTADJUSTMENT() && null != deal.getLOANS().getLOAN().getADJUSTMENT().getPRINCIPALANDINTERESTPAYMENTADJUSTMENT().getPRINCIPALANDINTERESTPAYMENTPERCHANGEADJUSTMENTRULES().getPRINCIPALANDINTERESTPAYMENTPERCHANGEADJUSTMENTRULE())
 		{
 			List<INTERESTRATEPERCHANGEADJUSTMENTRULE> interestrateperchangeadjustmentrules = deal.getLOANS().getLOAN().getADJUSTMENT().getINTERESTRATEADJUSTMENT().getINTERESTRATEPERCHANGEADJUSTMENTRULES().getINTERESTRATEPERCHANGEADJUSTMENTRULE();
 			for (INTERESTRATEPERCHANGEADJUSTMENTRULE interestrateperchangeadjustmentrule : interestrateperchangeadjustmentrules ){
@@ -381,21 +394,25 @@ public class PopulateData {
 		List<LoanTermsETIA>  loanTermsETIAs = new LinkedList<>();
 		LOAN loan = document.getDEALSETS().getDEALSET().getDEALS().getDEAL().getLOANS().getLOAN();
 		
-		List<ESTIMATEDPROPERTYCOSTCOMPONENT> estimatedpropertycostcomponents = loan.getDOCUMENTSPECIFICDATASETS().getDOCUMENTSPECIFICDATASET().getINTEGRATEDDISCLOSURE().getESTIMATEDPROPERTYCOST().getESTIMATEDPROPERTYCOSTCOMPONENTS().getESTIMATEDPROPERTYCOSTCOMPONENT();
-		
-		for(ESTIMATEDPROPERTYCOSTCOMPONENT estimatedpropertycostcomponent : estimatedpropertycostcomponents)
+		if(null != loan.getDOCUMENTSPECIFICDATASETS() && null != loan.getDOCUMENTSPECIFICDATASETS().getDOCUMENTSPECIFICDATASET().getINTEGRATEDDISCLOSURE() && null != loan.getDOCUMENTSPECIFICDATASETS().getDOCUMENTSPECIFICDATASET().getINTEGRATEDDISCLOSURE().getESTIMATEDPROPERTYCOST() && null != loan.getDOCUMENTSPECIFICDATASETS().getDOCUMENTSPECIFICDATASET().getINTEGRATEDDISCLOSURE().getESTIMATEDPROPERTYCOST().getESTIMATEDPROPERTYCOSTCOMPONENTS() && null != loan.getDOCUMENTSPECIFICDATASETS().getDOCUMENTSPECIFICDATASET().getINTEGRATEDDISCLOSURE().getESTIMATEDPROPERTYCOST().getESTIMATEDPROPERTYCOSTCOMPONENTS().getESTIMATEDPROPERTYCOSTCOMPONENT())
 		{
-			if(null != estimatedpropertycostcomponent)
+			List<ESTIMATEDPROPERTYCOSTCOMPONENT> estimatedpropertycostcomponents = loan.getDOCUMENTSPECIFICDATASETS().getDOCUMENTSPECIFICDATASET().getINTEGRATEDDISCLOSURE().getESTIMATEDPROPERTYCOST().getESTIMATEDPROPERTYCOSTCOMPONENTS().getESTIMATEDPROPERTYCOSTCOMPONENT();
+			
+			for(ESTIMATEDPROPERTYCOSTCOMPONENT estimatedpropertycostcomponent : estimatedpropertycostcomponents)
 			{
-				LoanTermsETIA  loanTermsETIA = new LoanTermsETIA();
-				if(null != estimatedpropertycostcomponent.getProjectedPaymentEscrowedType())
-					loanTermsETIA.setProjectedPaymentEscrowedType(estimatedpropertycostcomponent.getProjectedPaymentEscrowedType().getValue().value());
-				if(null != estimatedpropertycostcomponent.getProjectedPaymentEstimatedTaxesInsuranceAssessmentComponentType())
-					loanTermsETIA.setProjectedPaymentEstimatedTaxesInsuranceAssessmentComponentType(estimatedpropertycostcomponent.getProjectedPaymentEstimatedTaxesInsuranceAssessmentComponentType().getValue().value());
-				if(null != estimatedpropertycostcomponent.getProjectedPaymentEstimatedTaxesInsuranceAssessmentComponentTypeOtherDescription())
-					loanTermsETIA.setProjectedPaymentEstimatedTaxesInsuranceAssessmentComponentTypeOtherDescription(estimatedpropertycostcomponent.getProjectedPaymentEstimatedTaxesInsuranceAssessmentComponentTypeOtherDescription().getValue());
-				loanTermsETIAs.add(loanTermsETIA);
+				if(null != estimatedpropertycostcomponent)
+				{
+					LoanTermsETIA  loanTermsETIA = new LoanTermsETIA();
+					if(null != estimatedpropertycostcomponent.getProjectedPaymentEscrowedType())
+						loanTermsETIA.setProjectedPaymentEscrowedType(estimatedpropertycostcomponent.getProjectedPaymentEscrowedType().getValue().value());
+					if(null != estimatedpropertycostcomponent.getProjectedPaymentEstimatedTaxesInsuranceAssessmentComponentType())
+						loanTermsETIA.setProjectedPaymentEstimatedTaxesInsuranceAssessmentComponentType(estimatedpropertycostcomponent.getProjectedPaymentEstimatedTaxesInsuranceAssessmentComponentType().getValue().value());
+					if(null != estimatedpropertycostcomponent.getProjectedPaymentEstimatedTaxesInsuranceAssessmentComponentTypeOtherDescription())
+						loanTermsETIA.setProjectedPaymentEstimatedTaxesInsuranceAssessmentComponentTypeOtherDescription(estimatedpropertycostcomponent.getProjectedPaymentEstimatedTaxesInsuranceAssessmentComponentTypeOtherDescription().getValue());
+					loanTermsETIAs.add(loanTermsETIA);
+				}
 			}
+		
 		}
 		return loanTermsETIAs;
 		
@@ -420,5 +437,153 @@ public class PopulateData {
 		loanTermsEscrowAccount.setFirstYearTotalNonEscrowPaymentAmount(firstYearTotalNonEscrowPaymentAmount);
 		return loanTermsEscrowAccount;
 		
+	}
+	
+	public static List<CashToCloseModel> populateCashToCloseModel(DOCUMENT document)
+	{
+		List<CashToCloseModel> cashToCloseModels = new LinkedList<>();
+		LOAN loan = document.getDEALSETS().getDEALSET().getDEALS().getDEAL().getLOANS().getLOAN();
+		if(null != loan.getDOCUMENTSPECIFICDATASETS().getDOCUMENTSPECIFICDATASET() && null != loan.getDOCUMENTSPECIFICDATASETS().getDOCUMENTSPECIFICDATASET().getINTEGRATEDDISCLOSURE() && null != loan.getDOCUMENTSPECIFICDATASETS().getDOCUMENTSPECIFICDATASET().getINTEGRATEDDISCLOSURE().getCASHTOCLOSEITEMS())
+		{
+			List<CASHTOCLOSEITEM> cashtocloseitems = loan.getDOCUMENTSPECIFICDATASETS().getDOCUMENTSPECIFICDATASET().getINTEGRATEDDISCLOSURE().getCASHTOCLOSEITEMS().getCASHTOCLOSEITEM();			
+			for(CASHTOCLOSEITEM cashtocloseitem : cashtocloseitems)
+			{
+				CashToCloseModel cashToCloseModel = new CashToCloseModel();
+					cashToCloseModel.setIsAmountChangedIndicator((null != cashtocloseitem.getIntegratedDisclosureCashToCloseItemAmountChangedIndicator()) ? Convertor.booleanToString(cashtocloseitem.getIntegratedDisclosureCashToCloseItemAmountChangedIndicator().isValue()) : "");
+					cashToCloseModel.setItemChangeDescription(null != cashtocloseitem.getIntegratedDisclosureCashToCloseItemChangeDescription() ? cashtocloseitem.getIntegratedDisclosureCashToCloseItemChangeDescription().getValue() : "");
+					cashToCloseModel.setItemEstimatedAmount(null != cashtocloseitem.getIntegratedDisclosureCashToCloseItemEstimatedAmount() ? cashtocloseitem.getIntegratedDisclosureCashToCloseItemEstimatedAmount().getValue().toPlainString() : "");
+					cashToCloseModel.setItemPaymentType(null != cashtocloseitem.getIntegratedDisclosureCashToCloseItemPaymentType() ? cashtocloseitem.getIntegratedDisclosureCashToCloseItemPaymentType().getValue().value() : "");
+					cashToCloseModel.setItemType(null != cashtocloseitem.getIntegratedDisclosureCashToCloseItemType() ? cashtocloseitem.getIntegratedDisclosureCashToCloseItemType().getValue().value() : "" );
+				cashToCloseModels.add(cashToCloseModel);
+			}	
+		}
+		return cashToCloseModels;
+	}
+	
+	public static List<ID_SubsectionModel> populateID_SubsectionModel(DOCUMENT document)
+	{
+		List<ID_SubsectionModel> id_SubsectionModels = new LinkedList<>();
+		return id_SubsectionModels;
+		
+	}
+	
+	public static List<LiabilitiesModel> populateLiabilitiesModel(DOCUMENT document)
+	{
+		List<LiabilitiesModel> liabilitiesModels = new LinkedList<>();
+		DEAL deal = document.getDEALSETS().getDEALSET().getDEALS().getDEAL();
+		
+		if(null != deal.getLIABILITIES() && null != deal.getLIABILITIES().getLIABILITY())
+		{
+			List<LIABILITY> liabilities = deal.getLIABILITIES().getLIABILITY();
+			for(LIABILITY liability : liabilities)
+			{
+				LiabilitiesModel liabilitiesModel = new LiabilitiesModel();
+				String label = null;
+				if(null != liability.getLIABILITYDETAIL())
+				{
+					LIABILITYDETAIL liabilityDetail = liability.getLIABILITYDETAIL();
+					if(null != liabilityDetail.getEXTENSION() && null != liabilityDetail.getEXTENSION().getOTHER())
+					{
+						liabilitiesModel.setIDSection(null != liabilityDetail.getEXTENSION().getOTHER().getIntegratedDisclosureSectionType() ? liabilityDetail.getEXTENSION().getOTHER().getIntegratedDisclosureSectionType().getValue().value() : "");
+						liabilitiesModel.setSecuredBySubjectProperty(null != liabilityDetail.getEXTENSION().getOTHER().isLiabilitySecuredBySubjectPropertyIndicator() ? liabilityDetail.getEXTENSION().getOTHER().isLiabilitySecuredBySubjectPropertyIndicator().toString() : "");
+					}
+						liabilitiesModel.setDescription(null != liabilityDetail.getLiabilityDescription() ? liabilityDetail.getLiabilityDescription().getValue() : "");
+						liabilitiesModel.setType(null != liabilityDetail.getLiabilityType() ? liabilityDetail.getLiabilityType().getValue().value() : "");
+						label = null != liabilityDetail.getLiabilityType().getDisplayLabelText() ? liabilityDetail.getLiabilityType().getDisplayLabelText() : "";
+						if("".equals(label) || null != label)
+							label = StringFormatter.CAMEL.formatString(liabilityDetail.getLiabilityType().getValue().value());
+						if("Other".equalsIgnoreCase(label))
+							label = StringFormatter.CAMEL.formatString(null != liabilityDetail.getLiabilityTypeOtherDescription() ? liabilityDetail.getLiabilityTypeOtherDescription().getValue() : "");
+						
+				}
+				liabilitiesModel.setPayoffAmount(null != liability.getPAYOFF().getPayoffAmount() ? liability.getPAYOFF().getPayoffAmount().getValue().toPlainString() : "");
+			}
+		}
+		//PayoffPartialIndicator PENDING
+		return liabilitiesModels;
+		
+	}
+	
+	public static List<AdjustmentsModel> populateAdjustmentsModel(DOCUMENT document)
+	{
+		List<AdjustmentsModel> adjustmentsModels = new LinkedList<>();
+		LOAN loan = document.getDEALSETS().getDEALSET().getDEALS().getDEAL().getLOANS().getLOAN();
+		
+		if(null != loan.getCLOSINGINFORMATION() && null != loan.getCLOSINGINFORMATION().getCLOSINGADJUSTMENTITEMS() &&  null != loan.getCLOSINGINFORMATION().getCLOSINGADJUSTMENTITEMS().getCLOSINGADJUSTMENTITEM())
+		{
+			List<CLOSINGADJUSTMENTITEM> closingadjustmentitems = loan.getCLOSINGINFORMATION().getCLOSINGADJUSTMENTITEMS().getCLOSINGADJUSTMENTITEM();
+			for(CLOSINGADJUSTMENTITEM closingadjustmentitem :closingadjustmentitems)
+			{
+				AdjustmentsModel adjustmentsModel = new AdjustmentsModel();
+				String label = null;
+				if(null != closingadjustmentitem.getCLOSINGADJUSTMENTITEMDETAIL())
+				{
+					CLOSINGADJUSTMENTITEMDETAIL closingadjustmentitemdetail = closingadjustmentitem.getCLOSINGADJUSTMENTITEMDETAIL(); 
+					adjustmentsModel.setPaymentAmount(null != closingadjustmentitemdetail.getClosingAdjustmentItemAmount() ? closingadjustmentitemdetail.getClosingAdjustmentItemAmount().getValue().toPlainString() : "");
+					adjustmentsModel.setPaidOutsideOfClosingIndicator(null != closingadjustmentitemdetail.getClosingAdjustmentItemPaidOutsideOfClosingIndicator() ? closingadjustmentitemdetail.getClosingAdjustmentItemPaidOutsideOfClosingIndicator().isValue() : false);
+					adjustmentsModel.setIntegratedDisclosureSectionType(null != closingadjustmentitemdetail.getIntegratedDisclosureSectionType() ? closingadjustmentitemdetail.getIntegratedDisclosureSectionType().getValue().value() : "");
+					adjustmentsModel.setIntegratedDisclosureSubsectionType(null != closingadjustmentitemdetail.getIntegratedDisclosureSubsectionType() ? closingadjustmentitemdetail.getIntegratedDisclosureSubsectionType().getValue().value() : "");
+					label = null != closingadjustmentitemdetail.getClosingAdjustmentItemType().getDisplayLabelText() ? closingadjustmentitemdetail.getClosingAdjustmentItemType().getDisplayLabelText() : "";
+					if("".equals(label) || null != label)
+						label = StringFormatter.CAMEL.formatString(closingadjustmentitemdetail.getClosingAdjustmentItemType().getValue().value());
+					if("Other".equalsIgnoreCase(label) && null != closingadjustmentitemdetail.getClosingAdjustmentItemTypeOtherDescription())
+						label = StringFormatter.CAMEL.formatString(closingadjustmentitemdetail.getClosingAdjustmentItemTypeOtherDescription().getValue());
+				}
+				if(null != closingadjustmentitem.getCLOSINGADJUSTMENTITEMPAIDBY())
+				{
+					PAIDBY paidby =closingadjustmentitem.getCLOSINGADJUSTMENTITEMPAIDBY();
+					if(null != paidby.getINDIVIDUAL() && null != paidby.getINDIVIDUAL().getNAME() && null != paidby.getINDIVIDUAL().getNAME().getFullName())
+						adjustmentsModel.setPaymentPaidByType(paidby.getINDIVIDUAL().getNAME().getFullName().getValue());
+					else if(null != paidby.getLEGALENTITY() && null != paidby.getLEGALENTITY().getLEGALENTITYDETAIL() && null != paidby.getLEGALENTITY().getLEGALENTITYDETAIL().getFullName())
+						adjustmentsModel.setPaymentPaidByType(paidby.getINDIVIDUAL().getNAME().getFullName().getValue());
+				}
+					adjustmentsModel.setType(closingadjustmentitem.getCLOSINGADJUSTMENTITEMDETAIL().getClosingAdjustmentItemType().getValue().value());
+					adjustmentsModel.setTypeOtherDescription(null != closingadjustmentitem.getCLOSINGADJUSTMENTITEMDETAIL().getClosingAdjustmentItemTypeOtherDescription() ? closingadjustmentitem.getCLOSINGADJUSTMENTITEMDETAIL().getClosingAdjustmentItemTypeOtherDescription().getValue() : "");
+					adjustmentsModel.setLabel(label); 
+					adjustmentsModels.add(adjustmentsModel);
+			}
+		}
+		//GSE CLOSING_ADJUSTMENT_ITEM_PAID_TO PENDING
+		return adjustmentsModels;
+		
+	}
+	
+	public static List<ProrationsModel> populateProrationsModel(DOCUMENT document)
+	{
+		List<ProrationsModel> prorationsModels = new LinkedList<>();
+		LOAN loan = document.getDEALSETS().getDEALSET().getDEALS().getDEAL().getLOANS().getLOAN();
+		
+		if(null != loan.getCLOSINGINFORMATION() && null != loan.getCLOSINGINFORMATION().getPRORATIONITEMS() && null != loan.getCLOSINGINFORMATION().getPRORATIONITEMS().getPRORATIONITEM())
+		{
+			List<PRORATIONITEM> prorationitems = loan.getCLOSINGINFORMATION().getPRORATIONITEMS().getPRORATIONITEM();
+			for(PRORATIONITEM prorationitem : prorationitems)
+			{
+				ProrationsModel prorationsModel = new ProrationsModel();
+				String label = null;
+				prorationsModel.setPaymentAmount(null != prorationitem.getProrationItemAmount() ? prorationitem.getProrationItemAmount().getValue().toPlainString() : "");
+				prorationsModel.setIntegratedDisclosureSubsectionType(null != prorationitem.getIntegratedDisclosureSubsectionType() ? prorationitem.getIntegratedDisclosureSubsectionType().getValue().value() : "");
+				prorationsModel.setIntegratedDisclosureSectionType(null != prorationitem.getIntegratedDisclosureSectionType() ? prorationitem.getIntegratedDisclosureSectionType().getValue().value() : "");
+				prorationsModel.setProrationItemPaidFromDate(null != prorationitem.getProrationItemPaidFromDate() ? prorationitem.getProrationItemPaidFromDate().getValue() : "");
+				prorationsModel.setProrationItemPaidThroughDate(null != prorationitem.getProrationItemPaidThroughDate() ? prorationitem.getProrationItemPaidThroughDate().getValue() : "");
+				prorationsModel.setType(null != prorationitem.getProrationItemType() ? prorationitem.getProrationItemType().getValue().value() : "");
+				prorationsModel.setTypeOtherDescription(null != prorationitem.getProrationItemTypeOtherDescription() ? prorationitem.getProrationItemTypeOtherDescription().getValue(): "");
+				if(null != prorationitem.getProrationItemType() && null != prorationitem.getProrationItemType().getDisplayLabelText())
+					label = prorationitem.getProrationItemType().getDisplayLabelText();
+				
+				if(("".equals(label) || null == label) && null != prorationitem.getProrationItemType())
+					label = prorationitem.getProrationItemType().getValue().value();
+				
+				if("Other".equalsIgnoreCase(label) && null != prorationitem.getProrationItemTypeOtherDescription())
+					label = StringFormatter.CAMEL.formatString(prorationitem.getProrationItemTypeOtherDescription().getValue());
+				else
+					label = StringFormatter.CAMEL.formatString(label);
+				
+				prorationsModel.setLabel(label);
+				prorationsModels.add(prorationsModel);
+			}
+			
+		}
+		
+		return prorationsModels;		
 	}
 }

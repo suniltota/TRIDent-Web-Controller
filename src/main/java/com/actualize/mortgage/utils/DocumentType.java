@@ -9,6 +9,10 @@ import org.mismo.residential._2009.schemas.LIABILITY;
 import org.mismo.residential._2009.schemas.LOANIDENTIFIER;
 import org.mismo.residential._2009.schemas.MESSAGE;
 
+import com.actualize.mortgage.domainmodels.CashToClose;
+import com.actualize.mortgage.domainmodels.CashToCloseModel;
+import com.actualize.mortgage.domainmodels.LiabilitiesModel;
+
 /**
  * @author bkollepara
  *
@@ -37,30 +41,26 @@ public class DocumentType {
 	public static boolean isAlternateView(DOCUMENT document) {
 		
 		DEAL deal = document.getDEALSETS().getDEALSET().getDEALS().getDEAL();
-		List<LIABILITY> liabilityList = new LinkedList<>();
 		
-		if(null != document.getDEALSETS().getDEALSET().getDEALS().getDEAL().getLIABILITIES())
-			liabilityList = document.getDEALSETS().getDEALSET().getDEALS().getDEAL().getLIABILITIES().getLIABILITY(); 
-		//List<CASHTOCLOSEITEM> cashList = 
-		
+		List<CashToCloseModel> cashToCloseModels = PopulateData.populateCashToCloseModel(document);
+		List<LiabilitiesModel> liabilitiesModels = PopulateData.populateLiabilitiesModel(document);
 		if (isStandardView(document))
 			return false;
 		
 		// Check payoffs and payment
 		boolean isPayoffsAndPayments = false;
-		for(LIABILITY liability:liabilityList) {
-			//if(("PayoffsAndPayments").equalsIgnoreCase()) {
-			//	isPayoffsAndPayments = true;
-			//	break;
-			System.out.println(liability.getLIABILITYDETAIL().getEXTENSION().getOTHER().getIntegratedDisclosureSectionType());
-			//}
-		}
-		/*for (CashToClose cashToClose:cashList) {
-			if (cashToClose.getItemType().equalsIgnoreCase("TotalPayoffsAndPayments")) {
+		for(LiabilitiesModel liability:liabilitiesModels) {
+			if(("PayoffsAndPayments").equalsIgnoreCase(liability.getIDSection())) {
 				isPayoffsAndPayments = true;
 				break;
 			}
-		}*/
+		}
+		for (CashToCloseModel cashToCloseModel : cashToCloseModels) {
+			if (cashToCloseModel.getItemType().equalsIgnoreCase("TotalPayoffsAndPayments")) {
+				isPayoffsAndPayments = true;
+				break;
+			}
+		}
 
 		// Check if refi
 		boolean isRefinanceTypeLoan = false;

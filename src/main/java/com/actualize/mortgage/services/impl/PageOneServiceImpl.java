@@ -377,10 +377,6 @@ public class PageOneServiceImpl implements PageOneService {
 		LoanTermsPI loanTermsPI = PopulateData.populateLoanTermsPI(document);
 		LoanTermsInterestRate loanTermsInterestRate = PopulateData.populateLoanTermsInterestRate(document);
 		String loanAmount = "";
-		String negativeAmortizationType = "";
-		String disclosedFullyIndexedRatePercent = "";
-		String weightedAverageInterestRatePercent = "";
-		String noteRatePercent = "";
 		//text4_2_2 = "";
 		//DEAL.LOANS.LOAN.TERMS_OF_LOAN.NoteAmount['__text']
 		loanAmount = deal.getLOANS().getLOAN().getTERMSOFLOAN().getNoteAmount().getValue().toPlainString();	
@@ -390,20 +386,15 @@ public class PageOneServiceImpl implements PageOneService {
 		{
 			String text4_1_2 = "Can go as high as ";
 			String text4_1_3 = "Can increase until year ";
-			//DEAL.LOANS.LOAN.LOAN_DETAIL.LoanAmountIncreaseIndicator
 			if(deal.getLOANS().getLOAN().getLOANDETAIL().getLoanAmountIncreaseIndicator().isValue())
 			{
-				//DEAL.LOANS.LOAN.NEGATIVE_AMORTIZATION.NEGATIVE_AMORTIZATION_RULE.NegativeAmortizationType['__text']).equalsIgnoreCase("ScheduledNegativeAmortization")
 				if("ScheduledNegativeAmortization".equalsIgnoreCase(deal.getLOANS().getLOAN().getNEGATIVEAMORTIZATION().getNEGATIVEAMORTIZATIONRULE().getNegativeAmortizationType().getValue().value()))
 				{
 					text4_1_2 = "Does go as high as ";
 					text4_1_3 = "Does increase until year ";
-					negativeAmortizationType = deal.getLOANS().getLOAN().getNEGATIVEAMORTIZATION().getNEGATIVEAMORTIZATIONRULE().getNegativeAmortizationType().getValue().value();
 				}
 			}
-			//DEAL.LOANS.LOAN.NEGATIVE_AMORTIZATION.NEGATIVE_AMORTIZATION_RULE.NegativeAmortizationMaximumLoanBalanceAmount['__text']
 			text4_1_2 = text4_1_2 + " " + deal.getLOANS().getLOAN().getNEGATIVEAMORTIZATION().getNEGATIVEAMORTIZATIONRULE().getNegativeAmortizationMaximumLoanBalanceAmount().getValue().toPlainString();
-			//DEAL.LOANS.LOAN.NEGATIVE_AMORTIZATION.NegativeAmortizationLimitMonthsCount['__text']
 			text4_1_3 = text4_1_3 + " " +Integer.toString(deal.getLOANS().getLOAN().getNEGATIVEAMORTIZATION().getNEGATIVEAMORTIZATIONRULE().getNegativeAmortizationLimitMonthsCount().getValue()); 
 			loanTermsLoanAmount.setStatus("YES");
 			List<String> details = new LinkedList<>();
@@ -423,17 +414,14 @@ public class PageOneServiceImpl implements PageOneService {
 		else if(null != deal.getLOANS().getLOAN().getTERMSOFLOAN().getDisclosedFullyIndexedRatePercent())
 		{
 			text4_2 = deal.getLOANS().getLOAN().getTERMSOFLOAN().getDisclosedFullyIndexedRatePercent().getValue().toPlainString();
-			disclosedFullyIndexedRatePercent = deal.getLOANS().getLOAN().getTERMSOFLOAN().getDisclosedFullyIndexedRatePercent().getValue().toPlainString();
 		}
 			else if(null != deal.getLOANS().getLOAN().getTERMSOFLOAN().getWeightedAverageInterestRatePercent())
 		{
 			text4_2 = deal.getLOANS().getLOAN().getTERMSOFLOAN().getWeightedAverageInterestRatePercent().getValue().toPlainString();
-			weightedAverageInterestRatePercent = deal.getLOANS().getLOAN().getTERMSOFLOAN().getWeightedAverageInterestRatePercent().getValue().toPlainString();
 		}
 		else
 		{
 			text4_2 = deal.getLOANS().getLOAN().getTERMSOFLOAN().getNoteRatePercent().getValue().toPlainString();
-			noteRatePercent = deal.getLOANS().getLOAN().getTERMSOFLOAN().getNoteRatePercent().getValue().toPlainString();
 		}
 		loanTermsInterestRate.setInterest(text4_2);
 		
@@ -450,14 +438,12 @@ public class PageOneServiceImpl implements PageOneService {
 				}
 				else
 				{
-					//"First".equalsIgnoreCase(DEAL.LOANS.LOAN.ADJUSTMENT.INTEREST_RATE_ADJUSTMENT.INTEREST_RATE_PER_CHANGE_ADJUSTMENT_RULES.INTEREST_RATE_PER_CHANGE_ADJUSTMENT_RULE.AdjustmentRuleType['__text'])
 					if("First".equalsIgnoreCase(interestrateperchangeadjustmentrule.getAdjustmentRuleType().getValue().value()))
 					{
 						text4_2_2 = Integer.toString(interestrateperchangeadjustmentrule.getPerChangeRateAdjustmentFrequencyMonthsCount().getValue());
 					}
 				}
 			});
-		//StringFormatter.ROUNDUPYEARS.formatString(DEAL.LOANS.LOAN.ADJUSTMENT.INTEREST_RATE_ADJUSTMENT.INTEREST_RATE_LIFETIME_ADJUSTMENT_RULE.FirstRateChangeMonthsCount['__text']
 		text4_2_2 = StringFormatter.YEARS.formatString(text4_2_2);
 		List<String> detail = new LinkedList<>();
 			detail.add("Adjusts <b>every "+ ("1".equals(text4_2_2) ? "year" : (text4_2_2 + " years")) +"</b> starting in year "+ StringFormatter.ROUNDUPYEARS.formatString(Integer.toString(deal.getLOANS().getLOAN().getADJUSTMENT().getINTERESTRATEADJUSTMENT().getINTERESTRATELIFETIMEADJUSTMENTRULE().getFirstRateChangeMonthsCount().getValue())));
@@ -755,18 +741,21 @@ public class PageOneServiceImpl implements PageOneService {
 				costsAtClosingClosingCosts.setAmount(integratedDisclosureSectionTypeValues.get("TotalClosingCosts"));
 				totalLoanCosts = integratedDisclosureSectionTypeValues.get("TotalLoanCosts");
 				if(null == totalLoanCosts || totalLoanCosts.isEmpty())
-					totalLoanCosts = "$0";
+					totalLoanCosts = "0";
 				
 				totalOtherCosts = integratedDisclosureSectionTypeValues.get("TotalOtherCosts");
 				if(null == totalOtherCosts || totalOtherCosts.isEmpty())
-					totalOtherCosts = "$0";
+					totalOtherCosts = "0";
 			
-				lenderCredits = StringFormatter.DOLLARS.formatString(Convertor.getLenderCredits("LenderCredits", document));
+				lenderCredits = Convertor.getLenderCredits("LenderCredits", document);
 				if(null == lenderCredits || lenderCredits.isEmpty()|| "0".equals(lenderCredits))
-					lenderCredits = "$0";
+					lenderCredits = "0";
 		
 		closingCostsDetails.add("Includes "+totalLoanCosts+" in Loan Costs + "+totalOtherCosts+" in Other Costs -"+lenderCredits);
 		closingCostsDetails.add("in Lender Credits. <i>See page 2 for details.</i>");
+		costsAtClosingClosingCosts.setTotalLoanCosts(totalLoanCosts);
+		costsAtClosingClosingCosts.setTotalOtherCosts(totalOtherCosts);
+		costsAtClosingClosingCosts.setLenderCredits(lenderCredits);
 		costsAtClosingClosingCosts.setDetails(closingCostsDetails);
 		
 		//6.2
@@ -774,12 +763,12 @@ public class PageOneServiceImpl implements PageOneService {
 		if(null != deal.getLOANS().getLOAN().getCLOSINGINFORMATION().getCLOSINGINFORMATIONDETAIL().getCashFromBorrowerAtClosingAmount())
 			costsAtClosingCashToClose.setAmount(StringFormatter.NODOLLARS.formatString(deal.getLOANS().getLOAN().getCLOSINGINFORMATION().getCLOSINGINFORMATIONDETAIL().getCashFromBorrowerAtClosingAmount().getValue().toPlainString()));
 		else if(null != deal.getLOANS().getLOAN().getCLOSINGINFORMATION().getCLOSINGINFORMATIONDETAIL().getCashToBorrowerAtClosingAmount())
-			if(DocumentType.isStandardView(document))
+			if(DocumentType.isAlternateView(document))
 				costsAtClosingCashToClose.setAmount(StringFormatter.NODOLLARS.formatString(deal.getLOANS().getLOAN().getCLOSINGINFORMATION().getCLOSINGINFORMATIONDETAIL().getCashToBorrowerAtClosingAmount().getValue().toPlainString()));
 			else
 				costsAtClosingCashToClose.setAmount(StringFormatter.NODOLLARS.formatString(deal.getLOANS().getLOAN().getCLOSINGINFORMATION().getCLOSINGINFORMATIONDETAIL().getCashToBorrowerAtClosingAmount().getValue().toPlainString()));
 		
-		if(DocumentType.isStandardView(document))
+		if(DocumentType.isAlternateView(document))
 		{
 			costsAtClosingCashToClose.setDocType("true");
 			if(null != deal.getLOANS().getLOAN().getCLOSINGINFORMATION().getCLOSINGINFORMATIONDETAIL().getCashFromBorrowerAtClosingAmount())

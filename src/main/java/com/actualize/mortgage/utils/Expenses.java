@@ -1,20 +1,16 @@
 package com.actualize.mortgage.utils;
 
-import java.util.HashMap;
-
-public abstract class Expenses {
-	
-	private HashMap<String, Integer> placement 	= null;		
-	private String  label 		= "";
-	private String  type 		= "";
-	private String  typeOtherDescription = "";
-	private String  paidToType 	= "";
-	private String  integratedDisclosureSectionType = "";
-	private boolean paidOutsideOfClosingIndicator = false;
-	private String  paymentAmount = "";
-	private String  paymentPaidByType ="";
-	private String  paymentTimingType = "";
-	private String  paymentToEntity = "";
+public class Expenses {
+	private String  label;
+	private String  type;
+	private String  typeOtherDescription;
+	private String  paidToType;
+	private String  integratedDisclosureSectionType;
+	private boolean paidOutsideOfClosingIndicator;
+	private String  paymentAmount;
+	private String  paymentPaidByType;
+	private String  paymentTimingType;
+	private String  paymentToEntity;
 
 	public String getPaidToType() {
 		return paidToType;
@@ -76,15 +72,5 @@ public abstract class Expenses {
 	public void setLabel(String label) {
 		this.label = label;
 	}
-	public int getPlacement(String str) {
-		if (placement != null && placement.get(str) != null){
-			return placement.get(str);
-		}
-		return 0;
-	}
-	public void setPlacement(String str, Integer row) {
-		placement = new HashMap<String, Integer>();
-		placement.put(str, row);
-	}
-
+	
 }

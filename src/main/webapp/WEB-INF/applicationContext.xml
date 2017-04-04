@@ -34,5 +34,4 @@
    	<bean id="pageOneService" class="com.actualize.mortgage.services.impl.PageOneServiceImpl"/>
    	<bean id="pageTwoService" class="com.actualize.mortgage.services.impl.PageTwoServiceImpl"/>
    	<bean id="pageOneMappingService" class="com.actualize.mortgage.services.impl.PageOneMappingServiceImpl"/>
-   	<bean id="pageTwoMappingService" class="com.actualize.mortgage.services.impl.PageTwoMappingServiceImpl"/>
 </beans>

@@ -58,28 +58,21 @@ public class PageTwoServiceImpl implements PageTwoService{
 				ClosingCostProperties closingCostProperties = new ClosingCostProperties();
 					closingCostProperties = LoanCostsTable(fee,"OriginationCharges");
 					if(null != closingCostProperties.getFeeType())
-					{
 						originationChargeList.add(closingCostProperties);
-					}
 			}
 			else if("ServicesBorrowerDidNotShopFor".equalsIgnoreCase(fee.getFEEDETAIL().getIntegratedDisclosureSectionType().getValue().value()))
 			{
 				ClosingCostProperties closingCostProperties = new ClosingCostProperties();
 					closingCostProperties = LoanCostsTable(fee,"ServicesBorrowerDidNotShopFor");
 					if(null != closingCostProperties.getFeeType())
-					{
-						
 						sbDidNotShopFors.add(closingCostProperties);
-					}
 			}
 			else if("ServicesBorrowerDidShopFor".equalsIgnoreCase(fee.getFEEDETAIL().getIntegratedDisclosureSectionType().getValue().value()))
 			{
 				ClosingCostProperties closingCostProperties = new ClosingCostProperties();
 					closingCostProperties = LoanCostsTable(fee,"ServicesBorrowerDidShopFor");
 					if(null != closingCostProperties.getFeeType())
-					{
-							sbDidShopFors.add(closingCostProperties);
-					}
+						sbDidShopFors.add(closingCostProperties);
 			}
 		}
 		
@@ -91,7 +84,6 @@ public class PageTwoServiceImpl implements PageTwoService{
 		});
 		
 		Collections.sort(sbDidNotShopFors,new Comparator<ClosingCostProperties>(){
-
 			@Override
 			public int compare(ClosingCostProperties o1, ClosingCostProperties o2) {
 				return o1.getFeeType().compareTo(o2.getFeeType());
@@ -99,7 +91,6 @@ public class PageTwoServiceImpl implements PageTwoService{
 		});
 		
 		Collections.sort(sbDidShopFors,new Comparator<ClosingCostProperties>(){
-
 			@Override
 			public int compare(ClosingCostProperties o1, ClosingCostProperties o2) {
 				return o1.getFeeType().compareTo(o2.getFeeType());
@@ -160,9 +151,7 @@ public class PageTwoServiceImpl implements PageTwoService{
 				}
 				
 				if(null != closingCostProperties.getFeeType())
-				{
 					tOGovtFeesList.add(closingCostProperties);	
-				}
 			}
 			
 		}
@@ -182,9 +171,7 @@ public class PageTwoServiceImpl implements PageTwoService{
 			tOGovtFeesList.add(0, closingCostProperties);
 		}	
 		else
-		{	
 			tOGovtFeesList.add(0, FeeCostsTableRow(recordingFee, false, str, null));
-		}
 		
 		List<PREPAIDITEM> prepaidItems = Convertor.getPrepaidItemList(document);
 		
@@ -201,9 +188,7 @@ public class PageTwoServiceImpl implements PageTwoService{
 			prepaids = addPrepaidByType(prepaidItems, prepaidItem);
 		
 			if(null != prepaids.getFeeType() && prepaidItem.equalsIgnoreCase(prepaids.getFeeType()))
-			{		
 				prepaidsList.add(prepaids);	
-			}
 			else
 			{
 				prepaids.setDisplayLabel(StringFormatter.CAMEL.formatString(prepaidItem));
@@ -231,17 +216,14 @@ public class PageTwoServiceImpl implements PageTwoService{
 			prepaidsList.add(prepaids);
 		}
 		else
-		{
 			prepaidsList.add(PrepaidCostsTableRow(propertyTaxes,true , "Property Taxes"));
-		}
+
 		if(null != prepaidItems)
 		for(PREPAIDITEM prepaiditem : prepaidItems)
 		{
 			String prepaidType = prepaiditem.getPREPAIDITEMDETAIL().getPrepaidItemType().getValue().value();
 			if(checkOtherPrepaids(prepaidType))
-			{
 				prepaidsList.add(PrepaidCostsTableRow(prepaiditem, true, prepaidType));
-			}
 		}
 		
 		//ESCROWS
@@ -258,9 +240,7 @@ public class PageTwoServiceImpl implements PageTwoService{
 			iepAtClosing = addEscrowByType(escrowsItems, escrowItem);
 		
 			if(null != iepAtClosing.getFeeType())
-			{
 				iePatClosingList.add(iepAtClosing);	
-			}
 			else
 			{
 				IEPatClosing iePatClosing = new IEPatClosing();
@@ -318,9 +298,7 @@ public class PageTwoServiceImpl implements PageTwoService{
 		{
 			String disclosureType = fee.getFEEDETAIL().getIntegratedDisclosureSectionType().getValue().value();
 			if( "OtherCosts".equalsIgnoreCase(disclosureType) )
-			{	
 				otherCostsList.add(FeeCostsTableRow(fee, true, null, null));
-			}
 		}
 		
 		//Total Other Costs
