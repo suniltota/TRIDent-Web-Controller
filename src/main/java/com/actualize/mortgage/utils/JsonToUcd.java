@@ -1,5 +1,8 @@
 package com.actualize.mortgage.utils;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.logging.Logger;
 
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -9,9 +12,13 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import com.actualize.mortgage.domainmodels.Address;
+import com.actualize.mortgage.domainmodels.Borrower;
 import com.actualize.mortgage.domainmodels.ClosingInformation;
+import com.actualize.mortgage.domainmodels.Lender;
 import com.actualize.mortgage.domainmodels.LoanInformation;
+import com.actualize.mortgage.domainmodels.LoanTerms;
 import com.actualize.mortgage.domainmodels.PDFDocument;
+import com.actualize.mortgage.domainmodels.Seller;
 
 public class JsonToUcd {
 	private static final String GSE_ALIAS = "gse";
@@ -68,9 +75,12 @@ public class JsonToUcd {
 	}
 
 	private void insertAboutVersion(Document document, Element element, PDFDocument jsonDocument) {
-		// TODO: set correct version number and created date time
-		insertData(document, element, "AboutVersionIdentifier", "TRIDent Web Toolkit, v0.1");
-		insertData(document, element, "CreatedDatetime", "2017-03-01T14:19:48Z");
+		insertData(document, element, "AboutVersionIdentifier", "TRIDent Web Toolkit, v0.1"); // TODO: set correct version number
+		insertData(document, element, "CreatedDatetime", LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME) + 'Z');
+	}
+
+	private void insertAdjustment(Document document, Element element, PDFDocument jsonDocument) {
+		insertInterestRateAdjustment(document, insertLevels(document, element, "INTEREST_RATE_ADJUSTMENT"), jsonDocument);
 	}
 
 	private void insertClosingInformationDetail(Document document, Element element, PDFDocument jsonDocument) {
@@ -84,6 +94,7 @@ public class JsonToUcd {
 	private void insertDeal(Document document, Element element, PDFDocument jsonDocument) {
 		insertSubjectProperty(document, insertLevels(document, element, "COLLATERALS/COLLATERAL/SUBJECT_PROPERTY"), jsonDocument);
 		insertLoan(document, insertLevels(document, element, "LOANS/LOAN"), jsonDocument);
+		insertParties(document, insertLevels(document, element, "PARTIES"), jsonDocument);
 	}
 
 	private void insertDealSet(Document document, Element element, PDFDocument jsonDocument) {
@@ -104,12 +115,32 @@ public class JsonToUcd {
 		insertData(document, element, "IntegratedDisclosureLoanProductDescription", jsonDocument.getPageOne().getLoanInformation().getProduct());
 	}
 
+	private void insertInterestRateAdjustment(Document document, Element element, PDFDocument jsonDocument) {
+		insertInterestRateLifetimeAdjustmentRule(document, insertLevels(document, element, "INTEREST_RATE_LIFETIME_ADJUSTMENT_RULE"), jsonDocument);
+	}
+
+	private void insertInterestRateLifetimeAdjustmentRule(Document document, Element element, PDFDocument jsonDocument) {
+		LoanTerms loanTerms = jsonDocument.getPageOne().getLoanTerms();
+		insertData(document, element, "CeilingRatePercent", loanTerms.getLoanTermsInterestRate().getCeilingRatePercent());
+		insertData(document, element, "CeilingRatePercentEarliestEffectiveMonthsCount", loanTerms.getLoanTermsInterestRate().getCeilingRatePercentEarliestEffectiveMonthsCount());
+		insertData(document, element, "FirstRateChangeMonthsCount", loanTerms.getLoanTermsInterestRate().getFirstRateChangeMonthsCount());
+		//insertData(document, element, "FloorRatePercent", loanTerms.getLoanTermsInterestRate().???);
+		//insertData(document, element, "MarginRatePercent", loanTerms.getLoanTermsInterestRate().???);
+	}
+
 	private void insertLoan(Document document, Element element, PDFDocument jsonDocument) {
+		insertAdjustment(document, insertLevels(document, element, "ADJUSTMENT"), jsonDocument);
 		insertClosingInformationDetail(document, insertLevels(document, element, "CLOSING_INFORMATION/CLOSING_INFORMATION_DETAIL"), jsonDocument);
 		insertIntegratedDisclosureDetail(document, insertLevels(document, element, "DOCUMENT_SPECIFIC_DATA_SETS/DOCUMENT_SPECIFIC_DATA_SET/INTEGRATED_DISCLOSURE/INTEGRATED_DISCLOSURE_DETAIL"), jsonDocument);
+		insertLoanDetail(document, insertLevels(document, element, "LOAN_DETAIL"), jsonDocument);
 		insertLoanIdentifiers(document, insertLevels(document, element, "LOAN_IDENTIFIERS"), jsonDocument);
 		insertMaturityRule(document, insertLevels(document, element, "MATURITY/MATURITY_RULE"), jsonDocument);
 		insertTermsOfLoan(document, insertLevels(document, element, "TERMS_OF_LOAN"), jsonDocument);
+	}
+
+	private void insertLoanDetail(Document document, Element element, PDFDocument jsonDocument) {
+		LoanTerms loanTerms = jsonDocument.getPageOne().getLoanTerms();
+		insertData(document, element, "InterestRateIncreaseIndicator", loanTerms.getLoanTermsInterestRate().getInterestRateIncreaseIndicator());
 	}
 
 	private void insertLoanIdentifiers(Document document, Element element, PDFDocument jsonDocument) {
@@ -145,12 +176,76 @@ public class JsonToUcd {
 		insertDocumentSet(document, insertLevels(document, element, "DOCUMENT_SETS/DOCUMENT_SET"), jsonDocument);
 	}
 
+	private void insertParties(Document document, Element element, PDFDocument jsonDocument) {
+		List<Borrower> borrowers = jsonDocument.getPageOne().getTransactionInformation().getBorrower();
+		for (Borrower borrower : borrowers) {
+			Element party = insertLevels(document, element, "PARTY");
+			Element roleDetail = insertLevels(document, party, "ROLES/ROLE/ROLE_DETAIL");
+			insertData(document, roleDetail, "PartyRoleType", borrower.getPartyRoleType());
+			if ("Other".equals(borrower.getPartyRoleType()))
+				insertData(document, roleDetail, "PartyRoleTypeOtherDescription", borrower.getPartyRoleOtherDescription());
+			Element name = insertLevels(document, party, "INDIVIDUAL/NAME");
+			insertData(document, name, "FirstName", borrower.getNameModel().getFirstName());
+			insertData(document, name, "LastName", borrower.getNameModel().getLastName());
+			insertData(document, name, "MiddleName", borrower.getNameModel().getMiddleName());
+			insertData(document, name, "SuffixName", borrower.getNameModel().getSuffixName());
+			Element address = insertLevels(document, party, "ADDRESSES/ADDRESS");
+			insertData(document, address, "AddressLineText", borrower.getAddress().getAddressLineText());
+			insertData(document, address, "AddressUnitDesignatorType", borrower.getAddress().getAddressUnitDesignatorType());
+			insertData(document, address, "AddressUnitIdentifier", borrower.getAddress().getAddressUnitIdentifier());
+			insertData(document, address, "CityName", borrower.getAddress().getCityName());
+			insertData(document, address, "CountryCode", borrower.getAddress().getCountryCode());
+			insertData(document, address, "PostalCode", borrower.getAddress().getPostalCode());
+			insertData(document, address, "StateCode", borrower.getAddress().getStateCode());
+		}
+
+		List<Seller> sellers = jsonDocument.getPageOne().getTransactionInformation().getSeller();
+		for (Seller seller : sellers) {
+			Element party = insertLevels(document, element, "PARTY");
+			Element roleDetail = insertLevels(document, party, "ROLES/ROLE/ROLE_DETAIL");
+			insertData(document, roleDetail, "PartyRoleType", "Seller");
+			Element name = insertLevels(document, party, "INDIVIDUAL/NAME");
+			insertData(document, name, "FirstName", seller.getNameModel().getFirstName());
+			insertData(document, name, "LastName", seller.getNameModel().getLastName());
+			insertData(document, name, "MiddleName", seller.getNameModel().getMiddleName());
+			insertData(document, name, "SuffixName", seller.getNameModel().getSuffixName());
+			Element address = insertLevels(document, party, "ADDRESSES/ADDRESS");
+			insertData(document, address, "AddressLineText", seller.getAddress().getAddressLineText());
+			insertData(document, address, "AddressUnitDesignatorType", seller.getAddress().getAddressUnitDesignatorType());
+			insertData(document, address, "AddressUnitIdentifier", seller.getAddress().getAddressUnitIdentifier());
+			insertData(document, address, "CityName", seller.getAddress().getCityName());
+			insertData(document, address, "CountryCode", seller.getAddress().getCountryCode());
+			insertData(document, address, "PostalCode", seller.getAddress().getPostalCode());
+			insertData(document, address, "StateCode", seller.getAddress().getStateCode());
+		}
+
+		List<Lender> lenders = jsonDocument.getPageOne().getTransactionInformation().getLender(); // TODO: There should be two lenders - one individual and one organization
+		for (Lender lender : lenders) {
+			Element party = insertLevels(document, element, "PARTY");
+			Element roleDetail = insertLevels(document, party, "ROLES/ROLE/ROLE_DETAIL");
+			insertData(document, roleDetail, "PartyRoleType", "NotePayTo");
+			Element legalEntity = insertLevels(document, party, "LEGAL_ENTITY/LEGAL_ENTITY_DETAIL");
+			insertData(document, legalEntity, "FullName", lender.getNameModel().getFullName());
+			Element address = insertLevels(document, party, "ADDRESSES/ADDRESS");
+			insertData(document, address, "AddressLineText", lender.getAddress().getAddressLineText());
+			insertData(document, address, "AddressUnitDesignatorType", lender.getAddress().getAddressUnitDesignatorType());
+			insertData(document, address, "AddressUnitIdentifier", lender.getAddress().getAddressUnitIdentifier());
+			insertData(document, address, "CityName", lender.getAddress().getCityName());
+			insertData(document, address, "CountryCode", lender.getAddress().getCountryCode());
+			insertData(document, address, "PostalCode", lender.getAddress().getPostalCode());
+			insertData(document, address, "StateCode", lender.getAddress().getStateCode());
+			//Element licenseDetail = insertLevels(document, party, "LICENSE/LICENSE_DETAIL");
+			//insertData(document, licenseDetail, "NMLSID", lender.???);
+		}
+		
+		// TODO: Mortgage Broker, SettlementAgent, Real Estate Agent (Buyer, Seller)
+	}
+
 	private void insertSubjectProperty(Document document, Element element, PDFDocument jsonDocument) {
 		Address address = jsonDocument.getPageOne().getClosingInformation().getProperty();
 		insertData(document, element, "AddressLineText", address.getAddressLineText());
 		insertData(document, element, "AddressUnitDesignatorType", address.getAddressUnitDesignatorType());
 		insertData(document, element, "AddressUnitIdentifier", address.getAddressUnitIdentifier());
-		insertData(document, element, "AddressLineText", address.getAddressLineText());
 		insertData(document, element, "CityName", address.getCityName());
 		insertData(document, element, "PostalCode", address.getPostalCode());
 		insertData(document, element, "StateCode", address.getStateCode());
@@ -158,7 +253,10 @@ public class JsonToUcd {
 
 	private void insertTermsOfLoan(Document document, Element element, PDFDocument jsonDocument) {
 		LoanInformation loanInformation = jsonDocument.getPageOne().getLoanInformation();
+		LoanTerms loanTerms = jsonDocument.getPageOne().getLoanTerms();
 		insertData(document, element, "LienPriorityType", "FirstLien");
 		insertData(document, element, "MortgageType", loanInformation.getLoanType());
+		insertData(document, element, "NoteAmount", loanTerms.getLoanTermsLoanAmount().getNoteAmount());
+		insertData(document, element, "NoteRatePercent", loanTerms.getLoanTermsInterestRate().getNoteRatePercent());
 	}
 }
