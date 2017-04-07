@@ -13,44 +13,33 @@ public class PDFDocument implements Serializable {
 	private DocumentType documentType;
 	private PageOne pageOne;
 	private PageTwo pageTwo;
+	private PageThree pageThree;
 	
-	/**
-	 * @return the documentType
-	 */
 	public DocumentType getDocumentType() {
 		return documentType;
 	}
-	/**
-	 * @param documentType the documentType to set
-	 */
 	public void setDocumentType(DocumentType documentType) {
 		this.documentType = documentType;
 	}
-	/**
-	 * @return the pageOne
-	 */
 	public PageOne getPageOne() {
 		return pageOne;
 	}
-	/**
-	 * @param pageOne the pageOne to set
-	 */
 	public void setPageOne(PageOne pageOne) {
 		this.pageOne = pageOne;
 	}
-	/**
-	 * @return the pageTwo
-	 */
 	public PageTwo getPageTwo() {
 		return pageTwo;
 	}
-	/**
-	 * @param pageTwo the pageTwo to set
-	 */
 	public void setPageTwo(PageTwo pageTwo) {
 		this.pageTwo = pageTwo;
 	}
-
+	public PageThree getPageThree() {
+		return pageThree;
+	}
+	public void setPageThree(PageThree pageThree) {
+		this.pageThree = pageThree;
+	}
+	
 
 	
 

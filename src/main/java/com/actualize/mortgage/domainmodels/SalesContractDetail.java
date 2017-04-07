@@ -6,17 +6,11 @@ public class SalesContractDetail implements Serializable{
 	
 	private static final long serialVersionUID = -3763131948453549811L;
 
-	private String personalPropertyIndicator;
+	private boolean personalPropertyIndicator;
 	private String personalPropertyAmount;
 	private String realPropertyAmount;
 	private String saleContractAmount;
 	
-	public String getPersonalPropertyIndicator() {
-		return personalPropertyIndicator;
-	}
-	public void setPersonalPropertyIndicator(String personalPropertyIndicator) {
-		this.personalPropertyIndicator = personalPropertyIndicator;
-	}
 	public String getPersonalPropertyAmount() {
 		return personalPropertyAmount;
 	}
@@ -34,6 +28,12 @@ public class SalesContractDetail implements Serializable{
 	}
 	public void setSaleContractAmount(String saleContractAmount) {
 		this.saleContractAmount = saleContractAmount;
+	}
+	public boolean isPersonalPropertyIndicator() {
+		return personalPropertyIndicator;
+	}
+	public void setPersonalPropertyIndicator(boolean personalPropertyIndicator) {
+		this.personalPropertyIndicator = personalPropertyIndicator;
 	}
 	
 

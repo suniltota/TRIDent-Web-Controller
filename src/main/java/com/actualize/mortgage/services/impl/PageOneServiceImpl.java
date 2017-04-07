@@ -112,7 +112,7 @@ public class PageOneServiceImpl implements PageOneService {
 			collaterals.forEach(collateral ->{
 				closingInformation.setSalePrice(null != collateral.getSUBJECTPROPERTY().getSALESCONTRACTS().getSALESCONTRACT().getSALESCONTRACTDETAIL().getSalesContractAmount() ? collateral.getSUBJECTPROPERTY().getSALESCONTRACTS().getSALESCONTRACT().getSALESCONTRACTDETAIL().getSalesContractAmount().getValue().toString():"");
 				salesContractDetail.setSaleContractAmount(null != collateral.getSUBJECTPROPERTY().getSALESCONTRACTS().getSALESCONTRACT().getSALESCONTRACTDETAIL().getSalesContractAmount() ? collateral.getSUBJECTPROPERTY().getSALESCONTRACTS().getSALESCONTRACT().getSALESCONTRACTDETAIL().getSalesContractAmount().getValue().toString():"");
-				salesContractDetail.setPersonalPropertyIndicator(Convertor.booleanToString(null != collateral.getSUBJECTPROPERTY().getSALESCONTRACTS().getSALESCONTRACT().getSALESCONTRACTDETAIL().getPersonalPropertyIncludedIndicator() ? collateral.getSUBJECTPROPERTY().getSALESCONTRACTS().getSALESCONTRACT().getSALESCONTRACTDETAIL().getPersonalPropertyIncludedIndicator().isValue() : false));
+				salesContractDetail.setPersonalPropertyIndicator(null != collateral.getSUBJECTPROPERTY().getSALESCONTRACTS().getSALESCONTRACT().getSALESCONTRACTDETAIL().getPersonalPropertyIncludedIndicator() ? collateral.getSUBJECTPROPERTY().getSALESCONTRACTS().getSALESCONTRACT().getSALESCONTRACTDETAIL().getPersonalPropertyIncludedIndicator().isValue() : false);
 			});
 			closingInformation.setSalesContractDetail(salesContractDetail);
 		}
@@ -761,13 +761,14 @@ public class PageOneServiceImpl implements PageOneService {
 		//6.2
 		//DEAL.LOANS.LOAN.CLOSING_INFORMATION.CLOSING_INFORMATION_DETAIL.CashFromBorrowerAtClosingAmount
 		if(null != deal.getLOANS().getLOAN().getCLOSINGINFORMATION().getCLOSINGINFORMATIONDETAIL().getCashFromBorrowerAtClosingAmount())
+		{
 			costsAtClosingCashToClose.setAmount(StringFormatter.NODOLLARS.formatString(deal.getLOANS().getLOAN().getCLOSINGINFORMATION().getCLOSINGINFORMATIONDETAIL().getCashFromBorrowerAtClosingAmount().getValue().toPlainString()));
+			costsAtClosingCashToClose.setCashFromBorrowerAtClosingAmount(deal.getLOANS().getLOAN().getCLOSINGINFORMATION().getCLOSINGINFORMATIONDETAIL().getCashFromBorrowerAtClosingAmount().getValue().toPlainString());
+		}
 		else if(null != deal.getLOANS().getLOAN().getCLOSINGINFORMATION().getCLOSINGINFORMATIONDETAIL().getCashToBorrowerAtClosingAmount())
-			if(DocumentType.isAlternateView(document))
-				costsAtClosingCashToClose.setAmount(StringFormatter.NODOLLARS.formatString(deal.getLOANS().getLOAN().getCLOSINGINFORMATION().getCLOSINGINFORMATIONDETAIL().getCashToBorrowerAtClosingAmount().getValue().toPlainString()));
-			else
-				costsAtClosingCashToClose.setAmount(StringFormatter.NODOLLARS.formatString(deal.getLOANS().getLOAN().getCLOSINGINFORMATION().getCLOSINGINFORMATIONDETAIL().getCashToBorrowerAtClosingAmount().getValue().toPlainString()));
-		
+		{
+			costsAtClosingCashToClose.setAmount(StringFormatter.NODOLLARS.formatString(deal.getLOANS().getLOAN().getCLOSINGINFORMATION().getCLOSINGINFORMATIONDETAIL().getCashToBorrowerAtClosingAmount().getValue().toPlainString()));			
+		}
 		if(DocumentType.isAlternateView(document))
 		{
 			costsAtClosingCashToClose.setDocType("true");

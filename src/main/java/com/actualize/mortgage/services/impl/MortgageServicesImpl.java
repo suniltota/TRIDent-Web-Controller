@@ -37,22 +37,24 @@ import com.actualize.mortgage.domainmodels.Borrower;
 import com.actualize.mortgage.domainmodels.ClosingCostDetailsLoanCosts;
 import com.actualize.mortgage.domainmodels.ClosingCostDetailsOtherCosts;
 import com.actualize.mortgage.domainmodels.ClosingInformation;
+import com.actualize.mortgage.domainmodels.ConversionError;
 import com.actualize.mortgage.domainmodels.CostsAtClosing;
+import com.actualize.mortgage.domainmodels.DataElement;
+import com.actualize.mortgage.domainmodels.IntermediateXMLData;
 import com.actualize.mortgage.domainmodels.Lender;
 import com.actualize.mortgage.domainmodels.LoanInformation;
 import com.actualize.mortgage.domainmodels.LoanTerms;
 import com.actualize.mortgage.domainmodels.PDFDocument;
 import com.actualize.mortgage.domainmodels.PageOne;
+import com.actualize.mortgage.domainmodels.PageThree;
 import com.actualize.mortgage.domainmodels.PageTwo;
 import com.actualize.mortgage.domainmodels.ProjectedPayments;
 import com.actualize.mortgage.domainmodels.Seller;
 import com.actualize.mortgage.domainmodels.TransactionInformation;
-import com.actualize.mortgage.domainmodels.ConversionError;
-import com.actualize.mortgage.domainmodels.DataElement;
-import com.actualize.mortgage.domainmodels.IntermediateXMLData;
 import com.actualize.mortgage.services.MortgageServices;
 import com.actualize.mortgage.services.PageOneMappingService;
 import com.actualize.mortgage.services.PageOneService;
+import com.actualize.mortgage.services.PageThreeService;
 import com.actualize.mortgage.services.PageTwoService;
 import com.actualize.mortgage.utils.Convertor;
 import com.actualize.mortgage.utils.DocumentType;
@@ -87,6 +89,9 @@ public class MortgageServicesImpl implements MortgageServices{
 	private PageTwoService pageTwoService;
 	
 	@Autowired
+	private PageThreeService pageThreeService;
+	
+	@Autowired
 	private PageOneMappingService pageOneMappingService;
 	
 	@Override
@@ -95,8 +100,8 @@ public class MortgageServicesImpl implements MortgageServices{
 			documentType.setStandardView(DocumentType.isStandardView(document));
 			documentType.setLoanType(documentType.getLoanType(document));
 			documentType.setAlternateView(DocumentType.isAlternateView(document));
-			documentType.setHomeEquityLoanIndicator(DocumentType.isHomeEquityLoanIndicator(document));
-			documentType.setPayoffsAndPayments(DocumentType.isPayoffsAndPayments(document));
+			documentType.setHomeEquityLoanIndicator(DocumentType.HomeEquityLoanIndicator());
+			documentType.setPayoffsAndPayments(DocumentType.PayoffsAndPayments());
 			documentType.setRefinanceTypeLoan(DocumentType.isRefinanceTypeLoan(document));
 			documentType.setSellerOnly(DocumentType.isSellerOnly(document));
 			documentType.setLoanId(documentType.getLoanIdentifier(document));
@@ -151,6 +156,7 @@ public class MortgageServicesImpl implements MortgageServices{
 			pdfDocument.setDocumentType(documentType);
 			pdfDocument.setPageOne(pageOne);
 			pdfDocument.setPageTwo(pageTwo);
+			pdfDocument.setPageThree(populatePageThree(document));
 			pdfDocuments.add(pdfDocument);
 		}
 		return pdfDocuments;
@@ -186,18 +192,6 @@ public class MortgageServicesImpl implements MortgageServices{
         }
         return message;
     }
-
-	@Override
-	public MESSAGE mapPageOne(MESSAGE currentXMLObject, PDFDocument modifiedJSONObject) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public MESSAGE mapPageTwo(MESSAGE currentXMLObject, PDFDocument modifiedJSONObject) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
-	}
 	
 	@Override
     public MESSAGE generateMasterXML(IntermediateXMLData intermediateXMLData) throws Exception {
@@ -437,5 +431,15 @@ public class MortgageServicesImpl implements MortgageServices{
     private String canonicalSearchString(String str) {
         return str.replaceAll("\\s", "").toUpperCase();
     }
+
+	@Override
+	public PageThree populatePageThree(DOCUMENT document) throws Exception {
+		
+		PageThree pageThree = new PageThree();
+		pageThree.setCashToCloses(pageThreeService.createCalculatingCashtoClose(document));
+		if(!DocumentType.isAlternateView(document))
+			pageThree.setSummariesofTransactions(pageThreeService.createSummariesofTransactions(document));
+		return pageThree;
+	}
 
 }

@@ -15,8 +15,8 @@ import javax.xml.bind.Unmarshaller;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.OutputKeys;
-import javax.xml.transform.Transformer;import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMResult;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
@@ -35,16 +35,11 @@ import com.actualize.mortgage.domainmodels.PDFDocument;
 import com.actualize.mortgage.domainmodels.PDFResponse;
 import com.actualize.mortgage.sercurity.SessionContext;
 import com.actualize.mortgage.services.MortgageServices;
-import com.lowagie.text.pdf.codec.Base64.OutputStream;
 import com.uniformdisclosure.UniformDisclosureBuilder;
 import com.uniformdisclosure.UniformDisclosureBuilderSeller;
 
 import datalayer.InputData;
 import datalayer.PopulateInputData;
-import transformer.TRIDTransformer;
-import ucdutils.UCDArcRolesParty;
-import ucdutils.UCDArcRolesSignatory;
-import xmlutils.Utils;
 
 @RestController
 @RequestMapping(value="/actualize")

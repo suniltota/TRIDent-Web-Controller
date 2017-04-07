@@ -1,27 +1,35 @@
 package com.actualize.mortgage.utils;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import org.mismo.residential._2009.schemas.CASHTOCLOSEITEM;
 import org.mismo.residential._2009.schemas.CLOSINGADJUSTMENTITEM;
 import org.mismo.residential._2009.schemas.CLOSINGADJUSTMENTITEMDETAIL;
+import org.mismo.residential._2009.schemas.CLOSINGCOSTFUND;
+import org.mismo.residential._2009.schemas.COLLATERAL;
 import org.mismo.residential._2009.schemas.DEAL;
 import org.mismo.residential._2009.schemas.DOCUMENT;
 import org.mismo.residential._2009.schemas.ESCROWITEM;
 import org.mismo.residential._2009.schemas.ESTIMATEDPROPERTYCOSTCOMPONENT;
 import org.mismo.residential._2009.schemas.FEE;
+import org.mismo.residential._2009.schemas.INTEGRATEDDISCLOSURESECTIONSUMMARY;
+import org.mismo.residential._2009.schemas.INTEGRATEDDISCLOSURESECTIONSUMMARYDETAIL;
+import org.mismo.residential._2009.schemas.INTEGRATEDDISCLOSURESUBSECTIONPAYMENT;
 import org.mismo.residential._2009.schemas.INTERESTRATEPERCHANGEADJUSTMENTRULE;
 import org.mismo.residential._2009.schemas.LIABILITY;
 import org.mismo.residential._2009.schemas.LIABILITYDETAIL;
 import org.mismo.residential._2009.schemas.LOAN;
 import org.mismo.residential._2009.schemas.LOANIDENTIFIER;
 import org.mismo.residential._2009.schemas.PAIDBY;
-import org.mismo.residential._2009.schemas.PAYOFF;
 import org.mismo.residential._2009.schemas.PRORATIONITEM;
+import org.mismo.residential._2009.schemas.SALESCONTRACTDETAIL;
 
 import com.actualize.mortgage.domainmodels.AdjustmentsModel;
 import com.actualize.mortgage.domainmodels.CashToCloseModel;
+import com.actualize.mortgage.domainmodels.ClosingCostFundModel;
 import com.actualize.mortgage.domainmodels.EscrowsModel;
 import com.actualize.mortgage.domainmodels.FeeModel;
 import com.actualize.mortgage.domainmodels.ID_SubsectionModel;
@@ -37,6 +45,7 @@ import com.actualize.mortgage.domainmodels.LoanTermsLoanAmount;
 import com.actualize.mortgage.domainmodels.LoanTermsPI;
 import com.actualize.mortgage.domainmodels.LoanTermsPrepaymentPenalty;
 import com.actualize.mortgage.domainmodels.ProrationsModel;
+import com.actualize.mortgage.domainmodels.SalesContractDetail;
 
 public class PopulateData {
 	
@@ -390,7 +399,6 @@ public class PopulateData {
 	
 	public static List<LoanTermsETIA> populateLoanTermsETIA(DOCUMENT document)
 	{
-		
 		List<LoanTermsETIA>  loanTermsETIAs = new LinkedList<>();
 		LOAN loan = document.getDEALSETS().getDEALSET().getDEALS().getDEAL().getLOANS().getLOAN();
 		
@@ -454,6 +462,7 @@ public class PopulateData {
 					cashToCloseModel.setItemEstimatedAmount(null != cashtocloseitem.getIntegratedDisclosureCashToCloseItemEstimatedAmount() ? cashtocloseitem.getIntegratedDisclosureCashToCloseItemEstimatedAmount().getValue().toPlainString() : "");
 					cashToCloseModel.setItemPaymentType(null != cashtocloseitem.getIntegratedDisclosureCashToCloseItemPaymentType() ? cashtocloseitem.getIntegratedDisclosureCashToCloseItemPaymentType().getValue().value() : "");
 					cashToCloseModel.setItemType(null != cashtocloseitem.getIntegratedDisclosureCashToCloseItemType() ? cashtocloseitem.getIntegratedDisclosureCashToCloseItemType().getValue().value() : "" );
+					cashToCloseModel.setItemFinalAmount(null != cashtocloseitem.getIntegratedDisclosureCashToCloseItemFinalAmount() ? cashtocloseitem.getIntegratedDisclosureCashToCloseItemFinalAmount().getValue().toPlainString() : "");
 				cashToCloseModels.add(cashToCloseModel);
 			}	
 		}
@@ -463,6 +472,46 @@ public class PopulateData {
 	public static List<ID_SubsectionModel> populateID_SubsectionModel(DOCUMENT document)
 	{
 		List<ID_SubsectionModel> id_SubsectionModels = new LinkedList<>();
+		List<INTEGRATEDDISCLOSURESECTIONSUMMARY> integrateddisclosuresectionsummaries =  Convertor.getIntegrateddisclosuresectionsummaries(document);
+		for(INTEGRATEDDISCLOSURESECTIONSUMMARY integrateddisclosuresectionsummary : integrateddisclosuresectionsummaries)
+		{
+			ID_SubsectionModel id_SubsectionModel = new ID_SubsectionModel();
+			String integratedDisclosureSectionType = "";
+			String integratedDisclosureSubsectionType = "";
+			
+			if(null != integrateddisclosuresectionsummary.getINTEGRATEDDISCLOSURESECTIONSUMMARYDETAIL())
+			{	
+				INTEGRATEDDISCLOSURESECTIONSUMMARYDETAIL integrateddisclosuresectionsummarydetail = integrateddisclosuresectionsummary.getINTEGRATEDDISCLOSURESECTIONSUMMARYDETAIL();
+				integratedDisclosureSectionType = null != integrateddisclosuresectionsummarydetail.getIntegratedDisclosureSectionType() ? integrateddisclosuresectionsummarydetail.getIntegratedDisclosureSectionType().getValue().value() : "";
+				if(null != integrateddisclosuresectionsummarydetail.getIntegratedDisclosureSubsectionType())
+				{
+					String type = integrateddisclosuresectionsummarydetail.getIntegratedDisclosureSubsectionType().getValue().value();
+					if("Other".equalsIgnoreCase(type))
+						integratedDisclosureSubsectionType = integrateddisclosuresectionsummarydetail.getIntegratedDisclosureSubsectionTypeOtherDescription().getValue();
+					else
+						integratedDisclosureSubsectionType = integrateddisclosuresectionsummarydetail.getIntegratedDisclosureSubsectionType().getValue().value();
+				}
+				String lenderTolerance = null != integrateddisclosuresectionsummarydetail.getLenderCreditToleranceCureAmount() ? integrateddisclosuresectionsummarydetail.getLenderCreditToleranceCureAmount().getValue().toPlainString() : "";
+				if(null != integratedDisclosureSubsectionType && null !=integratedDisclosureSectionType && null!= integrateddisclosuresectionsummary.getINTEGRATEDDISCLOSURESUBSECTIONPAYMENTS() && null != integrateddisclosuresectionsummary.getINTEGRATEDDISCLOSURESUBSECTIONPAYMENTS().getINTEGRATEDDISCLOSURESUBSECTIONPAYMENT())
+				{
+					List<INTEGRATEDDISCLOSURESUBSECTIONPAYMENT> integrateddisclosuresubsectionpayments = integrateddisclosuresectionsummary.getINTEGRATEDDISCLOSURESUBSECTIONPAYMENTS().getINTEGRATEDDISCLOSURESUBSECTIONPAYMENT();
+					for(INTEGRATEDDISCLOSURESUBSECTIONPAYMENT integrateddisclosuresubsectionpayment : integrateddisclosuresubsectionpayments)
+					{
+						id_SubsectionModel.setIntegratedDisclosureSectionType(integratedDisclosureSectionType);
+						id_SubsectionModel.setIntegratedDisclosureSubsectionType(integratedDisclosureSubsectionType);
+						id_SubsectionModel.setLenderTolerance(lenderTolerance);
+						id_SubsectionModel.setPaymentPaidByType(null != integrateddisclosuresubsectionpayment.getIntegratedDisclosureSubsectionPaidByType() ? integrateddisclosuresubsectionpayment.getIntegratedDisclosureSubsectionPaidByType().getValue().value() : "");
+						id_SubsectionModel.setPaymentAmount(null != integrateddisclosuresubsectionpayment.getIntegratedDisclosureSubsectionPaymentAmount() ? integrateddisclosuresubsectionpayment.getIntegratedDisclosureSubsectionPaymentAmount().getValue().toPlainString() : "");
+						if(null != integrateddisclosuresubsectionpayment.getIntegratedDisclosureSubsectionPaymentTimingType() && "AtClosing".equalsIgnoreCase(integrateddisclosuresubsectionpayment.getIntegratedDisclosureSubsectionPaymentTimingType().getValue().value()))
+							id_SubsectionModel.setPaidOutsideOfClosingIndicator(false);
+						else if(null != integrateddisclosuresubsectionpayment.getIntegratedDisclosureSubsectionPaymentTimingType() && "BeforeClosing".equalsIgnoreCase(integrateddisclosuresubsectionpayment.getIntegratedDisclosureSubsectionPaymentTimingType().getValue().value()))
+							id_SubsectionModel.setPaidOutsideOfClosingIndicator(true);
+						id_SubsectionModel.setLabel(StringFormatter.CAMEL.formatString(integratedDisclosureSubsectionType));
+					id_SubsectionModels.add(id_SubsectionModel);	
+					}
+				}
+			}
+		}
 		return id_SubsectionModels;
 		
 	}
@@ -535,7 +584,7 @@ public class PopulateData {
 					if(null != paidby.getINDIVIDUAL() && null != paidby.getINDIVIDUAL().getNAME() && null != paidby.getINDIVIDUAL().getNAME().getFullName())
 						adjustmentsModel.setPaymentPaidByType(paidby.getINDIVIDUAL().getNAME().getFullName().getValue());
 					else if(null != paidby.getLEGALENTITY() && null != paidby.getLEGALENTITY().getLEGALENTITYDETAIL() && null != paidby.getLEGALENTITY().getLEGALENTITYDETAIL().getFullName())
-						adjustmentsModel.setPaymentPaidByType(paidby.getINDIVIDUAL().getNAME().getFullName().getValue());
+						adjustmentsModel.setPaymentPaidByType(paidby.getLEGALENTITY().getLEGALENTITYDETAIL().getFullName().getValue());
 				}
 					adjustmentsModel.setType(closingadjustmentitem.getCLOSINGADJUSTMENTITEMDETAIL().getClosingAdjustmentItemType().getValue().value());
 					adjustmentsModel.setTypeOtherDescription(null != closingadjustmentitem.getCLOSINGADJUSTMENTITEMDETAIL().getClosingAdjustmentItemTypeOtherDescription() ? closingadjustmentitem.getCLOSINGADJUSTMENTITEMDETAIL().getClosingAdjustmentItemTypeOtherDescription().getValue() : "");
@@ -559,7 +608,7 @@ public class PopulateData {
 			for(PRORATIONITEM prorationitem : prorationitems)
 			{
 				ProrationsModel prorationsModel = new ProrationsModel();
-				String label = null;
+				String label = "";
 				prorationsModel.setPaymentAmount(null != prorationitem.getProrationItemAmount() ? prorationitem.getProrationItemAmount().getValue().toPlainString() : "");
 				prorationsModel.setIntegratedDisclosureSubsectionType(null != prorationitem.getIntegratedDisclosureSubsectionType() ? prorationitem.getIntegratedDisclosureSubsectionType().getValue().value() : "");
 				prorationsModel.setIntegratedDisclosureSectionType(null != prorationitem.getIntegratedDisclosureSectionType() ? prorationitem.getIntegratedDisclosureSectionType().getValue().value() : "");
@@ -586,4 +635,61 @@ public class PopulateData {
 		
 		return prorationsModels;		
 	}
+	
+	 public static Map<String,String> getIntegrateddisclosuresectionsummariesAmountMap(DOCUMENT document)
+	 {
+		Map<String,String> IDSSummariesAmount = new HashMap<>();
+		List<INTEGRATEDDISCLOSURESECTIONSUMMARY> integrateddisclosuresectionsummaries = Convertor.getIntegrateddisclosuresectionsummaries(document);	
+		for( INTEGRATEDDISCLOSURESECTIONSUMMARY  integrateddisclosuresectionsummary: integrateddisclosuresectionsummaries)
+		{
+			if(null != integrateddisclosuresectionsummary.getINTEGRATEDDISCLOSURESECTIONSUMMARYDETAIL().getIntegratedDisclosureSectionType() && null != integrateddisclosuresectionsummary.getINTEGRATEDDISCLOSURESECTIONSUMMARYDETAIL().getIntegratedDisclosureSectionTotalAmount() )
+			{
+				IDSSummariesAmount.put(integrateddisclosuresectionsummary.getINTEGRATEDDISCLOSURESECTIONSUMMARYDETAIL().getIntegratedDisclosureSectionType().getValue().value(), integrateddisclosuresectionsummary.getINTEGRATEDDISCLOSURESECTIONSUMMARYDETAIL().getIntegratedDisclosureSectionTotalAmount().getValue().toPlainString());
+			}
+		}
+		return IDSSummariesAmount;
+	 }
+	 
+	 public static SalesContractDetail populateSalesContractDetail(DOCUMENT document)
+	 {
+		SalesContractDetail salesContractDetail = new SalesContractDetail();
+		DEAL deal = document.getDEALSETS().getDEALSET().getDEALS().getDEAL();
+		
+		if(null != deal.getCOLLATERALS() && null != deal.getCOLLATERALS().getCOLLATERAL())
+		{
+			List<COLLATERAL>collaterals = deal.getCOLLATERALS().getCOLLATERAL();
+			for(COLLATERAL collateral:collaterals)
+			{
+				if(null != collateral.getSUBJECTPROPERTY() && null != collateral.getSUBJECTPROPERTY().getSALESCONTRACTS() && null != collateral.getSUBJECTPROPERTY().getSALESCONTRACTS().getSALESCONTRACT() && null != collateral.getSUBJECTPROPERTY().getSALESCONTRACTS().getSALESCONTRACT().getSALESCONTRACTDETAIL())
+				{
+					SALESCONTRACTDETAIL salescontractdetail = collateral.getSUBJECTPROPERTY().getSALESCONTRACTS().getSALESCONTRACT().getSALESCONTRACTDETAIL();
+						salesContractDetail.setPersonalPropertyAmount(null != salescontractdetail.getPersonalPropertyAmount() ? salescontractdetail.getPersonalPropertyAmount().getValue().toPlainString() : "");
+						salesContractDetail.setPersonalPropertyIndicator(null != salescontractdetail.getPersonalPropertyIncludedIndicator() ? salescontractdetail.getPersonalPropertyIncludedIndicator().isValue() : false);
+						salesContractDetail.setRealPropertyAmount(null != salescontractdetail.getRealPropertyAmount() ? salescontractdetail.getRealPropertyAmount().getValue().toPlainString() : "");
+						salesContractDetail.setSaleContractAmount(null != salescontractdetail.getSalesContractAmount() ? salescontractdetail.getSalesContractAmount().getValue().toPlainString() : "");
+				}
+			}
+		}
+		
+		return salesContractDetail;
+	 }
+	 
+	 public static List<ClosingCostFundModel> populateClosingCostFundModel(DOCUMENT document)
+	 {
+		 List<ClosingCostFundModel> closingCostFundModels = new LinkedList<>();
+		 LOAN loan = document.getDEALSETS().getDEALSET().getDEALS().getDEAL().getLOANS().getLOAN();
+		 if(null != loan.getCLOSINGINFORMATION() && null != loan.getCLOSINGINFORMATION().getCLOSINGCOSTFUNDS() && null != loan.getCLOSINGINFORMATION().getCLOSINGCOSTFUNDS().getCLOSINGCOSTFUND())
+		 {
+			 List<CLOSINGCOSTFUND> closingcostfunds = loan.getCLOSINGINFORMATION().getCLOSINGCOSTFUNDS().getCLOSINGCOSTFUND();
+			 for(CLOSINGCOSTFUND costfund : closingcostfunds)
+			 {
+				 ClosingCostFundModel closingCostFundModel = new ClosingCostFundModel();
+				 	closingCostFundModel.setClosingCostFundAmount(null != costfund.getClosingCostFundAmount() ? costfund.getClosingCostFundAmount().getValue().toPlainString() : "");
+				 	closingCostFundModel.setFundsType(null != costfund.getFundsType() ? costfund.getFundsType().getValue().value() : "");
+				 	closingCostFundModel.setIntegratedDisclosureSectionType(null != costfund.getIntegratedDisclosureSectionType() ? costfund.getIntegratedDisclosureSectionType().getValue().value() : "");
+				 closingCostFundModels.add(closingCostFundModel);
+			 }
+		 }
+		return closingCostFundModels;
+	 }
 }

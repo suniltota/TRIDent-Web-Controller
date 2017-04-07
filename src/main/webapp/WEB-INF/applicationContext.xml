@@ -33,5 +33,6 @@
     <bean id="mortgageServices" class="com.actualize.mortgage.services.impl.MortgageServicesImpl"/> 
    	<bean id="pageOneService" class="com.actualize.mortgage.services.impl.PageOneServiceImpl"/>
    	<bean id="pageTwoService" class="com.actualize.mortgage.services.impl.PageTwoServiceImpl"/>
+   	<bean id="pageThreeService" class="com.actualize.mortgage.services.impl.PageThreeServiceImpl"/>
    	<bean id="pageOneMappingService" class="com.actualize.mortgage.services.impl.PageOneMappingServiceImpl"/>
 </beans>
