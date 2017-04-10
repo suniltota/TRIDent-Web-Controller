@@ -44,7 +44,7 @@ import com.actualize.mortgage.domainmodels.IntermediateXMLData;
 import com.actualize.mortgage.domainmodels.Lender;
 import com.actualize.mortgage.domainmodels.LoanInformation;
 import com.actualize.mortgage.domainmodels.LoanTerms;
-import com.actualize.mortgage.domainmodels.PDFDocument;
+import com.actualize.mortgage.domainmodels.ClosingDisclosureDocument;
 import com.actualize.mortgage.domainmodels.PageOne;
 import com.actualize.mortgage.domainmodels.PageThree;
 import com.actualize.mortgage.domainmodels.PageTwo;
@@ -139,13 +139,13 @@ public class MortgageServicesImpl implements MortgageServices{
 	}
 
 	@Override
-	public List<PDFDocument> createDocument(MESSAGE message) throws Exception {
-		List<PDFDocument> pdfDocuments = new ArrayList<>();
+	public List<ClosingDisclosureDocument> createDocument(MESSAGE message) throws Exception {
+		List<ClosingDisclosureDocument> pdfDocuments = new ArrayList<>();
 		List<DOCUMENT> documents = message.getDOCUMENTSETS().getDOCUMENTSET().getDOCUMENTS().getDOCUMENT();
 			
 		for(DOCUMENT document : documents)
 		{
-			PDFDocument pdfDocument = new PDFDocument();
+			ClosingDisclosureDocument pdfDocument = new ClosingDisclosureDocument();
 			DocumentType documentType = new DocumentType();
 			PageOne pageOne = new PageOne();
 			PageTwo pageTwo = new PageTwo();
@@ -178,7 +178,7 @@ public class MortgageServicesImpl implements MortgageServices{
 	}
 
     @Override
-    public MESSAGE updateMismoObject(MESSAGE currentXMLObject, PDFDocument modifiedJSONObject) throws Exception {
+    public MESSAGE updateMismoObject(MESSAGE currentXMLObject, ClosingDisclosureDocument modifiedJSONObject) throws Exception {
 
         MESSAGE message = currentXMLObject;
         List<DOCUMENT> documents = currentXMLObject.getDOCUMENTSETS().getDOCUMENTSET().getDOCUMENTS().getDOCUMENT();

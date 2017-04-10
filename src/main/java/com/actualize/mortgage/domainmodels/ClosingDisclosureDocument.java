@@ -6,7 +6,7 @@ import com.actualize.mortgage.utils.DocumentType;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown=true)
-public class PDFDocument implements Serializable {
+public class ClosingDisclosureDocument implements Serializable {
 	
 	private static final long serialVersionUID = 4671101480733733876L;
 	

@@ -17,7 +17,7 @@ import com.actualize.mortgage.domainmodels.ClosingInformation;
 import com.actualize.mortgage.domainmodels.Lender;
 import com.actualize.mortgage.domainmodels.LoanInformation;
 import com.actualize.mortgage.domainmodels.LoanTerms;
-import com.actualize.mortgage.domainmodels.PDFDocument;
+import com.actualize.mortgage.domainmodels.ClosingDisclosureDocument;
 import com.actualize.mortgage.domainmodels.Seller;
 
 public class JsonToUcd {
@@ -41,7 +41,7 @@ public class JsonToUcd {
     	return dbf;
     }
 
-    public Document transform(PDFDocument jsonDocument) {
+    public Document transform(ClosingDisclosureDocument jsonDocument) {
 		Document document = null;
 		try {
 			document = dbf.newDocumentBuilder().newDocument();
@@ -74,16 +74,16 @@ public class JsonToUcd {
 		return parent;
 	}
 
-	private void insertAboutVersion(Document document, Element element, PDFDocument jsonDocument) {
+	private void insertAboutVersion(Document document, Element element, ClosingDisclosureDocument jsonDocument) {
 		insertData(document, element, "AboutVersionIdentifier", "TRIDent Web Toolkit, v0.1"); // TODO: set correct version number
 		insertData(document, element, "CreatedDatetime", LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME) + 'Z');
 	}
 
-	private void insertAdjustment(Document document, Element element, PDFDocument jsonDocument) {
+	private void insertAdjustment(Document document, Element element, ClosingDisclosureDocument jsonDocument) {
 		insertInterestRateAdjustment(document, insertLevels(document, element, "INTEREST_RATE_ADJUSTMENT"), jsonDocument);
 	}
 
-	private void insertClosingInformationDetail(Document document, Element element, PDFDocument jsonDocument) {
+	private void insertClosingInformationDetail(Document document, Element element, ClosingDisclosureDocument jsonDocument) {
 		ClosingInformation closingInformation = jsonDocument.getPageOne().getClosingInformation();
 		insertData(document, element, "ClosingAgentOrderNumberIdentifier", closingInformation.getFileNo());
 		insertData(document, element, "ClosingDate", closingInformation.getClosingDate());
@@ -91,35 +91,35 @@ public class JsonToUcd {
 		insertData(document, element, "DocumentOrderClassificationType", "Final");
 	}
 
-	private void insertDeal(Document document, Element element, PDFDocument jsonDocument) {
+	private void insertDeal(Document document, Element element, ClosingDisclosureDocument jsonDocument) {
 		insertSubjectProperty(document, insertLevels(document, element, "COLLATERALS/COLLATERAL/SUBJECT_PROPERTY"), jsonDocument);
 		insertLoan(document, insertLevels(document, element, "LOANS/LOAN"), jsonDocument);
 		insertParties(document, insertLevels(document, element, "PARTIES"), jsonDocument);
 	}
 
-	private void insertDealSet(Document document, Element element, PDFDocument jsonDocument) {
+	private void insertDealSet(Document document, Element element, ClosingDisclosureDocument jsonDocument) {
 		insertDeal(document, insertLevels(document, element, "DEALS/DEAL"), jsonDocument);
 	}
 
-	private void insertDealSets(Document document, Element element, PDFDocument jsonDocument) {
+	private void insertDealSets(Document document, Element element, ClosingDisclosureDocument jsonDocument) {
 		insertDealSet(document, insertLevels(document, element, "DEAL_SET"), jsonDocument);
 	}
 
-	private void insertDocumentSet(Document document, Element element, PDFDocument jsonDocument) {
+	private void insertDocumentSet(Document document, Element element, ClosingDisclosureDocument jsonDocument) {
 		element.setAttribute("MISMOReferenceModelIdentifier", "3.3.0299");
 		insertDealSets(document, insertLevels(document, element, "DEAL_SETS"), jsonDocument);
 	}
 
-	private void insertIntegratedDisclosureDetail(Document document, Element element, PDFDocument jsonDocument) {
+	private void insertIntegratedDisclosureDetail(Document document, Element element, ClosingDisclosureDocument jsonDocument) {
 		insertData(document, element, "IntegratedDisclosureIssuedDate", jsonDocument.getPageOne().getClosingInformation().getDateIssued());
 		insertData(document, element, "IntegratedDisclosureLoanProductDescription", jsonDocument.getPageOne().getLoanInformation().getProduct());
 	}
 
-	private void insertInterestRateAdjustment(Document document, Element element, PDFDocument jsonDocument) {
+	private void insertInterestRateAdjustment(Document document, Element element, ClosingDisclosureDocument jsonDocument) {
 		insertInterestRateLifetimeAdjustmentRule(document, insertLevels(document, element, "INTEREST_RATE_LIFETIME_ADJUSTMENT_RULE"), jsonDocument);
 	}
 
-	private void insertInterestRateLifetimeAdjustmentRule(Document document, Element element, PDFDocument jsonDocument) {
+	private void insertInterestRateLifetimeAdjustmentRule(Document document, Element element, ClosingDisclosureDocument jsonDocument) {
 		LoanTerms loanTerms = jsonDocument.getPageOne().getLoanTerms();
 		insertData(document, element, "CeilingRatePercent", loanTerms.getLoanTermsInterestRate().getCeilingRatePercent());
 		insertData(document, element, "CeilingRatePercentEarliestEffectiveMonthsCount", loanTerms.getLoanTermsInterestRate().getCeilingRatePercentEarliestEffectiveMonthsCount());
@@ -128,7 +128,7 @@ public class JsonToUcd {
 		//insertData(document, element, "MarginRatePercent", loanTerms.getLoanTermsInterestRate().???);
 	}
 
-	private void insertLoan(Document document, Element element, PDFDocument jsonDocument) {
+	private void insertLoan(Document document, Element element, ClosingDisclosureDocument jsonDocument) {
 		insertAdjustment(document, insertLevels(document, element, "ADJUSTMENT"), jsonDocument);
 		insertClosingInformationDetail(document, insertLevels(document, element, "CLOSING_INFORMATION/CLOSING_INFORMATION_DETAIL"), jsonDocument);
 		insertIntegratedDisclosureDetail(document, insertLevels(document, element, "DOCUMENT_SPECIFIC_DATA_SETS/DOCUMENT_SPECIFIC_DATA_SET/INTEGRATED_DISCLOSURE/INTEGRATED_DISCLOSURE_DETAIL"), jsonDocument);
@@ -138,12 +138,12 @@ public class JsonToUcd {
 		insertTermsOfLoan(document, insertLevels(document, element, "TERMS_OF_LOAN"), jsonDocument);
 	}
 
-	private void insertLoanDetail(Document document, Element element, PDFDocument jsonDocument) {
+	private void insertLoanDetail(Document document, Element element, ClosingDisclosureDocument jsonDocument) {
 		LoanTerms loanTerms = jsonDocument.getPageOne().getLoanTerms();
 		insertData(document, element, "InterestRateIncreaseIndicator", loanTerms.getLoanTermsInterestRate().getInterestRateIncreaseIndicator());
 	}
 
-	private void insertLoanIdentifiers(Document document, Element element, PDFDocument jsonDocument) {
+	private void insertLoanIdentifiers(Document document, Element element, ClosingDisclosureDocument jsonDocument) {
 		LoanInformation loanInformation = jsonDocument.getPageOne().getLoanInformation();
 		if (!loanInformation.getMic().isEmpty()) {
 			Element loanIdentifier = insertLevels(document, element, "LOAN_IDENTIFIER");
@@ -157,7 +157,7 @@ public class JsonToUcd {
 		}
 	}
 
-	private void insertMaturityRule(Document document, Element element, PDFDocument jsonDocument) {
+	private void insertMaturityRule(Document document, Element element, ClosingDisclosureDocument jsonDocument) {
 		LoanInformation loanInformation = jsonDocument.getPageOne().getLoanInformation();
 		if (!loanInformation.getLoanTerm().isEmpty()) {
 			insertData(document, element, "LoanMaturityPeriodCount", loanInformation.getLoanTerm());
@@ -165,7 +165,7 @@ public class JsonToUcd {
 		}
 	}
 
-	private void insertMessage(Document document, Element element, PDFDocument jsonDocument) {
+	private void insertMessage(Document document, Element element, ClosingDisclosureDocument jsonDocument) {
 		element.setAttribute(XMLNS_ALIAS + ":xsi", XSI_URI);
 		element.setAttribute("xsi:schemaLocation", "http://www.mismo.org/residential/2009/schemas ../../../MISMO/V3.3.0_CR_2014-02/ReferenceModel_v3.3.0_B299/MISMO_3.3.0_B299.xsd");
 		element.setAttribute(XMLNS_ALIAS + ":" + MISMO_ALIAS, MISMO_URI);
@@ -176,7 +176,7 @@ public class JsonToUcd {
 		insertDocumentSet(document, insertLevels(document, element, "DOCUMENT_SETS/DOCUMENT_SET"), jsonDocument);
 	}
 
-	private void insertParties(Document document, Element element, PDFDocument jsonDocument) {
+	private void insertParties(Document document, Element element, ClosingDisclosureDocument jsonDocument) {
 		List<Borrower> borrowers = jsonDocument.getPageOne().getTransactionInformation().getBorrower();
 		for (Borrower borrower : borrowers) {
 			Element party = insertLevels(document, element, "PARTY");
@@ -241,7 +241,7 @@ public class JsonToUcd {
 		// TODO: Mortgage Broker, SettlementAgent, Real Estate Agent (Buyer, Seller)
 	}
 
-	private void insertSubjectProperty(Document document, Element element, PDFDocument jsonDocument) {
+	private void insertSubjectProperty(Document document, Element element, ClosingDisclosureDocument jsonDocument) {
 		Address address = jsonDocument.getPageOne().getClosingInformation().getProperty();
 		insertData(document, element, "AddressLineText", address.getAddressLineText());
 		insertData(document, element, "AddressUnitDesignatorType", address.getAddressUnitDesignatorType());
@@ -251,7 +251,7 @@ public class JsonToUcd {
 		insertData(document, element, "StateCode", address.getStateCode());
 	}
 
-	private void insertTermsOfLoan(Document document, Element element, PDFDocument jsonDocument) {
+	private void insertTermsOfLoan(Document document, Element element, ClosingDisclosureDocument jsonDocument) {
 		LoanInformation loanInformation = jsonDocument.getPageOne().getLoanInformation();
 		LoanTerms loanTerms = jsonDocument.getPageOne().getLoanTerms();
 		insertData(document, element, "LienPriorityType", "FirstLien");

@@ -31,7 +31,7 @@ import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 
 import com.actualize.mortgage.domainmodels.IntermediateXMLData;
-import com.actualize.mortgage.domainmodels.PDFDocument;
+import com.actualize.mortgage.domainmodels.ClosingDisclosureDocument;
 import com.actualize.mortgage.domainmodels.PDFResponse;
 import com.actualize.mortgage.sercurity.SessionContext;
 import com.actualize.mortgage.services.MortgageServices;
@@ -52,7 +52,7 @@ public class ActualizeApi {
     SessionContext sessionContext;
 	
     @RequestMapping(value = "/ucdxml", method = { RequestMethod.POST })
-    public List<PDFDocument> fillFormByXML(@RequestBody String xmldoc) throws Exception {
+    public List<ClosingDisclosureDocument> fillFormByXML(@RequestBody String xmldoc) throws Exception {
         sessionContext.getUserDetails().setMessage(xmldoc);
         Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(new InputSource(new ByteArrayInputStream(xmldoc.getBytes("utf-8"))));
         MESSAGE message = transformXmlToObject(document);
@@ -61,7 +61,7 @@ public class ActualizeApi {
 	
 	
 	@RequestMapping(value = "/readTxt", method = { RequestMethod.POST })
-    public List<PDFDocument> fillFormByTxt(@RequestBody MESSAGE messageXMLObject) throws Exception {
+    public List<ClosingDisclosureDocument> fillFormByTxt(@RequestBody MESSAGE messageXMLObject) throws Exception {
 		 return  mortgageServices.createDocument(messageXMLObject);
     }
 	
@@ -90,12 +90,12 @@ public class ActualizeApi {
     }
     
     @RequestMapping(value = "/saveUCDXML", method = { RequestMethod.POST })
-    public String saveModifiedUCDXML(@RequestBody List<PDFDocument> pdfDocument) throws Exception {
+    public String saveModifiedUCDXML(@RequestBody List<ClosingDisclosureDocument> pdfDocument) throws Exception {
         String currentXMLObject = sessionContext.getUserDetails().getMessage();
         Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(new InputSource(new ByteArrayInputStream(currentXMLObject.getBytes("utf-8"))));
         MESSAGE message = transformXmlToObject(document);
         
-        for(PDFDocument pdf : pdfDocument){
+        for(ClosingDisclosureDocument pdf : pdfDocument){
             message = mortgageServices.updateMismoObject(message, pdf);
         }
         return transformObjectToXML(message);

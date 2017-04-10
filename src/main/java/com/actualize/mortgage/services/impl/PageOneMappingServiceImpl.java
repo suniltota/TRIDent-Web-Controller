@@ -44,7 +44,7 @@ import com.actualize.mortgage.domainmodels.LoanTermsLoanAmount;
 import com.actualize.mortgage.domainmodels.LoanTermsPI;
 import com.actualize.mortgage.domainmodels.LoanTermsPrepaymentPenalty;
 import com.actualize.mortgage.domainmodels.NameModel;
-import com.actualize.mortgage.domainmodels.PDFDocument;
+import com.actualize.mortgage.domainmodels.ClosingDisclosureDocument;
 import com.actualize.mortgage.domainmodels.ProjectedPayments;
 import com.actualize.mortgage.domainmodels.ProjectedPaymentsETIA;
 import com.actualize.mortgage.domainmodels.ProjectedPaymentsPI;
@@ -67,7 +67,7 @@ public class PageOneMappingServiceImpl  implements PageOneMappingService{
 	String text4_2_2 = "";
 	
 	@Override
-	public DOCUMENT mapClosingInformation(DOCUMENT document, PDFDocument pdfDocument) {
+	public DOCUMENT mapClosingInformation(DOCUMENT document, ClosingDisclosureDocument pdfDocument) {
 		
 		ClosingInformation closingInformation = pdfDocument.getPageOne().getClosingInformation();
 		String dateIssued = closingInformation.getDateIssued();
@@ -144,7 +144,7 @@ public class PageOneMappingServiceImpl  implements PageOneMappingService{
 	}
 
 	@Override
-	public DOCUMENT mapLoanInformation(DOCUMENT document, PDFDocument pdfDocument) {
+	public DOCUMENT mapLoanInformation(DOCUMENT document, ClosingDisclosureDocument pdfDocument) {
 
 		deal = document.getDEALSETS().getDEALSET().getDEALS().getDEAL();
 		LoanInformation loanInformation = pdfDocument.getPageOne().getLoanInformation();
@@ -219,7 +219,7 @@ public class PageOneMappingServiceImpl  implements PageOneMappingService{
 	}
 
 	@Override
-	public DOCUMENT mapTransactionInformation(DOCUMENT document, PDFDocument pdfDocument) {
+	public DOCUMENT mapTransactionInformation(DOCUMENT document, ClosingDisclosureDocument pdfDocument) {
 		
 		//TransactionInformation transactionInformation = new TransactionInformation();
 		deal = document.getDEALSETS().getDEALSET().getDEALS().getDEAL();
@@ -402,7 +402,7 @@ public class PageOneMappingServiceImpl  implements PageOneMappingService{
 	}
 
 	@Override
-	public DOCUMENT mapLoanTerms(DOCUMENT document, PDFDocument pdfDocument) {
+	public DOCUMENT mapLoanTerms(DOCUMENT document, ClosingDisclosureDocument pdfDocument) {
 		LoanTerms loanTerms = pdfDocument.getPageOne().getLoanTerms();
 		deal = document.getDEALSETS().getDEALSET().getDEALS().getDEAL();
 		LoanTermsLoanAmount loanTermsLoanAmount = loanTerms.getLoanTermsLoanAmount();
@@ -602,7 +602,7 @@ public class PageOneMappingServiceImpl  implements PageOneMappingService{
 	}
 
 	@Override
-	public DOCUMENT mapProjectedPayments(DOCUMENT document, PDFDocument pdfDocument) {
+	public DOCUMENT mapProjectedPayments(DOCUMENT document, ClosingDisclosureDocument pdfDocument) {
 		
 		ProjectedPayments projectedPayments = pdfDocument.getPageOne().getProjectedPayments();
 		deal = document.getDEALSETS().getDEALSET().getDEALS().getDEAL();
@@ -889,7 +889,7 @@ public class PageOneMappingServiceImpl  implements PageOneMappingService{
 
 	
 	@Override
-	public DOCUMENT mapCostsAtClosing(DOCUMENT document, PDFDocument pdfDocument) {
+	public DOCUMENT mapCostsAtClosing(DOCUMENT document, ClosingDisclosureDocument pdfDocument) {
 
 		CostsAtClosing costsAtClosing = pdfDocument.getPageOne().getCostsAtClosing();
 		deal = document.getDEALSETS().getDEALSET().getDEALS().getDEAL();
