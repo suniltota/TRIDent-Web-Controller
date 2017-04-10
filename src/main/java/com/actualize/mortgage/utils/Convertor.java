@@ -19,7 +19,11 @@ import com.actualize.mortgage.domainmodels.ClosingCostProperties;
 import com.actualize.mortgage.domainmodels.EscrowsModel;
 import com.actualize.mortgage.domainmodels.FeeModel;
 import com.actualize.mortgage.domainmodels.PrepaidsModel;
-
+/**
+ * This class is perform various operations such as conversions and extractions of MISMO Objects
+ * @author sboragala
+ *
+ */
 public class Convertor {
 	
 	public static String convertMonthsToDisplayFormat(Integer months){
@@ -36,14 +40,23 @@ public class Convertor {
             maturity = Integer.toString(years) + " yr. " + Integer.toString(modMonths) + " mo.";
         return maturity;
 	}
-	
+	/**
+	 * 
+	 * @param document
+	 * @return Integrated Disclosuresection Summaries as a List
+	 */
 	public static List<INTEGRATEDDISCLOSURESECTIONSUMMARY> getIntegrateddisclosuresectionsummaries(DOCUMENT document)
 	{
 		List<INTEGRATEDDISCLOSURESECTIONSUMMARY> integrateddisclosuresectionsummaries = new LinkedList<INTEGRATEDDISCLOSURESECTIONSUMMARY>();
 			integrateddisclosuresectionsummaries = document.getDEALSETS().getDEALSET().getDEALS().getDEAL().getLOANS().getLOAN().getDOCUMENTSPECIFICDATASETS().getDOCUMENTSPECIFICDATASET().getINTEGRATEDDISCLOSURE().getINTEGRATEDDISCLOSURESECTIONSUMMARIES().getINTEGRATEDDISCLOSURESECTIONSUMMARY();
 		return integrateddisclosuresectionsummaries;
 	}
-	
+	/**
+	 * 
+	 * @param integratedDisclosureSectionType
+	 * @param document
+	 * @return Integrated Disclosure Section Summary for specific integrated DisclosureSectionType
+	 */
 	public static INTEGRATEDDISCLOSURESECTIONSUMMARY  getIntegratedDisclosureSectionSummary(String integratedDisclosureSectionType, DOCUMENT document){
 		List<INTEGRATEDDISCLOSURESECTIONSUMMARY> integrateddisclosuresectionsummaries = getIntegrateddisclosuresectionsummaries(document);	
 		for( INTEGRATEDDISCLOSURESECTIONSUMMARY  integrateddisclosuresectionsummary: integrateddisclosuresectionsummaries)
@@ -57,6 +70,12 @@ public class Convertor {
 		return null;
 	}
 	
+	/**
+	 * 
+	 * @param integratedDisclosureSubSectionType
+	 * @param document
+	 * @return lender credits
+	 */
 	public static String getLenderCredits(String integratedDisclosureSubSectionType, DOCUMENT document )
 	{
 		String amount = "";
@@ -81,6 +100,12 @@ public class Convertor {
 		return amount;
 	}
 	
+	/**
+	 * 
+	 * @param document
+	 * @return a map of IntegratedDisclosureSectionType and its specific Integrated Disclosure Section TotalAmount
+	 */
+	
 	public static Map<String,String> getIntegratedDisclosureSectionTypes(DOCUMENT document)
 	{
 		List<INTEGRATEDDISCLOSURESECTIONSUMMARY> integrateddisclosuresectionsummaries = getIntegrateddisclosuresectionsummaries(document);
@@ -95,7 +120,11 @@ public class Convertor {
 		
 		return integratedDisclosureSectionTypeValues;
 	}
-	
+	/**
+	 * 
+	 * @param document
+	 * @return FEE List
+	 */
 	public static List<FEE> getFees(DOCUMENT document)
 	{
 		List<FEE> fees = new LinkedList<>();
@@ -109,11 +138,16 @@ public class Convertor {
 		
 		return prepaiditems;
 	}
-	
+	/**
+	 * 
+	 * @param prepaidItem
+	 * @return PrepaidsModel
+	 */
 	public static PrepaidsModel getPrepaidModel(PREPAIDITEM prepaidItem)
 	{
 		PrepaidsModel prepaidsModel = new PrepaidsModel();
 		String label = "";
+		
 		if(null != prepaidItem.getPREPAIDITEMDETAIL().getPrepaidItemType())
 		{
 			label = prepaidItem.getPREPAIDITEMDETAIL().getPrepaidItemType().getDisplayLabelText();

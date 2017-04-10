@@ -16,7 +16,6 @@ import com.actualize.mortgage.domainmodels.AdjustmentsModel;
 import com.actualize.mortgage.domainmodels.CashToClose;
 import com.actualize.mortgage.domainmodels.CashToCloseModel;
 import com.actualize.mortgage.domainmodels.ClosingCostFundModel;
-import com.actualize.mortgage.domainmodels.ClosingCostProperties;
 import com.actualize.mortgage.domainmodels.ID_SubsectionModel;
 import com.actualize.mortgage.domainmodels.LiabilitiesModel;
 import com.actualize.mortgage.domainmodels.ProrationsModel;

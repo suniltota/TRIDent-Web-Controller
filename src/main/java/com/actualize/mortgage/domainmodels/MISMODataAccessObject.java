@@ -69,26 +69,26 @@ public abstract class MISMODataAccessObject {
 	// Package visibility
 	public final Element element;
 	
-	MISMODataAccessObject(Element e) {
+	protected MISMODataAccessObject(Element e) {
 		element = e;
 		setDocumentInfo(e);
 	}
 
-	String getElementValue(Element element, String tagname) {
+	protected String getElementValue(Element element, String tagname) {
 		Element elem = getElement(element, tagname);
 		if (elem == null)
 			return null;
 		return elem.getTextContent();
 	}
 	
-	Element getElement(Element element, String tagname) {
+	protected Element getElement(Element element, String tagname) {
 		NodeList nodes = getElements(element, tagname);
 		if (nodes.getLength() > 0)
 			return (Element)nodes.item(0);
 		return null;
 	}
 	
-	NodeList getElements(Element element, String tagname) {
+	protected NodeList getElements(Element element, String tagname) {
 		return element.getElementsByTagName(tagname);
 	}
 
@@ -145,7 +145,7 @@ public abstract class MISMODataAccessObject {
 		return NS + str;
 	}
 
-	boolean nameSortsBefore(String a, String b) {
+	protected boolean nameSortsBefore(String a, String b) {
 		if (a == null || a.equals("Additional Charges"))
 			return false;
 		if (b == null || b.equals("Additional Charges"))
@@ -153,7 +153,7 @@ public abstract class MISMODataAccessObject {
 		return a.compareToIgnoreCase(b) < 0;
 	}
 	
-	String canonicalLabel(String str) {
+	protected String canonicalLabel(String str) {
 		String outStr = "";
 		for (String s : str.replaceAll("\\s*-+\\s*", " - ").split("(?<!(^|[A-Z]))(?=[A-Z])|(?<!^)(?=[A-Z][a-z])"))
 			outStr = outStr.equals("") ? s.trim() : outStr + " " + s.trim();

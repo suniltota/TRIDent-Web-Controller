@@ -8,7 +8,11 @@ import com.actualize.mortgage.domainmodels.LoanInformation;
 import com.actualize.mortgage.domainmodels.LoanTerms;
 import com.actualize.mortgage.domainmodels.ProjectedPayments;
 import com.actualize.mortgage.domainmodels.TransactionInformation;
-
+/**
+ * 
+ * @author sboragala
+ *
+ */
 public interface PageOneService {
 
 	public ClosingInformation createClosingInformation(DOCUMENT document);
