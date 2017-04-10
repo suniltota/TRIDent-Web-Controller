@@ -1,16 +1,27 @@
 package com.actualize.mortgage.lepagemodels;
 
-import com.actualize.mortgage.ledatamodels.Address;
+import java.io.Serializable;
+import java.util.List;
+
+import com.actualize.mortgage.domainmodels.Address;
+
 
 /**
  * This model describes first section of Loan Estimate and serves as response to front end.  
  * @author sboragala
  *
  */
-public class LoanEstimateSection {
+public class LoanEstimateSection implements Serializable {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 4136166273672214432L;
+	
+	private String lenderFullName;
+	private Address lenderAddress;
 	private String dateIssued;
-	private Address applicants;
+	private List<LoanEstimateSectionBorrower> applicants;
 	private Address property;
 	private String estimatedPropValue;
 	private String loanTerm;
@@ -18,12 +29,31 @@ public class LoanEstimateSection {
 	private String product;
 	private String loanType;
 	private String loanId;
-	private String rateLock;
-	private String untillDate;
-	private String untillTime;
-	private String expireDate;
-	private String expireTime;
-	
+	private LoanEstimateSectionRateLock loanEstimateSectionRateLock;
+	/**
+	 * @return the lenderFullName
+	 */
+	public String getLenderFullName() {
+		return lenderFullName;
+	}
+	/**
+	 * @param lenderFullName the lenderFullName to set
+	 */
+	public void setLenderFullName(String lenderFullName) {
+		this.lenderFullName = lenderFullName;
+	}
+	/**
+	 * @return the lenderAddress
+	 */
+	public Address getLenderAddress() {
+		return lenderAddress;
+	}
+	/**
+	 * @param lenderAddress the lenderAddress to set
+	 */
+	public void setLenderAddress(Address lenderAddress) {
+		this.lenderAddress = lenderAddress;
+	}
 	/**
 	 * @return the dateIssued
 	 */
@@ -39,13 +69,13 @@ public class LoanEstimateSection {
 	/**
 	 * @return the applicants
 	 */
-	public Address getApplicants() {
+	public List<LoanEstimateSectionBorrower> getApplicants() {
 		return applicants;
 	}
 	/**
 	 * @param applicants the applicants to set
 	 */
-	public void setApplicants(Address applicants) {
+	public void setApplicants(List<LoanEstimateSectionBorrower> applicants) {
 		this.applicants = applicants;
 	}
 	/**
@@ -133,64 +163,18 @@ public class LoanEstimateSection {
 		this.loanId = loanId;
 	}
 	/**
-	 * @return the rateLock
+	 * @return the loanEstimateSectionRateLock
 	 */
-	public String getRateLock() {
-		return rateLock;
+	public LoanEstimateSectionRateLock getLoanEstimateSectionRateLock() {
+		return loanEstimateSectionRateLock;
 	}
 	/**
-	 * @param rateLock the rateLock to set
+	 * @param loanEstimateSectionRateLock the loanEstimateSectionRateLock to set
 	 */
-	public void setRateLock(String rateLock) {
-		this.rateLock = rateLock;
+	public void setLoanEstimateSectionRateLock(LoanEstimateSectionRateLock loanEstimateSectionRateLock) {
+		this.loanEstimateSectionRateLock = loanEstimateSectionRateLock;
 	}
-	/**
-	 * @return the untillDate
-	 */
-	public String getUntillDate() {
-		return untillDate;
-	}
-	/**
-	 * @param untillDate the untillDate to set
-	 */
-	public void setUntillDate(String untillDate) {
-		this.untillDate = untillDate;
-	}
-	/**
-	 * @return the untillTime
-	 */
-	public String getUntillTime() {
-		return untillTime;
-	}
-	/**
-	 * @param untillTime the untillTime to set
-	 */
-	public void setUntillTime(String untillTime) {
-		this.untillTime = untillTime;
-	}
-	/**
-	 * @return the expireDate
-	 */
-	public String getExpireDate() {
-		return expireDate;
-	}
-	/**
-	 * @param expireDate the expireDate to set
-	 */
-	public void setExpireDate(String expireDate) {
-		this.expireDate = expireDate;
-	}
-	/**
-	 * @return the expireTime
-	 */
-	public String getExpireTime() {
-		return expireTime;
-	}
-	/**
-	 * @param expireTime the expireTime to set
-	 */
-	public void setExpireTime(String expireTime) {
-		this.expireTime = expireTime;
-	}
+	
+	
 	
 }
