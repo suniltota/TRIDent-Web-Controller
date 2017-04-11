@@ -1,7 +1,11 @@
 package com.actualize.mortgage.lepagemodels;
 
 import java.io.Serializable;
-
+/**
+ * 
+ * @author sboragala
+ *
+ */
 public class LoanEstimateSectionRateLock implements Serializable {
 	/**
 	 * 

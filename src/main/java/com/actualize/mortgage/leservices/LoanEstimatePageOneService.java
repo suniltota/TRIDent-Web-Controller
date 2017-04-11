@@ -16,9 +16,5 @@ public interface LoanEstimatePageOneService {
 	 * @throws Exception
 	 */
 	public LoanEstimateSection createLoanEstimateSection(Deal deal) throws Exception;
-	
-	
-	
-	
 
 }

@@ -78,10 +78,19 @@ public class LoanEstimatePageOneServiceImpl implements LoanEstimatePageOneServic
 		loanEstimateSection.setLoanType("Other".equalsIgnoreCase(loanType) ? loanTerms.MortgageTypeOtherDescription :loanType);
 		loanEstimateSection.setLoanId(loanIdentifier.LoanIdentifier);
 		loanEstimateSection.setLoanEstimateSectionRateLock(rateLock(locks, idDetail));
+		
 		return loanEstimateSection;
 
-	}	
+	}
 	
+	/**
+	 * calculates the salePrice
+	 * @param loanTerms
+	 * @param salesContractDetail
+	 * @param propertyValuationDetail
+	 * @param propertyDetail
+	 * @return saleprice as a String
+	 */
 	private static String salePrice(TermsOfLoan loanTerms, SalesContractDetail salesContractDetail, PropertyValuationDetail propertyValuationDetail, PropertyDetail propertyDetail) {
 		if (!loanTerms.LoanPurposeType.equalsIgnoreCase("Purchase"))
 			if (propertyValuationDetail.PropertyValuationAmount.equals(""))
@@ -92,8 +101,13 @@ public class LoanEstimatePageOneServiceImpl implements LoanEstimatePageOneServic
 			return salesContractDetail.RealPropertyAmount;
 		return salesContractDetail.SalesContractAmount;
 	}
-
-	private static NameModel fullName(Name name) {
+	
+	/**
+	 * fetch the Name Model from XML
+	 * @param name
+	 * @return name detail
+	 */
+	private static NameModel getNameModel(Name name) {
 		NameModel nameModel = new NameModel();
 		
 		if (!name.FullName.equals(""))
@@ -108,6 +122,11 @@ public class LoanEstimatePageOneServiceImpl implements LoanEstimatePageOneServic
 		return nameModel;
 	}
 	
+	/**
+	 * fetch the address model from XML
+	 * @param address
+	 * @return address Model
+	 */
 	private static com.actualize.mortgage.domainmodels.Address toAddressModel(Address address) {
 	com.actualize.mortgage.domainmodels.Address addressModel = new com.actualize.mortgage.domainmodels.Address();
 		
@@ -123,6 +142,13 @@ public class LoanEstimatePageOneServiceImpl implements LoanEstimatePageOneServic
 		return addressModel;
 	}
 	
+	/**
+	 * calculates the loan term
+	 * @param loanDetail
+	 * @param maturityRule
+	 * @param construction
+	 * @return loanTerm as a string
+	 */
 	private static String loanTerm(LoanDetail loanDetail, MaturityRule maturityRule, Construction construction) {
 		if (loanDetail.ConstructionLoanIndicator.equalsIgnoreCase("true")) {
 			if (construction.ConstructionLoanType.equalsIgnoreCase("ConstructionOnly"))
@@ -132,6 +158,11 @@ public class LoanEstimatePageOneServiceImpl implements LoanEstimatePageOneServic
 		return maturityRule.LoanMaturityPeriodCount;
 	}
 	
+	/**
+	 * fetches the list of borrowers from the XMl 
+	 * @param borrowers
+	 * @return borrowers List
+	 */
 	private static List<LoanEstimateSectionBorrower> applicants(Parties borrowers) {
 		
 		List<LoanEstimateSectionBorrower> loanEstimateSectionBorrowers = new LinkedList<>();
@@ -142,7 +173,7 @@ public class LoanEstimatePageOneServiceImpl implements LoanEstimatePageOneServic
 			if (!borrowers.parties[0].legalEntity.legalEntityDetail.FullName.equals(""))
 				applicant.setFullName(borrowers.parties[0].legalEntity.legalEntityDetail.FullName);
 			else
-				applicant = fullName(borrowers.parties[0].individual.name);
+				applicant = getNameModel(borrowers.parties[0].individual.name);
 			addressModel = toAddressModel(new Address((Element)borrowers.parties[0].getElementAddNS("ADDRESSES/ADDRESS[AddressType='Mailing']")));
 			loanEstimateSectionBorrower.setName(applicant);
 			loanEstimateSectionBorrower.setAddress(addressModel);
@@ -150,6 +181,13 @@ public class LoanEstimatePageOneServiceImpl implements LoanEstimatePageOneServic
 			}
 		return loanEstimateSectionBorrowers;
 	}
+	
+	/**
+	 * calculates the rateLock
+	 * @param locks
+	 * @param idDetail
+	 * @return LoanEstimateSectionRateLock object
+	 */
 	public static LoanEstimateSectionRateLock rateLock(Locks locks, IntegratedDisclosureDetail idDetail) {
 	
 		LoanEstimateSectionRateLock loanEstimateSectionRateLock = new LoanEstimateSectionRateLock();
