@@ -21,14 +21,18 @@ import com.actualize.mortgage.domainmodels.Lender;
 import com.actualize.mortgage.domainmodels.LoanInformation;
 import com.actualize.mortgage.domainmodels.LoanInformationLoanIdentifier;
 import com.actualize.mortgage.domainmodels.LoanTerms;
+import com.actualize.mortgage.domainmodels.LoanTermsBalloonPayment;
 import com.actualize.mortgage.domainmodels.LoanTermsETIA;
 import com.actualize.mortgage.domainmodels.LoanTermsEscrowAccount;
 import com.actualize.mortgage.domainmodels.LoanTermsInterestRate;
+import com.actualize.mortgage.domainmodels.LoanTermsIntialEscrow;
 import com.actualize.mortgage.domainmodels.LoanTermsLoanAmount;
 import com.actualize.mortgage.domainmodels.LoanTermsPI;
+import com.actualize.mortgage.domainmodels.LoanTermsPrepaymentPenalty;
 import com.actualize.mortgage.domainmodels.ProjectedPayments;
 import com.actualize.mortgage.domainmodels.ClosingDisclosureDocument;
 import com.actualize.mortgage.domainmodels.Seller;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class JsonToUcd {
 	private static final String GSE_ALIAS = "gse";
@@ -94,13 +98,12 @@ public class JsonToUcd {
 		ClosingInformation closingInformation = jsonDocument.getPageOne().getClosingInformation();
 		CostsAtClosing costsAtClosing = jsonDocument.getPageOne().getCostsAtClosing();
 		CostsAtClosingCashToClose costsAtClosingCashToClose = costsAtClosing.getCostsAtClosingCashToClose();
-		CostsAtClosingClosingCosts costsAtClosingClosingCosts = costsAtClosing.getCostsAtClosingClosingCosts(); 
-		/*insertData(document, element, "CashFromBorrowerAtClosingAmount", costsAtClosingCashToClose.getCashFromBorrowerAtClosingAmount());
-		insertData(document, element, "CashFromSellerAtClosingAmount", costsAtClosingCashToClose.getCashFromSellerAtClosingAmount());
+		insertData(document, element, "CashFromBorrowerAtClosingAmount", costsAtClosingCashToClose.getCashFromBorrowerAtClosingAmount());
+		insertData(document, element, "CashFromSellerAtClosingAmount", "");
 		insertData(document, element, "CashToBorrowerAtClosingAmount", costsAtClosingCashToClose.getCashToBorrowerAtClosingAmount());
-		insertData(document, element, "CashToSellerAtClosingAmount", costsAtClosingCashToClose.getCashToSellerAtClosingAmount());
-		insertData(document, element, "CurrentRateSetDate", closingInformation.getCurrentRateSetDate());*/
-		//insertData(document, element, "DocumentOrderClassificationType", closingInformation.getDocumentOrderClassificationType()); //TODO: This datapoint is not found in UCD Spec.
+		insertData(document, element, "CashToSellerAtClosingAmount", "");
+		insertData(document, element, "CurrentRateSetDate", "");
+		insertData(document, element, "DocumentOrderClassificationType", ""); //TODO: This datapoint is not found in UCD Spec.
 		insertData(document, element, "CashFromBorrowerAtClosingAmount", costsAtClosingCashToClose.getAmount());
 		insertData(document, element, "CashFromSellerAtClosingAmount", costsAtClosingCashToClose.getAmount());
 		insertData(document, element, "CashToBorrowerAtClosingAmount", costsAtClosingCashToClose.getAmount());
@@ -110,13 +113,86 @@ public class JsonToUcd {
 		insertData(document, element, "DisbursementDate", closingInformation.getDisbursementDate());
 		
 	}
-
+    /**
+     * Inserts Deal from JSON Object
+     * @param document
+     * @param element
+     * @param jsonDocument
+     */
 	private void insertDeal(Document document, Element element, ClosingDisclosureDocument jsonDocument) {
 		insertSubjectProperty(document, insertLevels(document, element, "COLLATERALS/COLLATERAL/SUBJECT_PROPERTY"), jsonDocument);
 		insertLoan(document, insertLevels(document, element, "LOANS/LOAN"), jsonDocument);
 		insertParties(document, insertLevels(document, element, "PARTIES"), jsonDocument);
+		insertLiabilities(document, insertLevels(document, element, "LIABILITIES"), jsonDocument);
+	}
+	 /**
+     * Inserts Liabilities from JSON Object
+     * @param document
+     * @param element
+     * @param jsonDocument
+     */
+	private void insertLiabilities(Document document, Element element, ClosingDisclosureDocument jsonDocument) {
+		// TODO Auto-generated method stub
+		//for (String group : groupings)
+			insertLiability(document, insertLevels(document, element, "LIABILITY"), jsonDocument);
+	}
+	 /**
+     * Inserts Liability from JSON Object
+     * @param document
+     * @param element
+     * @param jsonDocument
+     */
+	 private void insertLiability(Document document, Element element, ClosingDisclosureDocument jsonDocument) {
+		// TODO Auto-generated method stub
+		 insertLiabilityDetail(document, insertLevels(document, element, "LIABILITY_DETAIL"), jsonDocument);
+		 insertLiabilityHolder(document, insertLevels(document, element, "LIABILITY_HOLDER"), jsonDocument);
+		 insertPayoff(document, insertLevels(document, element, "PAYOFF"), jsonDocument);
+	}
+	 /**
+	     * Inserts Payoff from JSON Object
+	     * @param document
+	     * @param element
+	     * @param jsonDocument
+	     */
+	 private void insertPayoff(Document document, Element element, ClosingDisclosureDocument jsonDocument) {
+		// TODO Auto-generated method stub
+		insertData(document, element, "PayoffAmount", "");
+		insertData(document, element, "PayoffPrepaymentPenaltyAmount", "");
+		insertExtension(document, insertLevels(document, element, "EXTENSION"), jsonDocument);
+	}
+	/**
+	     * Inserts Liability Holder from JSON Object
+	     * @param document
+	     * @param element
+	     * @param jsonDocument
+	     */
+	 private void insertLiabilityHolder(Document document, Element element,
+			ClosingDisclosureDocument jsonDocument) {
+		// TODO Auto-generated method stub
+		 insertName(document, insertLevels(document, element, "NAME"), jsonDocument);
+	 }
+	/**
+	     * Inserts Liability Detail from JSON Object
+	     * @param document
+	     * @param element
+	     * @param jsonDocument
+	     */
+	private void insertLiabilityDetail(Document document, Element element,
+			ClosingDisclosureDocument jsonDocument) {
+		// TODO Auto-generated method stub
+		insertData(document, element, "LiabilityDescription", "");
+		Element liabilityTypeElement = insertData(document, element, "LiabilityType", "");
+		liabilityTypeElement.setAttribute("gse:DisplayLabelText", "");
+		insertData(document, element, "LiabilityTypeOtherDescription", "");
+		insertExtension(document, insertLevels(document, element, "EXTENSION"), jsonDocument);
 	}
 
+	/**
+     * Inserts Deal Set from JSON Object
+     * @param document
+     * @param element
+     * @param jsonDocument
+     */
 	private void insertDealSet(Document document, Element element, ClosingDisclosureDocument jsonDocument) {
 		insertDeal(document, insertLevels(document, element, "DEALS/DEAL"), jsonDocument);
 	}
@@ -134,8 +210,8 @@ public class JsonToUcd {
 		ClosingInformation closingInformation = jsonDocument.getPageOne().getClosingInformation();
 		LoanInformation loanInformation = jsonDocument.getPageOne().getLoanInformation();
 		LoanTermsEscrowAccount  loanTermsEscrowAccount = jsonDocument.getPageOne().getLoanTerms().getLoanTermsEscrowAccount();
-		/*insertData(document, element, "FirstYearTotalEscrowPaymentAmount", loanTermsEscrowAccount.getFirstYearTotalEscrowPaymentAmount());
-		insertData(document, element, "FirstYearTotalEscrowPaymentDescription", loanTermsEscrowAccount.getFirstYearTotalEscrowPaymentDescription());*/
+		insertData(document, element, "FirstYearTotalEscrowPaymentAmount", "");
+		insertData(document, element, "FirstYearTotalEscrowPaymentDescription", "");
 		insertData(document, element, "FirstYearTotalNonEscrowPaymentAmount", loanTermsEscrowAccount.getFirstYearTotalNonEscrowPaymentAmount());
 		insertData(document, element, "FirstYearTotalNonEscrowPaymentDescription", loanTermsEscrowAccount.getFirstYearTotalNonEscrowPaymentDescription());
 		insertData(document, element, "IntegratedDisclosureHomeEquityLoanIndicator", loanInformation.getIntegratedDisclosureHomeEquityLoanIndicator());
@@ -144,12 +220,7 @@ public class JsonToUcd {
 	}
 
 	private void insertLoan(Document document, Element element, ClosingDisclosureDocument jsonDocument) {
-		/*insertClosingInformationDetail(document, insertLevels(document, element, "CLOSING_INFORMATION/CLOSING_INFORMATION_DETAIL"), jsonDocument);
-		insertIntegratedDisclosureDetail(document, insertLevels(document, element, "DOCUMENT_SPECIFIC_DATA_SETS/DOCUMENT_SPECIFIC_DATA_SET/INTEGRATED_DISCLOSURE/INTEGRATED_DISCLOSURE_DETAIL"), jsonDocument);
-		insertLoanIdentifiers(document, insertLevels(document, element, "LOAN_IDENTIFIERS"), jsonDocument);
-		insertMaturityRule(document, insertLevels(document, element, "MATURITY/MATURITY_RULE"), jsonDocument);
-		insertTermsOfLoan(document, insertLevels(document, element, "TERMS_OF_LOAN"), jsonDocument);*/
-
+		
 		insertAdjustment(document, insertLevels(document, element, "ADJUSTMENT"), jsonDocument);
 		insertAmortizationRule(document, insertLevels(document, element, "AMORTIZATION/AMORTIZATION_RULE"), jsonDocument);
 		insertBuydown(document, insertLevels(document, element, "BUYDOWN"), jsonDocument);
@@ -182,110 +253,511 @@ public class JsonToUcd {
 		insertUnderwriting(document, insertLevels(document, element, "UNDERWRITING"), jsonDocument); // Not needed for LE
 	
 	}
-
-	private void insertUnderwriting(Document document, Element insertLevels, ClosingDisclosureDocument jsonDocument) {
+    /**
+     * Inserts Underwriting from JSON Object
+     * @param document
+     * @param element
+     * @param jsonDocument
+     */
+	private void insertUnderwriting(Document document, Element element, ClosingDisclosureDocument jsonDocument) {
 		// TODO Auto-generated method stub
-		
+		insertAutomatedUnderwritings(document, insertLevels(document, element, "AUTOMATED_UNDERWRITINGS"), jsonDocument);
+		insertUnderwritingDetail(document, insertLevels(document, element, "UNDERWRITING_DETAIL"), jsonDocument);
+	}
+	/**
+     * Inserts Underwriting Detail from JSON Object
+     * @param document
+     * @param element
+     * @param jsonDocument
+     */
+	private void insertUnderwritingDetail(Document document, Element element,
+			ClosingDisclosureDocument jsonDocument) {
+		// TODO Auto-generated method stub
+		insertData(document, element, "LoanManualUnderwritingIndicator", "");
 	}
 
-	private void insertServicing(Document document, Element insertLevels, ClosingDisclosureDocument jsonDocument) {
+	/**
+    * Inserts Automated Underwritings from JSON Object
+    * @param document
+    * @param element
+    * @param jsonDocument
+    */
+    private void insertAutomatedUnderwritings(Document document, Element element,
+			ClosingDisclosureDocument jsonDocument) {
 		// TODO Auto-generated method stub
-		
+    	//for (String group : groupings)
+			insertAutomatedUnderwriting(document, insertLevels(document, element, "AUTOMATED_UNDERWRITING"), jsonDocument);
+	}
+    /**
+     * Inserts Automated Underwriting from JSON Object
+     * @param document
+     * @param element
+     * @param jsonDocument
+     */
+	private void insertAutomatedUnderwriting(Document document, Element element,
+			ClosingDisclosureDocument jsonDocument) {
+		// TODO Auto-generated method stub
+		insertData(document, element, "AutomatedUnderwritingCaseIdentifier", "");
+		insertData(document, element, "AutomatedUnderwritingRecommendationDescription", "");
+		insertData(document, element, "AutomatedUnderwritingSystemType", "");
+		insertData(document, element, "AutomatedUnderwritingSystemTypeOtherDescription", "");
 	}
 
-	private void insertReverseMortgage(Document document, Element insertLevels, ClosingDisclosureDocument jsonDocument) {
+	/**
+     * Inserts Servicing from JSON Object
+     * @param document
+     * @param element
+     * @param jsonDocument
+     */
+	private void insertServicing(Document document, Element element, ClosingDisclosureDocument jsonDocument) {
 		// TODO Auto-generated method stub
-		
+		insertServicingDetail(document, insertLevels(document, element, "SERVICING_DETAIL"), jsonDocument);
+	}
+	/**
+     * Inserts Servicing Detail from JSON Object
+     * @param document
+     * @param element
+     * @param jsonDocument
+     */
+    private void insertServicingDetail(Document document, Element element,
+			ClosingDisclosureDocument jsonDocument) {
+		// TODO Auto-generated method stub
+    	insertData(document, element, "LoanAcquisitionActualUPBAmount", "");
 	}
 
-	private void insertRefinance(Document document, Element insertLevels, ClosingDisclosureDocument jsonDocument) {
+	/**
+     * Inserts Reverse Mortgage from JSON Object
+     * @param document
+     * @param element
+     * @param jsonDocument
+     */
+	private void insertReverseMortgage(Document document, Element element, ClosingDisclosureDocument jsonDocument) {
 		// TODO Auto-generated method stub
-		
+		insertData(document, element, "ReverseInitialPrincipalLimitAmount", "");
+	}
+    /**
+     * Inserts Refinace from JSON Object
+     * @param document
+     * @param element
+     * @param jsonDocument
+     */
+	private void insertRefinance(Document document, Element element, ClosingDisclosureDocument jsonDocument) {
+		// TODO Auto-generated method stub
+		insertData(document, element, "RefinanceCashOutDeterminationType", "");
+		insertData(document, element, "RefinanceSameLenderIndicator", "");
+	}
+	/**
+	 * Inserts Qualified Mortgage from JSON Object
+	 * @param document
+	 * @param element
+	 * @param jsonDocument
+	 */
+	private void insertQualifiedMortgage(Document document, Element element, ClosingDisclosureDocument jsonDocument) {
+		// TODO Auto-generated method stub
+		insertExemption(document, insertLevels(document, element, "EXEMPTIONS/EXEMPTION"), jsonDocument);
+		insertQualifiedMortgageDetail(document, insertLevels(document, element, "QUALIFIED_MORTGAGE_DETAIL"), jsonDocument);
+	}
+	/**
+	 * Inserts Qualified Mortgage Detail from JSON Object
+	 * @param document
+	 * @param insertLevels
+	 * @param jsonDocument
+	 */
+	private void insertQualifiedMortgageDetail(Document document, Element element,
+			ClosingDisclosureDocument jsonDocument) {
+		// TODO Auto-generated method stub
+		insertData(document, element, "AbilityToRepayMethodType", "");
 	}
 
-	private void insertQualifiedMortgage(Document document, Element insertLevels, ClosingDisclosureDocument jsonDocument) {
+	/**
+	 * Inserts Exemption from JSON Object
+	 * @param document
+	 * @param insertLevels
+	 * @param jsonDocument
+	 */
+	private void insertExemption(Document document, Element element, ClosingDisclosureDocument jsonDocument) {
 		// TODO Auto-generated method stub
-		
+		insertData(document, element, "AbilityToRepayExemptionReasonType", "");
 	}
 
-	private void insertQualification(Document document, Element insertLevels, ClosingDisclosureDocument jsonDocument) {
+	/**
+	 * inserts Qualification from JSON Object
+	 * @param document
+	 * @param element
+	 * @param jsonDocument
+	 */
+	private void insertQualification(Document document, Element element, ClosingDisclosureDocument jsonDocument) {
 		// TODO Auto-generated method stub
-		
+		insertData(document, element, "TotalMonthlyIncomeAmount", "");
+		insertData(document, element, "IncomeConsideredInDecisionIndicator", "");
+		insertData(document, element, "CreditScoreConsideredInDecisionIndicator", "");
+		insertData(document, element, "TotalDebtExpenseRatioPercent", "");
+		insertData(document, element, "TotalDebtExpenseRatioConsideredInDecisionIndicator", "");
+		insertData(document, element, "CombinedLTVRatioConsideredInDecisionIndicator", "");
 	}
 
-	private void insertPrepaymentPenalty(Document document, Element insertLevels, ClosingDisclosureDocument jsonDocument) {
+	private void insertPrepaymentPenalty(Document document, Element element, ClosingDisclosureDocument jsonDocument) {
 		// TODO Auto-generated method stub
-		
+		insertPrepaymentPenaltyLifetimeRule(document, insertLevels(document, element, "PREPAYMENT_PENALTY_LIFETIME_RULE"), jsonDocument);
 	}
 
-	private void insertPayment(Document document, Element insertLevels, ClosingDisclosureDocument jsonDocument) {
+	private void insertPrepaymentPenaltyLifetimeRule(Document document, Element element,
+			ClosingDisclosureDocument jsonDocument) {
 		// TODO Auto-generated method stub
-		
+		insertData(document, element, "PrepaymentPenaltyExpirationDate", "");
+		insertData(document, element, "PrepaymentPenaltyExpirationMonthsCount", "");
+		insertData(document, element, "PrepaymentPenaltyMaximumLifeOfLoanAmount", "");
 	}
 
-	private void insertNegativeAmortization(Document document, Element insertLevels, ClosingDisclosureDocument jsonDocument) {
+	private void insertPayment(Document document, Element element, ClosingDisclosureDocument jsonDocument) {
 		// TODO Auto-generated method stub
-		
+		insertPartialPayments(document, insertLevels(document, element, "PARTIAL_PAYMENTS"), jsonDocument); 
+		insertPaymentRule(document, insertLevels(document, element, "PAYMENT_RULE"), jsonDocument);
 	}
 
-	private void insertMIDataDetail(Document document, Element insertLevels, ClosingDisclosureDocument jsonDocument) {
+	private void insertPaymentRule(Document document, Element element, ClosingDisclosureDocument jsonDocument) {
 		// TODO Auto-generated method stub
-		
+		insertData(document, element, "FullyIndexedInitialPrincipalAndInterestPaymentAmount", "");
+		insertData(document, element, "InitialPrincipalAndInterestPaymentAmount", "");
+		insertData(document, element, "PartialPaymentAllowedIndicator", "");
+		insertData(document, element, "PaymentFrequencyType", "");
+		insertData(document, element, "PaymentOptionIndicator", "");
+		insertData(document, element, "SeasonalPaymentPeriodEndMonth", "");
+		insertData(document, element, "SeasonalPaymentPeriodStartMonth", "");
+		insertExtension(document, insertLevels(document, element, "EXTENSION"), jsonDocument);
 	}
 
-	private void insertLoanProduct(Document document, Element insertLevels, ClosingDisclosureDocument jsonDocument) {
+	private void insertPartialPayments(Document document, Element element,
+			ClosingDisclosureDocument jsonDocument) {
 		// TODO Auto-generated method stub
-		
+		//for (String group : groupings)
+			insertPartialPayment(document, insertLevels(document, element, "PARTIAL_PAYMENT"), jsonDocument);
 	}
 
-	private void insertLoanLevelCredit(Document document, Element insertLevels, ClosingDisclosureDocument jsonDocument) {
+	private void insertPartialPayment(Document document, Element element, ClosingDisclosureDocument jsonDocument) {
 		// TODO Auto-generated method stub
-		
+		insertData(document, element, "PartialPaymentApplicationMethodType", "");
+		insertData(document, element, "PartialPaymentApplicationMethodTypeOtherDescription", "");
 	}
 
-	private void insertLoanDetail(Document document, Element insertLevels, ClosingDisclosureDocument jsonDocument) {
+	private void insertNegativeAmortization(Document document, Element element, ClosingDisclosureDocument jsonDocument) {
 		// TODO Auto-generated method stub
-		
+		insertNegativeAmortizationRule(document, insertLevels(document, element, "NEGATIVE_AMORTIZATION_RULE"), jsonDocument);
 	}
 
-	private void insertLateChargeRule(Document document, Element insertLevels, ClosingDisclosureDocument jsonDocument) {
+	private void insertNegativeAmortizationRule(Document document, Element element,
+			ClosingDisclosureDocument jsonDocument) {
 		// TODO Auto-generated method stub
-		
+		insertData(document, element, "LoanNegativeAmortizationResolutionType", "");
+		insertData(document, element, "LoanNegativeAmortizationResolutionTypeOtherDescription", "");
+		insertData(document, element, "NegativeAmortizationLimitMonthsCount", jsonDocument.getPageOne().getLoanTerms().getLoanTermsLoanAmount().getNegativeAmortizationLimitMonthsCount());
+		insertData(document, element, "NegativeAmortizationMaximumLoanBalanceAmount", jsonDocument.getPageOne().getLoanTerms().getLoanTermsLoanAmount().getNegativeAmortizationMaximumLoanBalanceAmount());
+		insertData(document, element, "NegativeAmortizationType", "");
 	}
 
-	private void insertInterestOnly(Document document, Element insertLevels, ClosingDisclosureDocument jsonDocument) {
+	private void insertMIDataDetail(Document document, Element element, ClosingDisclosureDocument jsonDocument) {
 		// TODO Auto-generated method stub
-		
+		insertData(document, element, "MICertificateIdentifier", jsonDocument.getPageOne().getLoanInformation().getMiCertificateIdentifier());
+		insertData(document, element, "MICompanyNameType", "");
+		insertData(document, element, "MICompanyNameTypeOtherDescription", "");
+		insertData(document, element, "MIScheduledTerminationDate", "");
 	}
 
-	private void insertHmdaLoan(Document document, Element insertLevels, ClosingDisclosureDocument jsonDocument) {
+	private void insertLoanProduct(Document document, Element element, ClosingDisclosureDocument jsonDocument) {
 		// TODO Auto-generated method stub
-		
+		insertLoanPriceQuotes(document, insertLevels(document, element, "LOAN_PRICE_QUOTES"), jsonDocument);
+		insertLocks(document, insertLevels(document, element, "LOCKS"), jsonDocument);
 	}
 
-	private void insertHighCostMortgages(Document document, Element insertLevels, ClosingDisclosureDocument jsonDocument) {
+	private void insertLocks(Document document, Element element, ClosingDisclosureDocument jsonDocument) {
 		// TODO Auto-generated method stub
-		
+		//for (String group : groupings)
+			insertLock(document, insertLevels(document, element, "LOCK"), jsonDocument);
 	}
 
-	private void insertHeloc(Document document, Element insertLevels, ClosingDisclosureDocument jsonDocument) {
+	private void insertLock(Document document, Element element, ClosingDisclosureDocument jsonDocument) {
 		// TODO Auto-generated method stub
-		
+		insertData(document, element, "LockExpirationDatetime", "");
+		insertData(document, element, "LockStatusType", "");
+		insertExtension(document, insertLevels(document, element, "EXTENSION"), jsonDocument);
 	}
 
-	private void insertForeclosures(Document document, Element insertLevels, ClosingDisclosureDocument jsonDocument) {
+	private void insertLoanPriceQuotes(Document document, Element element,
+			ClosingDisclosureDocument jsonDocument) {
 		// TODO Auto-generated method stub
-		
+		//for (String group : groupings)
+			insertLoanPriceQuote(document, insertLevels(document, element, "LOAN_PRICE_QUOTE"), jsonDocument);
 	}
 
-	private void insertFeeInformation(Document document, Element insertLevels, ClosingDisclosureDocument jsonDocument) {
+	private void insertLoanPriceQuote(Document document, Element element, ClosingDisclosureDocument jsonDocument) {
 		// TODO Auto-generated method stub
-		
+		insertLoanPriceQuoteDetail(document, insertLevels(document, element, "LOAN_PRICE_QUOTE_DETAIL"), jsonDocument);
 	}
 
-	private void insertEscrow(Document document, Element insertLevels, ClosingDisclosureDocument jsonDocument) {
+	private void insertLoanPriceQuoteDetail(Document document, Element element,
+			ClosingDisclosureDocument jsonDocument) {
 		// TODO Auto-generated method stub
+		insertData(document, element, "LoanPriceQuoteInterestRatePercent", "");
+	}
+
+	private void insertLoanLevelCredit(Document document, Element element, ClosingDisclosureDocument jsonDocument) {
+		// TODO Auto-generated method stub
+		insertLoanLevelCreditDetail(document, insertLevels(document, element, "LOAN_LEVEL_CREDIT_DETAIL"), jsonDocument);
+	}
+
+	private void insertLoanLevelCreditDetail(Document document, Element element,
+			ClosingDisclosureDocument jsonDocument) {
+		// TODO Auto-generated method stub
+		insertData(document, element, "LoanLevelCreditScoreValue", "");
+		insertData(document, element, "CreditScoreModelNameType", "");
+		insertData(document, element, "CreditScoreModelNameTypeOtherDescription", "");
+		insertData(document, element, "CreditScoreCategoryVersionType", "");
+	}
+
+	private void insertLoanDetail(Document document, Element element, ClosingDisclosureDocument jsonDocument) {
+		// TODO Auto-generated method stub
+		LoanTerms loanterms = jsonDocument.getPageOne().getLoanTerms();
+		LoanTermsLoanAmount loanTermsLoanAmount = loanterms.getLoanTermsLoanAmount();
+		LoanTermsInterestRate loanTermsInterestRate = loanterms.getLoanTermsInterestRate();
+		LoanTermsPI loanTermsPI = loanterms.getLoanTermsPI();
+		LoanTermsPrepaymentPenalty loanTermsPrepaymentPenalty = loanterms.getLoanTermsPrepaymentPenalty();
+		LoanTermsBalloonPayment loanTermsBalloonPayment = loanterms.getLoanTermsBalloonPayment();
+		LoanTermsIntialEscrow loanTermsIntialEscrow = loanterms.getLoanTermsIntialEscrow();
 		
+		insertData(document, element, "AssumedIndicator", ""); //TODO Not Found in UCD-Spec
+		insertData(document, element, "AssumabilityIndicator", "");
+		insertData(document, element, "BalloonIndicator", loanTermsBalloonPayment.getBalloonIndicator());
+		insertData(document, element, "BalloonPaymentAmount", loanTermsBalloonPayment.getBalloonPaymentAmount());
+		insertData(document, element, "BuydownTemporarySubsidyFundingIndicator", loanTermsInterestRate.getBuydownTemporarySubsidyFundingIndicator());
+		insertData(document, element, "ConstructionLoanIndicator", "");
+		insertData(document, element, "CreditorServicingOfLoanStatementType", ""); //TODO Not Found in UCD-Spec
+		insertData(document, element, "DemandFeatureIndicator", "");
+		insertData(document, element, "EscrowAbsenceReasonType", ""); 
+		insertData(document, element, "EscrowIndicator", loanTermsIntialEscrow.getEscrowIndicator());
+		insertData(document, element, "InterestOnlyIndicator", loanTermsPI.getInterestOnlyIndicator());
+		insertData(document, element, "InterestRateIncreaseIndicator", loanTermsInterestRate.getInterestRateIncreaseIndicator());
+		insertData(document, element, "LoanAmountIncreaseIndicator", "");//TODO Need to add this data to the object "LoanTermsLoanAmount"
+		insertData(document, element, "LoanLevelCreditScoreValue", ""); //TODO Not Found in UCD-Spec
+		insertData(document, element, "MIRequiredIndicator", jsonDocument.getPageOne().getLoanInformation().getMiRequiredIndicator());
+		insertData(document, element, "NegativeAmortizationIndicator", loanTermsLoanAmount.getNegativeAmoritzationIndicator());
+		insertData(document, element, "PaymentIncreaseIndicator", ""); //TODO Need to add this to Object 
+		insertData(document, element, "PrepaymentPenaltyIndicator", loanTermsPrepaymentPenalty.getPrepaymentPenaltyIndicator());
+		insertData(document, element, "SeasonalPaymentFeatureIndicator", "");
+		insertData(document, element, "StepPaymentsFeatureDescription", "");//TODO Not Found in UCD-Spec
+		insertData(document, element, "TotalSubordinateFinancingAmount", "");
+		insertExtension(document, insertLevels(document, element, "EXTENSION"), jsonDocument);
+	}
+
+	private void insertLateChargeRule(Document document, Element element, ClosingDisclosureDocument jsonDocument) {
+		// TODO Auto-generated method stub
+		insertData(document, element, "LateChargeAmount", "");
+		insertData(document, element, "LateChargeGracePeriodDaysCount", "");
+		insertData(document, element, "LateChargeMaximumAmount", "");
+		insertData(document, element, "LateChargeMinimumAmount", "");
+		insertData(document, element, "LateChargeRatePercent", "");
+		insertData(document, element, "LateChargeType", "");
+	}
+
+	private void insertInterestOnly(Document document, Element element, ClosingDisclosureDocument jsonDocument) {
+		// TODO Auto-generated method stub
+		insertData(document, element, "InterestOnlyTermMonthsCount", jsonDocument.getPageOne().getLoanTerms().getLoanTermsPI().getInterestOnlyTermMonthsCount());
+	}
+
+	private void insertHmdaLoan(Document document, Element element, ClosingDisclosureDocument jsonDocument) {
+		// TODO Auto-generated method stub
+		insertHmdaLoanDenial(document, insertLevels(document, element, "HMDA_LOAN_DENIALS"), jsonDocument);
+		insertHmdaLoanDetail(document, insertLevels(document, element, "HMDA_LOAN_DETAIL"), jsonDocument);
+	}
+
+	private void insertHmdaLoanDetail(Document document, Element element, ClosingDisclosureDocument jsonDocument) {
+		// TODO Auto-generated method stub
+		insertData(document, element, "HMDAPurposeOfLoanType", "");
+		insertData(document, element, "HMDAPreapprovalType", "");
+		insertData(document, element, "HMDADispositionType", "");
+		insertData(document, element, "HMDADispositionDate", "");
+		insertData(document, element, "HMDAReportingCRAExemptionIndicator", "");
+		insertData(document, element, "HMDAReportingSmallPopulationIndicator", "");
+		insertData(document, element, "HMDAPurchaserType", "");
+		insertData(document, element, "HMDAPurchaserTypeOtherDescription", "");
+		insertData(document, element, "HMDARateSpreadPercent", "");
+		insertData(document, element, "HMDAHOEPALoanStatusIndicator", "");
+		insertData(document, element, "HMDAMultipleCreditScoresUsedIndicator", "");
+		insertData(document, element, "HMDAOtherNonAmortizingFeaturesIndicator", "");
+		insertData(document, element, "HMDAManufacturedHomeLegalClassificationType", "");
+		insertData(document, element, "HMDAApplicationSubmissionType", "");
+		insertData(document, element, "HMDACoveredLoanInitiallyPayableToReportingInstitutionStatusType", "");
+		insertData(document, element, "HMDABusinessPurposeIndicator", "");
+	}
+
+	private void insertHmdaLoanDenial(Document document, Element element, ClosingDisclosureDocument jsonDocument) {
+		// TODO Auto-generated method stub
+		insertData(document, element, "HMDAReasonForDenialType", "");
+		insertData(document, element, "HMDAReasonForDenialTypeOtherDescription", "");
+	}
+
+	private void insertHighCostMortgages(Document document, Element element, ClosingDisclosureDocument jsonDocument) {
+		// TODO Auto-generated method stub
+		//for (String group : groupings)
+			insertHighCostMortgage(document, insertLevels(document, element, "HIGH_COST_MORTGAGE"), jsonDocument);
+	}
+
+	private void insertHighCostMortgage(Document document, Element element,
+			ClosingDisclosureDocument jsonDocument) {
+		// TODO Auto-generated method stub
+		insertData(document, element, "AveragePrimeOfferRatePercent", "");
+		insertData(document, element, "RegulationZExcludedBonaFideDiscountPointsIndicator", "");
+		insertData(document, element, "RegulationZExcludedBonaFideDiscountPointsPercent", "");
+		insertData(document, element, "RegulationZTotalAffiliateFeesAmount", "");
+		insertData(document, element, "RegulationZTotalLoanAmount", "");
+		insertData(document, element, "RegulationZTotalPointsAndFeesAmount", "");
+	}
+
+	private void insertHeloc(Document document, Element element, ClosingDisclosureDocument jsonDocument) {
+		// TODO Auto-generated method stub
+		insertHelocRule(document, insertLevels(document, element, "HELOC_RULE"), jsonDocument);
+	}
+
+	private void insertHelocRule(Document document, Element element, ClosingDisclosureDocument jsonDocument) {
+		// TODO Auto-generated method stub
+		insertData(document, element, "HELOCMaximumBalanceAmount", "");
+	}
+
+	private void insertForeclosures(Document document, Element element, ClosingDisclosureDocument jsonDocument) {
+		// TODO Auto-generated method stub
+		//for (String group : groupings)
+			insertForeclosure(document, insertLevels(document, element, "FORECLOSURE"), jsonDocument);
+	}
+
+	private void insertForeclosure(Document document, Element element, ClosingDisclosureDocument jsonDocument) {
+		// TODO Auto-generated method stub
+		insertForeclosureDetail(document, insertLevels(document, element, "FORECLOSURE_DETAIL"), jsonDocument);
+	}
+
+	private void insertForeclosureDetail(Document document, Element element,
+			ClosingDisclosureDocument jsonDocument) {
+		// TODO Auto-generated method stub
+		insertData(document, element, "DeficiencyRightsPreservedIndicator", "");
+	}
+
+	private void insertFeeInformation(Document document, Element element, ClosingDisclosureDocument jsonDocument) {
+		// TODO Auto-generated method stub
+		insertFees(document, insertLevels(document, element, "FEES"), jsonDocument);
+		insertFeeSummaryDetail(document, insertLevels(document, element, "FEES_SUMMARY/FEE_SUMMARY_DETAIL"), jsonDocument);
+	}
+
+	private void insertFeeSummaryDetail(Document document, Element element,
+			ClosingDisclosureDocument jsonDocument) {
+		// TODO Auto-generated method stub
+		insertData(document, element, "APRPercent", "");
+		insertData(document, element, "FeeSummaryTotalAmountFinancedAmount", "");
+		insertData(document, element, "FeeSummaryTotalFinanceChargeAmount", "");
+		insertData(document, element, "FeeSummaryTotalInterestPercent", "");
+		insertData(document, element, "FeeSummaryTotalOfAllPaymentsAmount", "");
+	}
+
+	private void insertFees(Document document, Element element, ClosingDisclosureDocument jsonDocument) {
+		// TODO Auto-generated method stub
+		//for (String group : groupings)
+			insertFee(document, insertLevels(document, element, "FEE"), jsonDocument);
+	}
+
+	private void insertFee(Document document, Element element, ClosingDisclosureDocument jsonDocument) {
+		// TODO Auto-generated method stub
+		insertFeeDetail(document,  insertLevels(document, element, "FEE_DETAIL"), jsonDocument);
+		insertFeePaidTo(document, 	insertLevels(document, element, "FEE_PAID_TO"), jsonDocument);
+		insertFeePayments(document, insertLevels(document, element, "FEE_PAYMENTS"), jsonDocument);
+	}
+
+	private void insertFeePayments(Document document, Element element, ClosingDisclosureDocument jsonDocument) {
+		// TODO Auto-generated method stub
+		//for (String group : groupings)
+			insertFeePayment(document,	insertLevels(document, element, "FEE_PAYMENT"), jsonDocument);
+	}
+
+	private void insertFeePayment(Document document, Element element, ClosingDisclosureDocument jsonDocument) {
+		// TODO Auto-generated method stub
+		insertData(document, element, "FeeActualPaymentAmount", "");
+		insertData(document, element, "FeePaymentPaidByType", "");
+		insertData(document, element, "FeePaymentPaidOutsideOfClosingIndicator", "");
+	}
+
+	private void insertFeePaidTo(Document document, Element element, ClosingDisclosureDocument jsonDocument) {
+		// TODO Auto-generated method stub
+		insertLegalEntity(document,	insertLevels(document, element, "LEGAL_ENTITY"), jsonDocument);
+	}
+
+	private void insertFeeDetail(Document document, Element element, ClosingDisclosureDocument jsonDocument) {
+		// TODO Auto-generated method stub
+		insertData(document, element, "BorrowerChosenProviderIndicator", "");
+		insertData(document, element, "FeeActualTotalAmount", "");
+		insertData(document, element, "FeeEstimatedTotalAmount", "");
+		insertData(document, element, "FeePaidToType", "");
+		insertData(document, element, "FeePaidToTypeOtherDescription", "");
+		insertData(document, element, "FeePercentBasisType", "");
+		insertData(document, element, "FeeTotalPercent", "");
+		Element FeeTypeelement = insertData(document, element, "FeeType", "");
+		FeeTypeelement.setAttribute("gse:DisplayLabelText", "");
+		insertData(document, element, "FeeTypeOtherDescription", "");
+		insertData(document, element, "IntegratedDisclosureSectionType", "");
+		insertData(document, element, "OptionalCostIndicator", "");
+		insertData(document, element, "RegulationZPointsAndFeesIndicator", "");
+		insertData(document, element, "RequiredProviderOfServiceIndicator", "");
+		insertExtension(document, insertLevels(document, element, "EXTENSION"), jsonDocument);
+	}
+
+	private void insertEscrow(Document document, Element element, ClosingDisclosureDocument jsonDocument) {
+		// TODO Auto-generated method stub
+		insertEscrowDetail(document, insertLevels(document, element, "ESCROW_DETAIL"), jsonDocument);
+		insertEscrowItems(document, insertLevels(document, element, "ESCROW_ITEMS"), jsonDocument);
+	}
+
+	private void insertEscrowItems(Document document, Element element, ClosingDisclosureDocument jsonDocument) {
+		// TODO Auto-generated method stub
+		//for (String group : groupings)
+			insertEscrowItem(document, insertLevels(document, element, "ESCROW_ITEM"), jsonDocument);
+	}
+
+	private void insertEscrowItem(Document document, Element element, ClosingDisclosureDocument jsonDocument) {
+		// TODO Auto-generated method stub
+		insertEscrowItemDetail(document, insertLevels(document, element, "ESCROW_ITEM_DETAIL"), jsonDocument);
+		insertEscrowItemPayments(document,  insertLevels(document, element, "ESCROW_ITEM_PAYMENTS"), jsonDocument);
+	}
+
+	private void insertEscrowItemPayments(Document document, Element element,
+			ClosingDisclosureDocument jsonDocument) {
+		// TODO Auto-generated method stub
+		//for (String group : groupings)
+			insertEscrowItemPayment(document, insertLevels(document, element, "ESCROW_ITEM_PAYMENT"), jsonDocument);
+	}
+
+	private void insertEscrowItemPayment(Document document, Element element,
+			ClosingDisclosureDocument jsonDocument) {
+		// TODO Auto-generated method stub
+		insertData(document, element, "EscrowItemActualPaymentAmount", "");
+		insertData(document, element, "EscrowItemPaymentPaidByType", "");
+		insertData(document, element, "EscrowItemPaymentTimingType", "");
+	}
+
+	private void insertEscrowItemDetail(Document document, Element element,
+			ClosingDisclosureDocument jsonDocument) {
+		// TODO Auto-generated method stub
+		insertData(document, element, "EscrowCollectedNumberOfMonthsCount", "");
+		insertData(document, element, "EscrowItemCategoryType", "");
+		insertData(document, element, "EscrowItemEstimatedTotalAmount", "");
+		insertData(document, element, "EscrowItemType", "");
+		element.setAttribute("gse:DisplayLabelText", "");
+		insertData(document, element, "EscrowItemTypeOtherDescription", "");
+		insertData(document, element, "EscrowMonthlyPaymentAmount", "");
+		insertData(document, element, "FeePaidToType", "");
+		insertData(document, element, "FeePaidToTypeOtherDescription", "");
+		insertData(document, element, "IntegratedDisclosureSectionType", "");
+		insertData(document, element, "RegulationZPointsAndFeesIndicator", "");
+		insertExtension(document, insertLevels(document, element, "EXTENSION"), jsonDocument);
+	}
+
+	private void insertEscrowDetail(Document document, Element element, ClosingDisclosureDocument jsonDocument) {
+		// TODO Auto-generated method stub
+		insertData(document, element, "EscrowAggregateAccountingAdjustmentAmount", "");
 	}
 
 	private void insertDocumentSpecificDataSet(Document document, Element element, ClosingDisclosureDocument jsonDocument) {
@@ -327,7 +799,7 @@ public class JsonToUcd {
 	private void insertProjectedPayment(Document document, Element element,
 			ClosingDisclosureDocument jsonDocument) {
 		// TODO Auto-generated method stub
-		//insertAttributeValue(xmlout, parentElement, "SequenceNumber", xmlin, path, group);
+		//insertAttributeValue(xmlout, parentElement, "SequenceNumber", "");
 		
 		element.setAttribute("SequenceNumber", "");
 		insertData(document, element, "PaymentFrequencyType", "");
@@ -515,7 +987,7 @@ public class JsonToUcd {
 		insertData(document, element, "ProrationItemPaidThroughDate", "");
 		Element prorationItemTypeElement = insertData(document, element, "ProrationItemType", "");
 		prorationItemTypeElement.setAttribute("gse:DisplayLabelText", "");
-		//insertAttributeValue(xmlout, prorationItemTypeElement, "gse:DisplayLabelText", xmlin, path, group);
+		//insertAttributeValue(xmlout, prorationItemTypeElement, "gse:DisplayLabelText", "");
 		insertData(document, element, "ProrationItemTypeOtherDescription", "");
 		//TODO Need To Add the Object
 	}
@@ -575,7 +1047,7 @@ public class JsonToUcd {
 		insertData(document, element, "PrepaidItemPerDiemCalculationMethodType", "");
 		Element prepaidItemTypeElement = insertData(document, element, "PrepaidItemType", "");
 		prepaidItemTypeElement.setAttribute("gse:DisplayLabelText", "");// To Do Value Not binded with object
-		//insertAttributeValue(xmlout, prepaidItemTypeElement, "gse:DisplayLabelText", xmlin, path, group);
+		//insertAttributeValue(xmlout, prepaidItemTypeElement, "gse:DisplayLabelText", "");
 		insertData(document, element, "PrepaidItemTypeOtherDescription", "");
 		insertData(document, element, "RegulationZPointsAndFeesIndicator", "");
 		insertExtension(document,insertLevels(document, element, "PREPAID_ITEM_PAYMENTS"), jsonDocument);
@@ -947,10 +1419,10 @@ public class JsonToUcd {
 		insertData(document, element, "MortgageType", loanInformation.getMortgageType());
 		insertData(document, element, "MortgageTypeOtherDescription", loanInformation.getMortgageTypeOtherDescription());
 		insertData(document, element, "NoteAmount", loanTermsLoanAmount.getAmount());
-		//insertData(document, element, "NoteAmount", loanTermsLoanAmount.getNoteAmount());
+		insertData(document, element, "NoteAmount", loanTermsLoanAmount.getNoteAmount());
 		insertData(document, element, "NoteRatePercent", loanTermsInterestRate.getInterest());
-		//insertData(document, element, "NoteRatePercent", loanTermsInterestRate.getNoteRatePercent());
+		insertData(document, element, "NoteRatePercent", loanTermsInterestRate.getNoteRatePercent());
 		insertData(document, element, "WeightedAverageInterestRatePercent",loanTermsInterestRate.getInterest());
-		//insertData(document, element, "WeightedAverageInterestRatePercent", loanTermsInterestRate.getWeightedAverageInterestRatePercent());
+		insertData(document, element, "WeightedAverageInterestRatePercent", "");// TODO Need to add this data to Object
 	}
 }
