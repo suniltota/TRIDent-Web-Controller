@@ -15,24 +15,25 @@ import com.actualize.mortgage.lepagemodels.LoanEstimateDocument;
 import com.actualize.mortgage.leservices.LoanEstimateServices;
 
 @RestController
-@RequestMapping(value="/trident/le")
+@RequestMapping(value = "/trident/le")
 public class LoanEstimateAPI {
-	
-	@Autowired
-	LoanEstimateServices loanEstimateServices;
-	
-	/**
-	 * Generates the JSON response for LE on uploading xml 
-	 * @param xmldoc
-	 * @return JSON response for LE 
-	 * @throws Exception
-	 */
-	@RequestMapping(value = "/v1/letojson", method = { RequestMethod.POST })
+
+    @Autowired
+    LoanEstimateServices loanEstimateServices;
+
+    /**
+     * Generates the JSON response for LE on uploading xml
+     * 
+     * @param xmldoc
+     * @return JSON response for LE
+     * @throws Exception
+     */
+    @RequestMapping(value = "/v1/letojson", method = { RequestMethod.POST })
     public LoanEstimateDocument generateresponse(@RequestBody String xmldoc) throws Exception {
-		LoanEstimateDocument loanEstimateDocument = new LoanEstimateDocument();
-		InputStream stream = new ByteArrayInputStream(xmldoc.getBytes(StandardCharsets.UTF_8));
-			MISMODocument mismoDocument = new MISMODocument(stream);
-			loanEstimateDocument = loanEstimateServices.createLoanEstimateDocument(mismoDocument);
-		return loanEstimateDocument;
-	}
+        LoanEstimateDocument loanEstimateDocument = new LoanEstimateDocument();
+        InputStream stream = new ByteArrayInputStream(xmldoc.getBytes(StandardCharsets.UTF_8));
+        MISMODocument mismoDocument = new MISMODocument(stream);
+        loanEstimateDocument = loanEstimateServices.createLoanEstimateDocument(mismoDocument);
+        return loanEstimateDocument;
+    }
 }

@@ -38,4 +38,5 @@
    	<bean id="loanEstimateServices" class="com.actualize.mortgage.leservices.impl.LoanEstimateServicesImpl"/>
    	<bean id="loanEstimateResponseServices" class="com.actualize.mortgage.leservices.impl.LoanEstimateResponseServicesImpl"/>
    	<bean id="loanEstimatePageOneService" class="com.actualize.mortgage.leservices.impl.LoanEstimatePageOneServiceImpl"/>
+   	<bean id="closingDisclosureService" class="com.actualize.mortgage.cdservices.impl.ClosingDisclosureServiceImpl"/>
 </beans>
