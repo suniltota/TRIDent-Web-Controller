@@ -30,6 +30,7 @@ import com.actualize.mortgage.domainmodels.LoanTermsLoanAmount;
 import com.actualize.mortgage.domainmodels.LoanTermsPI;
 import com.actualize.mortgage.domainmodels.LoanTermsPrepaymentPenalty;
 import com.actualize.mortgage.domainmodels.ProjectedPayments;
+import com.actualize.mortgage.domainmodels.SalesContractDetailModel;
 import com.actualize.mortgage.domainmodels.ClosingDisclosureDocument;
 import com.actualize.mortgage.domainmodels.Seller;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -732,10 +733,12 @@ public class JsonToUcd {
      */
 	private void insertPaymentRule(Document document, Element element, ClosingDisclosureDocument jsonDocument) {
 		// TODO Auto-generated method stub
-		insertData(document, element, "FullyIndexedInitialPrincipalAndInterestPaymentAmount", "");
-		insertData(document, element, "InitialPrincipalAndInterestPaymentAmount", "");
+		LoanTerms loanTerms = jsonDocument.getPageOne().getLoanTerms();
+		LoanTermsPI loanTermsPI = loanTerms.getLoanTermsPI();
+		insertData(document, element, "FullyIndexedInitialPrincipalAndInterestPaymentAmount", loanTermsPI.getFullyIndexedInitialPrincipalAndInterestPaymentAmount());
+		insertData(document, element, "InitialPrincipalAndInterestPaymentAmount", loanTermsPI.getInitialPrincipalAndInterestPaymentAmount());
 		insertData(document, element, "PartialPaymentAllowedIndicator", "");
-		insertData(document, element, "PaymentFrequencyType", "");
+		insertData(document, element, "PaymentFrequencyType", loanTermsPI.getPaymentFrequencyType());
 		insertData(document, element, "PaymentOptionIndicator", "");
 		insertData(document, element, "SeasonalPaymentPeriodEndMonth", "");
 		insertData(document, element, "SeasonalPaymentPeriodStartMonth", "");
@@ -1481,7 +1484,8 @@ public class JsonToUcd {
 		// TODO Auto-generated method stub
 		
 		insertData(document, element, "ProjectedPaymentEscrowedType", loanTermsETIA.getProjectedPaymentEscrowedType());
-		insertData(document, element, "ProjectedPaymentEstimatedTaxesInsuranceAssessmentComponentType", loanTermsETIA.getProjectedPaymentEstimatedTaxesInsuranceAssessmentComponentType()); //TODO Need to Add Object Data
+		insertData(document, element, 
+				"ProjectedPaymentEstimatedTaxesInsuranceAssessmentComponentType", loanTermsETIA.getProjectedPaymentEstimatedTaxesInsuranceAssessmentComponentType()); //TODO Need to Add Object Data
 		insertData(document, element,
 				"ProjectedPaymentEstimatedTaxesInsuranceAssessmentComponentTypeOtherDescription", loanTermsETIA.getProjectedPaymentEstimatedTaxesInsuranceAssessmentComponentTypeOtherDescription());
 	
@@ -2269,10 +2273,12 @@ public class JsonToUcd {
 	private void insertSalesContractDetail(Document document, Element element,
 			ClosingDisclosureDocument jsonDocument) {
 		// TODO Auto-generated method stub
-		insertData(document, element, "PersonalPropertyAmount", "");
-		insertData(document, element, "PersonalPropertyIncludedIndicator", "");
-		insertData(document, element, "RealPropertyAmount", "");
-		insertData(document, element, "SalesContractAmount", "");
+		ClosingInformation closingInformation = jsonDocument.getPageOne().getClosingInformation();
+		SalesContractDetailModel salesContractDetail = closingInformation.getSalesContractDetail();
+		insertData(document, element, "PersonalPropertyAmount", salesContractDetail.getPersonalPropertyAmount());
+		insertData(document, element, "PersonalPropertyIncludedIndicator", salesContractDetail.isPersonalPropertyIndicator()+"");
+		insertData(document, element, "RealPropertyAmount", salesContractDetail.getRealPropertyAmount());
+		insertData(document, element, "SalesContractAmount", salesContractDetail.getSaleContractAmount());
 	}
 	/**
      * Inserts Property Valuations from JSON Object
