@@ -45,7 +45,7 @@ import com.actualize.mortgage.domainmodels.LoanTermsLoanAmount;
 import com.actualize.mortgage.domainmodels.LoanTermsPI;
 import com.actualize.mortgage.domainmodels.LoanTermsPrepaymentPenalty;
 import com.actualize.mortgage.domainmodels.ProrationsModel;
-import com.actualize.mortgage.domainmodels.SalesContractDetail;
+import com.actualize.mortgage.domainmodels.SalesContractDetailModel;
 
 public class PopulateData {
 	
@@ -650,9 +650,9 @@ public class PopulateData {
 		return IDSSummariesAmount;
 	 }
 	 
-	 public static SalesContractDetail populateSalesContractDetail(DOCUMENT document)
+	 public static SalesContractDetailModel populateSalesContractDetail(DOCUMENT document)
 	 {
-		SalesContractDetail salesContractDetail = new SalesContractDetail();
+		SalesContractDetailModel salesContractDetailModel = new SalesContractDetailModel();
 		DEAL deal = document.getDEALSETS().getDEALSET().getDEALS().getDEAL();
 		
 		if(null != deal.getCOLLATERALS() && null != deal.getCOLLATERALS().getCOLLATERAL())
@@ -663,15 +663,15 @@ public class PopulateData {
 				if(null != collateral.getSUBJECTPROPERTY() && null != collateral.getSUBJECTPROPERTY().getSALESCONTRACTS() && null != collateral.getSUBJECTPROPERTY().getSALESCONTRACTS().getSALESCONTRACT() && null != collateral.getSUBJECTPROPERTY().getSALESCONTRACTS().getSALESCONTRACT().getSALESCONTRACTDETAIL())
 				{
 					SALESCONTRACTDETAIL salescontractdetail = collateral.getSUBJECTPROPERTY().getSALESCONTRACTS().getSALESCONTRACT().getSALESCONTRACTDETAIL();
-						salesContractDetail.setPersonalPropertyAmount(null != salescontractdetail.getPersonalPropertyAmount() ? salescontractdetail.getPersonalPropertyAmount().getValue().toPlainString() : "");
-						salesContractDetail.setPersonalPropertyIndicator(null != salescontractdetail.getPersonalPropertyIncludedIndicator() ? salescontractdetail.getPersonalPropertyIncludedIndicator().isValue() : false);
-						salesContractDetail.setRealPropertyAmount(null != salescontractdetail.getRealPropertyAmount() ? salescontractdetail.getRealPropertyAmount().getValue().toPlainString() : "");
-						salesContractDetail.setSaleContractAmount(null != salescontractdetail.getSalesContractAmount() ? salescontractdetail.getSalesContractAmount().getValue().toPlainString() : "");
+						salesContractDetailModel.setPersonalPropertyAmount(null != salescontractdetail.getPersonalPropertyAmount() ? salescontractdetail.getPersonalPropertyAmount().getValue().toPlainString() : "");
+						salesContractDetailModel.setPersonalPropertyIndicator(null != salescontractdetail.getPersonalPropertyIncludedIndicator() ? salescontractdetail.getPersonalPropertyIncludedIndicator().isValue() : false);
+						salesContractDetailModel.setRealPropertyAmount(null != salescontractdetail.getRealPropertyAmount() ? salescontractdetail.getRealPropertyAmount().getValue().toPlainString() : "");
+						salesContractDetailModel.setSaleContractAmount(null != salescontractdetail.getSalesContractAmount() ? salescontractdetail.getSalesContractAmount().getValue().toPlainString() : "");
 				}
 			}
 		}
 		
-		return salesContractDetail;
+		return salesContractDetailModel;
 	 }
 	 
 	 public static List<ClosingCostFundModel> populateClosingCostFundModel(DOCUMENT document)

@@ -1,10 +1,11 @@
 package com.actualize.mortgage.leservices;
 
-import com.actualize.mortgage.ledatamodels.MISMODocument;
+import java.io.InputStream;
+
 import com.actualize.mortgage.lepagemodels.LoanEstimateDocument;
 
 public interface LoanEstimateServices {
 	
-	public LoanEstimateDocument createLoanEstimateDocument(MISMODocument mismoDocument) throws Exception;
-
+	public LoanEstimateDocument createLoanEstimateDocumentObjectfromXMLDoc(InputStream inputXmlStream) throws Exception;
+	
 }

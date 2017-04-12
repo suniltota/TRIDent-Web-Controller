@@ -2,7 +2,7 @@ package com.actualize.mortgage.domainmodels;
 
 import java.io.Serializable;
 
-public class PropertyValuationDetail implements Serializable {
+public class PropertyValuationDetailModel implements Serializable {
 	
 	private static final long serialVersionUID = -4243667995030954693L;
 	

@@ -15,8 +15,8 @@ public class ClosingInformation implements Serializable {
 	//below field is saleContractAmount, shall be removed later
 	private String salePrice;
 	private String partyRoleType;
-	private SalesContractDetail salesContractDetail;
-	private PropertyValuationDetail propertyValuationDetail;
+	private SalesContractDetailModel salesContractDetailModel;
+	private PropertyValuationDetailModel propertyValuationDetailModel;
 	
 	
 	public String getDateIssued() {
@@ -83,20 +83,20 @@ public class ClosingInformation implements Serializable {
 		this.partyRoleType = partyRoleType;
 	}
 
-	public SalesContractDetail getSalesContractDetail() {
-		return salesContractDetail;
+	public SalesContractDetailModel getSalesContractDetail() {
+		return salesContractDetailModel;
 	}
 
-	public void setSalesContractDetail(SalesContractDetail salesContractDetail) {
-		this.salesContractDetail = salesContractDetail;
+	public void setSalesContractDetail(SalesContractDetailModel salesContractDetailModel) {
+		this.salesContractDetailModel = salesContractDetailModel;
 	}
 
-	public PropertyValuationDetail getPropertyValuationDetail() {
-		return propertyValuationDetail;
+	public PropertyValuationDetailModel getPropertyValuationDetail() {
+		return propertyValuationDetailModel;
 	}
 
-	public void setPropertyValuationDetail(PropertyValuationDetail propertyValuationDetail) {
-		this.propertyValuationDetail = propertyValuationDetail;
+	public void setPropertyValuationDetail(PropertyValuationDetailModel propertyValuationDetailModel) {
+		this.propertyValuationDetailModel = propertyValuationDetailModel;
 	}
 	
 

@@ -1,112 +1,247 @@
 package com.actualize.mortgage.convertors;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-
-import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
 
+import com.actualize.mortgage.domainmodels.NameModel;
+import com.actualize.mortgage.ledatamodels.Address;
+import com.actualize.mortgage.ledatamodels.Construction;
 import com.actualize.mortgage.ledatamodels.Deal;
-import com.actualize.mortgage.ledatamodels.DocumentClass;
-import com.actualize.mortgage.ledatamodels.DocumentClassification;
+import com.actualize.mortgage.ledatamodels.Document;
+import com.actualize.mortgage.ledatamodels.IntegratedDisclosureDetail;
+import com.actualize.mortgage.ledatamodels.LegalEntityDetail;
+import com.actualize.mortgage.ledatamodels.LoanDetail;
 import com.actualize.mortgage.ledatamodels.LoanIdentifier;
+import com.actualize.mortgage.ledatamodels.Locks;
 import com.actualize.mortgage.ledatamodels.MISMODocument;
+import com.actualize.mortgage.ledatamodels.MaturityRule;
+import com.actualize.mortgage.ledatamodels.Name;
+import com.actualize.mortgage.ledatamodels.Parties;
+import com.actualize.mortgage.ledatamodels.PropertyDetail;
+import com.actualize.mortgage.ledatamodels.PropertyValuationDetail;
+import com.actualize.mortgage.ledatamodels.SalesContractDetail;
 import com.actualize.mortgage.ledatamodels.TermsOfLoan;
+import com.actualize.mortgage.lepagemodels.LoanEstimateDocument;
+import com.actualize.mortgage.lepagemodels.LoanEstimatePageOne;
+import com.actualize.mortgage.lepagemodels.LoanEstimateSection;
+import com.actualize.mortgage.lepagemodels.LoanEstimateSectionBorrower;
+import com.actualize.mortgage.lepagemodels.LoanEstimateSectionRateLock;
+import com.actualize.mortgage.utils.StringFormatter;
 
+import leform.Formatter;
+
+/**
+ * 
+ * @author sboragala
+ *
+ */
 public class LoanEstimateConvertor {
-	
 	/**
-	 * 
-	 * @param in
-	 * @param validate
-	 * @return xml as document
-	 * @throws ParserConfigurationException
-	 * @throws IOException
-	 * @throws SAXException
+	 * converts xml to JSON response
+	 * @param document
+	 * @return
+	 * @throws Exception 
 	 */
-	public Document run(InputStream in, boolean validate) throws ParserConfigurationException, IOException, SAXException {
-		// Create the results document and root element ("Results")
-        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-        DocumentBuilder builder = dbf.newDocumentBuilder();
-        Document xmldoc = builder.newDocument();
-		Element resultsElement = xmldoc.createElement("Results");
-        xmldoc.appendChild(resultsElement);
-        Element statusElement = xmldoc.createElement("Status");
-        resultsElement.appendChild(statusElement);
-        
-        // Add the start and end times
-		Element startElement = xmldoc.createElement("StartTime");
-		resultsElement.appendChild(startElement);
-		Element endElement = xmldoc.createElement("EndTime");
-		resultsElement.appendChild(endElement);
-
-		// Stamp the start time
-		startElement.appendChild(xmldoc.createTextNode(new Date().toString()));
-
-    	// Save input stream into ByteArrayOutputStream (needed for multiple purposes, e.g. validation and input)
-    	ByteArrayOutputStream baos = inputStreamToByteArrayOutputStream(in);
-		in.close();
-
-
-		MISMODocument data = new MISMODocument(new ByteArrayInputStream(baos.toByteArray()));
-	  //  insertPdfResults(data, xmldoc, resultsElement);
-
-		// Stamp the end time
-    	endElement.appendChild(xmldoc.createTextNode(new Date().toString()));
-
-    	// Set status to success
-    	statusElement.appendChild(xmldoc.createTextNode("Success"));
-    	return xmldoc;
+	public LoanEstimateDocument convertXmltoJSON(MISMODocument mismodoc) throws Exception
+	{
+		LoanEstimateDocument loanEstimateDocument = new LoanEstimateDocument();
+		LoanEstimatePageOne loanEstimatePageOne = new LoanEstimatePageOne();
+			loanEstimatePageOne.setLoanEstimateSection(createLoanEstimateSection(mismodoc));
+			loanEstimateDocument.setLoanEstimatePageOne(loanEstimatePageOne);
+		return loanEstimateDocument;
 	}
 	
 	/**
-	 * converts inputStream to ByteArrayOutputStream
-	 * @param in
-	 * @return xml as ByteArrayOutputStream
-	 * @throws IOException
+	 * creates loan estimate section 
+	 * @param deal
+	 * @return
+	 * @throws Exception
 	 */
-	private static ByteArrayOutputStream inputStreamToByteArrayOutputStream(InputStream in) throws IOException {
-		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		byte[] buffer = new byte[1024];
-		int len;
-		while ((len = in.read(buffer)) > -1 ) {
-		    baos.write(buffer, 0, len);
+	private LoanEstimateSection createLoanEstimateSection(MISMODocument mismodoc) throws Exception {
+			
+		LoanEstimateSection loanEstimateSection = new LoanEstimateSection();
+		Document document = null;
+		NodeList nodes = mismodoc.getElementsAddNS("//DOCUMENT");
+        if (nodes.getLength() > 0)
+            document = new Document(Document.NS, (Element)nodes.item(0));
+        Deal deal = new Deal(Deal.NS, (Element)document.getElementAddNS("DEAL_SETS/DEAL_SET/DEALS/DEAL"));
+		
+		// Data query helper strings
+		String loan = "LOANS/LOAN";
+		String lender = "PARTIES/PARTY[ROLES/ROLE/ROLE_DETAIL/PartyRoleType='NotePayTo'][LEGAL_ENTITY]";
+		String subjectProperty = "COLLATERALS/COLLATERAL/SUBJECT_PROPERTY";
+		String propertyValuation = subjectProperty + "/PROPERTY_VALUATIONS/PROPERTY_VALUATION";
+		String salesContract = subjectProperty + "/SALES_CONTRACTS/SALES_CONTRACT";
+		// Data containers
+		Address lenderAddress = new Address((Element)deal.getElementAddNS(lender + "/ADDRESSES/ADDRESS[AddressType='Mailing']"));
+		Address propertyAddress = new Address((Element)deal.getElementAddNS(subjectProperty + "/ADDRESS"));
+		Parties borrowerParties = new Parties((Element)deal.getElementAddNS("PARTIES"), "[ROLES/ROLE/ROLE_DETAIL/PartyRoleType='Borrower']");
+		Construction construction = new Construction((Element)deal.getElementAddNS(loan + "/CONSTRUCTION"));
+		IntegratedDisclosureDetail idDetail = new IntegratedDisclosureDetail((Element)deal.getElementAddNS(loan + "/DOCUMENT_SPECIFIC_DATA_SETS/DOCUMENT_SPECIFIC_DATA_SET/INTEGRATED_DISCLOSURE/INTEGRATED_DISCLOSURE_DETAIL"));
+		LegalEntityDetail lenderDetail = new LegalEntityDetail((Element)deal.getElementAddNS(lender + "/LEGAL_ENTITY/LEGAL_ENTITY_DETAIL"));
+		LoanDetail loanDetail = new LoanDetail((Element)deal.getElementAddNS(loan + "/LOAN_DETAIL"));
+		LoanIdentifier loanIdentifier = new LoanIdentifier((Element)deal.getElementAddNS(loan + "/LOAN_IDENTIFIERS/LOAN_IDENTIFIER[LoanIdentifierType='LenderLoan']"));
+		Locks locks = new Locks((Element)deal.getElementAddNS(loan + "/LOAN_PRODUCT/LOCKS"));
+		MaturityRule maturityRule = new MaturityRule((Element)deal.getElementAddNS(loan + "/MATURITY/MATURITY_RULE[LoanMaturityPeriodType='Month']"));
+		PropertyDetail propertyDetail = new PropertyDetail((Element)deal.getElementAddNS(subjectProperty + "/PROPERTY_DETAIL"));
+		PropertyValuationDetail propertyValuationDetail = new PropertyValuationDetail((Element)deal.getElementAddNS(propertyValuation + "/PROPERTY_VALUATION_DETAIL"));
+		SalesContractDetail salesContractDetail = new SalesContractDetail((Element)deal.getElementAddNS(salesContract + "/SALES_CONTRACT_DETAIL"));
+		TermsOfLoan loanTerms = new TermsOfLoan((Element)deal.getElementAddNS(loan + "/TERMS_OF_LOAN"));
+		String loanType = loanTerms.MortgageType;
+		
+		loanEstimateSection.setLenderFullName(StringFormatter.STRINGCLEAN.formatString(lenderDetail.FullName));
+		loanEstimateSection.setLenderAddress(toAddressModel(lenderAddress));
+		loanEstimateSection.setDateIssued(Formatter.DATE.format(idDetail.IntegratedDisclosureIssuedDate));
+		loanEstimateSection.setApplicants(applicants(borrowerParties));
+		loanEstimateSection.setEstimatedPropValue(Formatter.ZEROTRUNCDOLLARS.format(salePrice(loanTerms, salesContractDetail, propertyValuationDetail, propertyDetail)));
+		loanEstimateSection.setLoanTerm(Formatter.YEARSMONTHS.format(loanTerm(loanDetail, maturityRule, construction)));
+		loanEstimateSection.setPurpose(loanTerms.LoanPurposeType);
+		loanEstimateSection.setProduct(idDetail.IntegratedDisclosureLoanProductDescription);
+		loanEstimateSection.setLoanType("Other".equalsIgnoreCase(loanType) ? loanTerms.MortgageTypeOtherDescription :loanType);
+		loanEstimateSection.setLoanId(loanIdentifier.LoanIdentifier);
+		loanEstimateSection.setProperty(toAddressModel(propertyAddress));
+		loanEstimateSection.setLoanEstimateSectionRateLock(rateLock(locks, idDetail));
+		return loanEstimateSection;
+
 		}
-		baos.flush();
-		return baos;
+		
+	/**
+	 * calculates the salePrice
+	 * @param loanTerms
+	 * @param salesContractDetail
+	 * @param propertyValuationDetail
+	 * @param propertyDetail
+	 * @return saleprice as a String
+	 */
+	private static String salePrice(TermsOfLoan loanTerms, SalesContractDetail salesContractDetail, PropertyValuationDetail propertyValuationDetail, PropertyDetail propertyDetail) {
+		if (!loanTerms.LoanPurposeType.equalsIgnoreCase("Purchase"))
+			if (propertyValuationDetail.PropertyValuationAmount.equals(""))
+				return propertyDetail.PropertyEstimatedValueAmount;
+			else
+				return propertyValuationDetail.PropertyValuationAmount;		
+		if (salesContractDetail.PersonalPropertyIncludedIndicator.equalsIgnoreCase("true"))
+			return salesContractDetail.RealPropertyAmount;
+		return salesContractDetail.SalesContractAmount;
 	}
 	
 	/**
-	 * 
-	 * @param data
-	 * @throws IOException
+	 * fetch the Name Model from XML
+	 * @param name
+	 * @return name detail
 	 */
-	public void run(MISMODocument data) throws  IOException {
-
-		// Grab deal and loan identifier
-		Deal deal = null;
-		NodeList nodes = data.getElementsAddNS("//DEAL");
-		NodeList documentClassificationNodes = data.getElementsAddNS("//DOCUMENT_CLASSIFICATION");
+	private static NameModel toNameModel(Name name) {
+		NameModel nameModel = new NameModel();
 		
-		if (nodes.getLength() > 0)
-			deal = new Deal(Deal.NS, (Element)nodes.item(0));
-		LoanIdentifier loanIdentifier = new LoanIdentifier((Element)deal.getElementAddNS("LOANS/LOAN/LOAN_IDENTIFIERS/LOAN_IDENTIFIER[LoanIdentifierType='LenderLoan']"));
-		TermsOfLoan termsOfLoan = new TermsOfLoan((Element)deal.getElementAddNS("LOANS/LOAN/TERMS_OF_LOAN[LoanPurposeType='Refinance']"));
-
-		DocumentClassification documentClassification = null;
-		if(documentClassificationNodes.getLength()>0)
-		    documentClassification = new DocumentClassification(DocumentClassification.NS, (Element)documentClassificationNodes.item(0));
+		if (!name.FullName.equals(""))
+			nameModel.setFullName(name.FullName);
+		if (!name.MiddleName.equals("")) 
+			nameModel.setMiddleName(name.MiddleName);
+		if (!name.LastName.equals("")) 
+			nameModel.setLastName(name.LastName);
+		if (!name.SuffixName.equals("")) 
+			nameModel.setSuffixName(name.SuffixName);
 		
-		DocumentClass documentClass = new DocumentClass((Element)documentClassification.getElementAddNS("DOCUMENT_CLASSES/DOCUMENT_CLASS[DocumentType='Other']"));
-		
+		return nameModel;
 	}
+	
+	/**
+	 * fetch the address model from XML
+	 * @param address
+	 * @return address Model
+	 */
+	private static com.actualize.mortgage.domainmodels.Address toAddressModel(Address address) {
+	com.actualize.mortgage.domainmodels.Address addressModel = new com.actualize.mortgage.domainmodels.Address();
+		
+		if (!address.CityName.equals(""))
+			addressModel.setCityName(address.CityName);
+		if (!address.AddressLineText.equals(""))
+			addressModel.setAddressLineText(address.AddressLineText);
+		if (!address.StateCode.equals(""))
+			addressModel.setStateCode(address.StateCode);
+		if (!address.PostalCode.equals("")) 
+			addressModel.setPostalCode(address.PostalCode);
+		
+		return addressModel;
+	}
+	
+	/**
+	 * calculates the loan term
+	 * @param loanDetail
+	 * @param maturityRule
+	 * @param construction
+	 * @return loanTerm as a string
+	 */
+	private static String loanTerm(LoanDetail loanDetail, MaturityRule maturityRule, Construction construction) {
+		if (loanDetail.ConstructionLoanIndicator.equalsIgnoreCase("true")) {
+			if (construction.ConstructionLoanType.equalsIgnoreCase("ConstructionOnly"))
+				return construction.ConstructionPeriodNumberOfMonthsCount;
+			return construction.ConstructionLoanTotalTermMonthsCount;
+		}
+		return maturityRule.LoanMaturityPeriodCount;
+	}
+	
+	/**
+	 * fetches the list of borrowers from the XMl 
+	 * @param borrowers
+	 * @return borrowers List
+	 */
+	private static List<LoanEstimateSectionBorrower> applicants(Parties borrowers) {
+		
+		List<LoanEstimateSectionBorrower> loanEstimateSectionBorrowers = new LinkedList<>();
+		if (borrowers.parties.length > 0) {
+			LoanEstimateSectionBorrower loanEstimateSectionBorrower = new LoanEstimateSectionBorrower();
+			NameModel applicant = new NameModel();
+			com.actualize.mortgage.domainmodels.Address addressModel = new com.actualize.mortgage.domainmodels.Address();
+			if (!borrowers.parties[0].legalEntity.legalEntityDetail.FullName.equals(""))
+				applicant.setFullName(borrowers.parties[0].legalEntity.legalEntityDetail.FullName);
+			else
+				applicant = toNameModel(borrowers.parties[0].individual.name);
+			addressModel = toAddressModel(new Address((Element)borrowers.parties[0].getElementAddNS("ADDRESSES/ADDRESS[AddressType='Mailing']")));
+			loanEstimateSectionBorrower.setName(applicant);
+			loanEstimateSectionBorrower.setAddress(addressModel);
+			loanEstimateSectionBorrowers.add(loanEstimateSectionBorrower);
+			}
+		return loanEstimateSectionBorrowers;
+	}
+	
+	/**
+	 * calculates the rateLock
+	 * @param locks
+	 * @param idDetail
+	 * @return LoanEstimateSectionRateLock object
+	 */
+	public static LoanEstimateSectionRateLock rateLock(Locks locks, IntegratedDisclosureDetail idDetail) {
+	
+		LoanEstimateSectionRateLock loanEstimateSectionRateLock = new LoanEstimateSectionRateLock();
+		// Get lock date/time
+		String time = "";
+		String timezone = "";
+		if (locks.locks.length > 0)
+			if (locks.locks[locks.locks.length - 1].LockStatusType.equalsIgnoreCase("Locked")) {
+				loanEstimateSectionRateLock.setUntillDate(Formatter.DATETIME.format(locks.locks[locks.locks.length - 1].LockExpirationDatetime)) ;
+				loanEstimateSectionRateLock.setUntillTimeZone(locks.locks[locks.locks.length - 1].extension.other.LockExpirationTimezoneType);
+			}
+	
+		// Build first line
+		time = loanEstimateSectionRateLock.getExpireDate();
+		if (("").equals(time))
+			loanEstimateSectionRateLock.setRateLock("false");
+		else
+			loanEstimateSectionRateLock.setRateLock("true");
+	
+		
+		// Append subsequent lines
+		timezone = idDetail.extension.other.IntegratedDisclosureEstimatedClosingCostsExpirationTimezoneType;
+		String formattedTimezone = timezone.equals("") ? "" : (" " + timezone);
+			loanEstimateSectionRateLock.setExpireDate(Formatter.DATE.format(idDetail.IntegratedDisclosureEstimatedClosingCostsExpirationDatetime));
+			loanEstimateSectionRateLock.setExpireTime(Formatter.TIME.format(idDetail.IntegratedDisclosureEstimatedClosingCostsExpirationDatetime));
+			loanEstimateSectionRateLock.setExpireTimeZone(formattedTimezone);
+	
+		return loanEstimateSectionRateLock;
+	}
+	
+		
 }

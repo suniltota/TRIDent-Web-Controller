@@ -19,7 +19,7 @@ import com.actualize.mortgage.domainmodels.ClosingCostFundModel;
 import com.actualize.mortgage.domainmodels.ID_SubsectionModel;
 import com.actualize.mortgage.domainmodels.LiabilitiesModel;
 import com.actualize.mortgage.domainmodels.ProrationsModel;
-import com.actualize.mortgage.domainmodels.SalesContractDetail;
+import com.actualize.mortgage.domainmodels.SalesContractDetailModel;
 import com.actualize.mortgage.domainmodels.SummariesofTransactions;
 import com.actualize.mortgage.domainmodels.SummariesofTransactionsBorrowerSection;
 import com.actualize.mortgage.domainmodels.SummariesofTransactionsDetails;
@@ -177,7 +177,7 @@ public class PageThreeServiceImpl implements PageThreeService{
 			 	borrowerSection.setDueFromBorrowerAtClosingTotalAmount(IDSSummaryDetail.get("DueFromBorrowerAtClosing"));
 			 	borrowerSection.setPaidAlreadybyoronBehalfofBorroweratClosing(IDSSummaryDetail.get("PaidAlreadyByOrOnBehalfOfBorrowerAtClosing"));
 			
-				SalesContractDetail contractDetail = PopulateData.populateSalesContractDetail(document);
+				SalesContractDetailModel contractDetail = PopulateData.populateSalesContractDetail(document);
 				 for(int i=0;i<dueFromBorrowerLabel.length;i++)
 				 {
 					 SummariesofTransactionsDetails dueFromBorrower = new SummariesofTransactionsDetails();

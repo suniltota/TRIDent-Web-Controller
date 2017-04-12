@@ -30,6 +30,7 @@ public class LoanEstimateSection implements Serializable {
 	private String loanType;
 	private String loanId;
 	private LoanEstimateSectionRateLock loanEstimateSectionRateLock;
+	
 	/**
 	 * @return the lenderFullName
 	 */

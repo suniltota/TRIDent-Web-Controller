@@ -35,7 +35,7 @@ import com.actualize.mortgage.domainmodels.NameModel;
 import com.actualize.mortgage.domainmodels.ProjectedPayments;
 import com.actualize.mortgage.domainmodels.ProjectedPaymentsETIA;
 import com.actualize.mortgage.domainmodels.ProjectedPaymentsPI;
-import com.actualize.mortgage.domainmodels.SalesContractDetail;
+import com.actualize.mortgage.domainmodels.SalesContractDetailModel;
 import com.actualize.mortgage.domainmodels.Seller;
 import com.actualize.mortgage.domainmodels.TransactionInformation;
 import com.actualize.mortgage.services.PageOneService;
@@ -60,7 +60,7 @@ public class PageOneServiceImpl implements PageOneService {
 		
 		DEAL deal = document.getDEALSETS().getDEALSET().getDEALS().getDEAL();
 		ClosingInformation closingInformation = new ClosingInformation();
-		SalesContractDetail salesContractDetail = new SalesContractDetail();
+		SalesContractDetailModel salesContractDetailModel = new SalesContractDetailModel();
 		ADDRESS address = new ADDRESS();
 		Address property = new Address();
 		String settlementAgent = null;
@@ -111,10 +111,10 @@ public class PageOneServiceImpl implements PageOneService {
 		{
 			collaterals.forEach(collateral ->{
 				closingInformation.setSalePrice(null != collateral.getSUBJECTPROPERTY().getSALESCONTRACTS().getSALESCONTRACT().getSALESCONTRACTDETAIL().getSalesContractAmount() ? collateral.getSUBJECTPROPERTY().getSALESCONTRACTS().getSALESCONTRACT().getSALESCONTRACTDETAIL().getSalesContractAmount().getValue().toString():"");
-				salesContractDetail.setSaleContractAmount(null != collateral.getSUBJECTPROPERTY().getSALESCONTRACTS().getSALESCONTRACT().getSALESCONTRACTDETAIL().getSalesContractAmount() ? collateral.getSUBJECTPROPERTY().getSALESCONTRACTS().getSALESCONTRACT().getSALESCONTRACTDETAIL().getSalesContractAmount().getValue().toString():"");
-				salesContractDetail.setPersonalPropertyIndicator(null != collateral.getSUBJECTPROPERTY().getSALESCONTRACTS().getSALESCONTRACT().getSALESCONTRACTDETAIL().getPersonalPropertyIncludedIndicator() ? collateral.getSUBJECTPROPERTY().getSALESCONTRACTS().getSALESCONTRACT().getSALESCONTRACTDETAIL().getPersonalPropertyIncludedIndicator().isValue() : false);
+				salesContractDetailModel.setSaleContractAmount(null != collateral.getSUBJECTPROPERTY().getSALESCONTRACTS().getSALESCONTRACT().getSALESCONTRACTDETAIL().getSalesContractAmount() ? collateral.getSUBJECTPROPERTY().getSALESCONTRACTS().getSALESCONTRACT().getSALESCONTRACTDETAIL().getSalesContractAmount().getValue().toString():"");
+				salesContractDetailModel.setPersonalPropertyIndicator(null != collateral.getSUBJECTPROPERTY().getSALESCONTRACTS().getSALESCONTRACT().getSALESCONTRACTDETAIL().getPersonalPropertyIncludedIndicator() ? collateral.getSUBJECTPROPERTY().getSALESCONTRACTS().getSALESCONTRACT().getSALESCONTRACTDETAIL().getPersonalPropertyIncludedIndicator().isValue() : false);
 			});
-			closingInformation.setSalesContractDetail(salesContractDetail);
+			closingInformation.setSalesContractDetail(salesContractDetailModel);
 		}
 		
 		closingInformation.setSettlementAgent(settlementAgent);
