@@ -2,7 +2,8 @@ package com.actualize.mortgage.domainmodels;
 
 import java.io.Serializable;
 
-import datalayer.Expenses;
+import com.actualize.mortgage.utils.Expenses;
+
 
 public class ID_SubsectionModel extends Expenses implements Serializable{
 	
