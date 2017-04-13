@@ -23,7 +23,6 @@ import com.actualize.mortgage.domainmodels.ClosingInformation;
 import com.actualize.mortgage.domainmodels.CostsAtClosing;
 import com.actualize.mortgage.domainmodels.CostsAtClosingCashToClose;
 import com.actualize.mortgage.domainmodels.CostsAtClosingClosingCosts;
-import com.actualize.mortgage.domainmodels.Lender;
 import com.actualize.mortgage.domainmodels.LoanInformation;
 import com.actualize.mortgage.domainmodels.LoanTerms;
 import com.actualize.mortgage.domainmodels.LoanTermsBalloonPayment;
@@ -36,7 +35,6 @@ import com.actualize.mortgage.domainmodels.ProjectedPayments;
 import com.actualize.mortgage.domainmodels.ProjectedPaymentsETIA;
 import com.actualize.mortgage.domainmodels.ProjectedPaymentsPI;
 import com.actualize.mortgage.domainmodels.SalesContractDetailModel;
-import com.actualize.mortgage.domainmodels.Seller;
 import com.actualize.mortgage.domainmodels.TransactionInformation;
 import com.actualize.mortgage.services.PageOneService;
 import com.actualize.mortgage.utils.Convertor;
@@ -202,8 +200,8 @@ public class PageOneServiceImpl implements PageOneService {
 		TransactionInformation transactionInformation = new TransactionInformation();
 		deal = document.getDEALSETS().getDEALSET().getDEALS().getDEAL();
 		List<Borrower> borrowers = new LinkedList<>();
-		List<Seller> sellers = new LinkedList<>();
-		List<Lender> lenders = new LinkedList<>();
+		List<Borrower> sellers = new LinkedList<>();
+		List<Borrower> lenders = new LinkedList<>();
 		deal = document.getDEALSETS().getDEALSET().getDEALS().getDEAL();
 		int i = 0;
 		List<PARTY> parties = deal.getPARTIES().getPARTY();
@@ -271,7 +269,7 @@ public class PageOneServiceImpl implements PageOneService {
 				}
 				else if(PartyRoleBase.PROPERTY_SELLER == party.getROLES().getROLE().getROLEDETAIL().getPartyRoleType().getValue())
 				{
-					Seller seller = new Seller();
+					Borrower seller = new Borrower();
 					Address sproperty = new Address();
 					NameModel nameModel =  new NameModel();
 					String sName = "";
@@ -332,11 +330,10 @@ public class PageOneServiceImpl implements PageOneService {
 				}
 				else if(PartyRoleBase.NOTE_PAY_TO == party.getROLES().getROLE().getROLEDETAIL().getPartyRoleType().getValue())
 				{
-					Lender lender = new Lender();
+					Borrower lender = new Borrower();
 					Address lproperty = new Address();
 					NameModel nameModel =  new NameModel();
 					String lName = "";
-					
 					if(null != party.getLEGALENTITY())
 					{
 						lName = party.getLEGALENTITY().getLEGALENTITYDETAIL().getFullName().getValue();

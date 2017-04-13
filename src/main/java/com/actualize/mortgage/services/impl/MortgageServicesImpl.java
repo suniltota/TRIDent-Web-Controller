@@ -36,20 +36,18 @@ import com.actualize.mortgage.domainmodels.Address;
 import com.actualize.mortgage.domainmodels.Borrower;
 import com.actualize.mortgage.domainmodels.ClosingCostDetailsLoanCosts;
 import com.actualize.mortgage.domainmodels.ClosingCostDetailsOtherCosts;
+import com.actualize.mortgage.domainmodels.ClosingDisclosureDocument;
 import com.actualize.mortgage.domainmodels.ClosingInformation;
 import com.actualize.mortgage.domainmodels.ConversionError;
 import com.actualize.mortgage.domainmodels.CostsAtClosing;
 import com.actualize.mortgage.domainmodels.DataElement;
 import com.actualize.mortgage.domainmodels.IntermediateXMLData;
-import com.actualize.mortgage.domainmodels.Lender;
 import com.actualize.mortgage.domainmodels.LoanInformation;
 import com.actualize.mortgage.domainmodels.LoanTerms;
-import com.actualize.mortgage.domainmodels.ClosingDisclosureDocument;
 import com.actualize.mortgage.domainmodels.PageOne;
 import com.actualize.mortgage.domainmodels.PageThree;
 import com.actualize.mortgage.domainmodels.PageTwo;
 import com.actualize.mortgage.domainmodels.ProjectedPayments;
-import com.actualize.mortgage.domainmodels.Seller;
 import com.actualize.mortgage.domainmodels.TransactionInformation;
 import com.actualize.mortgage.services.MortgageServices;
 import com.actualize.mortgage.services.PageOneMappingService;
@@ -78,8 +76,8 @@ public class MortgageServicesImpl implements MortgageServices{
 	DocumentType documentType = new DocumentType();
 	
 	List<Borrower> borrowers = new LinkedList<>();
-	List<Seller> sellers = new LinkedList<>();
-	List<Lender> lenders = new LinkedList<>();
+	List<Borrower> sellers = new LinkedList<>();
+	List<Borrower> lenders = new LinkedList<>();
 	
 	
 	@Autowired

@@ -18,7 +18,6 @@ import org.mismo.residential._2009.schemas.INTEGRATEDDISCLOSURESUBSECTIONPAYMENT
 import org.mismo.residential._2009.schemas.INTERESTRATEPERCHANGEADJUSTMENTRULE;
 import org.mismo.residential._2009.schemas.LOANIDENTIFIER;
 import org.mismo.residential._2009.schemas.LoanPurposeBase;
-import org.mismo.residential._2009.schemas.MortgageBase;
 import org.mismo.residential._2009.schemas.PARTY;
 import org.mismo.residential._2009.schemas.PRINCIPALANDINTERESTPAYMENTPERCHANGEADJUSTMENTRULE;
 import org.mismo.residential._2009.schemas.PROJECTEDPAYMENT;
@@ -27,15 +26,14 @@ import org.mismo.residential._2009.schemas.PaymentFrequencyBase;
 import org.mismo.residential._2009.schemas.ProjectedPaymentCalculationPeriodTermBase;
 import org.mismo.residential._2009.schemas.ProjectedPaymentEscrowedBase;
 import org.mismo.residential._2009.schemas.ProjectedPaymentEstimatedTaxesInsuranceAssessmentComponentBase;
-import org.mismo.residential._2009.schemas.TERMSOFLOAN;
 
 import com.actualize.mortgage.domainmodels.Address;
 import com.actualize.mortgage.domainmodels.Borrower;
+import com.actualize.mortgage.domainmodels.ClosingDisclosureDocument;
 import com.actualize.mortgage.domainmodels.ClosingInformation;
 import com.actualize.mortgage.domainmodels.CostsAtClosing;
 import com.actualize.mortgage.domainmodels.CostsAtClosingCashToClose;
 import com.actualize.mortgage.domainmodels.CostsAtClosingClosingCosts;
-import com.actualize.mortgage.domainmodels.Lender;
 import com.actualize.mortgage.domainmodels.LoanInformation;
 import com.actualize.mortgage.domainmodels.LoanTerms;
 import com.actualize.mortgage.domainmodels.LoanTermsBalloonPayment;
@@ -44,15 +42,11 @@ import com.actualize.mortgage.domainmodels.LoanTermsLoanAmount;
 import com.actualize.mortgage.domainmodels.LoanTermsPI;
 import com.actualize.mortgage.domainmodels.LoanTermsPrepaymentPenalty;
 import com.actualize.mortgage.domainmodels.NameModel;
-import com.actualize.mortgage.domainmodels.ClosingDisclosureDocument;
 import com.actualize.mortgage.domainmodels.ProjectedPayments;
 import com.actualize.mortgage.domainmodels.ProjectedPaymentsETIA;
 import com.actualize.mortgage.domainmodels.ProjectedPaymentsPI;
-import com.actualize.mortgage.domainmodels.Seller;
 import com.actualize.mortgage.services.PageOneMappingService;
 import com.actualize.mortgage.utils.Convertor;
-import com.actualize.mortgage.utils.DocumentType;
-import com.actualize.mortgage.utils.PopulateData;
 import com.actualize.mortgage.utils.StringFormatter;
 
 public class PageOneMappingServiceImpl  implements PageOneMappingService{
@@ -228,8 +222,8 @@ public class PageOneMappingServiceImpl  implements PageOneMappingService{
 		int sellerNo = 0;
 		int lenderNo = 0;
 		List<Borrower> borrowers = pdfDocument.getPageOne().getTransactionInformation().getBorrower();
-		List<Seller> sellers = pdfDocument.getPageOne().getTransactionInformation().getSeller();
-		List<Lender> lenders = pdfDocument.getPageOne().getTransactionInformation().getLender();
+		List<Borrower> sellers = pdfDocument.getPageOne().getTransactionInformation().getSeller();
+		List<Borrower> lenders = pdfDocument.getPageOne().getTransactionInformation().getLender();
 		for(PARTY party : parties){
 			if(null != party.getROLES())
 			{

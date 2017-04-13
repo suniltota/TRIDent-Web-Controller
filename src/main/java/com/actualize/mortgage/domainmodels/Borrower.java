@@ -2,14 +2,11 @@ package com.actualize.mortgage.domainmodels;
 
 import java.io.Serializable;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 public class Borrower implements Serializable {
 
 	private static final long serialVersionUID = -6243514603739727710L;
 	
 	private String type;
-	@JsonProperty("borrowerDetails")
 	private NameModel nameModel;
 	private String partyRoleType;
 	private String partyRoleOtherDescription;

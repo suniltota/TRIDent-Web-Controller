@@ -3,13 +3,23 @@ package com.actualize.mortgage.domainmodels;
 import java.io.Serializable;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+/**
+ * 
+ * @author sboragala
+ *
+ */
 public class TransactionInformation implements Serializable {
 	
 	private static final long serialVersionUID = 2048295015514864504L;
 	
+	@JsonProperty(value="borrowerDetails")
 	private List<Borrower> borrower;
-	private List<Seller> seller;
-	private List<Lender> lender;	
+	@JsonProperty(value="sellerDetails")
+	private List<Borrower> seller;
+	@JsonProperty(value="lenderFullName")
+	private List<Borrower> lender;
+	
 	/**
 	 * @return the borrower
 	 */
@@ -25,29 +35,27 @@ public class TransactionInformation implements Serializable {
 	/**
 	 * @return the seller
 	 */
-	public List<Seller> getSeller() {
+	public List<Borrower> getSeller() {
 		return seller;
 	}
 	/**
 	 * @param seller the seller to set
 	 */
-	public void setSeller(List<Seller> seller) {
+	public void setSeller(List<Borrower> seller) {
 		this.seller = seller;
 	}
 	/**
 	 * @return the lender
 	 */
-	public List<Lender> getLender() {
+	public List<Borrower> getLender() {
 		return lender;
 	}
 	/**
 	 * @param lender the lender to set
 	 */
-	public void setLender(List<Lender> lender) {
+	public void setLender(List<Borrower> lender) {
 		this.lender = lender;
 	}
 	
-	
-	
-	
+
 }

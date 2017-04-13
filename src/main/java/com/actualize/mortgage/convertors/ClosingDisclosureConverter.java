@@ -12,6 +12,7 @@ import org.w3c.dom.NodeList;
 
 import com.actualize.mortgage.cdpagemodels.ClosingDisclosure;
 import com.actualize.mortgage.cdpagemodels.ClosingDisclosurePageOne;
+import com.actualize.mortgage.domainmodels.Borrower;
 import com.actualize.mortgage.domainmodels.ClosingInformation;
 import com.actualize.mortgage.domainmodels.NameModel;
 import com.actualize.mortgage.domainmodels.PropertyValuationDetailModel;
@@ -26,6 +27,8 @@ import com.actualize.mortgage.ledatamodels.IntegratedDisclosureDetail;
 import com.actualize.mortgage.ledatamodels.LegalEntity;
 import com.actualize.mortgage.ledatamodels.LegalEntityDetail;
 import com.actualize.mortgage.ledatamodels.LoanDetail;
+import com.actualize.mortgage.ledatamodels.LoanIdentifier;
+import com.actualize.mortgage.ledatamodels.LoanIdentifiers;
 import com.actualize.mortgage.ledatamodels.MISMODocument;
 import com.actualize.mortgage.ledatamodels.MaturityRule;
 import com.actualize.mortgage.ledatamodels.Name;
@@ -62,8 +65,8 @@ public class ClosingDisclosureConverter {
         
         ClosingDisclosurePageOne closingDisclosurePageOne = new ClosingDisclosurePageOne();
         closingDisclosurePageOne.setClosingInformation(createClosingInformation(mismodoc));
+        closingDisclosurePageOne.setTransactionInformation(createTransactionInformation(mismodoc));
         closingDisclosure.setClosingDisclosurePageOne(closingDisclosurePageOne);
-        
         return closingDisclosure;
     }
  
@@ -126,9 +129,9 @@ public class ClosingDisclosureConverter {
     {
     	TransactionInformation transactionInformation = new TransactionInformation();
     	Document document = null;
+    	LegalEntityDetail legalEntityDetail = null;
         NodeList nodes = mismodoc.getElementsAddNS("//DOCUMENT");
         String subjectProperty = "COLLATERALS/COLLATERAL/SUBJECT_PROPERTY";
-        String salesContract = subjectProperty + "/SALES_CONTRACTS/SALES_CONTRACT";
         String loan = "LOANS/LOAN";
         if (nodes.getLength() > 0)
             document = new Document(Document.NS, (Element)nodes.item(0));
@@ -136,7 +139,12 @@ public class ClosingDisclosureConverter {
         
     	Parties borrowerParties = new Parties((Element)deal.getElementAddNS("PARTIES"), "[ROLES/ROLE/ROLE_DETAIL/PartyRoleType='Borrower']");
     	Parties sellerParties = new Parties((Element)deal.getElementAddNS("PARTIES"), "[ROLES/ROLE/ROLE_DETAIL/PartyRoleType='PropertySeller']");
+    	Parties lenders = new Parties((Element)deal.getElementAddNS("PARTIES"), "[ROLES/ROLE/ROLE_DETAIL/PartyRoleType='NotePayTo']");
+    	LoanIdentifiers loanIdentifier = new LoanIdentifiers((Element)deal.getElementAddNS("LOANS/LOAN/LOAN_IDENTIFIERS"));
     	
+    	transactionInformation.setBorrower(createBorrowers(borrowerParties));
+    	transactionInformation.setSeller(createBorrowers(sellerParties));
+    	transactionInformation.setLender(createBorrowers(lenders));
 		return transactionInformation;
     	
     }
@@ -217,50 +225,34 @@ public class ClosingDisclosureConverter {
 		return maturityRule.LoanMaturityPeriodCount;
 	}
 	
-	/**
-	 * fetches the list of borrowers from the XMl 
-	 * @param borrowers
-	 * @return borrowers List
-	 */
-	private static List<LoanEstimateSectionBorrower> applicants(Parties borrowers) {
-		
-		List<LoanEstimateSectionBorrower> loanEstimateSectionBorrowers = new LinkedList<>();
-		if (borrowers.parties.length > 0) {
-			LoanEstimateSectionBorrower loanEstimateSectionBorrower = new LoanEstimateSectionBorrower();
-			NameModel applicant = new NameModel();
-			com.actualize.mortgage.domainmodels.Address addressModel = new com.actualize.mortgage.domainmodels.Address();
-			if (!borrowers.parties[0].legalEntity.legalEntityDetail.FullName.equals(""))
-				applicant.setFullName(borrowers.parties[0].legalEntity.legalEntityDetail.FullName);
-			else
-				applicant = toNameModel(borrowers.parties[0].individual.name);
-			addressModel = toAddressModel(new Address((Element)borrowers.parties[0].getElementAddNS("ADDRESSES/ADDRESS[AddressType='Mailing']")));
-			loanEstimateSectionBorrower.setName(applicant);
-			loanEstimateSectionBorrower.setAddress(addressModel);
-			loanEstimateSectionBorrowers.add(loanEstimateSectionBorrower);
-			}
-		return loanEstimateSectionBorrowers;
-	}
+	
     /**
-     * 
+     * fetches the list of sellers from the XMl
      * @param borrowers
-     * @return
+     * @return borrowers list as JSON
      */
-	private static List<LoanEstimateSectionBorrower> createBorrowers(Parties borrowers) {
+	private static List<Borrower> createBorrowers(Parties borrowers) {
 		
-		List<LoanEstimateSectionBorrower> loanEstimateSectionBorrowers = new LinkedList<>();
+		List<Borrower> borrowersList = new LinkedList<>();
 		if (borrowers.parties.length > 0) {
-			LoanEstimateSectionBorrower loanEstimateSectionBorrower = new LoanEstimateSectionBorrower();
+			Borrower borrower = new Borrower();
 			NameModel applicant = new NameModel();
 			com.actualize.mortgage.domainmodels.Address addressModel = new com.actualize.mortgage.domainmodels.Address();
 			if (!borrowers.parties[0].legalEntity.legalEntityDetail.FullName.equals(""))
+			{	
 				applicant.setFullName(borrowers.parties[0].legalEntity.legalEntityDetail.FullName);
-			else
-				applicant = toNameModel(borrowers.parties[0].individual.name);
-			addressModel = toAddressModel(new Address((Element)borrowers.parties[0].getElementAddNS("ADDRESSES/ADDRESS[AddressType='Mailing']")));
-			loanEstimateSectionBorrower.setName(applicant);
-			loanEstimateSectionBorrower.setAddress(addressModel);
-			loanEstimateSectionBorrowers.add(loanEstimateSectionBorrower);
+				borrower.setType("O");
 			}
-		return loanEstimateSectionBorrowers;
+			else
+			{
+				applicant = toNameModel(borrowers.parties[0].individual.name);
+				borrower.setType("I");
+			}
+			addressModel = toAddressModel(new Address((Element)borrowers.parties[0].getElementAddNS("ADDRESSES/ADDRESS[AddressType='Mailing']")));
+			borrower.setNameModel(applicant);
+			borrower.setAddress(addressModel);
+			borrowersList.add(borrower);
+			}
+		return borrowersList;
 	}
 }

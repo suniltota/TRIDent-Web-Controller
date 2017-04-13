@@ -17,7 +17,6 @@ import com.actualize.mortgage.domainmodels.ClosingInformation;
 import com.actualize.mortgage.domainmodels.CostsAtClosing;
 import com.actualize.mortgage.domainmodels.CostsAtClosingCashToClose;
 import com.actualize.mortgage.domainmodels.CostsAtClosingClosingCosts;
-import com.actualize.mortgage.domainmodels.Lender;
 import com.actualize.mortgage.domainmodels.LoanInformation;
 import com.actualize.mortgage.domainmodels.LoanInformationLoanIdentifier;
 import com.actualize.mortgage.domainmodels.LoanTerms;
@@ -32,7 +31,6 @@ import com.actualize.mortgage.domainmodels.LoanTermsPrepaymentPenalty;
 import com.actualize.mortgage.domainmodels.ProjectedPayments;
 import com.actualize.mortgage.domainmodels.SalesContractDetailModel;
 import com.actualize.mortgage.domainmodels.ClosingDisclosureDocument;
-import com.actualize.mortgage.domainmodels.Seller;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class JsonToUcd {
@@ -2206,8 +2204,8 @@ public class JsonToUcd {
 			insertData(document, address, "StateCode", borrower.getAddress().getStateCode());
 		}
 
-		List<Seller> sellers = jsonDocument.getPageOne().getTransactionInformation().getSeller();
-		for (Seller seller : sellers) {
+		List<Borrower> sellers = jsonDocument.getPageOne().getTransactionInformation().getSeller();
+		for (Borrower seller : sellers) {
 			Element party = insertLevels(document, element, "PARTY");
 			Element roleDetail = insertLevels(document, party, "ROLES/ROLE/ROLE_DETAIL");
 			insertData(document, roleDetail, "PartyRoleType", "Seller");
@@ -2226,8 +2224,8 @@ public class JsonToUcd {
 			insertData(document, address, "StateCode", seller.getAddress().getStateCode());
 		}
 
-		List<Lender> lenders = jsonDocument.getPageOne().getTransactionInformation().getLender(); // TODO: There should be two lenders - one individual and one organization
-		for (Lender lender : lenders) {
+		List<Borrower> lenders = jsonDocument.getPageOne().getTransactionInformation().getLender(); // TODO: There should be two lenders - one individual and one organization
+		for (Borrower lender : lenders) {
 			Element party = insertLevels(document, element, "PARTY");
 			Element roleDetail = insertLevels(document, party, "ROLES/ROLE/ROLE_DETAIL");
 			insertData(document, roleDetail, "PartyRoleType", "NotePayTo");
