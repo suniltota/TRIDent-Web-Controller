@@ -14,11 +14,25 @@ import com.actualize.mortgage.cdpagemodels.ClosingDisclosure;
 import com.actualize.mortgage.cdpagemodels.ClosingDisclosurePageOne;
 import com.actualize.mortgage.domainmodels.Borrower;
 import com.actualize.mortgage.domainmodels.ClosingInformation;
+import com.actualize.mortgage.domainmodels.LoanInformation;
+import com.actualize.mortgage.domainmodels.LoanInformationLoanIdentifier;
+import com.actualize.mortgage.domainmodels.LoanTerms;
+import com.actualize.mortgage.domainmodels.LoanTermsBalloonPayment;
+import com.actualize.mortgage.domainmodels.LoanTermsETIA;
+import com.actualize.mortgage.domainmodels.LoanTermsEscrowAccount;
+import com.actualize.mortgage.domainmodels.LoanTermsInterestRate;
+import com.actualize.mortgage.domainmodels.LoanTermsIntialEscrow;
+import com.actualize.mortgage.domainmodels.LoanTermsLoanAmount;
+import com.actualize.mortgage.domainmodels.LoanTermsPI;
+import com.actualize.mortgage.domainmodels.LoanTermsPrepaymentPenalty;
 import com.actualize.mortgage.domainmodels.NameModel;
 import com.actualize.mortgage.domainmodels.PropertyValuationDetailModel;
 import com.actualize.mortgage.domainmodels.SalesContractDetailModel;
 import com.actualize.mortgage.domainmodels.TransactionInformation;
 import com.actualize.mortgage.ledatamodels.Address;
+import com.actualize.mortgage.ledatamodels.AmortizationRule;
+import com.actualize.mortgage.ledatamodels.BuydownOccurence;
+import com.actualize.mortgage.ledatamodels.BuydownRule;
 import com.actualize.mortgage.ledatamodels.ClosingInformationDetail;
 import com.actualize.mortgage.ledatamodels.Construction;
 import com.actualize.mortgage.ledatamodels.Deal;
@@ -29,9 +43,12 @@ import com.actualize.mortgage.ledatamodels.LegalEntityDetail;
 import com.actualize.mortgage.ledatamodels.LoanDetail;
 import com.actualize.mortgage.ledatamodels.LoanIdentifier;
 import com.actualize.mortgage.ledatamodels.LoanIdentifiers;
+import com.actualize.mortgage.ledatamodels.MIDataDetail;
 import com.actualize.mortgage.ledatamodels.MISMODocument;
 import com.actualize.mortgage.ledatamodels.MaturityRule;
 import com.actualize.mortgage.ledatamodels.Name;
+import com.actualize.mortgage.ledatamodels.NegativeAmortizationRule;
+import com.actualize.mortgage.ledatamodels.Other;
 import com.actualize.mortgage.ledatamodels.Parties;
 import com.actualize.mortgage.ledatamodels.PropertyDetail;
 import com.actualize.mortgage.ledatamodels.PropertyValuationDetail;
@@ -50,7 +67,8 @@ import leform.Formatter;
  */
 
 public class ClosingDisclosureConverter {
-
+	String loanId = "";
+	String loanMic = "";
     public ClosingDisclosure convertXmltoJSON(MISMODocument mismodoc) {
         ClosingDisclosure closingDisclosure = new ClosingDisclosure();
       
@@ -66,6 +84,7 @@ public class ClosingDisclosureConverter {
         ClosingDisclosurePageOne closingDisclosurePageOne = new ClosingDisclosurePageOne();
         closingDisclosurePageOne.setClosingInformation(createClosingInformation(mismodoc));
         closingDisclosurePageOne.setTransactionInformation(createTransactionInformation(mismodoc));
+        closingDisclosurePageOne.setLoanInformation(createLoanInformation(mismodoc));
         closingDisclosure.setClosingDisclosurePageOne(closingDisclosurePageOne);
         return closingDisclosure;
     }
@@ -148,6 +167,112 @@ public class ClosingDisclosureConverter {
 		return transactionInformation;
     	
     }
+    /**
+     * Creates Loan Information from MISMODocument
+     * @param mismodoc
+     * @return
+     */
+    private LoanInformation createLoanInformation(MISMODocument mismodoc)
+    {
+    	LoanInformation loanInformationSection = new LoanInformation();
+    	String loanTotalTerm = "";  
+ 	    String loanPurpose = "";
+ 	    String loanType = "";
+ 	    String loanProduct = "";
+    	Document document = null;
+        NodeList nodes = mismodoc.getElementsAddNS("//DOCUMENT");
+        String loan = "LOANS/LOAN";
+        if (nodes.getLength() > 0)
+            document = new Document(Document.NS, (Element)nodes.item(0));
+        Deal deal = new Deal(Deal.NS, (Element)document.getElementAddNS("DEAL_SETS/DEAL_SET/DEALS/DEAL"));
+        IntegratedDisclosureDetail idDetail = new IntegratedDisclosureDetail((Element)deal.getElementAddNS("LOANS/LOAN/DOCUMENT_SPECIFIC_DATA_SETS/DOCUMENT_SPECIFIC_DATA_SET/INTEGRATED_DISCLOSURE/INTEGRATED_DISCLOSURE_DETAIL"));
+        MaturityRule maturityRule = new MaturityRule((Element)deal.getElementAddNS(loan + "/MATURITY/MATURITY_RULE"));
+        Construction construction = new Construction((Element)deal.getElementAddNS(loan + "/CONSTRUCTION"));
+ 	    TermsOfLoan loanTerms = new TermsOfLoan((Element)deal.getElementAddNS(loan + "/TERMS_OF_LOAN"));
+        LoanDetail loanDetail = new LoanDetail((Element)deal.getElementAddNS("LOANS/LOAN/LOAN_DETAIL"));
+        
+        MIDataDetail miDataDetail = new MIDataDetail((Element)deal.getElementAddNS(loan + "/MI_DATA/MI_DATA_DETAIL"));
+        AmortizationRule amortization = new AmortizationRule((Element)deal.getElementAddNS(loan + "/AMORTIZATION/AMORTIZATION_RULE"));
+        
+        LoanIdentifiers loanidentifiers = new LoanIdentifiers((Element)deal.getElementAddNS(loan + "/LOAN_IDENTIFIERS"));
+        List<LoanInformationLoanIdentifier> loanInformationLoanIdentifiers = new LinkedList<>();
+        if(loanidentifiers.loanIdentifieries.length>0)
+        for(int i=0; i<loanidentifiers.loanIdentifieries.length;i++)
+ 	    {
+        	LoanInformationLoanIdentifier loanInformationLoanIdentifier = new LoanInformationLoanIdentifier();
+ 	  			loanInformationLoanIdentifier.setLoanIdentifier(loanidentifiers.loanIdentifieries[i].LoanIdentifier);
+ 	  			loanInformationLoanIdentifier.setLoanIdentifierType(loanidentifiers.loanIdentifieries[i].LoanIdentifierType);
+ 	  		loanInformationLoanIdentifiers.add(loanInformationLoanIdentifier);
+ 	  	}
+        
+ 	  	
+ 	    //Loan Term
+ 	  	if(null != loanDetail.ConstructionLoanIndicator && null != construction && "ConstructionToPermanent".equalsIgnoreCase(construction.ConstructionLoanType))
+		{
+			loanTotalTerm = Convertor.convertMonthsToDisplayFormat(Integer.parseInt(construction.ConstructionLoanTotalTermMonthsCount));
+		}
+		else if(null != maturityRule.LoanMaturityPeriodType && "Year".equalsIgnoreCase(maturityRule.LoanMaturityPeriodType))
+		{
+			loanTotalTerm = maturityRule.LoanMaturityPeriodCount + " Year";
+		}
+		else if("Month".equalsIgnoreCase(maturityRule.LoanMaturityPeriodType) && !("").equalsIgnoreCase(maturityRule.LoanMaturityPeriodCount))
+		{
+			loanTotalTerm = Convertor.convertMonthsToDisplayFormat(Integer.parseInt(maturityRule.LoanMaturityPeriodCount));
+		}
+ 	    //Loan Purpose
+		if(("Purchase").equalsIgnoreCase(loanTerms.LoanPurposeType))
+			loanPurpose = "Purchase";
+		else if(loanDetail.ConstructionLoanIndicator == "true")
+			loanPurpose = "Construction";
+		else if(idDetail.IntegratedDisclosureHomeEquityLoanIndicator == "true")
+			loanPurpose = "Home Equity Loan";
+		else
+			loanPurpose = "Refinance"; 	  	
+		//Loan Type
+		loanType = loanTerms.MortgageType;
+		//Loan Product
+		loanProduct = idDetail.IntegratedDisclosureLoanProductDescription;
+		//Loan Mic && Loan Id
+		if("true".equalsIgnoreCase(loanDetail.MIRequiredIndicator)){
+			if("Conventional".equalsIgnoreCase(loanTerms.MortgageType)){
+				loanMic = miDataDetail.MICertificateIdentifier;
+			}
+			else
+			{
+				loanInformationLoanIdentifiers.forEach(loanidentifierdata ->{
+					if("AgencyCase".equalsIgnoreCase(loanidentifierdata.getLoanIdentifierType()))
+						loanMic = loanidentifierdata.getLoanIdentifier();
+				});
+			}
+		}
+		loanInformationLoanIdentifiers.forEach(loanidentifierdata ->{
+			if("LenderLoan".equalsIgnoreCase(loanidentifierdata.getLoanIdentifierType()))
+				loanId = loanidentifierdata.getLoanIdentifier();
+		});
+		
+ 	    loanInformationSection.setLoanTerm(loanTotalTerm); 
+ 	    loanInformationSection.setPurpose(loanPurpose); 
+ 	    loanInformationSection.setProduct(loanProduct); 
+ 	    loanInformationSection.setLoanType(loanType);
+ 	    loanInformationSection.setLoanId(loanId);
+ 	    loanInformationSection.setMic(loanMic);
+ 	    loanInformationSection.setConstructionLoanType(construction.ConstructionLoanType);
+ 	    loanInformationSection.setConstructionPeriodNumberOfMonthsCount(construction.ConstructionPeriodNumberOfMonthsCount);
+ 	    loanInformationSection.setConstructionLoanTotalTermMonthsCount(construction.ConstructionLoanTotalTermMonthsCount); 
+ 	    loanInformationSection.setLoanMaturityPeriodType(maturityRule.LoanMaturityPeriodType);
+ 	    loanInformationSection.setLoanMaturityPeriodCount(maturityRule.LoanMaturityPeriodCount);
+ 	    loanInformationSection.setIntegratedDisclosureHomeEquityLoanIndicator(idDetail.IntegratedDisclosureHomeEquityLoanIndicator);
+ 	    loanInformationSection.setLienPriorityType(loanTerms.LienPriorityType);
+ 	    loanInformationSection.setIntegratedDisclosureLoanProductDescription(idDetail.IntegratedDisclosureLoanProductDescription);
+ 	    loanInformationSection.setMortgageType(loanTerms.MortgageType);
+ 	    loanInformationSection.setMortgageTypeOtherDescription(loanTerms.MortgageTypeOtherDescription);
+ 	    loanInformationSection.setMiRequiredIndicator(loanDetail.MIRequiredIndicator);
+ 	    loanInformationSection.setMiCertificateIdentifier(miDataDetail.MICertificateIdentifier);
+ 	    loanInformationSection.setLoanIdentifiers(loanInformationLoanIdentifiers);
+ 	    loanInformationSection.setAmortizationType(amortization.AmortizationType);	     
+        return loanInformationSection;
+    }
+
 	/**
 	 * calculates the salePrice
 	 * @param loanTerms

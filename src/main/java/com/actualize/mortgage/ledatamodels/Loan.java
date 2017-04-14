@@ -50,7 +50,7 @@ public class Loan extends MISMODataAccessObject {
 		loanProduct = new LoanProduct(NS, element);
 		Locks = new Locks(element);
 		maturityRule = new MaturityRule(element);
-		miDataDetail = new MIDataDetail(NS, element);
+		miDataDetail = new MIDataDetail(element);
 		negativeAmortization = new NegativeAmortization(NS, element);
 		payment = new Payment(NS, element);
 		prepaymentPenalty = new PrepaymentPenalty(NS, element);
