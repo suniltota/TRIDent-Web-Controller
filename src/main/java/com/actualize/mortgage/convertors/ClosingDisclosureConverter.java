@@ -15,6 +15,8 @@ import com.actualize.mortgage.cdpagemodels.ClosingDisclosurePageOne;
 import com.actualize.mortgage.domainmodels.Borrower;
 import com.actualize.mortgage.domainmodels.ClosingInformation;
 import com.actualize.mortgage.domainmodels.CostsAtClosing;
+import com.actualize.mortgage.domainmodels.CostsAtClosingCashToClose;
+import com.actualize.mortgage.domainmodels.CostsAtClosingClosingCosts;
 import com.actualize.mortgage.domainmodels.EscrowsModel;
 import com.actualize.mortgage.domainmodels.FeeModel;
 import com.actualize.mortgage.domainmodels.LoanInformation;
@@ -59,6 +61,7 @@ import com.actualize.mortgage.ledatamodels.FeePayments;
 import com.actualize.mortgage.ledatamodels.Fees;
 import com.actualize.mortgage.ledatamodels.IntegratedDisclosureDetail;
 import com.actualize.mortgage.ledatamodels.IntegratedDisclosureSectionSummaryDetail;
+import com.actualize.mortgage.ledatamodels.IntegratedDisclosureSubsectionPayment;
 import com.actualize.mortgage.ledatamodels.InterestOnly;
 import com.actualize.mortgage.ledatamodels.InterestRateLifetimeAdjustmentRule;
 import com.actualize.mortgage.ledatamodels.InterestRatePerChangeAdjustmentRule;
@@ -581,19 +584,46 @@ public class ClosingDisclosureConverter {
 		return projectedPaymentsModel;
 	}
 	
+	/**
+	 * calculates CostsAtClosing elements
+	 * @param deal
+	 * @return CostsAtClosing
+	 */
 	private CostsAtClosing createCostsAtClosing(Deal deal)
 	{
 		DocumentClass documentClass = new DocumentClass((Element)deal.getElementAddNS("../../../../DOCUMENT_CLASSIFICATION/DOCUMENT_CLASSES/DOCUMENT_CLASS[DocumentType='Other']"));
-		TermsOfLoan termsOfLoan = new TermsOfLoan((Element)deal.getElementAddNS("LOANS/LOAN/TERMS_OF_LOAN[LoanPurposeType='Refinance']"));
 		String idSummary = "LOANS/LOAN/DOCUMENT_SPECIFIC_DATA_SETS/DOCUMENT_SPECIFIC_DATA_SET/INTEGRATED_DISCLOSURE/INTEGRATED_DISCLOSURE_SECTION_SUMMARIES/INTEGRATED_DISCLOSURE_SECTION_SUMMARY";
 		String idDetail = idSummary + "/INTEGRATED_DISCLOSURE_SECTION_SUMMARY_DETAIL";
 		String ciDetail = "LOANS/LOAN/CLOSING_INFORMATION/CLOSING_INFORMATION_DETAIL";
+		ClosingInformationDetail closingDetail = new ClosingInformationDetail((Element)deal.getElementAddNS(ciDetail));
 		IntegratedDisclosureSectionSummaryDetail idClosingDetail = new IntegratedDisclosureSectionSummaryDetail((Element)deal.getElementAddNS(idDetail + "[IntegratedDisclosureSectionType='TotalClosingCosts'][IntegratedDisclosureSubsectionType='ClosingCostsSubtotal']"));
+		IntegratedDisclosureSectionSummaryDetail totalOtherCosts = new IntegratedDisclosureSectionSummaryDetail((Element)deal.getElementAddNS(idDetail + "[IntegratedDisclosureSectionType='TotalOtherCosts']"));
+		IntegratedDisclosureSectionSummaryDetail totalLoanCosts = new IntegratedDisclosureSectionSummaryDetail((Element)deal.getElementAddNS(idDetail + "[IntegratedDisclosureSectionType='TotalLoanCosts']"));
+		IntegratedDisclosureSubsectionPayment idLenderCredits = new IntegratedDisclosureSubsectionPayment((Element)deal.getElementAddNS(idSummary + "[INTEGRATED_DISCLOSURE_SECTION_SUMMARY_DETAIL/IntegratedDisclosureSubsectionType='LenderCredits']/INTEGRATED_DISCLOSURE_SUBSECTION_PAYMENTS/INTEGRATED_DISCLOSURE_SUBSECTION_PAYMENT"));
+		String lenderCredits;
+		if (idLenderCredits.integratedDisclosureSubsectionPaymentAmount.equals("")) {
+			IntegratedDisclosureSectionSummaryDetail idLenderCreditTwo = new IntegratedDisclosureSectionSummaryDetail((Element)deal.getElementAddNS(idDetail + "[IntegratedDisclosureSubsectionType='LenderCredits']"));
+			lenderCredits = idLenderCreditTwo.integratedDisclosureSubsectionTotalAmount;
+		} else
+			lenderCredits = idLenderCredits.integratedDisclosureSubsectionPaymentAmount;
 		
+		CostsAtClosingClosingCosts costsAtClosingClosingCosts = new CostsAtClosingClosingCosts();
+		CostsAtClosingCashToClose costsAtClosingCashToClose = new CostsAtClosingCashToClose(); 
+			costsAtClosingClosingCosts.setAmount(idClosingDetail.integratedDisclosureSectionTotalAmount);
+			costsAtClosingClosingCosts.setTotalOtherCosts(totalOtherCosts.integratedDisclosureSectionTotalAmount);
+			costsAtClosingClosingCosts.setLenderCredits(lenderCredits);
+			costsAtClosingClosingCosts.setTotalLoanCosts(totalLoanCosts.integratedDisclosureSectionTotalAmount);
+			costsAtClosingCashToClose.setAmount(closingDetail.CashFromBorrowerAtClosingAmount.equals("") ? closingDetail.CashToBorrowerAtClosingAmount : closingDetail.CashFromBorrowerAtClosingAmount);
+			costsAtClosingCashToClose.setCashFromBorrowerAtClosingAmount(closingDetail.CashFromBorrowerAtClosingAmount);
+			costsAtClosingCashToClose.setCashToBorrowerAtClosingAmount(closingDetail.CashToBorrowerAtClosingAmount);
 		
-		
+		if("ClosingDisclosure:AlternateForm".equalsIgnoreCase(documentClass.documentTypeOtherDescription)){
+			costsAtClosingCashToClose.setFromType("".equals(closingDetail.CashFromBorrowerAtClosingAmount.trim())?"false":"true");
+        }
 		
 		CostsAtClosing costsAtClosing = new CostsAtClosing();
+		costsAtClosing.setCostsAtClosingClosingCosts(costsAtClosingClosingCosts);
+		costsAtClosing.setCostsAtClosingCashToClose(costsAtClosingCashToClose);
 		return costsAtClosing;
 	}
     /**
