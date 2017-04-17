@@ -9,4 +9,8 @@ public class IntegratedDisclosureSectionSummaries extends MISMODataAccessObject 
 		super(element);
 		// TODO
 	}
+	public IntegratedDisclosureSectionSummaries(Element element) {
+		super(element);
+		// TODO
+	}
 }

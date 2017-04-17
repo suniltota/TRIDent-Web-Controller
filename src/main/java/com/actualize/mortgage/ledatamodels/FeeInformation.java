@@ -8,5 +8,6 @@ public class FeeInformation extends MISMODataAccessObject {
 	public FeeInformation(String NS, Element element) {
 		super(element);
 		// TODO
+		
 	}
 }

@@ -11,6 +11,10 @@ public class IntegratedDisclosureDetail extends MISMODataAccessObject{
 	public final String IntegratedDisclosureEstimatedClosingCostsExpirationDatetime;
 	public final String FiveYearTotalOfPaymentsComparisonAmount;
 	public final String FiveYearPrincipalReductionComparisonAmount;
+	public final String FirstYearTotalEscrowPaymentAmount;
+	public final String FirstYearTotalEscrowPaymentDescription;
+	public final String FirstYearTotalNonEscrowPaymentAmount;
+	public final String FirstYearTotalNonEscrowPaymentDescription;
 	public final Extension extension;
 	
 	public IntegratedDisclosureDetail(Element element) {
@@ -21,6 +25,11 @@ public class IntegratedDisclosureDetail extends MISMODataAccessObject{
 		IntegratedDisclosureEstimatedClosingCostsExpirationDatetime = getValueAddNS("IntegratedDisclosureEstimatedClosingCostsExpirationDatetime");
 		FiveYearTotalOfPaymentsComparisonAmount = getValueAddNS("FiveYearTotalOfPaymentsComparisonAmount");
 		FiveYearPrincipalReductionComparisonAmount = getValueAddNS("FiveYearPrincipalReductionComparisonAmount");
+		FirstYearTotalEscrowPaymentAmount = getValueAddNS("FirstYearTotalEscrowPaymentAmount");
+		FirstYearTotalEscrowPaymentDescription = getValueAddNS("FirstYearTotalEscrowPaymentDescription");
+		FirstYearTotalNonEscrowPaymentAmount = getValueAddNS("FirstYearTotalNonEscrowPaymentAmount");
+		FirstYearTotalNonEscrowPaymentDescription = getValueAddNS("FirstYearTotalNonEscrowPaymentDescription");
 		extension = new Extension((Element)getElementAddNS("EXTENSION"));
+		
 	}
 }

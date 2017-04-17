@@ -13,4 +13,9 @@ public class Buydown extends MISMODataAccessObject {
 		buydownOccurences = new BuydownOccurences((Element)getElementAddNS("BUYDOWN_OCCURRENCES"));
 		buydownRule = new BuydownRule((Element)getElementAddNS("BUYDOWN_RULE"));
 	}
+	public Buydown(Element element) {
+		super(element);
+		buydownOccurences = new BuydownOccurences((Element)getElementAddNS("BUYDOWN_OCCURRENCES"));
+		buydownRule = new BuydownRule((Element)getElementAddNS("BUYDOWN_RULE"));
+	}
 }

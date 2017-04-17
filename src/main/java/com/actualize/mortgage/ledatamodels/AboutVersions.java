@@ -19,4 +19,8 @@ public class AboutVersions extends MISMODataAccessObject {
 		else
 			aboutVersions = null;
 	}
+	
+	public AboutVersions(Element element) {
+		this(null,element);
+	}
 }
