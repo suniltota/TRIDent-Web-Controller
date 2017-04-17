@@ -31,7 +31,7 @@ import com.actualize.mortgage.domainmodels.LoanTermsLoanAmount;
 import com.actualize.mortgage.domainmodels.LoanTermsPI;
 import com.actualize.mortgage.domainmodels.LoanTermsPrepaymentPenalty;
 import com.actualize.mortgage.domainmodels.NameModel;
-import com.actualize.mortgage.domainmodels.ProjectedPayments;
+import com.actualize.mortgage.domainmodels.ProjectedPaymentsModel;
 import com.actualize.mortgage.domainmodels.ProjectedPaymentsETIA;
 import com.actualize.mortgage.domainmodels.ProjectedPaymentsPI;
 import com.actualize.mortgage.domainmodels.SalesContractDetailModel;
@@ -570,9 +570,9 @@ public class PageOneServiceImpl implements PageOneService {
 	}
 
 	@Override
-	public ProjectedPayments createProjectedPayments(DOCUMENT document) {
+	public ProjectedPaymentsModel createProjectedPayments(DOCUMENT document) {
 		
-		ProjectedPayments projectedPayments = new ProjectedPayments();
+		ProjectedPaymentsModel projectedPaymentsModel = new ProjectedPaymentsModel();
 		deal = document.getDEALSETS().getDEALSET().getDEALS().getDEAL();
 		
 		List<String> projectedPaymentsPaymentCalculation = new LinkedList<>();
@@ -709,15 +709,15 @@ public class PageOneServiceImpl implements PageOneService {
 				column++;
 			}
 			
-			projectedPayments.setProjectedPaymentsPaymentCalculation(projectedPaymentsPaymentCalculation);
-			projectedPayments.setProjectedPaymentsPrincipalInterest(projectedPaymentsPrincipalInterest);
-			projectedPayments.setProjectedPaymentsMortgageInsurance(projectedPaymentsMortgageInsurance);
-			projectedPayments.setProjectedPaymentsEstimatedEscrow(projectedPaymentsEstimatedEscrow);
-			projectedPayments.setProjectedPaymentsEstimatedTotalPayment(projectedPaymentsEstimatedTotalPayment);
-			projectedPayments.setProjectedPaymentsEstimatedTotalPaymentType(projectedPaymentsEstimatedTotalPaymentType);
-			projectedPayments.setProjectedPaymentsETIA(createProjectedPaymentsETIA());
+			projectedPaymentsModel.setProjectedPaymentsPaymentCalculation(projectedPaymentsPaymentCalculation);
+			projectedPaymentsModel.setProjectedPaymentsPrincipalInterest(projectedPaymentsPrincipalInterest);
+			projectedPaymentsModel.setProjectedPaymentsMortgageInsurance(projectedPaymentsMortgageInsurance);
+			projectedPaymentsModel.setProjectedPaymentsEstimatedEscrow(projectedPaymentsEstimatedEscrow);
+			projectedPaymentsModel.setProjectedPaymentsEstimatedTotalPayment(projectedPaymentsEstimatedTotalPayment);
+			projectedPaymentsModel.setProjectedPaymentsEstimatedTotalPaymentType(projectedPaymentsEstimatedTotalPaymentType);
+			projectedPaymentsModel.setProjectedPaymentsETIA(createProjectedPaymentsETIA());
 			
-		return projectedPayments;
+		return projectedPaymentsModel;
 	}
 
 	@Override

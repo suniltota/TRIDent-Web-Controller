@@ -4,7 +4,11 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
 import com.actualize.mortgage.domainmodels.MISMODataAccessObject;
-
+/**
+ * Defines parties from XML
+ * @author sboragala
+ *
+ */
 public class Parties extends MISMODataAccessObject {
 	public final Party[] parties;
 	

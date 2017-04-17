@@ -13,7 +13,7 @@ public class PageOne implements Serializable {
 	private TransactionInformation transactionInformation;
 	private LoanInformation loanInformation;
 	private LoanTerms loanTerms;
-	private ProjectedPayments projectedPayments;
+	private ProjectedPaymentsModel projectedPaymentsModel;
 	private CostsAtClosing costsAtClosing;
 	
 	/**
@@ -67,14 +67,14 @@ public class PageOne implements Serializable {
 	/**
 	 * @return the projectedPayments
 	 */
-	public ProjectedPayments getProjectedPayments() {
-		return projectedPayments;
+	public ProjectedPaymentsModel getProjectedPayments() {
+		return projectedPaymentsModel;
 	}
 	/**
-	 * @param projectedPayments the projectedPayments to set
+	 * @param projectedPaymentsModel the projectedPayments to set
 	 */
-	public void setProjectedPayments(ProjectedPayments projectedPayments) {
-		this.projectedPayments = projectedPayments;
+	public void setProjectedPayments(ProjectedPaymentsModel projectedPaymentsModel) {
+		this.projectedPaymentsModel = projectedPaymentsModel;
 	}
 	/**
 	 * @return the costsAtClosing

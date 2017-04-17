@@ -3,7 +3,11 @@ package com.actualize.mortgage.ledatamodels;
 import org.w3c.dom.Element;
 
 import com.actualize.mortgage.domainmodels.MISMODataAccessObject;
-
+/**
+ * 
+ * @author sboragala
+ *
+ */
 public class LoanIdentifier extends MISMODataAccessObject {
 	public final String LoanIdentifier;
 	public final String LoanIdentifierType;

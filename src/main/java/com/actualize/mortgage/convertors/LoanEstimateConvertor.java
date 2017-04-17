@@ -175,7 +175,7 @@ public class LoanEstimateConvertor {
 	 * @return loanTerm as a string
 	 */
 	private static String loanTerm(LoanDetail loanDetail, MaturityRule maturityRule, Construction construction) {
-		if (loanDetail.ConstructionLoanIndicator.equalsIgnoreCase("true")) {
+		if (loanDetail.constructionLoanIndicator.equalsIgnoreCase("true")) {
 			if (construction.ConstructionLoanType.equalsIgnoreCase("ConstructionOnly"))
 				return construction.ConstructionPeriodNumberOfMonthsCount;
 			return construction.ConstructionLoanTotalTermMonthsCount;

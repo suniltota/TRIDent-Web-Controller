@@ -1,7 +1,11 @@
 package com.actualize.mortgage.domainmodels;
 
 import java.io.Serializable;
-
+/**
+ * 
+ * @author sboragala
+ *
+ */
 public class ProjectedPaymentsETIA implements Serializable {
 	
 	/**

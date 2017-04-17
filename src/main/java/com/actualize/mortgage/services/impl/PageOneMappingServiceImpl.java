@@ -42,7 +42,7 @@ import com.actualize.mortgage.domainmodels.LoanTermsLoanAmount;
 import com.actualize.mortgage.domainmodels.LoanTermsPI;
 import com.actualize.mortgage.domainmodels.LoanTermsPrepaymentPenalty;
 import com.actualize.mortgage.domainmodels.NameModel;
-import com.actualize.mortgage.domainmodels.ProjectedPayments;
+import com.actualize.mortgage.domainmodels.ProjectedPaymentsModel;
 import com.actualize.mortgage.domainmodels.ProjectedPaymentsETIA;
 import com.actualize.mortgage.domainmodels.ProjectedPaymentsPI;
 import com.actualize.mortgage.services.PageOneMappingService;
@@ -598,14 +598,14 @@ public class PageOneMappingServiceImpl  implements PageOneMappingService{
 	@Override
 	public DOCUMENT mapProjectedPayments(DOCUMENT document, ClosingDisclosureDocument pdfDocument) {
 		
-		ProjectedPayments projectedPayments = pdfDocument.getPageOne().getProjectedPayments();
+		ProjectedPaymentsModel projectedPaymentsModel = pdfDocument.getPageOne().getProjectedPayments();
 		deal = document.getDEALSETS().getDEALSET().getDEALS().getDEAL();
 		
-		List<String> projectedPaymentsPaymentCalculation = projectedPayments.getProjectedPaymentsPaymentCalculation();
-		List<ProjectedPaymentsPI> projectedPaymentsPrincipalInterest = projectedPayments.getProjectedPaymentsPrincipalInterest();
-		List<String> projectedPaymentsMortgageInsurance = projectedPayments.getProjectedPaymentsMortgageInsurance();
-		List<String> projectedPaymentsEstimatedEscrow = projectedPayments.getProjectedPaymentsEstimatedEscrow();
-		List<String> projectedPaymentsEstimatedTotalPayment = projectedPayments.getProjectedPaymentsEstimatedTotalPayment();
+		List<String> projectedPaymentsPaymentCalculation = projectedPaymentsModel.getProjectedPaymentsPaymentCalculation();
+		List<ProjectedPaymentsPI> projectedPaymentsPrincipalInterest = projectedPaymentsModel.getProjectedPaymentsPrincipalInterest();
+		List<String> projectedPaymentsMortgageInsurance = projectedPaymentsModel.getProjectedPaymentsMortgageInsurance();
+		List<String> projectedPaymentsEstimatedEscrow = projectedPaymentsModel.getProjectedPaymentsEstimatedEscrow();
+		List<String> projectedPaymentsEstimatedTotalPayment = projectedPaymentsModel.getProjectedPaymentsEstimatedTotalPayment();
 		//String projectedPaymentsEstimatedTotalPaymentType = "";
 		
 		int column = 1;
@@ -677,7 +677,7 @@ public class PageOneMappingServiceImpl  implements PageOneMappingService{
 				}
 				
 				//projectedPaymentsEstimatedTotalPaymentType 
-				projectedpayment.getPaymentFrequencyType().setValue(projectedPayments.getProjectedPaymentsEstimatedTotalPaymentType() == null ?  PaymentFrequencyBase.fromValue(null): PaymentFrequencyBase.fromValue(projectedPayments.getProjectedPaymentsEstimatedTotalPaymentType()));
+				projectedpayment.getPaymentFrequencyType().setValue(projectedPaymentsModel.getProjectedPaymentsEstimatedTotalPaymentType() == null ?  PaymentFrequencyBase.fromValue(null): PaymentFrequencyBase.fromValue(projectedPaymentsModel.getProjectedPaymentsEstimatedTotalPaymentType()));
 				
 				// Calculate interest only flag
 				if (null != projectedPaymentsPrincipalInterest.get(count).getInterestOnly()) {

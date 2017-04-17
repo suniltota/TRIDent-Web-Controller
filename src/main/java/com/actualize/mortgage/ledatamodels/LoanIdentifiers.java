@@ -4,7 +4,11 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
 import com.actualize.mortgage.domainmodels.MISMODataAccessObject;
-
+/**
+ * Defines loan Identifiers
+ * @author sboragala
+ *
+ */
 public class LoanIdentifiers extends MISMODataAccessObject {
 	public final LoanIdentifier[] loanIdentifieries;
 	

@@ -3,48 +3,52 @@ package com.actualize.mortgage.ledatamodels;
 import org.w3c.dom.Element;
 
 import com.actualize.mortgage.domainmodels.MISMODataAccessObject;
-
+/**
+ * Defines LoanDetail Element in XML 
+ * @author sboragala
+ *
+ */
 public class LoanDetail extends MISMODataAccessObject {
-	public final String AssumabilityIndicator;
-	public final String BalloonIndicator;
-	public final String BalloonPaymentAmount;
-	public final String BuydownTemporarySubsidyFundingIndicator;
-	public final String ConstructionLoanIndicator;
-	public final String CreditorServicingOfLoanStatementType;
-	public final String DemandFeatureIndicator;
-	public final String EscrowAbsenceReasonType;
-	public final String EscrowIndicator;
-	public final String InterestOnlyIndicator;
-	public final String InterestRateIncreaseIndicator;
-	public final String LoanAmountIncreaseIndicator;
-	public final String MIRequiredIndicator;
-	public final String NegativeAmortizationIndicator;
-	public final String PaymentIncreaseIndicator;
-	public final String PrepaymentPenaltyIndicator;
-	public final String SeasonalPaymentFeatureIndicator;
-	public final String StepPaymentsFeatureDescription;
-	public final String TotalSubordinateFinancingAmount;
+	public final String assumabilityIndicator;
+	public final String balloonIndicator;
+	public final String balloonPaymentAmount;
+	public final String buydownTemporarySubsidyFundingIndicator;
+	public final String constructionLoanIndicator;
+	public final String creditorServicingOfLoanStatementType;
+	public final String demandFeatureIndicator;
+	public final String escrowAbsenceReasonType;
+	public final String escrowIndicator;
+	public final String interestOnlyIndicator;
+	public final String interestRateIncreaseIndicator;
+	public final String loanAmountIncreaseIndicator;
+	public final String miRequiredIndicator;
+	public final String negativeAmortizationIndicator;
+	public final String paymentIncreaseIndicator;
+	public final String prepaymentPenaltyIndicator;
+	public final String seasonalPaymentFeatureIndicator;
+	public final String stepPaymentsFeatureDescription;
+	public final String totalSubordinateFinancingAmount;
 
 	public LoanDetail(Element element) {
 		super(element);
-		AssumabilityIndicator = getValueAddNS("AssumabilityIndicator");
-		BalloonIndicator = getValueAddNS("BalloonIndicator");
-		BalloonPaymentAmount = getValueAddNS("BalloonPaymentAmount");
-		BuydownTemporarySubsidyFundingIndicator = getValueAddNS("BuydownTemporarySubsidyFundingIndicator");
-		ConstructionLoanIndicator = getValueAddNS("ConstructionLoanIndicator");
-		CreditorServicingOfLoanStatementType = getValueAddNS("CreditorServicingOfLoanStatementType");
-		DemandFeatureIndicator = getValueAddNS("DemandFeatureIndicator");
-		EscrowAbsenceReasonType = getValueAddNS("EscrowAbsenceReasonType");
-		EscrowIndicator = getValueAddNS("EscrowIndicator");
-		InterestOnlyIndicator = getValueAddNS("InterestOnlyIndicator");
-		InterestRateIncreaseIndicator = getValueAddNS("InterestRateIncreaseIndicator");
-		LoanAmountIncreaseIndicator = getValueAddNS("LoanAmountIncreaseIndicator");
-		MIRequiredIndicator = getValueAddNS("MIRequiredIndicator");
-		NegativeAmortizationIndicator = getValueAddNS("NegativeAmortizationIndicator");
-		PaymentIncreaseIndicator = getValueAddNS("PaymentIncreaseIndicator");
-		PrepaymentPenaltyIndicator = getValueAddNS("PrepaymentPenaltyIndicator");
-		SeasonalPaymentFeatureIndicator = getValueAddNS("SeasonalPaymentFeatureIndicator");
-		StepPaymentsFeatureDescription = getValueAddNS("StepPaymentsFeatureDescription");
-		TotalSubordinateFinancingAmount = getValueAddNS("TotalSubordinateFinancingAmount");
+		assumabilityIndicator = getValueAddNS("AssumabilityIndicator");
+		balloonIndicator = getValueAddNS("BalloonIndicator");
+		balloonPaymentAmount = getValueAddNS("BalloonPaymentAmount");
+		buydownTemporarySubsidyFundingIndicator = getValueAddNS("BuydownTemporarySubsidyFundingIndicator");
+		constructionLoanIndicator = getValueAddNS("ConstructionLoanIndicator");
+		creditorServicingOfLoanStatementType = getValueAddNS("CreditorServicingOfLoanStatementType");
+		demandFeatureIndicator = getValueAddNS("DemandFeatureIndicator");
+		escrowAbsenceReasonType = getValueAddNS("EscrowAbsenceReasonType");
+		escrowIndicator = getValueAddNS("EscrowIndicator");
+		interestOnlyIndicator = getValueAddNS("InterestOnlyIndicator");
+		interestRateIncreaseIndicator = getValueAddNS("InterestRateIncreaseIndicator");
+		loanAmountIncreaseIndicator = getValueAddNS("LoanAmountIncreaseIndicator");
+		miRequiredIndicator = getValueAddNS("MIRequiredIndicator");
+		negativeAmortizationIndicator = getValueAddNS("NegativeAmortizationIndicator");
+		paymentIncreaseIndicator = getValueAddNS("PaymentIncreaseIndicator");
+		prepaymentPenaltyIndicator = getValueAddNS("PrepaymentPenaltyIndicator");
+		seasonalPaymentFeatureIndicator = getValueAddNS("SeasonalPaymentFeatureIndicator");
+		stepPaymentsFeatureDescription = getValueAddNS("StepPaymentsFeatureDescription");
+		totalSubordinateFinancingAmount = getValueAddNS("TotalSubordinateFinancingAmount");
 	}
 }

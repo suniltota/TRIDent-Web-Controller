@@ -47,7 +47,7 @@ import com.actualize.mortgage.domainmodels.LoanTerms;
 import com.actualize.mortgage.domainmodels.PageOne;
 import com.actualize.mortgage.domainmodels.PageThree;
 import com.actualize.mortgage.domainmodels.PageTwo;
-import com.actualize.mortgage.domainmodels.ProjectedPayments;
+import com.actualize.mortgage.domainmodels.ProjectedPaymentsModel;
 import com.actualize.mortgage.domainmodels.TransactionInformation;
 import com.actualize.mortgage.services.MortgageServices;
 import com.actualize.mortgage.services.PageOneMappingService;
@@ -114,14 +114,14 @@ public class MortgageServicesImpl implements MortgageServices{
 		TransactionInformation transactionInformation = new TransactionInformation();
 		LoanInformation loanInformation = new LoanInformation();
 		LoanTerms loanTerms = new LoanTerms();
-		ProjectedPayments projectedPayments = new ProjectedPayments();
+		ProjectedPaymentsModel projectedPaymentsModel = new ProjectedPaymentsModel();
 		CostsAtClosing costsAtClosing = new CostsAtClosing();
 		
 		closingInformation = pageOneService.createClosingInformation(document);
 		transactionInformation = pageOneService.createTransactionInformation(document);
 		loanInformation = pageOneService.createLoanInformation(document);
 		loanTerms = pageOneService.createLoanTerms(document);
-		projectedPayments = pageOneService.createProjectedPayments(document);
+		projectedPaymentsModel = pageOneService.createProjectedPayments(document);
 		costsAtClosing = pageOneService.createCostsAtClosing(document);
 				
 		PageOne pageOne = new PageOne();
@@ -130,7 +130,7 @@ public class MortgageServicesImpl implements MortgageServices{
 			pageOne.setTransactionInformation(transactionInformation);
 			pageOne.setLoanInformation(loanInformation);
 			pageOne.setLoanTerms(loanTerms);
-			pageOne.setProjectedPayments(projectedPayments);
+			pageOne.setProjectedPayments(projectedPaymentsModel);
 			pageOne.setCostsAtClosing(costsAtClosing);
 		
 		return pageOne;

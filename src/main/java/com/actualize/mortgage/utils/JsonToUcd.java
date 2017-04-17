@@ -1,7 +1,5 @@
 package com.actualize.mortgage.utils;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -13,10 +11,10 @@ import org.w3c.dom.Element;
 
 import com.actualize.mortgage.domainmodels.Address;
 import com.actualize.mortgage.domainmodels.Borrower;
+import com.actualize.mortgage.domainmodels.ClosingDisclosureDocument;
 import com.actualize.mortgage.domainmodels.ClosingInformation;
 import com.actualize.mortgage.domainmodels.CostsAtClosing;
 import com.actualize.mortgage.domainmodels.CostsAtClosingCashToClose;
-import com.actualize.mortgage.domainmodels.CostsAtClosingClosingCosts;
 import com.actualize.mortgage.domainmodels.LoanInformation;
 import com.actualize.mortgage.domainmodels.LoanInformationLoanIdentifier;
 import com.actualize.mortgage.domainmodels.LoanTerms;
@@ -28,10 +26,7 @@ import com.actualize.mortgage.domainmodels.LoanTermsIntialEscrow;
 import com.actualize.mortgage.domainmodels.LoanTermsLoanAmount;
 import com.actualize.mortgage.domainmodels.LoanTermsPI;
 import com.actualize.mortgage.domainmodels.LoanTermsPrepaymentPenalty;
-import com.actualize.mortgage.domainmodels.ProjectedPayments;
 import com.actualize.mortgage.domainmodels.SalesContractDetailModel;
-import com.actualize.mortgage.domainmodels.ClosingDisclosureDocument;
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class JsonToUcd {
 	private static final String GSE_ALIAS = "gse";
