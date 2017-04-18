@@ -7,7 +7,11 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
 import com.actualize.mortgage.domainmodels.MISMODataAccessObject;
-
+/**
+ * Defines PrepaidItems in XML
+ * @author sboragala
+ *
+ */
 public class PrepaidItems extends MISMODataAccessObject {
 	public final PrepaidItem[] prepaidItems;
 	private static Pattern ptrnNumbers = Pattern.compile(" [2-9]+");

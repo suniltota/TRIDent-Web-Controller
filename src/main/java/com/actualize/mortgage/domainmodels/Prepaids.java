@@ -1,5 +1,9 @@
 package com.actualize.mortgage.domainmodels;
-
+/**
+ * Defines prepaids Model in UI response
+ * @author sboragala
+ *
+ */
 public class Prepaids extends ClosingCostProperties {
 
 	private static final long serialVersionUID = -3311207376960972497L;

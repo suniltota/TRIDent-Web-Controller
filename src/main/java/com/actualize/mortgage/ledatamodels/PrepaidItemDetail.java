@@ -6,60 +6,60 @@ import org.w3c.dom.NodeList;
 import com.actualize.mortgage.domainmodels.MISMODataAccessObject;
 
 public class PrepaidItemDetail extends MISMODataAccessObject {
-	public String DisplayLabelText = "";
-	public final String FeePaidToType;
-	public final String FeePaidToTypeOtherDescription;
-	public final String IntegratedDisclosureSectionType;
-	public final String PrepaidItemEstimatedTotalAmount;
-	public final String PrepaidItemMonthsPaidCount;
-	public final String PrepaidItemNumberOfDaysCount;
-	public final String PrepaidItemPaidFromDate;
-	public final String PrepaidItemPaidThroughDate;
-	public final String PrepaidItemPerDiemAmount;
-	public final String PrepaidItemPerDiemCalculationMethodType;
-	public final String PrepaidItemType;
-	public final String PrepaidItemTypeOtherDescription;
-	public final String RegulationZPointsAndFeesIndicator;
+	public String displayLabelText = "";
+	public final String feePaidToType;
+	public final String feePaidToTypeOtherDescription;
+	public final String integratedDisclosureSectionType;
+	public final String prepaidItemEstimatedTotalAmount;
+	public final String prepaidItemMonthsPaidCount;
+	public final String prepaidItemNumberOfDaysCount;
+	public final String prepaidItemPaidFromDate;
+	public final String prepaidItemPaidThroughDate;
+	public final String prepaidItemPerDiemAmount;
+	public final String prepaidItemPerDiemCalculationMethodType;
+	public final String prepaidItemType;
+	public final String prepaidItemTypeOtherDescription;
+	public final String regulationZPointsAndFeesIndicator;
 	
 	public PrepaidItemDetail(Element element) {
 		super(element);
-		FeePaidToType = getValueAddNS("FeePaidToType");
-		FeePaidToTypeOtherDescription = getValueAddNS("FeePaidToTypeOtherDescription");
-		IntegratedDisclosureSectionType = getValueAddNS("IntegratedDisclosureSectionType");
-		PrepaidItemEstimatedTotalAmount = getValueAddNS("PrepaidItemEstimatedTotalAmount");
-		PrepaidItemMonthsPaidCount = getValueAddNS("PrepaidItemMonthsPaidCount");
-		PrepaidItemNumberOfDaysCount = getValueAddNS("PrepaidItemNumberOfDaysCount");
-		PrepaidItemPaidFromDate = getValueAddNS("PrepaidItemPaidFromDate");
-		PrepaidItemPaidThroughDate = getValueAddNS("PrepaidItemPaidThroughDate");
-		PrepaidItemPerDiemAmount = getValueAddNS("PrepaidItemPerDiemAmount");
-		PrepaidItemPerDiemCalculationMethodType = getValueAddNS("PrepaidItemPerDiemCalculationMethodType");
-		PrepaidItemType = getValueAddNS("PrepaidItemType");
+		feePaidToType = getValueAddNS("FeePaidToType");
+		feePaidToTypeOtherDescription = getValueAddNS("FeePaidToTypeOtherDescription");
+		integratedDisclosureSectionType = getValueAddNS("IntegratedDisclosureSectionType");
+		prepaidItemEstimatedTotalAmount = getValueAddNS("PrepaidItemEstimatedTotalAmount");
+		prepaidItemMonthsPaidCount = getValueAddNS("PrepaidItemMonthsPaidCount");
+		prepaidItemNumberOfDaysCount = getValueAddNS("PrepaidItemNumberOfDaysCount");
+		prepaidItemPaidFromDate = getValueAddNS("PrepaidItemPaidFromDate");
+		prepaidItemPaidThroughDate = getValueAddNS("PrepaidItemPaidThroughDate");
+		prepaidItemPerDiemAmount = getValueAddNS("PrepaidItemPerDiemAmount");
+		prepaidItemPerDiemCalculationMethodType = getValueAddNS("PrepaidItemPerDiemCalculationMethodType");
+		prepaidItemType = getValueAddNS("PrepaidItemType");
 		NodeList node = getElementsAddNS("PrepaidItemType");
 		if(null != node)
 		{	
 			Element ele =(Element)node.item(0);
 			if(null != ele){
-				DisplayLabelText = ele.getAttribute("DisplayLabelText");
-				if("".equals(DisplayLabelText) || DisplayLabelText.isEmpty())
-					DisplayLabelText = ele.getAttribute("gse:DisplayLabelText");
+				displayLabelText = ele.getAttribute("DisplayLabelText");
+				if("".equals(displayLabelText) || displayLabelText.isEmpty())
+					displayLabelText = ele.getAttribute("gse:DisplayLabelText");
 			}
 		}
-		if("".equals(DisplayLabelText) || DisplayLabelText.isEmpty())
-			DisplayLabelText = getAttributeValue("gse:DisplayLabelText");
+		if("".equals(displayLabelText) || displayLabelText.isEmpty())
+			displayLabelText = getAttributeValue("gse:DisplayLabelText");
 		
-		if("".equals(DisplayLabelText) || DisplayLabelText.isEmpty())
-			DisplayLabelText = getAttributeValue("DisplayLabelText");
+		if("".equals(displayLabelText) || displayLabelText.isEmpty())
+			displayLabelText = getAttributeValue("DisplayLabelText");
 
-		PrepaidItemTypeOtherDescription = getValueAddNS("PrepaidItemTypeOtherDescription");
-		RegulationZPointsAndFeesIndicator = getValueAddNS("RegulationZPointsAndFeesIndicator");
+		prepaidItemTypeOtherDescription = getValueAddNS("PrepaidItemTypeOtherDescription");
+		regulationZPointsAndFeesIndicator = getValueAddNS("RegulationZPointsAndFeesIndicator");
 	}
 	
 	public String displayName() {
-		String str = PrepaidItemType;
-		if (!DisplayLabelText.equals(""))
-			str = DisplayLabelText;
-		else if (PrepaidItemType.equalsIgnoreCase("Other"))
-			str = PrepaidItemTypeOtherDescription;
+		String str = prepaidItemType;
+		if (!displayLabelText.equals(""))
+			str = displayLabelText;
+		else if (prepaidItemType.equalsIgnoreCase("Other"))
+			str = prepaidItemTypeOtherDescription;
 		return canonicalLabel(str);
 	}
 }

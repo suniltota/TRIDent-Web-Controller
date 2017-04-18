@@ -90,17 +90,17 @@ public class LoanEstimateConvertor {
 		PropertyValuationDetail propertyValuationDetail = new PropertyValuationDetail((Element)deal.getElementAddNS(propertyValuation + "/PROPERTY_VALUATION_DETAIL"));
 		SalesContractDetail salesContractDetail = new SalesContractDetail((Element)deal.getElementAddNS(salesContract + "/SALES_CONTRACT_DETAIL"));
 		TermsOfLoan loanTerms = new TermsOfLoan((Element)deal.getElementAddNS(loan + "/TERMS_OF_LOAN"));
-		String loanType = loanTerms.MortgageType;
+		String loanType = loanTerms.mortgageType;
 		
-		loanEstimateSection.setLenderFullName(StringFormatter.STRINGCLEAN.formatString(lenderDetail.FullName));
+		loanEstimateSection.setLenderFullName(StringFormatter.STRINGCLEAN.formatString(lenderDetail.fullName));
 		loanEstimateSection.setLenderAddress(toAddressModel(lenderAddress));
 		loanEstimateSection.setDateIssued(Formatter.DATE.format(idDetail.IntegratedDisclosureIssuedDate));
 		loanEstimateSection.setApplicants(applicants(borrowerParties));
 		loanEstimateSection.setEstimatedPropValue(Formatter.ZEROTRUNCDOLLARS.format(salePrice(loanTerms, salesContractDetail, propertyValuationDetail, propertyDetail)));
 		loanEstimateSection.setLoanTerm(Formatter.YEARSMONTHS.format(loanTerm(loanDetail, maturityRule, construction)));
-		loanEstimateSection.setPurpose(loanTerms.LoanPurposeType);
+		loanEstimateSection.setPurpose(loanTerms.loanPurposeType);
 		loanEstimateSection.setProduct(idDetail.IntegratedDisclosureLoanProductDescription);
-		loanEstimateSection.setLoanType("Other".equalsIgnoreCase(loanType) ? loanTerms.MortgageTypeOtherDescription :loanType);
+		loanEstimateSection.setLoanType("Other".equalsIgnoreCase(loanType) ? loanTerms.mortgageTypeOtherDescription :loanType);
 		loanEstimateSection.setLoanId(loanIdentifier.LoanIdentifier);
 		loanEstimateSection.setProperty(toAddressModel(propertyAddress));
 		loanEstimateSection.setLoanEstimateSectionRateLock(rateLock(locks, idDetail));
@@ -117,7 +117,7 @@ public class LoanEstimateConvertor {
 	 * @return saleprice as a String
 	 */
 	private static String salePrice(TermsOfLoan loanTerms, SalesContractDetail salesContractDetail, PropertyValuationDetail propertyValuationDetail, PropertyDetail propertyDetail) {
-		if (!loanTerms.LoanPurposeType.equalsIgnoreCase("Purchase"))
+		if (!loanTerms.loanPurposeType.equalsIgnoreCase("Purchase"))
 			if (propertyValuationDetail.PropertyValuationAmount.equals(""))
 				return propertyDetail.PropertyEstimatedValueAmount;
 			else
@@ -195,8 +195,8 @@ public class LoanEstimateConvertor {
 			LoanEstimateSectionBorrower loanEstimateSectionBorrower = new LoanEstimateSectionBorrower();
 			NameModel applicant = new NameModel();
 			com.actualize.mortgage.domainmodels.Address addressModel = new com.actualize.mortgage.domainmodels.Address();
-			if (!borrowers.parties[0].legalEntity.legalEntityDetail.FullName.equals(""))
-				applicant.setFullName(borrowers.parties[0].legalEntity.legalEntityDetail.FullName);
+			if (!borrowers.parties[0].legalEntity.legalEntityDetail.fullName.equals(""))
+				applicant.setFullName(borrowers.parties[0].legalEntity.legalEntityDetail.fullName);
 			else
 				applicant = toNameModel(borrowers.parties[0].individual.name);
 			addressModel = toAddressModel(new Address((Element)borrowers.parties[0].getElementAddNS("ADDRESSES/ADDRESS[AddressType='Mailing']")));
