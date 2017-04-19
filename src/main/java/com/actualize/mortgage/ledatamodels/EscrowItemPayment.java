@@ -6,15 +6,15 @@ import com.actualize.mortgage.domainmodels.MISMODataAccessObject;
 
 public class EscrowItemPayment extends MISMODataAccessObject{
 	
-	public final String EscrowItemActualPaymentAmount;
-	public final String EscrowItemPaymentPaidByType; 
-	public final String EscrowItemPaymentTimingType;
+	public final String escrowItemActualPaymentAmount;
+	public final String escrowItemPaymentPaidByType; 
+	public final String escrowItemPaymentTimingType;
 	
 	protected EscrowItemPayment(Element element) {
 		super(element);
 		// TODO Auto-generated constructor stub
-		EscrowItemActualPaymentAmount = getValueAddNS("EscrowItemActualPaymentAmount");
-		EscrowItemPaymentPaidByType   = getValueAddNS("EscrowItemPaymentPaidByType"); 
-		EscrowItemPaymentTimingType  = getValueAddNS("EscrowItemPaymentTimingType");
+		escrowItemActualPaymentAmount = getValueAddNS("EscrowItemActualPaymentAmount");
+		escrowItemPaymentPaidByType   = getValueAddNS("EscrowItemPaymentPaidByType"); 
+		escrowItemPaymentTimingType  = getValueAddNS("EscrowItemPaymentTimingType");
 	}
 }

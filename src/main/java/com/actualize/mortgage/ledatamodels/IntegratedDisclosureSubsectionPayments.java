@@ -10,7 +10,7 @@ public class IntegratedDisclosureSubsectionPayments extends MISMODataAccessObjec
 
 	public IntegratedDisclosureSubsectionPayments(Element element) {
 		super(element);
-		NodeList nodes = getElementsAddNS("INTEGRATED_DISCLOSURE_SUBSECTION_PAYMENT");
+		NodeList nodes = getElementsAddNS((NS == null ? "" : NS)+"INTEGRATED_DISCLOSURE_SUBSECTION_PAYMENT");
 		integratedDisclosureSubsectionPayments = new IntegratedDisclosureSubsectionPayment[nodes==null ? 0 : nodes.getLength()];
 		for (int i = 0; i < integratedDisclosureSubsectionPayments.length; i++)
 			integratedDisclosureSubsectionPayments[i] = new IntegratedDisclosureSubsectionPayment((Element)nodes.item(i));

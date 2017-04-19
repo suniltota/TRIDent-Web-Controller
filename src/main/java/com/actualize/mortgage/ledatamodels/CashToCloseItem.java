@@ -9,20 +9,20 @@ import com.actualize.mortgage.domainmodels.MISMODataAccessObject;
  *
  */
 public class CashToCloseItem extends MISMODataAccessObject {
-	public final String IntegratedDisclosureCashToCloseItemAmountChangedIndicator;
-	public final String IntegratedDisclosureCashToCloseItemChangeDescription;
-	public final String IntegratedDisclosureCashToCloseItemEstimatedAmount;
-	public final String IntegratedDisclosureCashToCloseItemFinalAmount;
-	public final String IntegratedDisclosureCashToCloseItemPaymentType;
-	public final String IntegratedDisclosureCashToCloseItemType;
+	public final String integratedDisclosureCashToCloseItemAmountChangedIndicator;
+	public final String integratedDisclosureCashToCloseItemChangeDescription;
+	public final String integratedDisclosureCashToCloseItemEstimatedAmount;
+	public final String integratedDisclosureCashToCloseItemFinalAmount;
+	public final String integratedDisclosureCashToCloseItemPaymentType;
+	public final String integratedDisclosureCashToCloseItemType;
 
 	public CashToCloseItem(Element element) {
 		super(element);
-		IntegratedDisclosureCashToCloseItemAmountChangedIndicator = getValueAddNS("IntegratedDisclosureCashToCloseItemAmountChangedIndicator");
-		IntegratedDisclosureCashToCloseItemChangeDescription = getValueAddNS("IntegratedDisclosureCashToCloseItemChangeDescription");
-		IntegratedDisclosureCashToCloseItemEstimatedAmount = getValueAddNS("IntegratedDisclosureCashToCloseItemEstimatedAmount");
-		IntegratedDisclosureCashToCloseItemFinalAmount = getValueAddNS("IntegratedDisclosureCashToCloseItemFinalAmount");
-		IntegratedDisclosureCashToCloseItemPaymentType = getValueAddNS("IntegratedDisclosureCashToCloseItemPaymentType");
-		IntegratedDisclosureCashToCloseItemType = getValueAddNS("IntegratedDisclosureCashToCloseItemType");
+		integratedDisclosureCashToCloseItemAmountChangedIndicator = getValueAddNS("IntegratedDisclosureCashToCloseItemAmountChangedIndicator");
+		integratedDisclosureCashToCloseItemChangeDescription = getValueAddNS("IntegratedDisclosureCashToCloseItemChangeDescription");
+		integratedDisclosureCashToCloseItemEstimatedAmount = getValueAddNS("IntegratedDisclosureCashToCloseItemEstimatedAmount");
+		integratedDisclosureCashToCloseItemFinalAmount = getValueAddNS("IntegratedDisclosureCashToCloseItemFinalAmount");
+		integratedDisclosureCashToCloseItemPaymentType = getValueAddNS("IntegratedDisclosureCashToCloseItemPaymentType");
+		integratedDisclosureCashToCloseItemType = getValueAddNS("IntegratedDisclosureCashToCloseItemType");
 	}
 }

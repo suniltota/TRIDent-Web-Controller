@@ -6,52 +6,52 @@ import org.w3c.dom.NodeList;
 import com.actualize.mortgage.domainmodels.MISMODataAccessObject;
 
 public class EscrowItemDetail extends MISMODataAccessObject {
-	public  String DisplayLabelText = "";
-	public final String EscrowCollectedNumberOfMonthsCount;
-	public final String EscrowItemCategoryType;
-	public final String EscrowItemEstimatedTotalAmount;
-	public final String EscrowItemType;
-	public final String EscrowItemTypeOtherDescription;
-	public final String EscrowMonthlyPaymentAmount;
-	public final String FeePaidToType;
-	public final String FeePaidToTypeOtherDescription;
-	public final String IntegratedDisclosureSectionType;
-	public final String RegulationZPointsAndFeesIndicator;
+	public  String displayLabelText = "";
+	public final String escrowCollectedNumberOfMonthsCount;
+	public final String escrowItemCategoryType;
+	public final String escrowItemEstimatedTotalAmount;
+	public final String escrowItemType;
+	public final String escrowItemTypeOtherDescription;
+	public final String escrowMonthlyPaymentAmount;
+	public final String feePaidToType;
+	public final String feePaidToTypeOtherDescription;
+	public final String integratedDisclosureSectionType;
+	public final String regulationZPointsAndFeesIndicator;
 	  
 	public EscrowItemDetail(Element element) {
 		super(element);
-		EscrowCollectedNumberOfMonthsCount = getValueAddNS("EscrowCollectedNumberOfMonthsCount");
-		EscrowItemCategoryType = getValueAddNS("EscrowItemCategoryType");
-		EscrowItemEstimatedTotalAmount = getValueAddNS("EscrowItemEstimatedTotalAmount");
-		EscrowItemType = getValueAddNS("EscrowItemType");
+		escrowCollectedNumberOfMonthsCount = getValueAddNS("EscrowCollectedNumberOfMonthsCount");
+		escrowItemCategoryType = getValueAddNS("EscrowItemCategoryType");
+		escrowItemEstimatedTotalAmount = getValueAddNS("EscrowItemEstimatedTotalAmount");
+		escrowItemType = getValueAddNS("EscrowItemType");
 		NodeList node = getElementsAddNS("EscrowItemType");
 		if(null != node)
 		{
 			Element ele =(Element)node.item(0);
 			if(null != ele)
 			{	
-				DisplayLabelText = ele.getAttribute("DisplayLabelText");
-				if("".equals(DisplayLabelText) || DisplayLabelText.isEmpty())
-					DisplayLabelText = ele.getAttribute("gse:DisplayLabelText");
+				displayLabelText = ele.getAttribute("DisplayLabelText");
+				if("".equals(displayLabelText) || displayLabelText.isEmpty())
+					displayLabelText = ele.getAttribute("gse:DisplayLabelText");
 			}
 		}
-		if("".equals(DisplayLabelText) || DisplayLabelText.isEmpty())
-			DisplayLabelText = getAttributeValue("gse:DisplayLabelText");
-		if("".equals(DisplayLabelText) || DisplayLabelText.isEmpty())
-			DisplayLabelText = getAttributeValue("DisplayLabelText");
-		EscrowItemTypeOtherDescription = getValueAddNS("EscrowItemTypeOtherDescription");
-		EscrowMonthlyPaymentAmount = getValueAddNS("EscrowMonthlyPaymentAmount");
-		FeePaidToType = getValueAddNS("FeePaidToType");
-		FeePaidToTypeOtherDescription = getValueAddNS("FeePaidToTypeOtherDescription");
-		IntegratedDisclosureSectionType = getValueAddNS("IntegratedDisclosureSectionType");
-		RegulationZPointsAndFeesIndicator = getValueAddNS("RegulationZPointsAndFeesIndicator");
+		if("".equals(displayLabelText) || displayLabelText.isEmpty())
+			displayLabelText = getAttributeValue("gse:DisplayLabelText");
+		if("".equals(displayLabelText) || displayLabelText.isEmpty())
+			displayLabelText = getAttributeValue("DisplayLabelText");
+		escrowItemTypeOtherDescription = getValueAddNS("EscrowItemTypeOtherDescription");
+		escrowMonthlyPaymentAmount = getValueAddNS("EscrowMonthlyPaymentAmount");
+		feePaidToType = getValueAddNS("FeePaidToType");
+		feePaidToTypeOtherDescription = getValueAddNS("FeePaidToTypeOtherDescription");
+		integratedDisclosureSectionType = getValueAddNS("IntegratedDisclosureSectionType");
+		regulationZPointsAndFeesIndicator = getValueAddNS("RegulationZPointsAndFeesIndicator");
 	}
 	
 	public String displayName() {
-		if (!DisplayLabelText.equals(""))
-			return DisplayLabelText;
-		if (EscrowItemType.equalsIgnoreCase("Other"))
-			return EscrowItemTypeOtherDescription;
-		return EscrowItemType;
+		if (!displayLabelText.equals(""))
+			return displayLabelText;
+		if (escrowItemType.equalsIgnoreCase("Other"))
+			return escrowItemTypeOtherDescription;
+		return escrowItemType;
 	}
 }

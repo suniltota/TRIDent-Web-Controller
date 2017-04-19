@@ -17,10 +17,6 @@ public class IntegratedDisclosure {
 		projectedPayments = new ProjectedPayments(element);
 	}
 	public IntegratedDisclosure(Element element) {
-		cashToCloseItems = new CashToCloseItems(element);
-		estimatedPropertyCost = new EstimatedPropertyCost(element);
-		integratedDisclosureDetail = new IntegratedDisclosureDetail(element);
-		integratedDisclosureSectionSummaries = new IntegratedDisclosureSectionSummaries(element);
-		projectedPayments = new ProjectedPayments(element);
+		this(null, element);
 	}
 }
