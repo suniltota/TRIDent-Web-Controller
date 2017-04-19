@@ -58,13 +58,13 @@ public class ActualizeApi {
 	 * @throws Exception
 	 */
 	
-    @RequestMapping(value = "/ucdxml", method = { RequestMethod.POST })
+  /*  @RequestMapping(value = "/ucdxml", method = { RequestMethod.POST })
     public List<ClosingDisclosureDocument> fillFormByXML(@RequestBody String xmldoc) throws Exception {
         sessionContext.getUserDetails().setMessage(xmldoc);
         Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(new InputSource(new ByteArrayInputStream(xmldoc.getBytes("utf-8"))));
         MESSAGE message = transformXmlToObject(document);
         return mortgageServices.createDocument(message);
-    }
+    }*/
 	
 	/**
 	 * generates JSON response for closing disclosure on giving xml as input in String format
@@ -72,10 +72,10 @@ public class ActualizeApi {
 	 * @return JSON response for closing disclosure
 	 * @throws Exception
 	 */
-	@RequestMapping(value = "/readTxt", method = { RequestMethod.POST })
+	/*@RequestMapping(value = "/readTxt", method = { RequestMethod.POST })
     public List<ClosingDisclosureDocument> fillFormByTxt(@RequestBody MESSAGE messageXMLObject) throws Exception {
 		 return  mortgageServices.createDocument(messageXMLObject);
-    }
+    }*/
 	
 	/**
 	 * generates PDF for closing disclosure on giving xml as input in String format
@@ -113,7 +113,7 @@ public class ActualizeApi {
      * @return UCD XML as String
      * @throws Exception
      */
-    @RequestMapping(value = "/saveUCDXML", method = { RequestMethod.POST })
+    /*@RequestMapping(value = "/saveUCDXML", method = { RequestMethod.POST })
     public String saveModifiedUCDXML(@RequestBody List<ClosingDisclosureDocument> pdfDocument) throws Exception {
         String currentXMLObject = sessionContext.getUserDetails().getMessage();
         Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(new InputSource(new ByteArrayInputStream(currentXMLObject.getBytes("utf-8"))));
@@ -123,7 +123,7 @@ public class ActualizeApi {
             message = mortgageServices.updateMismoObject(message, pdf);
         }
         return transformObjectToXML(message);
-    }
+    }*/
     
     /**
      * converts MESSAGE JAXB Object to String 

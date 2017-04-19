@@ -10,8 +10,8 @@ import com.actualize.mortgage.domainmodels.ClosingCostDetailsOtherCosts;
  *
  */
 public interface PageTwoService {
-	
+/*	
 	public ClosingCostDetailsLoanCosts createClosingCostDetailsLoanCosts(DOCUMENT document);
 	public ClosingCostDetailsOtherCosts createClosingCostDetailsOtherCosts(DOCUMENT document);
-
+*/
 }

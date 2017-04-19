@@ -14,11 +14,12 @@ import com.actualize.mortgage.domainmodels.TransactionInformation;
  *
  */
 public interface PageOneService {
-
+/*
 	public ClosingInformation createClosingInformation(DOCUMENT document);
 	public LoanInformation createLoanInformation(DOCUMENT document);
 	public TransactionInformation createTransactionInformation(DOCUMENT document);
 	public LoanTerms createLoanTerms(DOCUMENT document);
 	public ProjectedPaymentsModel createProjectedPayments(DOCUMENT document);
 	public CostsAtClosing createCostsAtClosing(DOCUMENT document);
+	*/
 }

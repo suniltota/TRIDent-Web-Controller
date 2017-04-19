@@ -43,7 +43,7 @@ import com.actualize.mortgage.utils.PopulateData;
 import com.actualize.mortgage.utils.StringFormatter;
 
 public class PageOneServiceImpl implements PageOneService {
-	
+/*	
 	DEAL deal = null;
 	Address property = new Address();
 	
@@ -889,5 +889,5 @@ public class PageOneServiceImpl implements PageOneService {
 			return "NO";
 		return "";
 	}
-
+*/
 }

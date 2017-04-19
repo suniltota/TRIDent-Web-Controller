@@ -66,7 +66,7 @@ import xmlutils.Utils;
 public class MortgageServicesImpl implements MortgageServices{
 	
     List<ConversionError> conversionErrorList = null;
-	DEAL deal = null;
+	/*DEAL deal = null;
 	Address property = new Address();
 	ADDRESS address = new ADDRESS();
 	Convertor convertor = new Convertor();
@@ -189,7 +189,7 @@ public class MortgageServicesImpl implements MortgageServices{
             document = pageOneMappingService.mapCostsAtClosing(document, modifiedJSONObject);
         }
         return message;
-    }
+    }*/
 	
 	@Override
     public MESSAGE generateMasterXML(IntermediateXMLData intermediateXMLData) throws Exception {
@@ -429,7 +429,7 @@ public class MortgageServicesImpl implements MortgageServices{
     private String canonicalSearchString(String str) {
         return str.replaceAll("\\s", "").toUpperCase();
     }
-
+/*
 	@Override
 	public PageThree populatePageThree(DOCUMENT document) throws Exception {
 		
@@ -439,5 +439,5 @@ public class MortgageServicesImpl implements MortgageServices{
 			pageThree.setSummariesofTransactions(pageThreeService.createSummariesofTransactions(document));
 		return pageThree;
 	}
-
+*/
 }

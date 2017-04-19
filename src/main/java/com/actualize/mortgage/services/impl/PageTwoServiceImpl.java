@@ -30,7 +30,7 @@ import com.actualize.mortgage.utils.DocumentType;
 import com.actualize.mortgage.utils.StringFormatter;
 
 public class PageTwoServiceImpl implements PageTwoService{
-
+/*
 	@Override
 	public ClosingCostDetailsLoanCosts createClosingCostDetailsLoanCosts(DOCUMENT document) {
 		ClosingCostDetailsLoanCosts closingCostDetailsLoanCosts = new ClosingCostDetailsLoanCosts();
@@ -711,5 +711,5 @@ public class PageTwoServiceImpl implements PageTwoService{
 		iepAtClosing.setLenderStatus(found.getLenderStatus());	
 		return iepAtClosing;
 	
-	}
+	}*/
 }
