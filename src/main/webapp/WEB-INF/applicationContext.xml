@@ -31,10 +31,7 @@
     
     <import resource="classpath:am-security.xml" />
     <bean id="mortgageServices" class="com.actualize.mortgage.services.impl.MortgageServicesImpl"/> 
-   	<bean id="pageOneService" class="com.actualize.mortgage.services.impl.PageOneServiceImpl"/>
-   	<bean id="pageTwoService" class="com.actualize.mortgage.services.impl.PageTwoServiceImpl"/>
    	<bean id="pageThreeService" class="com.actualize.mortgage.services.impl.PageThreeServiceImpl"/>
-   	<bean id="pageOneMappingService" class="com.actualize.mortgage.services.impl.PageOneMappingServiceImpl"/>
    	<bean id="loanEstimateServices" class="com.actualize.mortgage.leservices.impl.LoanEstimateServicesImpl"/>
    	<bean id="closingDisclosureService" class="com.actualize.mortgage.cdservices.impl.ClosingDisclosureServiceImpl"/>
 </beans>

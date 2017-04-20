@@ -21,7 +21,7 @@ public class DocumentType {
 	private boolean sellerOnly;
 	private static String aboutVersionIdentifier;
 	private String loanId;
-	
+	/*
 	public static boolean isStandardView(DOCUMENT document)
 	{
 		if("Other".equalsIgnoreCase(document.getDOCUMENTCLASSIFICATION().getDOCUMENTCLASSES().getDOCUMENTCLASS().getDocumentType().getValue().value()) && "ClosingDisclosure:ModelForm".equalsIgnoreCase(document.getDOCUMENTCLASSIFICATION().getDOCUMENTCLASSES().getDOCUMENTCLASS().getDocumentTypeOtherDescription().getValue().value()))
@@ -35,8 +35,8 @@ public class DocumentType {
 		
 		DEAL deal = document.getDEALSETS().getDEALSET().getDEALS().getDEAL();
 		
-		List<CashToCloseModel> cashToCloseModels = PopulateData.populateCashToCloseModel(document);
-		List<LiabilitiesModel> liabilitiesModels = PopulateData.populateLiabilitiesModel(document);
+//		List<CashToCloseModel> cashToCloseModels = PopulateData.populateCashToCloseModel(document);
+//		List<LiabilitiesModel> liabilitiesModels = PopulateData.populateLiabilitiesModel(document);
 		if (isStandardView(document))
 			return false;
 		
@@ -194,6 +194,6 @@ public class DocumentType {
 
 	public static void setAboutVersionIdentifier(String VersionIdentifier) {
 		aboutVersionIdentifier = VersionIdentifier;
-	}
+	}*/
 
 }

@@ -30,7 +30,6 @@ import org.mismo.residential._2009.schemas.SALESCONTRACTDETAIL;
 import com.actualize.mortgage.domainmodels.AdjustmentsModel;
 import com.actualize.mortgage.domainmodels.CashToCloseModel;
 import com.actualize.mortgage.domainmodels.ClosingCostFundModel;
-import com.actualize.mortgage.domainmodels.EscrowsModel;
 import com.actualize.mortgage.domainmodels.FeeModel;
 import com.actualize.mortgage.domainmodels.ID_SubsectionModel;
 import com.actualize.mortgage.domainmodels.LiabilitiesModel;
@@ -48,7 +47,7 @@ import com.actualize.mortgage.domainmodels.ProrationsModel;
 import com.actualize.mortgage.domainmodels.SalesContractDetailModel;
 
 public class PopulateData {
-	
+/*	
 	public static LoanInformation populateLoanInformation(DOCUMENT document)
 	{
 		DEAL deal = document.getDEALSETS().getDEALSET().getDEALS().getDEAL();
@@ -691,5 +690,5 @@ public class PopulateData {
 			 }
 		 }
 		return closingCostFundModels;
-	 }
+	 }*/
 }

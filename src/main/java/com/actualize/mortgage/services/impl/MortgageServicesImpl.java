@@ -24,38 +24,14 @@ import javax.xml.transform.dom.DOMResult;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
-import org.mismo.residential._2009.schemas.ADDRESS;
-import org.mismo.residential._2009.schemas.DEAL;
-import org.mismo.residential._2009.schemas.DOCUMENT;
 import org.mismo.residential._2009.schemas.MESSAGE;
 import org.mismo.residential._2009.schemas.ObjectFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.w3c.dom.Document;
 
-import com.actualize.mortgage.domainmodels.Address;
-import com.actualize.mortgage.domainmodels.Borrower;
-import com.actualize.mortgage.domainmodels.ClosingCostDetailsLoanCosts;
-import com.actualize.mortgage.domainmodels.ClosingCostDetailsOtherCosts;
-import com.actualize.mortgage.domainmodels.ClosingDisclosureDocument;
-import com.actualize.mortgage.domainmodels.ClosingInformation;
 import com.actualize.mortgage.domainmodels.ConversionError;
-import com.actualize.mortgage.domainmodels.CostsAtClosing;
 import com.actualize.mortgage.domainmodels.DataElement;
 import com.actualize.mortgage.domainmodels.IntermediateXMLData;
-import com.actualize.mortgage.domainmodels.LoanInformation;
-import com.actualize.mortgage.domainmodels.LoanTerms;
-import com.actualize.mortgage.domainmodels.PageOne;
-import com.actualize.mortgage.domainmodels.PageThree;
-import com.actualize.mortgage.domainmodels.PageTwo;
-import com.actualize.mortgage.domainmodels.ProjectedPaymentsModel;
-import com.actualize.mortgage.domainmodels.TransactionInformation;
 import com.actualize.mortgage.services.MortgageServices;
-import com.actualize.mortgage.services.PageOneMappingService;
-import com.actualize.mortgage.services.PageOneService;
-import com.actualize.mortgage.services.PageThreeService;
-import com.actualize.mortgage.services.PageTwoService;
-import com.actualize.mortgage.utils.Convertor;
-import com.actualize.mortgage.utils.DocumentType;
 import com.actualize.mortgage.utils.OutputFormatter;
 
 import transformer.TRIDTransformer;
@@ -66,130 +42,6 @@ import xmlutils.Utils;
 public class MortgageServicesImpl implements MortgageServices{
 	
     List<ConversionError> conversionErrorList = null;
-	/*DEAL deal = null;
-	Address property = new Address();
-	ADDRESS address = new ADDRESS();
-	Convertor convertor = new Convertor();
-	ClosingInformation closingInformation = new ClosingInformation();
-	TransactionInformation transactionInformation = new TransactionInformation();
-	LoanInformation loanInformation = new LoanInformation();
-	DocumentType documentType = new DocumentType();
-	
-	List<Borrower> borrowers = new LinkedList<>();
-	List<Borrower> sellers = new LinkedList<>();
-	List<Borrower> lenders = new LinkedList<>();
-	
-	
-	@Autowired
-	private PageOneService pageOneService;
-	
-	@Autowired
-	private PageTwoService pageTwoService;
-	
-	@Autowired
-	private PageThreeService pageThreeService;
-	
-	@Autowired
-	private PageOneMappingService pageOneMappingService;
-	
-	@Override
-	public DocumentType documentDetail(DOCUMENT document) throws Exception {
-		DocumentType documentType = new DocumentType();
-			documentType.setStandardView(DocumentType.isStandardView(document));
-			documentType.setLoanType(documentType.getLoanType(document));
-			documentType.setAlternateView(DocumentType.isAlternateView(document));
-			documentType.setHomeEquityLoanIndicator(DocumentType.HomeEquityLoanIndicator());
-			documentType.setPayoffsAndPayments(DocumentType.PayoffsAndPayments());
-			documentType.setRefinanceTypeLoan(DocumentType.isRefinanceTypeLoan(document));
-			documentType.setSellerOnly(DocumentType.isSellerOnly(document));
-			documentType.setLoanId(documentType.getLoanIdentifier(document));
-		return documentType;
-	}
-	
-	@Override
-	public PageOne populatePageOne(DOCUMENT document) throws Exception {
-		
-		
-		ClosingInformation closingInformation = new ClosingInformation();
-		TransactionInformation transactionInformation = new TransactionInformation();
-		LoanInformation loanInformation = new LoanInformation();
-		LoanTerms loanTerms = new LoanTerms();
-		ProjectedPaymentsModel projectedPaymentsModel = new ProjectedPaymentsModel();
-		CostsAtClosing costsAtClosing = new CostsAtClosing();
-		
-		closingInformation = pageOneService.createClosingInformation(document);
-		transactionInformation = pageOneService.createTransactionInformation(document);
-		loanInformation = pageOneService.createLoanInformation(document);
-		loanTerms = pageOneService.createLoanTerms(document);
-		projectedPaymentsModel = pageOneService.createProjectedPayments(document);
-		costsAtClosing = pageOneService.createCostsAtClosing(document);
-				
-		PageOne pageOne = new PageOne();
-		
-			pageOne.setClosingInformation(closingInformation);
-			pageOne.setTransactionInformation(transactionInformation);
-			pageOne.setLoanInformation(loanInformation);
-			pageOne.setLoanTerms(loanTerms);
-			pageOne.setProjectedPayments(projectedPaymentsModel);
-			pageOne.setCostsAtClosing(costsAtClosing);
-		
-		return pageOne;
-	}
-
-	@Override
-	public List<ClosingDisclosureDocument> createDocument(MESSAGE message) throws Exception {
-		List<ClosingDisclosureDocument> pdfDocuments = new ArrayList<>();
-		List<DOCUMENT> documents = message.getDOCUMENTSETS().getDOCUMENTSET().getDOCUMENTS().getDOCUMENT();
-			
-		for(DOCUMENT document : documents)
-		{
-			ClosingDisclosureDocument pdfDocument = new ClosingDisclosureDocument();
-			DocumentType documentType = new DocumentType();
-			PageOne pageOne = new PageOne();
-			PageTwo pageTwo = new PageTwo();
-			documentType = documentDetail(document);
-			documentType.setAboutVersionIdentifier(DocumentType.getAboutVersionIdentifier(message));
-			pageOne = populatePageOne(document);
-			pageTwo = populatePageTwo(document);
-			pdfDocument.setDocumentType(documentType);
-			pdfDocument.setPageOne(pageOne);
-			pdfDocument.setPageTwo(pageTwo);
-			pdfDocument.setPageThree(populatePageThree(document));
-			pdfDocuments.add(pdfDocument);
-		}
-		return pdfDocuments;
-	}
-
-	@Override
-	public PageTwo populatePageTwo(DOCUMENT document) throws Exception {
-		PageTwo pageTwo = new PageTwo();
-		ClosingCostDetailsLoanCosts closingCostDetailsLoanCosts = new ClosingCostDetailsLoanCosts();
-		ClosingCostDetailsOtherCosts closingCostDetailsOtherCosts = new ClosingCostDetailsOtherCosts();
-		
-		closingCostDetailsLoanCosts = pageTwoService.createClosingCostDetailsLoanCosts(document);
-		closingCostDetailsOtherCosts = pageTwoService.createClosingCostDetailsOtherCosts(document);
-		
-		pageTwo.setClosingCostDetailsLoanCosts(closingCostDetailsLoanCosts);
-		pageTwo.setClosingCostDetailsOtherCosts(closingCostDetailsOtherCosts);
-		
-		return pageTwo;
-	}
-
-    @Override
-    public MESSAGE updateMismoObject(MESSAGE currentXMLObject, ClosingDisclosureDocument modifiedJSONObject) throws Exception {
-
-        MESSAGE message = currentXMLObject;
-        List<DOCUMENT> documents = currentXMLObject.getDOCUMENTSETS().getDOCUMENTSET().getDOCUMENTS().getDOCUMENT();
-        for (DOCUMENT document : documents) {
-            document = pageOneMappingService.mapClosingInformation(document, modifiedJSONObject);
-            document = pageOneMappingService.mapLoanInformation(document, modifiedJSONObject);
-            document = pageOneMappingService.mapTransactionInformation(document, modifiedJSONObject);
-            document = pageOneMappingService.mapLoanTerms(document, modifiedJSONObject);
-            document = pageOneMappingService.mapProjectedPayments(document, modifiedJSONObject);
-            document = pageOneMappingService.mapCostsAtClosing(document, modifiedJSONObject);
-        }
-        return message;
-    }*/
 	
 	@Override
     public MESSAGE generateMasterXML(IntermediateXMLData intermediateXMLData) throws Exception {
@@ -429,15 +281,5 @@ public class MortgageServicesImpl implements MortgageServices{
     private String canonicalSearchString(String str) {
         return str.replaceAll("\\s", "").toUpperCase();
     }
-/*
-	@Override
-	public PageThree populatePageThree(DOCUMENT document) throws Exception {
-		
-		PageThree pageThree = new PageThree();
-		pageThree.setCashToCloses(pageThreeService.createCalculatingCashtoClose(document));
-		if(!DocumentType.isAlternateView(document))
-			pageThree.setSummariesofTransactions(pageThreeService.createSummariesofTransactions(document));
-		return pageThree;
-	}
-*/
+
 }

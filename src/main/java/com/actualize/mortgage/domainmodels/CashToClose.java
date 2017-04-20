@@ -1,7 +1,11 @@
 package com.actualize.mortgage.domainmodels;
 
 import java.io.Serializable;
-
+/**
+ * 
+ * @author sboragala
+ *
+ */
 public class CashToClose implements Serializable{
 
 	private static final long serialVersionUID = 4357130776769001121L;

@@ -15,13 +15,21 @@ public class ClosingCostProperties implements Serializable {
 	
 	private String displayLabel;
 	private String gseDisplayLabel;
-	private String feeType; 
+	private String feeActualTotalAmount;
+	private String feePaidToType;
+	private String feePaidToTypeOtherDescription;
+	private String feePercentBasisType;
+	private String feeTotalPercent;
+	private String feeType;
+	private String feeTypeOtherDescription;
+	private String integratedDisclosureSectionType;
+	private String optionalCostIndicator;
+	private String regulationZPointsAndFeesIndicator;
 	private String bpAtClosing;
 	private String bpB4Closing;
 	private String spAtClosing;
 	private String spB4Closing;
 	private String paidByOthers;
-	private String toEntity;
 	private String lenderStatus;
 	
 	/**
@@ -49,6 +57,66 @@ public class ClosingCostProperties implements Serializable {
 		this.gseDisplayLabel = gseDisplayLabel;
 	}
 	/**
+	 * @return the feeActualTotalAmount
+	 */
+	public String getFeeActualTotalAmount() {
+		return feeActualTotalAmount;
+	}
+	/**
+	 * @param feeActualTotalAmount the feeActualTotalAmount to set
+	 */
+	public void setFeeActualTotalAmount(String feeActualTotalAmount) {
+		this.feeActualTotalAmount = feeActualTotalAmount;
+	}
+	/**
+	 * @return the feePaidToType
+	 */
+	public String getFeePaidToType() {
+		return feePaidToType;
+	}
+	/**
+	 * @param feePaidToType the feePaidToType to set
+	 */
+	public void setFeePaidToType(String feePaidToType) {
+		this.feePaidToType = feePaidToType;
+	}
+	/**
+	 * @return the feePaidToTypeOtherDescription
+	 */
+	public String getFeePaidToTypeOtherDescription() {
+		return feePaidToTypeOtherDescription;
+	}
+	/**
+	 * @param feePaidToTypeOtherDescription the feePaidToTypeOtherDescription to set
+	 */
+	public void setFeePaidToTypeOtherDescription(String feePaidToTypeOtherDescription) {
+		this.feePaidToTypeOtherDescription = feePaidToTypeOtherDescription;
+	}
+	/**
+	 * @return the feePercentBasisType
+	 */
+	public String getFeePercentBasisType() {
+		return feePercentBasisType;
+	}
+	/**
+	 * @param feePercentBasisType the feePercentBasisType to set
+	 */
+	public void setFeePercentBasisType(String feePercentBasisType) {
+		this.feePercentBasisType = feePercentBasisType;
+	}
+	/**
+	 * @return the feeTotalPercent
+	 */
+	public String getFeeTotalPercent() {
+		return feeTotalPercent;
+	}
+	/**
+	 * @param feeTotalPercent the feeTotalPercent to set
+	 */
+	public void setFeeTotalPercent(String feeTotalPercent) {
+		this.feeTotalPercent = feeTotalPercent;
+	}
+	/**
 	 * @return the feeType
 	 */
 	public String getFeeType() {
@@ -59,6 +127,54 @@ public class ClosingCostProperties implements Serializable {
 	 */
 	public void setFeeType(String feeType) {
 		this.feeType = feeType;
+	}
+	/**
+	 * @return the feeTypeOtherDescription
+	 */
+	public String getFeeTypeOtherDescription() {
+		return feeTypeOtherDescription;
+	}
+	/**
+	 * @param feeTypeOtherDescription the feeTypeOtherDescription to set
+	 */
+	public void setFeeTypeOtherDescription(String feeTypeOtherDescription) {
+		this.feeTypeOtherDescription = feeTypeOtherDescription;
+	}
+	/**
+	 * @return the integratedDisclosureSectionType
+	 */
+	public String getIntegratedDisclosureSectionType() {
+		return integratedDisclosureSectionType;
+	}
+	/**
+	 * @param integratedDisclosureSectionType the integratedDisclosureSectionType to set
+	 */
+	public void setIntegratedDisclosureSectionType(String integratedDisclosureSectionType) {
+		this.integratedDisclosureSectionType = integratedDisclosureSectionType;
+	}
+	/**
+	 * @return the optionalCostIndicator
+	 */
+	public String getOptionalCostIndicator() {
+		return optionalCostIndicator;
+	}
+	/**
+	 * @param optionalCostIndicator the optionalCostIndicator to set
+	 */
+	public void setOptionalCostIndicator(String optionalCostIndicator) {
+		this.optionalCostIndicator = optionalCostIndicator;
+	}
+	/**
+	 * @return the regulationZPointsAndFeesIndicator
+	 */
+	public String getRegulationZPointsAndFeesIndicator() {
+		return regulationZPointsAndFeesIndicator;
+	}
+	/**
+	 * @param regulationZPointsAndFeesIndicator the regulationZPointsAndFeesIndicator to set
+	 */
+	public void setRegulationZPointsAndFeesIndicator(String regulationZPointsAndFeesIndicator) {
+		this.regulationZPointsAndFeesIndicator = regulationZPointsAndFeesIndicator;
 	}
 	/**
 	 * @return the bpAtClosing
@@ -121,18 +237,6 @@ public class ClosingCostProperties implements Serializable {
 		this.paidByOthers = paidByOthers;
 	}
 	/**
-	 * @return the toEntity
-	 */
-	public String getToEntity() {
-		return toEntity;
-	}
-	/**
-	 * @param toEntity the toEntity to set
-	 */
-	public void setToEntity(String toEntity) {
-		this.toEntity = toEntity;
-	}
-	/**
 	 * @return the lenderStatus
 	 */
 	public String getLenderStatus() {
@@ -146,5 +250,4 @@ public class ClosingCostProperties implements Serializable {
 	}
 	
 	
-
 }

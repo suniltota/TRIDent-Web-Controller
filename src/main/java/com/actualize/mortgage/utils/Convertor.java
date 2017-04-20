@@ -15,10 +15,7 @@ import org.mismo.residential._2009.schemas.INTEGRATEDDISCLOSURESECTIONSUMMARY;
 import org.mismo.residential._2009.schemas.INTEGRATEDDISCLOSURESUBSECTIONPAYMENT;
 import org.mismo.residential._2009.schemas.PREPAIDITEM;
 
-import com.actualize.mortgage.domainmodels.ClosingCostProperties;
-import com.actualize.mortgage.domainmodels.EscrowsModel;
-import com.actualize.mortgage.domainmodels.FeeModel;
-import com.actualize.mortgage.domainmodels.PrepaidsModel;
+
 /**
  * This class is perform various operations such as conversions and extractions of MISMO Objects
  * @author sboragala
@@ -26,7 +23,7 @@ import com.actualize.mortgage.domainmodels.PrepaidsModel;
  */
 public class Convertor {
 	
-	public static String convertMonthsToDisplayFormat(Integer months){
+/*	public static String convertMonthsToDisplayFormat(Integer months){
 	    int years = months / 12;
         int modMonths = months % 12;
         String maturity = "";
@@ -40,23 +37,24 @@ public class Convertor {
             maturity = Integer.toString(years) + " yr. " + Integer.toString(modMonths) + " mo.";
         return maturity;
 	}
+	
 	/**
 	 * 
 	 * @param document
 	 * @return Integrated Disclosuresection Summaries as a List
-	 */
+	 
 	public static List<INTEGRATEDDISCLOSURESECTIONSUMMARY> getIntegrateddisclosuresectionsummaries(DOCUMENT document)
 	{
 		List<INTEGRATEDDISCLOSURESECTIONSUMMARY> integrateddisclosuresectionsummaries = new LinkedList<INTEGRATEDDISCLOSURESECTIONSUMMARY>();
 			integrateddisclosuresectionsummaries = document.getDEALSETS().getDEALSET().getDEALS().getDEAL().getLOANS().getLOAN().getDOCUMENTSPECIFICDATASETS().getDOCUMENTSPECIFICDATASET().getINTEGRATEDDISCLOSURE().getINTEGRATEDDISCLOSURESECTIONSUMMARIES().getINTEGRATEDDISCLOSURESECTIONSUMMARY();
 		return integrateddisclosuresectionsummaries;
 	}
-	/**
+	*//**
 	 * 
 	 * @param integratedDisclosureSectionType
 	 * @param document
 	 * @return Integrated Disclosure Section Summary for specific integrated DisclosureSectionType
-	 */
+	 *//*
 	public static INTEGRATEDDISCLOSURESECTIONSUMMARY  getIntegratedDisclosureSectionSummary(String integratedDisclosureSectionType, DOCUMENT document){
 		List<INTEGRATEDDISCLOSURESECTIONSUMMARY> integrateddisclosuresectionsummaries = getIntegrateddisclosuresectionsummaries(document);	
 		for( INTEGRATEDDISCLOSURESECTIONSUMMARY  integrateddisclosuresectionsummary: integrateddisclosuresectionsummaries)
@@ -70,12 +68,12 @@ public class Convertor {
 		return null;
 	}
 	
-	/**
+	*//**
 	 * 
 	 * @param integratedDisclosureSubSectionType
 	 * @param document
 	 * @return lender credits
-	 */
+	 *//*
 	public static String getLenderCredits(String integratedDisclosureSubSectionType, DOCUMENT document )
 	{
 		String amount = "";
@@ -100,11 +98,11 @@ public class Convertor {
 		return amount;
 	}
 	
-	/**
+	*//**
 	 * 
 	 * @param document
 	 * @return a map of IntegratedDisclosureSectionType and its specific Integrated Disclosure Section TotalAmount
-	 */
+	 *//*
 	
 	public static Map<String,String> getIntegratedDisclosureSectionTypes(DOCUMENT document)
 	{
@@ -120,11 +118,11 @@ public class Convertor {
 		
 		return integratedDisclosureSectionTypeValues;
 	}
-	/**
+	*//**
 	 * 
 	 * @param document
 	 * @return FEE List
-	 */
+	 *//*
 	public static List<FEE> getFees(DOCUMENT document)
 	{
 		List<FEE> fees = new LinkedList<>();
@@ -138,11 +136,11 @@ public class Convertor {
 		
 		return prepaiditems;
 	}
-	/**
+	*//**
 	 * 
 	 * @param prepaidItem
 	 * @return PrepaidsModel
-	 */
+	 *//*
 	public static PrepaidsModel getPrepaidModel(PREPAIDITEM prepaidItem)
 	{
 		PrepaidsModel prepaidsModel = new PrepaidsModel();
@@ -330,12 +328,12 @@ public class Convertor {
 		}
 		return closingCostProperties;
 	}
-	
+	*/
 	public static String booleanToString(boolean status)
 	{
 		if(status)
-			return "YES";
-		return "NO";
+			return "true";
+		return "false";
 	}
 	
 	public static boolean stringToBoolean(String status)

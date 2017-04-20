@@ -3,7 +3,11 @@ package com.actualize.mortgage.domainmodels;
 import java.io.Serializable;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-
+/**
+ * populates CostsAtClosing section in Page One of CD for UI response
+ * @author sboragala
+ *
+ */
 public class CostsAtClosing implements Serializable {
 	
 	/**

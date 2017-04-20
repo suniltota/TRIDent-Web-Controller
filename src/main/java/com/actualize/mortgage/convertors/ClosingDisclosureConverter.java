@@ -31,8 +31,6 @@ import com.actualize.mortgage.domainmodels.ClosingInformation;
 import com.actualize.mortgage.domainmodels.CostsAtClosing;
 import com.actualize.mortgage.domainmodels.CostsAtClosingCashToClose;
 import com.actualize.mortgage.domainmodels.CostsAtClosingClosingCosts;
-import com.actualize.mortgage.domainmodels.EscrowsModel;
-import com.actualize.mortgage.domainmodels.FeeModel;
 import com.actualize.mortgage.domainmodels.IEPatClosing;
 import com.actualize.mortgage.domainmodels.LoanInformation;
 import com.actualize.mortgage.domainmodels.LoanInformationLoanIdentifier;
@@ -46,6 +44,7 @@ import com.actualize.mortgage.domainmodels.LoanTermsLoanAmount;
 import com.actualize.mortgage.domainmodels.LoanTermsPI;
 import com.actualize.mortgage.domainmodels.LoanTermsPrepaymentPenalty;
 import com.actualize.mortgage.domainmodels.NameModel;
+import com.actualize.mortgage.domainmodels.OtherCostsToGovtFees;
 import com.actualize.mortgage.domainmodels.Prepaids;
 import com.actualize.mortgage.domainmodels.ProjectedPaymentsDetails;
 import com.actualize.mortgage.domainmodels.ProjectedPaymentsModel;
@@ -68,16 +67,13 @@ import com.actualize.mortgage.ledatamodels.DocumentClass;
 import com.actualize.mortgage.ledatamodels.EscrowItem;
 import com.actualize.mortgage.ledatamodels.EscrowItemDetail;
 import com.actualize.mortgage.ledatamodels.EscrowItemPayment;
-import com.actualize.mortgage.ledatamodels.EscrowItemPayments;
 import com.actualize.mortgage.ledatamodels.EscrowItems;
 import com.actualize.mortgage.ledatamodels.EstimatedPropertyCost;
 import com.actualize.mortgage.ledatamodels.EstimatedPropertyCostComponents;
 import com.actualize.mortgage.ledatamodels.Fee;
 import com.actualize.mortgage.ledatamodels.FeeDetail;
 import com.actualize.mortgage.ledatamodels.FeePayment;
-import com.actualize.mortgage.ledatamodels.FeePayments;
 import com.actualize.mortgage.ledatamodels.Fees;
-import com.actualize.mortgage.ledatamodels.IntegratedDisclosure;
 import com.actualize.mortgage.ledatamodels.IntegratedDisclosureDetail;
 import com.actualize.mortgage.ledatamodels.IntegratedDisclosureSectionSummaries;
 import com.actualize.mortgage.ledatamodels.IntegratedDisclosureSectionSummary;
@@ -150,8 +146,6 @@ public class ClosingDisclosureConverter {
             closingDisclosurePageThree.setCashToCloses(createCalculatingCashtoClose(deal));
         closingDisclosure.setClosingDisclosurePageThree(closingDisclosurePageThree);
         
-        
-        
         return closingDisclosure;
     }
  
@@ -201,9 +195,15 @@ public class ClosingDisclosureConverter {
           	propertyValuationDetailModel.setPropertyValuationMethodType(propertyValuationDetail.PropertyValuationMethodType);
           	propertyValuationDetailModel.setPropertyValuationMethodTypeOtherDescription(propertyValuationDetail.PropertyValuationMethodTypeOtherDescription);
           closingInformationSection.setPropertyValuationDetail(propertyValuationDetailModel);
+          
         return closingInformationSection;
     }
     
+    /**
+     * Creates Transaction Information from MISMODocument
+     * @param deal
+     * @return TransactionInformation
+     */
     private TransactionInformation createTransactionInformation(Deal deal)
     {
     	TransactionInformation transactionInformation = new TransactionInformation();
@@ -215,6 +215,7 @@ public class ClosingDisclosureConverter {
     	transactionInformation.setBorrower(createBorrowers(borrowerParties));
     	transactionInformation.setSeller(createBorrowers(sellerParties));
     	transactionInformation.setLender(createBorrowers(lenders));
+    	
 		return transactionInformation;
     	
     }
@@ -315,9 +316,11 @@ public class ClosingDisclosureConverter {
  	    loanInformationSection.setMiRequiredIndicator(loanDetail.miRequiredIndicator);
  	    loanInformationSection.setMiCertificateIdentifier(miDataDetail.MICertificateIdentifier);
  	    loanInformationSection.setLoanIdentifiers(loanInformationLoanIdentifiers);
- 	    loanInformationSection.setAmortizationType(amortization.AmortizationType);	     
+ 	    loanInformationSection.setAmortizationType(amortization.AmortizationType);	
+ 	    
         return loanInformationSection;
     }
+    
     /**
      * Creates Loan Terms Section from MISMODocument
      * @param mismodoc
@@ -472,7 +475,7 @@ public class ClosingDisclosureConverter {
 		
 		if(null != escrowItems && null != escrowItem)
 		{
-			EscrowItem escrowsItem = getEscrowModel(escrowItems,"InitialEscrowPaymentAtClosing");
+			EscrowItem escrowsItem = getEscrowItem(escrowItems,"InitialEscrowPaymentAtClosing");
 			loanTermsIntialEscrow.setEscrowIndicator("YES");
 			loanTermsIntialEscrow.setEscrowItemType(escrowsItem.escrowItemDetail.escrowItemType);
 			loanTermsIntialEscrow.setDisplayLabelText(escrowsItem.escrowItemDetail.displayLabelText);
@@ -531,6 +534,7 @@ public class ClosingDisclosureConverter {
  	    loanTerms.setLoanTermsIntialEscrow(loanTermsIntialEscrow);
  	    loanTerms.setLoanTermsETIA(loanTermsETIAs);
  	    loanTerms.setLoanTermsEscrowAccount(loanTermsEscrowAccount);
+ 	    
     	return loanTerms;
     }
     
@@ -585,24 +589,30 @@ public class ClosingDisclosureConverter {
 	 */
 	private CostsAtClosing createCostsAtClosing(Deal deal)
 	{
-		DocumentClass documentClass = new DocumentClass((Element)deal.getElementAddNS("../../../../DOCUMENT_CLASSIFICATION/DOCUMENT_CLASSES/DOCUMENT_CLASS[DocumentType='Other']"));
 		String idSummary = "LOANS/LOAN/DOCUMENT_SPECIFIC_DATA_SETS/DOCUMENT_SPECIFIC_DATA_SET/INTEGRATED_DISCLOSURE/INTEGRATED_DISCLOSURE_SECTION_SUMMARIES/INTEGRATED_DISCLOSURE_SECTION_SUMMARY";
 		String idDetail = idSummary + "/INTEGRATED_DISCLOSURE_SECTION_SUMMARY_DETAIL";
 		String ciDetail = "LOANS/LOAN/CLOSING_INFORMATION/CLOSING_INFORMATION_DETAIL";
+		String lenderCredits;
+		
+		DocumentClass documentClass = new DocumentClass((Element)deal.getElementAddNS("../../../../DOCUMENT_CLASSIFICATION/DOCUMENT_CLASSES/DOCUMENT_CLASS[DocumentType='Other']"));
+		CostsAtClosingClosingCosts costsAtClosingClosingCosts = new CostsAtClosingClosingCosts();
+		CostsAtClosingCashToClose costsAtClosingCashToClose = new CostsAtClosingCashToClose(); 
 		ClosingInformationDetail closingDetail = new ClosingInformationDetail((Element)deal.getElementAddNS(ciDetail));
 		IntegratedDisclosureSectionSummaryDetail idClosingDetail = new IntegratedDisclosureSectionSummaryDetail((Element)deal.getElementAddNS(idDetail + "[IntegratedDisclosureSectionType='TotalClosingCosts'][IntegratedDisclosureSubsectionType='ClosingCostsSubtotal']"));
 		IntegratedDisclosureSectionSummaryDetail totalOtherCosts = new IntegratedDisclosureSectionSummaryDetail((Element)deal.getElementAddNS(idDetail + "[IntegratedDisclosureSectionType='TotalOtherCosts']"));
 		IntegratedDisclosureSectionSummaryDetail totalLoanCosts = new IntegratedDisclosureSectionSummaryDetail((Element)deal.getElementAddNS(idDetail + "[IntegratedDisclosureSectionType='TotalLoanCosts']"));
 		IntegratedDisclosureSubsectionPayment idLenderCredits = new IntegratedDisclosureSubsectionPayment((Element)deal.getElementAddNS(idSummary + "[INTEGRATED_DISCLOSURE_SECTION_SUMMARY_DETAIL/IntegratedDisclosureSubsectionType='LenderCredits']/INTEGRATED_DISCLOSURE_SUBSECTION_PAYMENTS/INTEGRATED_DISCLOSURE_SUBSECTION_PAYMENT"));
-		String lenderCredits;
+
 		if (idLenderCredits.integratedDisclosureSubsectionPaymentAmount.equals("")) {
 			IntegratedDisclosureSectionSummaryDetail idLenderCreditTwo = new IntegratedDisclosureSectionSummaryDetail((Element)deal.getElementAddNS(idDetail + "[IntegratedDisclosureSubsectionType='LenderCredits']"));
 			lenderCredits = idLenderCreditTwo.integratedDisclosureSubsectionTotalAmount;
+			costsAtClosingClosingCosts.setIntegratedDisclosureSubsectionTotalAmount(idLenderCreditTwo.integratedDisclosureSubsectionTotalAmount);
 		} else
+		{
 			lenderCredits = idLenderCredits.integratedDisclosureSubsectionPaymentAmount;
+			costsAtClosingClosingCosts.setIntegratedDisclosureSubsectionPaymentAmount(idLenderCredits.integratedDisclosureSubsectionPaymentAmount);
+		}
 		
-		CostsAtClosingClosingCosts costsAtClosingClosingCosts = new CostsAtClosingClosingCosts();
-		CostsAtClosingCashToClose costsAtClosingCashToClose = new CostsAtClosingCashToClose(); 
 			costsAtClosingClosingCosts.setAmount(idClosingDetail.integratedDisclosureSectionTotalAmount);
 			costsAtClosingClosingCosts.setTotalOtherCosts(totalOtherCosts.integratedDisclosureSectionTotalAmount);
 			costsAtClosingClosingCosts.setLenderCredits(lenderCredits);
@@ -628,6 +638,10 @@ public class ClosingDisclosureConverter {
 	 */
 	private ClosingCostDetailsLoanCosts ClosingCostDetailsLoanCosts(Deal deal)
 	{
+		String loan = "LOANS/LOAN";
+		String idSummary = "LOANS/LOAN/DOCUMENT_SPECIFIC_DATA_SETS/DOCUMENT_SPECIFIC_DATA_SET/INTEGRATED_DISCLOSURE/INTEGRATED_DISCLOSURE_SECTION_SUMMARIES/INTEGRATED_DISCLOSURE_SECTION_SUMMARY";
+		String idDetail = idSummary + "/INTEGRATED_DISCLOSURE_SECTION_SUMMARY_DETAIL";
+		
 		ClosingCostDetailsLoanCosts closingCostDetailsLoanCosts = new ClosingCostDetailsLoanCosts();
 
 		List<ClosingCostProperties> originationChargeList = new LinkedList<>();
@@ -635,16 +649,14 @@ public class ClosingDisclosureConverter {
 		List<ClosingCostProperties> sbDidShopFors = new LinkedList<>();
 		ClosingCostProperties tlCosts = new ClosingCostProperties();
 		
-		String loan = "LOANS/LOAN";
-	    DocumentClass documentClass = new DocumentClass((Element)deal.getElementAddNS("../../../../DOCUMENT_CLASSIFICATION/DOCUMENT_CLASSES/DOCUMENT_CLASS"));
-		String idSummary = "LOANS/LOAN/DOCUMENT_SPECIFIC_DATA_SETS/DOCUMENT_SPECIFIC_DATA_SET/INTEGRATED_DISCLOSURE/INTEGRATED_DISCLOSURE_SECTION_SUMMARIES/INTEGRATED_DISCLOSURE_SECTION_SUMMARY";
-		String idDetail = idSummary + "/INTEGRATED_DISCLOSURE_SECTION_SUMMARY_DETAIL";
+		DocumentClass documentClass = new DocumentClass((Element)deal.getElementAddNS("../../../../DOCUMENT_CLASSIFICATION/DOCUMENT_CLASSES/DOCUMENT_CLASS"));
 		IntegratedDisclosureSectionSummaries integratedDisclosureSectionSummaries = new IntegratedDisclosureSectionSummaries((Element)deal.getElementAddNS("LOANS/LOAN/DOCUMENT_SPECIFIC_DATA_SETS/DOCUMENT_SPECIFIC_DATA_SET/INTEGRATED_DISCLOSURE/INTEGRATED_DISCLOSURE_SECTION_SUMMARIES"));
 		IntegratedDisclosureSectionSummaryDetail totalLoanCosts = new IntegratedDisclosureSectionSummaryDetail((Element)deal.getElementAddNS(idDetail + "[IntegratedDisclosureSectionType='TotalLoanCosts']"));
 		IntegratedDisclosureSectionSummaryDetail idOraganisationCharges = new IntegratedDisclosureSectionSummaryDetail((Element)deal.getElementAddNS(idDetail + "[IntegratedDisclosureSectionType='OriginationCharges']"));
 		IntegratedDisclosureSectionSummaryDetail idServicesBorrowerDidNotShopFor = new IntegratedDisclosureSectionSummaryDetail((Element)deal.getElementAddNS(idDetail + "[IntegratedDisclosureSectionType='ServicesBorrowerDidNotShopFor']"));
 		IntegratedDisclosureSectionSummaryDetail idServicesBorrowerDidShopFor = new IntegratedDisclosureSectionSummaryDetail((Element)deal.getElementAddNS(idDetail + "[IntegratedDisclosureSectionType='ServicesBorrowerDidShopFor']"));
 		Fees fees = new Fees((Element)deal.getElementAddNS(loan + "/FEE_INFORMATION/FEES"));
+
 		closingCostDetailsLoanCosts.setOcTotalAmount(idOraganisationCharges.integratedDisclosureSectionTotalAmount);
 		closingCostDetailsLoanCosts.setSbDidNotShopTotalAmount(idServicesBorrowerDidNotShopFor.integratedDisclosureSectionTotalAmount);
 		closingCostDetailsLoanCosts.setSbDidShopTotalAmount(idServicesBorrowerDidShopFor.integratedDisclosureSectionTotalAmount);
@@ -709,134 +721,7 @@ public class ClosingDisclosureConverter {
 		return closingCostDetailsLoanCosts;
 	}
 	
-	/**
-	 * Insert Fee to Loan Costs Table
-	 * @param fee
-	 * @param sectionType
-	 * @return ClosingCostProperties
-	 */
-	private ClosingCostProperties loanCostsTable(Fee fee,String sectionType) 
-	{
-		
-		ClosingCostProperties closingCostProperties = new ClosingCostProperties();
-		
-		if(sectionType.equalsIgnoreCase(fee.feeDetail.integratedDisclosureSectionType))
-		{
-			if (("LoanDiscountPoints").equalsIgnoreCase(fee.feeDetail.feeType))
-				if(!"".equals(fee.feeDetail.feeTotalPercent) && !"0.0000".equalsIgnoreCase(fee.feeDetail.feeTotalPercent)&& !"".equals(fee.feeDetail.feePaidToType))
-				{
-					closingCostProperties = feeCostsTableRow(fee, true);
-					closingCostProperties.setToEntity(fee.feeDetail.feeTotalPercent);
-				}
-				else
-				{
-					closingCostProperties = feeCostsTableRow(fee, true);
-				}
-			else
-				closingCostProperties = feeCostsTableRow(fee, true);
-		}
-		return closingCostProperties;
-	}
 	
-    /**
-     * Insert Fee Details
-     * @param fee
-     * @param withTo
-     * @param label
-     * @param to
-     * @return
-     */
-	private ClosingCostProperties feeCostsTableRow(Fee fee, boolean to) 
-	{
-		
-		String paidTo = null != fee.feePaidTo ? fee.feePaidTo.legalEntity.legalEntityDetail.fullName:"";
-		ClosingCostProperties closingCostProperties = new ClosingCostProperties();
-				
-		/*str += !"".equals(fee.feeDetail.feePaidToTypeOtherDescription) ? fee.feeDetail.feePaidToTypeOtherDescription :"";
-		  if ("true".equals(fee.feeDetail.optionalCostIndicator) && !"".equals(fee.feeDetail.feePaidToTypeOtherDescription) && !fee.feeDetail.feePaidToTypeOtherDescription.toLowerCase().contains("optional"))
-			str += " (optional)";*/
-	
-		closingCostProperties.setToEntity(StringFormatter.STRINGCLEAN.formatString(paidTo));
-		
-		closingCostProperties.setFeeType(StringFormatter.CAMEL.formatString(fee.feeDetail.feeType));
-		closingCostProperties.setGseDisplayLabel(fee.feeDetail.displayLabelText);
-		
-		if(!"".equals(fee.feeDetail.displayLabelText))
-			closingCostProperties.setDisplayLabel(fee.feeDetail.displayLabelText);
-		else if("Other".equalsIgnoreCase(fee.feeDetail.feeType))
-			    closingCostProperties.setDisplayLabel(StringFormatter.CAMEL.formatString(fee.feeDetail.feeTypeOtherDescription));
-		else
-			closingCostProperties.setDisplayLabel(StringFormatter.CAMEL.formatString(fee.feeDetail.feeType));
-		
-		if(fee.feePayments.feePayments.length > 0)
-		for(FeePayment feepay :fee.feePayments.feePayments)
-		{
-			if(!"".equals(feepay.FeePaymentPaidByType))
-				{
-					String paidByType = feepay.FeePaymentPaidByType;
-					if( "Buyer".equalsIgnoreCase(paidByType)) 
-						if("true".equalsIgnoreCase(feepay.FeePaymentPaidOutsideOfClosingIndicator))
-				            closingCostProperties.setBpB4Closing((!"".equals(feepay.FeeActualPaymentAmount) && StringFormatter.doubleValue(feepay.FeeActualPaymentAmount) != 0) ? feepay.FeeActualPaymentAmount : "");
-						else
-						    closingCostProperties.setBpAtClosing(((!"".equals(feepay.FeeActualPaymentAmount) && StringFormatter.doubleValue(feepay.FeeActualPaymentAmount) != 0)) ? feepay.FeeActualPaymentAmount : "");
-					else if("Seller".equalsIgnoreCase(paidByType))
-						if("true".equalsIgnoreCase(feepay.FeePaymentPaidOutsideOfClosingIndicator))
-		                    closingCostProperties.setSpAtClosing((!"".equals(feepay.FeeActualPaymentAmount) && StringFormatter.doubleValue(feepay.FeeActualPaymentAmount) != 0) ? feepay.FeeActualPaymentAmount : "");
-						else
-		                    closingCostProperties.setSpAtClosing((!"".equals(feepay.FeeActualPaymentAmount) && StringFormatter.doubleValue(feepay.FeeActualPaymentAmount) != 0) ? feepay.FeeActualPaymentAmount : "");
-					else
-                        closingCostProperties.setPaidByOthers((!"".equals(feepay.FeeActualPaymentAmount) && StringFormatter.doubleValue(feepay.FeeActualPaymentAmount) != 0) ? feepay.FeeActualPaymentAmount : "");
-					
-					if("Lender".equalsIgnoreCase(paidByType))
-						closingCostProperties.setLenderStatus("YES");
-					else
-						closingCostProperties.setLenderStatus("NO");
-				}
-		}
-
-		return closingCostProperties;
-	}
-	/**
-	 * Calculate Total Loan Costs
-	 * @param totalLoanCosts
-	 * @param integratedDisclosureSectionSummaries
-	 * @return
-	 */
-	private ClosingCostProperties calculateTLCosts(IntegratedDisclosureSectionSummaryDetail totalLoanCosts, IntegratedDisclosureSectionSummaries integratedDisclosureSectionSummaries)
-	{
-		ClosingCostProperties tlCosts = new ClosingCostProperties();
-        	
-		if(null != integratedDisclosureSectionSummaries.integratedDisclosureSectionSummaries)	
-		for(IntegratedDisclosureSectionSummary integratedDisclosureSectionSummary : integratedDisclosureSectionSummaries.integratedDisclosureSectionSummaries){	
-			if("TotalLoanCosts".equalsIgnoreCase(integratedDisclosureSectionSummary.integratedDisclosureSectionSummaryDetail.integratedDisclosureSectionType) && "LoanCostsSubtotal".equalsIgnoreCase(integratedDisclosureSectionSummary.integratedDisclosureSectionSummaryDetail.integratedDisclosureSubsectionType))
-			{
-				IntegratedDisclosureSubsectionPayments integratedDisclosureSubsectionPayments = integratedDisclosureSectionSummary.integratedDisclosureSubsectionPayments;
-			    if(integratedDisclosureSubsectionPayments.integratedDisclosureSubsectionPayments.length>0)
-				for(IntegratedDisclosureSubsectionPayment integrateddisclosuresubsectionpayment : integratedDisclosureSubsectionPayments.integratedDisclosureSubsectionPayments)
-				{
-					if(("Buyer").equalsIgnoreCase(integrateddisclosuresubsectionpayment.integratedDisclosureSubsectionPaidByType))
-					{
-						if(("AtClosing").equalsIgnoreCase(integrateddisclosuresubsectionpayment.integratedDisclosureSubsectionPaymentTimingType))
-							tlCosts.setBpAtClosing(integrateddisclosuresubsectionpayment.integratedDisclosureSubsectionPaymentAmount);
-						else
-							tlCosts.setBpB4Closing(integrateddisclosuresubsectionpayment.integratedDisclosureSubsectionPaymentAmount);
-					}
-					else if(("Seller").equalsIgnoreCase(integrateddisclosuresubsectionpayment.integratedDisclosureSubsectionPaidByType))
-					{
-						if(("AtClosing").equalsIgnoreCase(integrateddisclosuresubsectionpayment.integratedDisclosureSubsectionPaymentTimingType))
-							tlCosts.setBpAtClosing(integrateddisclosuresubsectionpayment.integratedDisclosureSubsectionPaymentAmount);
-						else
-							tlCosts.setBpB4Closing(integrateddisclosuresubsectionpayment.integratedDisclosureSubsectionPaymentAmount);
-					}
-					if("Lender".equalsIgnoreCase(integrateddisclosuresubsectionpayment.integratedDisclosureSubsectionPaidByType))
-						tlCosts.setLenderStatus("YES");
-					else
-						tlCosts.setLenderStatus("NO");
-				}
-			}
-		}
-		return tlCosts;
-	}
 		
 	/**
      * create ClosingCostDetailsOtherCosts UI response
@@ -845,16 +730,21 @@ public class ClosingDisclosureConverter {
      */
     private ClosingCostDetailsOtherCosts createClosingCostOtherCosts(Deal deal)
     {
+    	String deedAmt = "";
+		String mrtgAmt = "";
+		
     	ClosingCostDetails closingCostDetails = new ClosingCostDetails();
     	ClosingCostDetailsOtherCosts closingCostDetailsOtherCosts = new ClosingCostDetailsOtherCosts();
-    	List<ClosingCostProperties> tOGovtFeesList = new ArrayList<>();
+    	Fee recordingFee = null;
+    	
+    	List<OtherCostsToGovtFees> tOGovtFeesList = new ArrayList<>();
 		List<Prepaids> prepaidsList = new LinkedList<>();
 		List<IEPatClosing> iePatClosingList = new LinkedList<>();
 		List<ClosingCostProperties> otherCostsList = new LinkedList<>();
-		String deedAmt = "";
-		String mrtgAmt = "";
-		Fee recordingFee = null;
+		
     	Fees taxesAndOtherGovernmentFees = new Fees((Element)deal.getElementAddNS("LOANS/LOAN/FEE_INFORMATION/FEES"),"[FEE_DETAIL/IntegratedDisclosureSectionType = 'TaxesAndOtherGovernmentFees']");
+    	EscrowItems escrowItems = new EscrowItems((Element)deal.getElementAddNS("LOANS/LOAN/ESCROW/ESCROW_ITEMS"));
+
     	for(Fee fee : taxesAndOtherGovernmentFees.fees)
 		{
 			ClosingCostProperties closingCostProperties = new ClosingCostProperties();
@@ -872,8 +762,20 @@ public class ClosingDisclosureConverter {
 			default:
 				closingCostProperties = feeCostsTableRow(fee, true);
 			
-			if(null != closingCostProperties.getFeeType())
-				tOGovtFeesList.add(closingCostProperties);	
+			if(null != closingCostProperties.getFeeType()){
+				OtherCostsToGovtFees otherCostsToGovtFees = new OtherCostsToGovtFees();
+					otherCostsToGovtFees.setDisplayLabel(closingCostProperties.getDisplayLabel());
+					otherCostsToGovtFees.setGseDisplayLabel(closingCostProperties.getGseDisplayLabel());
+					otherCostsToGovtFees.setBpAtClosing(closingCostProperties.getBpAtClosing());
+					otherCostsToGovtFees.setBpB4Closing(closingCostProperties.getBpB4Closing());
+					otherCostsToGovtFees.setFeeType(closingCostProperties.getFeeType());
+					otherCostsToGovtFees.setLenderStatus(closingCostProperties.getLenderStatus());
+					otherCostsToGovtFees.setPaidByOthers(closingCostProperties.getPaidByOthers());
+					otherCostsToGovtFees.setSpAtClosing(closingCostProperties.getSpAtClosing());
+					otherCostsToGovtFees.setSpB4Closing(closingCostProperties.getSpB4Closing());
+					otherCostsToGovtFees.setFeePaidToType(closingCostProperties.getFeePaidToType());
+				tOGovtFeesList.add(otherCostsToGovtFees);	
+				}
 			}
 		}
     	
@@ -884,9 +786,26 @@ public class ClosingDisclosureConverter {
 				return o1.getFeeType().compareTo(o2.getFeeType());
 			}
 		});
-    	String str = "Recording Fees          " +"Deed: "+ deedAmt+ " Mortgage: " + mrtgAmt;
     	if (null != recordingFee)
-    		tOGovtFeesList.add(0, feeCostsTableRow(recordingFee, false));
+    	{
+    		ClosingCostProperties closingCostProperties = feeCostsTableRow(recordingFee, false);
+    		OtherCostsToGovtFees otherCostsToGovtFees = new OtherCostsToGovtFees();
+    			otherCostsToGovtFees.setMrtgAmt(mrtgAmt);
+    			otherCostsToGovtFees.setDeedAmt(deedAmt);
+				otherCostsToGovtFees.setDisplayLabel(closingCostProperties.getDisplayLabel());
+				otherCostsToGovtFees.setGseDisplayLabel(closingCostProperties.getGseDisplayLabel());
+				otherCostsToGovtFees.setBpAtClosing(closingCostProperties.getBpAtClosing());
+				otherCostsToGovtFees.setBpB4Closing(closingCostProperties.getBpB4Closing());
+				otherCostsToGovtFees.setFeeType(closingCostProperties.getFeeType());
+				otherCostsToGovtFees.setLenderStatus(closingCostProperties.getLenderStatus());
+				otherCostsToGovtFees.setPaidByOthers(closingCostProperties.getPaidByOthers());
+				otherCostsToGovtFees.setSpAtClosing(closingCostProperties.getSpAtClosing());
+				otherCostsToGovtFees.setSpB4Closing(closingCostProperties.getSpB4Closing());
+				otherCostsToGovtFees.setFeePaidToType(closingCostProperties.getFeePaidToType());
+				otherCostsToGovtFees.setFeePaidToTypeOtherDescription(closingCostProperties.getFeePaidToTypeOtherDescription());
+			tOGovtFeesList.add(otherCostsToGovtFees);	
+    	}
+    		
     	
     	PrepaidItems prepaidItems = new PrepaidItems((Element)deal.getElementAddNS("LOANS/LOAN/CLOSING_INFORMATION/PREPAID_ITEMS"));
     	
@@ -907,10 +826,46 @@ public class ClosingDisclosureConverter {
 			if(checkOtherPrepaids(prepaidItem.prepaidItemDetail.prepaidItemType))
 				prepaidsList.add(setPrepaids(prepaidItem, true));
 		
+		//populate ESCROWS
+		if(null != escrowItems.escrowItems)
+		{
+			List<String> escrowItemsToDisplay = new LinkedList<>();
+				escrowItemsToDisplay.add("HomeownersInsurance");
+				escrowItemsToDisplay.add("MortgageInsurance");
+			
+			for(String escrow : escrowItemsToDisplay)
+			{
+				EscrowItem escrowItem = getEscrowItem(escrowItems, escrow);
+				 if (null != escrowItem.element)
+					 iePatClosingList.add(getEscrowModel(escrowItem));
+			}
+			
+			for(int i=0; i<escrowItems.escrowItems.length;i++)
+	 	    {
+				if (("Property Tax").equalsIgnoreCase(escrowItems.escrowItems[i].escrowItemDetail.displayLabelText)) {
+					iePatClosingList.add(getEscrowModel(escrowItems.escrowItems[i]));
+					break;
+				} 
+				else if (isPropertyTax(escrowItems.escrowItems[i].escrowItemDetail.escrowItemType)) {
+					IEPatClosing iePatClosing = new IEPatClosing();
+						iePatClosing = getEscrowModel(escrowItems.escrowItems[i]);
+						iePatClosing.setDisplayLabel("Property Taxes");
+					iePatClosingList.add(iePatClosing);
+				}
+	 	    }
+			
+			for(int i=0; i<escrowItems.escrowItems.length;i++)
+				if(checkOtherEscrows(escrowItems.escrowItems[i].escrowItemDetail.escrowItemType))
+					iePatClosingList.add(getEscrowModel(escrowItems.escrowItems[i]));
+		}
+		 
 		closingCostDetailsOtherCosts.setPrepaidsList(prepaidsList);
+		closingCostDetailsOtherCosts.setiEPatClosingList(iePatClosingList);
+		
 		return closingCostDetailsOtherCosts;
     	
     }
+    
     /**
      * Creates createCalculatingCashtoClose UI response
      * @param document
@@ -1033,7 +988,6 @@ public class ClosingDisclosureConverter {
 		List<CashToCloseModel> cashToCloseModels = new LinkedList<>();
 		CashToCloseItems cashToCloseItems = new CashToCloseItems((Element)deal.getElementAddNS("LOANS/LOAN/DOCUMENT_SPECIFIC_DATA_SETS/DOCUMENT_SPECIFIC_DATA_SET/INTEGRATED_DISCLOSURE/CASH_TO_CLOSE_ITEMS"));
 
-		System.out.println("CashToCloseItems length:::::"+cashToCloseItems.cashToCloseItems.length);
 		if(null != cashToCloseItems && cashToCloseItems.cashToCloseItems.length>0)
 		{
 			for(CashToCloseItem cashtocloseitem : cashToCloseItems.cashToCloseItems)
@@ -1057,7 +1011,7 @@ public class ClosingDisclosureConverter {
      * @param escrowType
      * @return EscrowsModel
      */
-    private EscrowItem getEscrowModel(EscrowItems escrowItems, String escrowType){
+    private EscrowItem getEscrowItem(EscrowItems escrowItems, String escrowType){
 		EscrowItem escrowItem = new EscrowItem(null);
 		
 		for(int i=0; i<escrowItems.escrowItems.length;i++)
@@ -1185,6 +1139,130 @@ public class ClosingDisclosureConverter {
 	}
 	
 	/**
+	 * Insert Fee to Loan Costs Table
+	 * @param fee
+	 * @param sectionType
+	 * @return ClosingCostProperties
+	 */
+	private ClosingCostProperties loanCostsTable(Fee fee,String sectionType) 
+	{
+		ClosingCostProperties closingCostProperties = new ClosingCostProperties();
+		
+		if(sectionType.equalsIgnoreCase(fee.feeDetail.integratedDisclosureSectionType))
+		{
+			if (("LoanDiscountPoints").equalsIgnoreCase(fee.feeDetail.feeType))
+				if(!"".equals(fee.feeDetail.feeTotalPercent) && !"0.0000".equalsIgnoreCase(fee.feeDetail.feeTotalPercent)&& !"".equals(fee.feeDetail.feePaidToType))
+				{
+					closingCostProperties = feeCostsTableRow(fee, true);
+					closingCostProperties.setFeePaidToType(fee.feeDetail.feeTotalPercent);
+				}
+				else
+				{
+					closingCostProperties = feeCostsTableRow(fee, true);
+				}
+			else
+				closingCostProperties = feeCostsTableRow(fee, true);
+		}
+		return closingCostProperties;
+	}
+	
+    /**
+     * Insert Fee Details
+     * @param fee
+     * @param withTo
+     * @param label
+     * @param to
+     * @return ClosingCostProperties
+     */
+	private ClosingCostProperties feeCostsTableRow(Fee fee, boolean to) 
+	{
+		ClosingCostProperties closingCostProperties = new ClosingCostProperties();
+		closingCostProperties.setGseDisplayLabel(fee.feeDetail.displayLabelText);
+		
+		  if ("true".equals(fee.feeDetail.optionalCostIndicator) && !"".equals(fee.feeDetail.feePaidToTypeOtherDescription) && !fee.feeDetail.feePaidToTypeOtherDescription.toLowerCase().contains("optional"))
+			  fee.feeDetail.displayLabelText += " (optional)";
+	
+		closingCostProperties.setFeeType(fee.feeDetail.feeType);
+		
+		if(!"".equals(fee.feeDetail.displayLabelText))
+			closingCostProperties.setDisplayLabel(fee.feeDetail.displayLabelText);
+		else if("Other".equalsIgnoreCase(fee.feeDetail.feeType))
+			    closingCostProperties.setDisplayLabel(StringFormatter.CAMEL.formatString(fee.feeDetail.feeTypeOtherDescription));
+		else
+			closingCostProperties.setDisplayLabel(StringFormatter.CAMEL.formatString(fee.feeDetail.feeType));
+		
+		if(fee.feePayments.feePayments.length > 0)
+		for(FeePayment feepay :fee.feePayments.feePayments)
+		{
+			if(!"".equals(feepay.FeePaymentPaidByType))
+				{
+					String paidByType = feepay.FeePaymentPaidByType;
+					if( "Buyer".equalsIgnoreCase(paidByType)) 
+						if("true".equalsIgnoreCase(feepay.FeePaymentPaidOutsideOfClosingIndicator))
+				            closingCostProperties.setBpB4Closing((!"".equals(feepay.FeeActualPaymentAmount) && StringFormatter.doubleValue(feepay.FeeActualPaymentAmount) != 0) ? feepay.FeeActualPaymentAmount : "");
+						else
+						    closingCostProperties.setBpAtClosing(((!"".equals(feepay.FeeActualPaymentAmount) && StringFormatter.doubleValue(feepay.FeeActualPaymentAmount) != 0)) ? feepay.FeeActualPaymentAmount : "");
+					else if("Seller".equalsIgnoreCase(paidByType))
+						if("true".equalsIgnoreCase(feepay.FeePaymentPaidOutsideOfClosingIndicator))
+		                    closingCostProperties.setSpAtClosing((!"".equals(feepay.FeeActualPaymentAmount) && StringFormatter.doubleValue(feepay.FeeActualPaymentAmount) != 0) ? feepay.FeeActualPaymentAmount : "");
+						else
+		                    closingCostProperties.setSpAtClosing((!"".equals(feepay.FeeActualPaymentAmount) && StringFormatter.doubleValue(feepay.FeeActualPaymentAmount) != 0) ? feepay.FeeActualPaymentAmount : "");
+					else
+                        closingCostProperties.setPaidByOthers((!"".equals(feepay.FeeActualPaymentAmount) && StringFormatter.doubleValue(feepay.FeeActualPaymentAmount) != 0) ? feepay.FeeActualPaymentAmount : "");
+					
+					if("Lender".equalsIgnoreCase(paidByType))
+						closingCostProperties.setLenderStatus("YES");
+					else
+						closingCostProperties.setLenderStatus("NO");
+				}
+		}
+
+		return closingCostProperties;
+	}
+	
+	/**
+	 * Calculate Total Loan Costs
+	 * @param totalLoanCosts
+	 * @param integratedDisclosureSectionSummaries
+	 * @return
+	 */
+	private ClosingCostProperties calculateTLCosts(IntegratedDisclosureSectionSummaryDetail totalLoanCosts, IntegratedDisclosureSectionSummaries integratedDisclosureSectionSummaries)
+	{
+		ClosingCostProperties tlCosts = new ClosingCostProperties();
+        	
+		if(null != integratedDisclosureSectionSummaries.integratedDisclosureSectionSummaries)	
+		for(IntegratedDisclosureSectionSummary integratedDisclosureSectionSummary : integratedDisclosureSectionSummaries.integratedDisclosureSectionSummaries){	
+			if("TotalLoanCosts".equalsIgnoreCase(integratedDisclosureSectionSummary.integratedDisclosureSectionSummaryDetail.integratedDisclosureSectionType) && "LoanCostsSubtotal".equalsIgnoreCase(integratedDisclosureSectionSummary.integratedDisclosureSectionSummaryDetail.integratedDisclosureSubsectionType))
+			{
+				IntegratedDisclosureSubsectionPayments integratedDisclosureSubsectionPayments = integratedDisclosureSectionSummary.integratedDisclosureSubsectionPayments;
+			    if(integratedDisclosureSubsectionPayments.integratedDisclosureSubsectionPayments.length>0)
+				for(IntegratedDisclosureSubsectionPayment integrateddisclosuresubsectionpayment : integratedDisclosureSubsectionPayments.integratedDisclosureSubsectionPayments)
+				{
+					if(("Buyer").equalsIgnoreCase(integrateddisclosuresubsectionpayment.integratedDisclosureSubsectionPaidByType))
+					{
+						if(("AtClosing").equalsIgnoreCase(integrateddisclosuresubsectionpayment.integratedDisclosureSubsectionPaymentTimingType))
+							tlCosts.setBpAtClosing(integrateddisclosuresubsectionpayment.integratedDisclosureSubsectionPaymentAmount);
+						else
+							tlCosts.setBpB4Closing(integrateddisclosuresubsectionpayment.integratedDisclosureSubsectionPaymentAmount);
+					}
+					else if(("Seller").equalsIgnoreCase(integrateddisclosuresubsectionpayment.integratedDisclosureSubsectionPaidByType))
+					{
+						if(("AtClosing").equalsIgnoreCase(integrateddisclosuresubsectionpayment.integratedDisclosureSubsectionPaymentTimingType))
+							tlCosts.setBpAtClosing(integrateddisclosuresubsectionpayment.integratedDisclosureSubsectionPaymentAmount);
+						else
+							tlCosts.setBpB4Closing(integrateddisclosuresubsectionpayment.integratedDisclosureSubsectionPaymentAmount);
+					}
+					if("Lender".equalsIgnoreCase(integrateddisclosuresubsectionpayment.integratedDisclosureSubsectionPaidByType))
+						tlCosts.setLenderStatus("YES");
+					else
+						tlCosts.setLenderStatus("NO");
+				}
+			}
+		}
+		return tlCosts;
+	}
+	
+	/**
 	 * Extracts the elements from PrepaidItem and sets to Prepaids Model
 	 * @param prepaidItem
 	 * @param to
@@ -1212,7 +1290,7 @@ public class ClosingDisclosureConverter {
 				else
 				{
 					prepaid.setMonths(prepaidItem.prepaidItemDetail.prepaidItemMonthsPaidCount);
-       			 	prepaid.setToEntity(prepaidItem.prepaidItemPaidTo.legalEntity.legalEntityDetail.fullName);
+       			 	prepaid.setFeePaidToType(prepaidItem.prepaidItemPaidTo.legalEntity.legalEntityDetail.fullName);
 				}
 			}
 			
@@ -1276,4 +1354,73 @@ public class ClosingDisclosureConverter {
 		return true;
 	}
 	
+	/**
+	 * Extracts the elements from escrowItem and sets to IEPatClosing Model for UI response
+	 * @param escrowItem
+	 * @return IEPatClosing
+	 */
+	private IEPatClosing getEscrowModel(EscrowItem escrowItem)
+	{
+		IEPatClosing iePatClosing = new IEPatClosing();
+		
+		EscrowItemDetail escrowItemDetail = escrowItem.escrowItemDetail;  
+		
+		iePatClosing.setGseDisplayLabel(escrowItemDetail.displayLabelText);
+		iePatClosing.setEscrowItemType(escrowItemDetail.escrowItemType);
+		iePatClosing.setEscrowItemTypeOtherDescription(escrowItemDetail.escrowItemTypeOtherDescription);
+		
+		if("".equals(escrowItemDetail.displayLabelText))
+		{
+			if("Other".equalsIgnoreCase(escrowItemDetail.escrowItemType))
+				iePatClosing.setDisplayLabel(StringFormatter.CAMEL.formatString(escrowItemDetail.escrowItemTypeOtherDescription));
+			else
+				iePatClosing.setDisplayLabel(StringFormatter.CAMEL.formatString(escrowItemDetail.escrowItemType));
+		}
+		else
+			iePatClosing.setDisplayLabel(escrowItemDetail.displayLabelText);
+			
+		iePatClosing.setEscrowCollectedNumberOfMonthsCount(escrowItemDetail.escrowCollectedNumberOfMonthsCount);
+		iePatClosing.setEscrowMonthlyPaymentAmount(escrowItemDetail.escrowMonthlyPaymentAmount);
+		iePatClosing.setFeePaidToType(escrowItemDetail.feePaidToType);
+		iePatClosing.setFeePaidToTypeOtherDescription(escrowItemDetail.feePaidToTypeOtherDescription);
+		iePatClosing.setIntegratedDisclosureSectionType(escrowItemDetail.integratedDisclosureSectionType);
+		iePatClosing.setRegulationZPointsAndFeesIndicator(escrowItemDetail.regulationZPointsAndFeesIndicator);
+		
+		for(EscrowItemPayment escrowitempayment : escrowItem.escrowItemPayments.escrowItemPayment)
+		{
+			String paidBy = escrowitempayment.escrowItemPaymentPaidByType;
+			
+			if ("Buyer".equalsIgnoreCase(paidBy)) 
+				if ("BeforeClosing".equalsIgnoreCase(escrowitempayment.escrowItemPaymentTimingType))
+					iePatClosing.setBpB4Closing(escrowitempayment.escrowItemActualPaymentAmount);
+				else
+					iePatClosing.setBpAtClosing(escrowitempayment.escrowItemActualPaymentAmount);
+			else if ("Seller".equalsIgnoreCase(paidBy))
+				if ("BeforeClosing".equalsIgnoreCase(escrowitempayment.escrowItemPaymentTimingType))
+					iePatClosing.setSpB4Closing(escrowitempayment.escrowItemActualPaymentAmount);
+				else
+					iePatClosing.setSpAtClosing(escrowitempayment.escrowItemActualPaymentAmount);
+			else
+				iePatClosing.setPaidByOthers(escrowitempayment.escrowItemActualPaymentAmount);
+			
+			if ("Lender".equalsIgnoreCase(paidBy))
+				iePatClosing.setLenderStatus("YES");
+			else
+				iePatClosing.setLenderStatus("NO");
+		}
+		return iePatClosing;
+	}
+
+	/**
+	 * Checks for other type of escrows
+	 * @param escrowType
+	 * @return boolean
+	 */
+	private boolean checkOtherEscrows(String escrowType)
+	{
+		if("HomeownersInsurance".equalsIgnoreCase(escrowType) || "MortgageInsurance".equalsIgnoreCase(escrowType) || "PrepaidInterest".equalsIgnoreCase(escrowType)
+				||"Property Taxes".equalsIgnoreCase(escrowType) || isPropertyTax(escrowType) ||null == escrowType || "".equals(escrowType))
+			return false;
+		return true;
+	}
 }

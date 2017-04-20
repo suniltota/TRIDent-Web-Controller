@@ -13,7 +13,7 @@ import com.actualize.mortgage.domainmodels.SummariesofTransactions;
  */
 public interface PageThreeService {
 	
-	public List<CashToClose> createCalculatingCashtoClose(DOCUMENT document);
-	public SummariesofTransactions createSummariesofTransactions(DOCUMENT document);
+/*	public List<CashToClose> createCalculatingCashtoClose(DOCUMENT document);
+	public SummariesofTransactions createSummariesofTransactions(DOCUMENT document);*/
 	
 }

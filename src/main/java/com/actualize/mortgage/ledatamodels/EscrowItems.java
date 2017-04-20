@@ -7,7 +7,11 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
 import com.actualize.mortgage.domainmodels.MISMODataAccessObject;
-
+/**
+ * Maps to EscrowItems in MISMO XML
+ * @author sboragala
+ *
+ */
 public class EscrowItems extends MISMODataAccessObject {
 	public final EscrowItem[] escrowItems;
 	private static Pattern ptrnNumbers = Pattern.compile(" [2-9]+");

@@ -31,7 +31,7 @@ import com.actualize.mortgage.utils.PopulateData;
 import com.actualize.mortgage.utils.StringFormatter;
 
 public class PageThreeServiceImpl implements PageThreeService{
-	
+/*	
 	List<CashToClose> cashToCloseList = new LinkedList<>();
 
 	@Override
@@ -374,5 +374,5 @@ public class PageThreeServiceImpl implements PageThreeService{
 		summariesofTransactions.setBorrowerSection(borrowerSection);
 		return summariesofTransactions;
 		
-	}
+	}*/
 }
