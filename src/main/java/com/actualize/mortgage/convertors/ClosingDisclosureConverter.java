@@ -126,14 +126,12 @@ public class ClosingDisclosureConverter {
         Deal deal = new Deal(Deal.NS, (Element)document.getElementAddNS("DEAL_SETS/DEAL_SET/DEALS/DEAL"));
 
         //PAGE ONE Of CD
-        ClosingDisclosurePageOne closingDisclosurePageOne = new ClosingDisclosurePageOne();
-	        closingDisclosurePageOne.setClosingInformation(createClosingInformation(deal));
-	        closingDisclosurePageOne.setTransactionInformation(createTransactionInformation(deal));
-	        closingDisclosurePageOne.setLoanInformation(createLoanInformation(deal));
-	        closingDisclosurePageOne.setLoanTerms(createLoanTerms(mismodoc));
-	        closingDisclosurePageOne.setProjectedPayments(createProjectedPayments(deal));
-	        closingDisclosurePageOne.setCostsAtClosing(createCostsAtClosing(deal));
-	     closingDisclosure.setClosingDisclosurePageOne(closingDisclosurePageOne);    
+	        closingDisclosure.setClosingInformation(createClosingInformation(deal));
+	        closingDisclosure.setTransactionInformation(createTransactionInformation(deal));
+	        closingDisclosure.setLoanInformation(createLoanInformation(deal));
+	        closingDisclosure.setLoanTerms(createLoanTerms(mismodoc));
+	        closingDisclosure.setProjectedPayments(createProjectedPayments(deal));
+	        closingDisclosure.setCostsAtClosing(createCostsAtClosing(deal));
         
 	    //PAGE TWO OF CD 
 	     ClosingDisclosurePageTwo closingDisclosurePageTwo = new ClosingDisclosurePageTwo();
