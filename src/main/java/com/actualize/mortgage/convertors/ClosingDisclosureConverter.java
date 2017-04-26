@@ -17,9 +17,9 @@ import org.w3c.dom.NodeList;
 
 import com.actualize.mortgage.cddatamodels.PrepaidItemPayment;
 import com.actualize.mortgage.cdpagemodels.ClosingDisclosure;
-import com.actualize.mortgage.cdpagemodels.ClosingDisclosurePageOne;
 import com.actualize.mortgage.cdpagemodels.ClosingDisclosurePageThree;
 import com.actualize.mortgage.cdpagemodels.ClosingDisclosurePageTwo;
+import com.actualize.mortgage.domainmodels.AutomatedUnderwritingsModel;
 import com.actualize.mortgage.domainmodels.Borrower;
 import com.actualize.mortgage.domainmodels.CashToClose;
 import com.actualize.mortgage.domainmodels.CashToCloseModel;
@@ -55,6 +55,7 @@ import com.actualize.mortgage.ledatamodels.AboutVersion;
 import com.actualize.mortgage.ledatamodels.AboutVersions;
 import com.actualize.mortgage.ledatamodels.Address;
 import com.actualize.mortgage.ledatamodels.AmortizationRule;
+import com.actualize.mortgage.ledatamodels.AutomatedUnderwritings;
 import com.actualize.mortgage.ledatamodels.BuydownOccurence;
 import com.actualize.mortgage.ledatamodels.BuydownRule;
 import com.actualize.mortgage.ledatamodels.CashToCloseItem;
@@ -105,8 +106,10 @@ import com.actualize.mortgage.ledatamodels.PropertyDetail;
 import com.actualize.mortgage.ledatamodels.PropertyValuationDetail;
 import com.actualize.mortgage.ledatamodels.SalesContractDetail;
 import com.actualize.mortgage.ledatamodels.TermsOfLoan;
+import com.actualize.mortgage.ledatamodels.Underwriting;
 import com.actualize.mortgage.utils.Convertor;
 import com.actualize.mortgage.utils.StringFormatter;
+
 
 /**
  * This class will map all the Closing Disclosure XPATH elements to JSON Objects and its attributes 
@@ -170,7 +173,7 @@ public class ClosingDisclosureConverter {
   		  SalesContractDetail salesContractDetail = new SalesContractDetail((Element)deal.getElementAddNS(salesContract + "/SALES_CONTRACT_DETAIL"));
   		  TermsOfLoan loanTerms = new TermsOfLoan((Element)deal.getElementAddNS(loan + "/TERMS_OF_LOAN"));
   		  Parties closingAgent = new Parties((Element)deal.getElementAddNS("PARTIES"), "[ROLES/ROLE/ROLE_DETAIL/PartyRoleType='ClosingAgent']");
-
+  		    		  
   		  for(int i=0; i<closingAgent.parties.length;i++)
   		  {
   			  if(null != new LegalEntityDetail((Element)closingAgent.parties[i].getElementAddNS("LEGAL_ENTITY/LEGAL_ENTITY_DETAIL")).element)
@@ -210,9 +213,9 @@ public class ClosingDisclosureConverter {
     	Parties sellerParties = new Parties((Element)deal.getElementAddNS("PARTIES"), "[ROLES/ROLE/ROLE_DETAIL/PartyRoleType='PropertySeller']");
     	Parties lenders = new Parties((Element)deal.getElementAddNS("PARTIES"), "[ROLES/ROLE/ROLE_DETAIL/PartyRoleType='NotePayTo']");
     	
-    	transactionInformation.setBorrower(createBorrowers(borrowerParties));
-    	transactionInformation.setSeller(createBorrowers(sellerParties));
-    	transactionInformation.setLender(createBorrowers(lenders));
+    	transactionInformation.setBorrower(createBorrowers(borrowerParties,"Borrower"));
+    	transactionInformation.setSeller(createBorrowers(sellerParties,"PropertySeller"));
+    	transactionInformation.setLender(createBorrowers(lenders,"NotePayTo"));
     	
 		return transactionInformation;
     	
@@ -233,17 +236,33 @@ public class ClosingDisclosureConverter {
         String loan = "LOANS/LOAN";
         String loanId = "";
     	String loanMic = "";
-        IntegratedDisclosureDetail idDetail = new IntegratedDisclosureDetail((Element)deal.getElementAddNS("LOANS/LOAN/DOCUMENT_SPECIFIC_DATA_SETS/DOCUMENT_SPECIFIC_DATA_SET/INTEGRATED_DISCLOSURE/INTEGRATED_DISCLOSURE_DETAIL"));
+        
+    	IntegratedDisclosureDetail idDetail = new IntegratedDisclosureDetail((Element)deal.getElementAddNS("LOANS/LOAN/DOCUMENT_SPECIFIC_DATA_SETS/DOCUMENT_SPECIFIC_DATA_SET/INTEGRATED_DISCLOSURE/INTEGRATED_DISCLOSURE_DETAIL"));
         MaturityRule maturityRule = new MaturityRule((Element)deal.getElementAddNS(loan + "/MATURITY/MATURITY_RULE"));
         Construction construction = new Construction((Element)deal.getElementAddNS(loan + "/CONSTRUCTION"));
  	    TermsOfLoan loanTerms = new TermsOfLoan((Element)deal.getElementAddNS(loan + "/TERMS_OF_LOAN"));
         LoanDetail loanDetail = new LoanDetail((Element)deal.getElementAddNS("LOANS/LOAN/LOAN_DETAIL"));
-        
         MIDataDetail miDataDetail = new MIDataDetail((Element)deal.getElementAddNS(loan + "/MI_DATA/MI_DATA_DETAIL"));
         AmortizationRule amortization = new AmortizationRule((Element)deal.getElementAddNS(loan + "/AMORTIZATION/AMORTIZATION_RULE"));
-        
         LoanIdentifiers loanidentifiers = new LoanIdentifiers((Element)deal.getElementAddNS(loan + "/LOAN_IDENTIFIERS"));
+        
+        Underwriting underwriting = new Underwriting(null, (Element)deal.getElementAddNS(loan+"/UNDERWRITING"));
+        	        
         List<LoanInformationLoanIdentifier> loanInformationLoanIdentifiers = new LinkedList<>();
+        List<AutomatedUnderwritingsModel> automatedUnderwritingsModelList = new LinkedList<>();
+        
+        if(underwriting.automatedUnderwritings.automatedUnderwriting.length >0)
+        {
+        	for(int i=0; i<underwriting.automatedUnderwritings.automatedUnderwriting.length;i++)
+     	    {
+        		AutomatedUnderwritingsModel automatedUnderwritingsModel = new AutomatedUnderwritingsModel();
+        			automatedUnderwritingsModel.setAutomatedUnderwritingCaseIdentifier(underwriting.automatedUnderwritings.automatedUnderwriting[i].automatedUnderwritingCaseIdentifier);
+        			automatedUnderwritingsModel.setAutomatedUnderwritingSystemType(underwriting.automatedUnderwritings.automatedUnderwriting[i].automatedUnderwritingSystemType);
+        			automatedUnderwritingsModel.setAutomatedUnderwritingSystemTypeOtherDescription(underwriting.automatedUnderwritings.automatedUnderwriting[i].automatedUnderwritingSystemTypeOtherDescription);
+        		automatedUnderwritingsModelList.add(automatedUnderwritingsModel);
+     	    }
+        }
+        
         if(loanidentifiers.loanIdentifieries.length>0)
         for(int i=0; i<loanidentifiers.loanIdentifieries.length;i++)
  	    {
@@ -314,8 +333,9 @@ public class ClosingDisclosureConverter {
  	    loanInformationSection.setMiRequiredIndicator(loanDetail.miRequiredIndicator);
  	    loanInformationSection.setMiCertificateIdentifier(miDataDetail.MICertificateIdentifier);
  	    loanInformationSection.setLoanIdentifiers(loanInformationLoanIdentifiers);
- 	    loanInformationSection.setAmortizationType(amortization.AmortizationType);	
- 	    
+ 	    loanInformationSection.setAmortizationType(amortization.AmortizationType);
+ 	    loanInformationSection.setAutomatedUnderwritings(automatedUnderwritingsModelList);
+ 	    loanInformationSection.setLoanManualUnderwritingIndicator(underwriting.underwritingDetail.loanManualUnderwritingIndicator);
         return loanInformationSection;
     }
     
@@ -1108,7 +1128,7 @@ public class ClosingDisclosureConverter {
      * @param borrowers
      * @return borrowers list as JSON
      */
-	private List<Borrower> createBorrowers(Parties borrowers) {
+	private List<Borrower> createBorrowers(Parties borrowers, String partyRoleType) {
 		
 		List<Borrower> borrowersList = new LinkedList<>();
 		if (borrowers.parties.length > 0) {
@@ -1130,6 +1150,7 @@ public class ClosingDisclosureConverter {
 				addressModel = toAddressModel(new Address((Element)borrowers.parties[i].getElementAddNS("ADDRESSES/ADDRESS[AddressType='Mailing']")));
 				borrower.setNameModel(applicant);
 				borrower.setAddress(addressModel);
+				borrower.setPartyRoleType(partyRoleType);
 				borrowersList.add(borrower);
 			}	
 		}
