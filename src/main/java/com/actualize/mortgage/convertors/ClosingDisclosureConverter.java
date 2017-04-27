@@ -190,10 +190,11 @@ public class ClosingDisclosureConverter {
           	salesContractDetailModel.setSaleContractAmount(salesContractDetail.SalesContractAmount);
           closingInformationSection.setSalesContractDetail(salesContractDetailModel);
           closingInformationSection.setSettlementAgent(legalEntityDetail.fullName);
-          	propertyValuationDetailModel.setPropertyEstimatedValueAmount(propertyValuationDetail.PropertyValuationAmount);
-          	propertyValuationDetailModel.setPropertyValuationAmount(propertyValuationDetail.PropertyValuationAmount);
-          	propertyValuationDetailModel.setPropertyValuationMethodType(propertyValuationDetail.PropertyValuationMethodType);
-          	propertyValuationDetailModel.setPropertyValuationMethodTypeOtherDescription(propertyValuationDetail.PropertyValuationMethodTypeOtherDescription);
+          	propertyValuationDetailModel.setPropertyEstimatedValueAmount(propertyDetail.propertyEstimatedValueAmount);
+          	propertyValuationDetailModel.setPropertyValuationAmount(propertyValuationDetail.propertyValuationAmount);
+          	propertyValuationDetailModel.setPropertyValuationMethodType(propertyValuationDetail.propertyValuationMethodType);
+          	propertyValuationDetailModel.setPropertyValuationMethodTypeOtherDescription(propertyValuationDetail.propertyValuationMethodTypeOtherDescription);
+         	propertyValuationDetailModel.setPropertyValue(!"".equals(propertyDetail.propertyEstimatedValueAmount) ? "Estimated" : "Appraised");
           closingInformationSection.setPropertyValuationDetail(propertyValuationDetailModel);
           
         return closingInformationSection;
@@ -316,13 +317,12 @@ public class ClosingDisclosureConverter {
  	    loanInformationSection.setProduct(loanProduct); 
  	    loanInformationSection.setLoanType(loanType);
  	    loanInformationSection.setLoanId(loanId);
- 	    loanInformationSection.setMic(loanMic);
  	    loanInformationSection.setConstructionLoanType(construction.ConstructionLoanType);
  	    loanInformationSection.setConstructionPeriodNumberOfMonthsCount(construction.ConstructionPeriodNumberOfMonthsCount);
  	    loanInformationSection.setConstructionLoanTotalTermMonthsCount(construction.ConstructionLoanTotalTermMonthsCount); 
  	    loanInformationSection.setLoanMaturityPeriodType(maturityRule.LoanMaturityPeriodType);
  	    loanInformationSection.setLoanMaturityPeriodCount(maturityRule.LoanMaturityPeriodCount);
- 	    //loanInformationSection.setIntegratedDisclosureHomeEquityLoanIndicator(idDetail.IntegratedDisclosureHomeEquityLoanIndicator);
+ 	    loanInformationSection.setIntegratedDisclosureHomeEquityLoanIndicator(idDetail.IntegratedDisclosureHomeEquityLoanIndicator);
  	    loanInformationSection.setLienPriorityType(loanTerms.lienPriorityType);
  	    loanInformationSection.setIntegratedDisclosureLoanProductDescription(idDetail.IntegratedDisclosureLoanProductDescription);
  	    loanInformationSection.setMortgageType(loanTerms.mortgageType);
@@ -1054,10 +1054,10 @@ public class ClosingDisclosureConverter {
 	 */
 	private static String salePrice(TermsOfLoan loanTerms, SalesContractDetail salesContractDetail, PropertyValuationDetail propertyValuationDetail, PropertyDetail propertyDetail) {
 		if (!loanTerms.loanPurposeType.equalsIgnoreCase("Purchase"))
-			if (propertyValuationDetail.PropertyValuationAmount.equals(""))
-				return propertyDetail.PropertyEstimatedValueAmount;
+			if (propertyValuationDetail.propertyValuationAmount.equals(""))
+				return propertyDetail.propertyEstimatedValueAmount;
 			else
-				return propertyValuationDetail.PropertyValuationAmount;		
+				return propertyValuationDetail.propertyValuationAmount;		
 		if (salesContractDetail.PersonalPropertyIncludedIndicator.equalsIgnoreCase("true"))
 			return salesContractDetail.RealPropertyAmount;
 		return salesContractDetail.SalesContractAmount;

@@ -118,10 +118,10 @@ public class LoanEstimateConvertor {
 	 */
 	private static String salePrice(TermsOfLoan loanTerms, SalesContractDetail salesContractDetail, PropertyValuationDetail propertyValuationDetail, PropertyDetail propertyDetail) {
 		if (!loanTerms.loanPurposeType.equalsIgnoreCase("Purchase"))
-			if (propertyValuationDetail.PropertyValuationAmount.equals(""))
-				return propertyDetail.PropertyEstimatedValueAmount;
+			if (propertyValuationDetail.propertyValuationAmount.equals(""))
+				return propertyDetail.propertyEstimatedValueAmount;
 			else
-				return propertyValuationDetail.PropertyValuationAmount;		
+				return propertyValuationDetail.propertyValuationAmount;		
 		if (salesContractDetail.PersonalPropertyIncludedIndicator.equalsIgnoreCase("true"))
 			return salesContractDetail.RealPropertyAmount;
 		return salesContractDetail.SalesContractAmount;

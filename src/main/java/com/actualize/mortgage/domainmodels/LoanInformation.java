@@ -15,7 +15,6 @@ public class LoanInformation implements Serializable {
 	private String product;
 	private String loanType;
 	private String loanId;
-	private String mic;
 	private String constructionLoanType;
 	private String constructionPeriodNumberOfMonthsCount;
 	private String constructionLoanTotalTermMonthsCount;
@@ -95,18 +94,6 @@ public class LoanInformation implements Serializable {
 	 */
 	public void setLoanId(String loanId) {
 		this.loanId = loanId;
-	}
-	/**
-	 * @return the mic
-	 */
-	public String getMic() {
-		return mic;
-	}
-	/**
-	 * @param mic the mic to set
-	 */
-	public void setMic(String mic) {
-		this.mic = mic;
 	}
 	/**
 	 * @return the constructionLoanType
