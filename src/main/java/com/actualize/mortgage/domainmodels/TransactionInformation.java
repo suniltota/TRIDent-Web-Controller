@@ -17,7 +17,7 @@ public class TransactionInformation implements Serializable {
 	private List<Borrower> borrower;
 	@JsonProperty(value="sellerDetails")
 	private List<Borrower> seller;
-	@JsonProperty(value="lenderFullName")
+	@JsonProperty(value="lenderDetails")
 	private List<Borrower> lender;
 	
 	/**

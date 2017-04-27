@@ -55,7 +55,6 @@ import com.actualize.mortgage.ledatamodels.AboutVersion;
 import com.actualize.mortgage.ledatamodels.AboutVersions;
 import com.actualize.mortgage.ledatamodels.Address;
 import com.actualize.mortgage.ledatamodels.AmortizationRule;
-import com.actualize.mortgage.ledatamodels.AutomatedUnderwritings;
 import com.actualize.mortgage.ledatamodels.BuydownOccurence;
 import com.actualize.mortgage.ledatamodels.BuydownRule;
 import com.actualize.mortgage.ledatamodels.CashToCloseItem;
@@ -212,7 +211,6 @@ public class ClosingDisclosureConverter {
     	Parties borrowerParties = new Parties((Element)deal.getElementAddNS("PARTIES"), "[ROLES/ROLE/ROLE_DETAIL/PartyRoleType='Borrower']");
     	Parties sellerParties = new Parties((Element)deal.getElementAddNS("PARTIES"), "[ROLES/ROLE/ROLE_DETAIL/PartyRoleType='PropertySeller']");
     	Parties lenders = new Parties((Element)deal.getElementAddNS("PARTIES"), "[ROLES/ROLE/ROLE_DETAIL/PartyRoleType='NotePayTo']");
-    	
     	transactionInformation.setBorrower(createBorrowers(borrowerParties,"Borrower"));
     	transactionInformation.setSeller(createBorrowers(sellerParties,"PropertySeller"));
     	transactionInformation.setLender(createBorrowers(lenders,"NotePayTo"));
@@ -245,9 +243,8 @@ public class ClosingDisclosureConverter {
         MIDataDetail miDataDetail = new MIDataDetail((Element)deal.getElementAddNS(loan + "/MI_DATA/MI_DATA_DETAIL"));
         AmortizationRule amortization = new AmortizationRule((Element)deal.getElementAddNS(loan + "/AMORTIZATION/AMORTIZATION_RULE"));
         LoanIdentifiers loanidentifiers = new LoanIdentifiers((Element)deal.getElementAddNS(loan + "/LOAN_IDENTIFIERS"));
-        
         Underwriting underwriting = new Underwriting(null, (Element)deal.getElementAddNS(loan+"/UNDERWRITING"));
-        	        
+        
         List<LoanInformationLoanIdentifier> loanInformationLoanIdentifiers = new LinkedList<>();
         List<AutomatedUnderwritingsModel> automatedUnderwritingsModelList = new LinkedList<>();
         
@@ -325,7 +322,7 @@ public class ClosingDisclosureConverter {
  	    loanInformationSection.setConstructionLoanTotalTermMonthsCount(construction.ConstructionLoanTotalTermMonthsCount); 
  	    loanInformationSection.setLoanMaturityPeriodType(maturityRule.LoanMaturityPeriodType);
  	    loanInformationSection.setLoanMaturityPeriodCount(maturityRule.LoanMaturityPeriodCount);
- 	    loanInformationSection.setIntegratedDisclosureHomeEquityLoanIndicator(idDetail.IntegratedDisclosureHomeEquityLoanIndicator);
+ 	    //loanInformationSection.setIntegratedDisclosureHomeEquityLoanIndicator(idDetail.IntegratedDisclosureHomeEquityLoanIndicator);
  	    loanInformationSection.setLienPriorityType(loanTerms.lienPriorityType);
  	    loanInformationSection.setIntegratedDisclosureLoanProductDescription(idDetail.IntegratedDisclosureLoanProductDescription);
  	    loanInformationSection.setMortgageType(loanTerms.mortgageType);
@@ -336,7 +333,9 @@ public class ClosingDisclosureConverter {
  	    loanInformationSection.setAmortizationType(amortization.AmortizationType);
  	    loanInformationSection.setAutomatedUnderwritings(automatedUnderwritingsModelList);
  	    loanInformationSection.setLoanManualUnderwritingIndicator(underwriting.underwritingDetail.loanManualUnderwritingIndicator);
-        return loanInformationSection;
+ 	    loanInformationSection.setInterestRateIncreaseIndicator(loanDetail.interestRateIncreaseIndicator);
+ 	    loanInformationSection.setNegativeAmoritzationIndicator(loanDetail.negativeAmortizationIndicator);
+ 	    return loanInformationSection;
     }
     
     /**
@@ -1102,7 +1101,8 @@ public class ClosingDisclosureConverter {
 			addressModel.setStateCode(address.StateCode);
 		if (!"".equals(address.PostalCode)) 
 			addressModel.setPostalCode(address.PostalCode);
-		
+		if (!"".equals(address.countryCode)) 
+			addressModel.setCountryCode(address.countryCode);
 		return addressModel;
 	}
 	
@@ -1148,6 +1148,9 @@ public class ClosingDisclosureConverter {
 					borrower.setType("I");
 				}
 				addressModel = toAddressModel(new Address((Element)borrowers.parties[i].getElementAddNS("ADDRESSES/ADDRESS[AddressType='Mailing']")));
+				String status = borrowers.parties[i].getValueAddNS("LEGAL_DESCRIPTIONS/LEGAL_DESCRIPTION/UNPARSED_LEGAL_DESCRIPTIONS/UNPARSED_LEGAL_DESCRIPTION/UnparsedLegalDescription");
+				addressModel.setUnparsedLegalDescription(status);
+				addressModel.setLegalDescription(status.length() >0 ? true : false);
 				borrower.setNameModel(applicant);
 				borrower.setAddress(addressModel);
 				borrower.setPartyRoleType(partyRoleType);

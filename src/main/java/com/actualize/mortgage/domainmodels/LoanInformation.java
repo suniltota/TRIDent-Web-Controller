@@ -32,6 +32,9 @@ public class LoanInformation implements Serializable {
 	private String miCertificateIdentifier;
 	private List<AutomatedUnderwritingsModel> automatedUnderwritings;
 	private String loanManualUnderwritingIndicator;
+	private String interestRateIncreaseIndicator;
+	private String negativeAmoritzationIndicator;
+	
 	
 	/**
 	 * @return the loanTerm
@@ -296,6 +299,30 @@ public class LoanInformation implements Serializable {
 	 */
 	public void setLoanManualUnderwritingIndicator(String loanManualUnderwritingIndicator) {
 		this.loanManualUnderwritingIndicator = loanManualUnderwritingIndicator;
+	}
+	/**
+	 * @return the interestRateIncreaseIndicator
+	 */
+	public String getInterestRateIncreaseIndicator() {
+		return interestRateIncreaseIndicator;
+	}
+	/**
+	 * @param interestRateIncreaseIndicator the interestRateIncreaseIndicator to set
+	 */
+	public void setInterestRateIncreaseIndicator(String interestRateIncreaseIndicator) {
+		this.interestRateIncreaseIndicator = interestRateIncreaseIndicator;
+	}
+	/**
+	 * @return the negativeAmoritzationIndicator
+	 */
+	public String getNegativeAmoritzationIndicator() {
+		return negativeAmoritzationIndicator;
+	}
+	/**
+	 * @param negativeAmoritzationIndicator the negativeAmoritzationIndicator to set
+	 */
+	public void setNegativeAmoritzationIndicator(String negativeAmoritzationIndicator) {
+		this.negativeAmoritzationIndicator = negativeAmoritzationIndicator;
 	} 
 	
 	

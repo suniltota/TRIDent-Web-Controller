@@ -18,6 +18,7 @@ public class Address implements Serializable {
 	private String postalCode;
 	private String stateCode;
 	private String unparsedLegalDescription;
+	private boolean isLegalDescription;
 	
 	/**
 	 * @return the addressLineText
@@ -115,12 +116,31 @@ public class Address implements Serializable {
 	public void setStateCode(String stateCode) {
 		this.stateCode = stateCode;
 	}
+	/**
+	 * @return the unparsedLegalDescription
+	 */
 	public String getUnparsedLegalDescription() {
 		return unparsedLegalDescription;
 	}
+	/**
+	 * @param unparsedLegalDescription the unparsedLegalDescription to set
+	 */
 	public void setUnparsedLegalDescription(String unparsedLegalDescription) {
 		this.unparsedLegalDescription = unparsedLegalDescription;
 	}
+	/**
+	 * @return the isLegalDescription
+	 */
+	public boolean isLegalDescription() {
+		return isLegalDescription;
+	}
+	/**
+	 * @param isLegalDescription the isLegalDescription to set
+	 */
+	public void setLegalDescription(boolean isLegalDescription) {
+		this.isLegalDescription = isLegalDescription;
+	}
+	
 	
 	
 }

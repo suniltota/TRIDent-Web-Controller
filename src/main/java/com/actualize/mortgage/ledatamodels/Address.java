@@ -14,6 +14,7 @@ public class Address extends MISMODataAccessObject {
 	public final String CityName;
 	public final String PostalCode;
 	public final String StateCode;
+	public final String countryCode;
 	
 	public Address(Element element) {
 		super(element);
@@ -22,5 +23,6 @@ public class Address extends MISMODataAccessObject {
 		CityName = getValueAddNS("CityName");
 		PostalCode = getValueAddNS("PostalCode");
 		StateCode = getValueAddNS("StateCode");
+		countryCode = getValueAddNS("CountryCode");
 	}
 }
