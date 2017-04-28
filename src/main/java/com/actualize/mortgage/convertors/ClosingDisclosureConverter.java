@@ -185,7 +185,7 @@ public class ClosingDisclosureConverter {
           closingInformationSection.setProperty(toAddressModel(propertyAddress));
           closingInformationSection.setSalePrice(StringFormatter.ZEROTRUNCDOLLARS.formatString(salePrice(loanTerms, salesContractDetail, propertyValuationDetail, propertyDetail)));
           	salesContractDetailModel.setPersonalPropertyAmount(salesContractDetail.PersonalPropertyAmount);
-          	salesContractDetailModel.setPersonalPropertyIndicator(salesContractDetail.PersonalPropertyIncludedIndicator);
+          	salesContractDetailModel.setPersonalPropertyIndicator(Convertor.stringToBoolean(salesContractDetail.PersonalPropertyIncludedIndicator));
           	salesContractDetailModel.setRealPropertyAmount(salesContractDetail.RealPropertyAmount);
           	salesContractDetailModel.setSaleContractAmount(salesContractDetail.SalesContractAmount);
           closingInformationSection.setSalesContractDetail(salesContractDetailModel);

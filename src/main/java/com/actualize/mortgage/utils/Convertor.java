@@ -338,7 +338,7 @@ public class Convertor {
 	
 	public static boolean stringToBoolean(String status)
 	{
-		if(status.equalsIgnoreCase("YES"))
+		if(status.equalsIgnoreCase("true"))
 			return true;
 		return false;
 	}

@@ -2271,7 +2271,7 @@ public class JsonToUcd {
 		ClosingInformation closingInformation = jsonDocument.getPageOne().getClosingInformation();
 		SalesContractDetailModel salesContractDetail = closingInformation.getSalesContractDetail();
 		insertData(document, element, "PersonalPropertyAmount", salesContractDetail.getPersonalPropertyAmount());
-		insertData(document, element, "PersonalPropertyIncludedIndicator", salesContractDetail.getPersonalPropertyIndicator()+"");
+		insertData(document, element, "PersonalPropertyIncludedIndicator", salesContractDetail.isPersonalPropertyIndicator()+"");
 		insertData(document, element, "RealPropertyAmount", salesContractDetail.getRealPropertyAmount());
 		insertData(document, element, "SalesContractAmount", salesContractDetail.getSaleContractAmount());
 	}
