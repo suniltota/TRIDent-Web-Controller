@@ -1,8 +1,11 @@
 package com.actualize.mortgage.domainmodels;
 
 import java.io.Serializable;
-import java.util.List;
-
+/**
+ * Represents LoanAmount of LoanTerms in JSON Response
+ * @author sboragala
+ *
+ */
 public class LoanTermsLoanAmount implements	Serializable {
 	
 	/**
@@ -10,73 +13,58 @@ public class LoanTermsLoanAmount implements	Serializable {
 	 */
 	private static final long serialVersionUID = 4527019703978052244L;
 	
-	private String amount;
-	private String status;
-	private List<String> details;
 	private String noteAmount;
 	private String negativeAmoritzationIndicator;
 	private String negativeAmortizationMaximumLoanBalanceAmount;
 	private String negativeAmortizationLimitMonthsCount;
 	
 	/**
-	 * @return the amount
+	 * @return the noteAmount
 	 */
-	public String getAmount() {
-		return amount;
-	}
-	/**
-	 * @param amount the amount to set
-	 */
-	public void setAmount(String amount) {
-		this.amount = amount;
-	}
-	/**
-	 * @return the status
-	 */
-	public String getStatus() {
-		return status;
-	}
-	/**
-	 * @param status the status to set
-	 */
-	public void setStatus(String status) {
-		this.status = status;
-	}
-	/**
-	 * @return the details
-	 */
-	public List<String> getDetails() {
-		return details;
-	}
-	/**
-	 * @param details the details to set
-	 */
-	public void setDetails(List<String> details) {
-		this.details = details;
-	}
 	public String getNoteAmount() {
 		return noteAmount;
 	}
+	/**
+	 * @param noteAmount the noteAmount to set
+	 */
 	public void setNoteAmount(String noteAmount) {
 		this.noteAmount = noteAmount;
 	}
+	/**
+	 * @return the negativeAmoritzationIndicator
+	 */
 	public String getNegativeAmoritzationIndicator() {
 		return negativeAmoritzationIndicator;
 	}
+	/**
+	 * @param negativeAmoritzationIndicator the negativeAmoritzationIndicator to set
+	 */
 	public void setNegativeAmoritzationIndicator(String negativeAmoritzationIndicator) {
 		this.negativeAmoritzationIndicator = negativeAmoritzationIndicator;
 	}
+	/**
+	 * @return the negativeAmortizationMaximumLoanBalanceAmount
+	 */
 	public String getNegativeAmortizationMaximumLoanBalanceAmount() {
 		return negativeAmortizationMaximumLoanBalanceAmount;
 	}
+	/**
+	 * @param negativeAmortizationMaximumLoanBalanceAmount the negativeAmortizationMaximumLoanBalanceAmount to set
+	 */
 	public void setNegativeAmortizationMaximumLoanBalanceAmount(String negativeAmortizationMaximumLoanBalanceAmount) {
 		this.negativeAmortizationMaximumLoanBalanceAmount = negativeAmortizationMaximumLoanBalanceAmount;
 	}
+	/**
+	 * @return the negativeAmortizationLimitMonthsCount
+	 */
 	public String getNegativeAmortizationLimitMonthsCount() {
 		return negativeAmortizationLimitMonthsCount;
 	}
+	/**
+	 * @param negativeAmortizationLimitMonthsCount the negativeAmortizationLimitMonthsCount to set
+	 */
 	public void setNegativeAmortizationLimitMonthsCount(String negativeAmortizationLimitMonthsCount) {
 		this.negativeAmortizationLimitMonthsCount = negativeAmortizationLimitMonthsCount;
 	}
-
+	
 }

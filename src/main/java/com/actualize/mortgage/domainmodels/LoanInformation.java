@@ -33,6 +33,7 @@ public class LoanInformation implements Serializable {
 	private String loanManualUnderwritingIndicator;
 	private String interestRateIncreaseIndicator;
 	private String negativeAmoritzationIndicator;
+	private String interestOnlyTermMonthsCount;
 	
 	
 	/**
@@ -310,6 +311,18 @@ public class LoanInformation implements Serializable {
 	 */
 	public void setNegativeAmoritzationIndicator(String negativeAmoritzationIndicator) {
 		this.negativeAmoritzationIndicator = negativeAmoritzationIndicator;
+	}
+	/**
+	 * @return the interestOnlyTermMonthsCount
+	 */
+	public String getInterestOnlyTermMonthsCount() {
+		return interestOnlyTermMonthsCount;
+	}
+	/**
+	 * @param interestOnlyTermMonthsCount the interestOnlyTermMonthsCount to set
+	 */
+	public void setInterestOnlyTermMonthsCount(String interestOnlyTermMonthsCount) {
+		this.interestOnlyTermMonthsCount = interestOnlyTermMonthsCount;
 	} 
 	
 	

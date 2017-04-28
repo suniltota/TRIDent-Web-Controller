@@ -915,7 +915,8 @@ public class JsonToUcd {
 		insertData(document, element, "DemandFeatureIndicator", "");
 		insertData(document, element, "EscrowAbsenceReasonType", ""); 
 		insertData(document, element, "EscrowIndicator", loanTermsIntialEscrow.getEscrowIndicator());
-		insertData(document, element, "InterestOnlyIndicator", loanTermsPI.getInterestOnlyIndicator());
+		//insertData(document, element, "InterestOnlyIndicator", loanTermsPI.getInterestOnlyIndicator());
+		System.out.println("insertLoanDetail");
 		insertData(document, element, "InterestRateIncreaseIndicator", loanTermsInterestRate.getInterestRateIncreaseIndicator());
 		insertData(document, element, "LoanAmountIncreaseIndicator", "");//TODO Need to add this data to the object "LoanTermsLoanAmount"
 		insertData(document, element, "LoanLevelCreditScoreValue", ""); //TODO Not Found in UCD-Spec
@@ -951,7 +952,8 @@ public class JsonToUcd {
      */
 	private void insertInterestOnly(Document document, Element element, ClosingDisclosureDocument jsonDocument) {
 		// TODO Auto-generated method stub
-		insertData(document, element, "InterestOnlyTermMonthsCount", jsonDocument.getPageOne().getLoanTerms().getLoanTermsPI().getInterestOnlyTermMonthsCount());
+		//insertData(document, element, "InterestOnlyTermMonthsCount", jsonDocument.getPageOne().getLoanTerms().getLoanTermsPI().getInterestOnlyTermMonthsCount());
+		System.out.println("insertInterestOnly");
 	}
 	/**
      * Inserts Hmda Loan from JSON Object
@@ -2269,7 +2271,7 @@ public class JsonToUcd {
 		ClosingInformation closingInformation = jsonDocument.getPageOne().getClosingInformation();
 		SalesContractDetailModel salesContractDetail = closingInformation.getSalesContractDetail();
 		insertData(document, element, "PersonalPropertyAmount", salesContractDetail.getPersonalPropertyAmount());
-		insertData(document, element, "PersonalPropertyIncludedIndicator", salesContractDetail.isPersonalPropertyIndicator()+"");
+		insertData(document, element, "PersonalPropertyIncludedIndicator", salesContractDetail.getPersonalPropertyIndicator()+"");
 		insertData(document, element, "RealPropertyAmount", salesContractDetail.getRealPropertyAmount());
 		insertData(document, element, "SalesContractAmount", salesContractDetail.getSaleContractAmount());
 	}
@@ -2408,7 +2410,6 @@ public class JsonToUcd {
 		insertData(document, element, "LoanPurposeType", loanInformation.getLoanType());
 		insertData(document, element, "MortgageType", loanInformation.getMortgageType());
 		insertData(document, element, "MortgageTypeOtherDescription", loanInformation.getMortgageTypeOtherDescription());
-		insertData(document, element, "NoteAmount", loanTermsLoanAmount.getAmount());
 		insertData(document, element, "NoteAmount", loanTermsLoanAmount.getNoteAmount());
 		insertData(document, element, "NoteRatePercent", loanTermsInterestRate.getInterest());
 		insertData(document, element, "NoteRatePercent", loanTermsInterestRate.getNoteRatePercent());

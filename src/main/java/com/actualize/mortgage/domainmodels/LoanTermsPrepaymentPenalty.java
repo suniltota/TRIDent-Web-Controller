@@ -1,10 +1,12 @@
 package com.actualize.mortgage.domainmodels;
 
 import java.io.Serializable;
-import java.util.List;
 
-
-
+/**
+ * Defines Prepayment Penalty of Loan Terms in JSON Response
+ * @author sboragala
+ *
+ */
 public class LoanTermsPrepaymentPenalty implements Serializable {
 	
 	/**
@@ -12,66 +14,47 @@ public class LoanTermsPrepaymentPenalty implements Serializable {
 	 */
 	private static final long serialVersionUID = 4614387411448264728L;
 	
-	private String amount;
-	private String status;
-	private List<String> details;
 	private String prepaymentPenaltyIndicator;
 	private String prepaymentPenaltyMaximumLifeOfLoanAmount;
 	private String prepaymentPenaltyExpirationMonthsCount;
 	
 	/**
-	 * @return the amount
+	 * @return the prepaymentPenaltyIndicator
 	 */
-	public String getAmount() {
-		return amount;
-	}
-	/**
-	 * @param amount the amount to set
-	 */
-	public void setAmount(String amount) {
-		this.amount = amount;
-	}
-	/**
-	 * @return the status
-	 */
-	public String getStatus() {
-		return status;
-	}
-	/**
-	 * @param status the status to set
-	 */
-	public void setStatus(String status) {
-		this.status = status;
-	}
-	/**
-	 * @return the details
-	 */
-	public List<String> getDetails() {
-		return details;
-	}
-	/**
-	 * @param details the details to set
-	 */
-	public void setDetails(List<String> details) {
-		this.details = details;
-	}
 	public String getPrepaymentPenaltyIndicator() {
 		return prepaymentPenaltyIndicator;
 	}
+	/**
+	 * @param prepaymentPenaltyIndicator the prepaymentPenaltyIndicator to set
+	 */
 	public void setPrepaymentPenaltyIndicator(String prepaymentPenaltyIndicator) {
 		this.prepaymentPenaltyIndicator = prepaymentPenaltyIndicator;
 	}
+	/**
+	 * @return the prepaymentPenaltyMaximumLifeOfLoanAmount
+	 */
 	public String getPrepaymentPenaltyMaximumLifeOfLoanAmount() {
 		return prepaymentPenaltyMaximumLifeOfLoanAmount;
 	}
+	/**
+	 * @param prepaymentPenaltyMaximumLifeOfLoanAmount the prepaymentPenaltyMaximumLifeOfLoanAmount to set
+	 */
 	public void setPrepaymentPenaltyMaximumLifeOfLoanAmount(String prepaymentPenaltyMaximumLifeOfLoanAmount) {
 		this.prepaymentPenaltyMaximumLifeOfLoanAmount = prepaymentPenaltyMaximumLifeOfLoanAmount;
 	}
+	/**
+	 * @return the prepaymentPenaltyExpirationMonthsCount
+	 */
 	public String getPrepaymentPenaltyExpirationMonthsCount() {
 		return prepaymentPenaltyExpirationMonthsCount;
 	}
+	/**
+	 * @param prepaymentPenaltyExpirationMonthsCount the prepaymentPenaltyExpirationMonthsCount to set
+	 */
 	public void setPrepaymentPenaltyExpirationMonthsCount(String prepaymentPenaltyExpirationMonthsCount) {
 		this.prepaymentPenaltyExpirationMonthsCount = prepaymentPenaltyExpirationMonthsCount;
 	}
-
+	
+	
+	
 }

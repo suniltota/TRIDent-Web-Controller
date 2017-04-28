@@ -177,7 +177,7 @@ public class ClosingDisclosureConverter {
   		  {
   			  if(null != new LegalEntityDetail((Element)closingAgent.parties[i].getElementAddNS("LEGAL_ENTITY/LEGAL_ENTITY_DETAIL")).element)
   				  legalEntityDetail = new LegalEntityDetail((Element)closingAgent.parties[i].getElementAddNS("LEGAL_ENTITY/LEGAL_ENTITY_DETAIL"));
-  		  }
+  		  } 
           closingInformationSection.setClosingDate(closingInformationDetail.ClosingDate);
           closingInformationSection.setDateIssued(idDetail.IntegratedDisclosureIssuedDate);
           closingInformationSection.setDisbursementDate(closingInformationDetail.DisbursementDate);
@@ -185,7 +185,7 @@ public class ClosingDisclosureConverter {
           closingInformationSection.setProperty(toAddressModel(propertyAddress));
           closingInformationSection.setSalePrice(StringFormatter.ZEROTRUNCDOLLARS.formatString(salePrice(loanTerms, salesContractDetail, propertyValuationDetail, propertyDetail)));
           	salesContractDetailModel.setPersonalPropertyAmount(salesContractDetail.PersonalPropertyAmount);
-          	salesContractDetailModel.setPersonalPropertyIndicator(Convertor.stringToBoolean(salesContractDetail.PersonalPropertyIncludedIndicator));
+          	salesContractDetailModel.setPersonalPropertyIndicator(salesContractDetail.PersonalPropertyIncludedIndicator);
           	salesContractDetailModel.setRealPropertyAmount(salesContractDetail.RealPropertyAmount);
           	salesContractDetailModel.setSaleContractAmount(salesContractDetail.SalesContractAmount);
           closingInformationSection.setSalesContractDetail(salesContractDetailModel);
@@ -245,6 +245,7 @@ public class ClosingDisclosureConverter {
         AmortizationRule amortization = new AmortizationRule((Element)deal.getElementAddNS(loan + "/AMORTIZATION/AMORTIZATION_RULE"));
         LoanIdentifiers loanidentifiers = new LoanIdentifiers((Element)deal.getElementAddNS(loan + "/LOAN_IDENTIFIERS"));
         Underwriting underwriting = new Underwriting(null, (Element)deal.getElementAddNS(loan+"/UNDERWRITING"));
+        InterestOnly interestOnly = new InterestOnly((Element)deal.getElementAddNS(loan+"/INTEREST_ONLY"));
         
         List<LoanInformationLoanIdentifier> loanInformationLoanIdentifiers = new LinkedList<>();
         List<AutomatedUnderwritingsModel> automatedUnderwritingsModelList = new LinkedList<>();
@@ -335,6 +336,7 @@ public class ClosingDisclosureConverter {
  	    loanInformationSection.setLoanManualUnderwritingIndicator(underwriting.underwritingDetail.loanManualUnderwritingIndicator);
  	    loanInformationSection.setInterestRateIncreaseIndicator(loanDetail.interestRateIncreaseIndicator);
  	    loanInformationSection.setNegativeAmoritzationIndicator(loanDetail.negativeAmortizationIndicator);
+ 	    loanInformationSection.setInterestOnlyTermMonthsCount(interestOnly.interestOnlyTermMonthsCount);
  	    return loanInformationSection;
     }
     
@@ -382,23 +384,12 @@ public class ClosingDisclosureConverter {
         IntegratedDisclosureDetail idDetail = new IntegratedDisclosureDetail((Element)deal.getElementAddNS(loan + "/DOCUMENT_SPECIFIC_DATA_SETS/DOCUMENT_SPECIFIC_DATA_SET/INTEGRATED_DISCLOSURE/INTEGRATED_DISCLOSURE_DETAIL"));
         AboutVersions aboutVersions = document.aboutVersions;
         List<AboutVersion> aboutVersionList = new LinkedList<>();
-        //LoanTermsLoanAmount
-        if("true".equalsIgnoreCase(loanDetail.negativeAmortizationIndicator))
-        	loanTermsLoanAmount.setStatus("YES");
-        else
-        	loanTermsLoanAmount.setStatus("NO");
+      
         
-        loanTermsLoanAmount.setAmount(termsOfLoan.noteAmount);
+        loanTermsLoanAmount.setNoteAmount(termsOfLoan.noteAmount);
         loanTermsLoanAmount.setNegativeAmoritzationIndicator(loanDetail.negativeAmortizationIndicator);
         loanTermsLoanAmount.setNegativeAmortizationLimitMonthsCount(negativeAmortizationRule.NegativeAmortizationLimitMonthsCount);
         loanTermsLoanAmount.setNegativeAmortizationMaximumLoanBalanceAmount(negativeAmortizationRule.NegativeAmortizationMaximumLoanBalanceAmount);
-        
-        //loanTermsInterestRate
-        if("true".equalsIgnoreCase(loanDetail.interestRateIncreaseIndicator)){
-			loanTermsInterestRate.setStatus("YES");
-        }
-        else
-        	loanTermsInterestRate.setStatus("NO");
        
         if("true".equalsIgnoreCase(other.BuydownReflectedInNoteIndicator) && !("").equals(buydownOccurence.BuydownInitialEffectiveInterestRatePercent))
 			interest = buydownOccurence.BuydownInitialEffectiveInterestRatePercent;
@@ -424,19 +415,11 @@ public class ClosingDisclosureConverter {
  	    loanTermsInterestRate.setCeilingRatePercentEarliestEffectiveMonthsCount(interestRateLifetimeAdjustmentRule.CeilingRatePercentEarliestEffectiveMonthsCount);
  	    loanTermsInterestRate.setCeilingRatePercent(interestRateLifetimeAdjustmentRule.CeilingRatePercent);
  	    loanTermsInterestRate.setDisclosedFullyIndexedRatePercent(termsOfLoan.disclosedFullyIndexedRatePercent);
- 	    
- 	    //loanTermsPI
-		
-		if("true".equalsIgnoreCase(loanDetail.paymentIncreaseIndicator))
-			loanTermsPI.setStatus("YES");
-		else
-			loanTermsPI.setStatus("NO");
 		
 		if(!"".equals(paymentRule.InitialPrincipalAndInterestPaymentAmount))
 			principalAmount = paymentRule.InitialPrincipalAndInterestPaymentAmount;
 		if("".equalsIgnoreCase(principalAmount))
 			principalAmount = paymentRule.FullyIndexedInitialPrincipalAndInterestPaymentAmount;
-		
         
 		//AboutVersionIdentifier
 		if(null != aboutVersions.aboutVersions)
@@ -461,35 +444,21 @@ public class ClosingDisclosureConverter {
 		loanTermsPI.setAmount(principalAmount);
  	    loanTermsPI.setInitialPrincipalAndInterestPaymentAmount(paymentRule.InitialPrincipalAndInterestPaymentAmount);
 		loanTermsPI.setFullyIndexedInitialPrincipalAndInterestPaymentAmount(paymentRule.FullyIndexedInitialPrincipalAndInterestPaymentAmount);
-		loanTermsPI.setInterestOnlyIndicator(loanDetail.interestOnlyIndicator);
-		loanTermsPI.setInterestOnlyTermMonthsCount(interestOnly.InterestOnlyTermMonthsCount);
 		loanTermsPI.setAdjustmentRuleType("First");
 		loanTermsPI.setFirstPrincipalAndInterestPaymentChangeMonthsCount(principalAndInterestPaymentLifetimeAdjustmentRule.FirstPrincipalAndInterestPaymentChangeMonthsCount);
 		loanTermsPI.setPrincipalAndInterestPaymentMaximumAmountEarliestEffectiveMonthsCount(principalAndInterestPaymentLifetimeAdjustmentRule.PrincipalAndInterestPaymentMaximumAmountEarliestEffectiveMonthsCount);
 		loanTermsPI.setPrincipalAndInterestPaymentMaximumAmount(principalAndInterestPaymentLifetimeAdjustmentRule.PrincipalAndInterestPaymentMaximumAmount);
  	 
 		//loanTermsPrepaymentPenalty
-		
-		if("true".equalsIgnoreCase(loanDetail.prepaymentPenaltyIndicator))
-			loanTermsPrepaymentPenalty.setStatus("YES");
-		else
-			loanTermsPrepaymentPenalty.setStatus("NO");
-			
 		loanTermsPrepaymentPenalty.setPrepaymentPenaltyIndicator(loanDetail.prepaymentPenaltyIndicator);
 		loanTermsPrepaymentPenalty.setPrepaymentPenaltyMaximumLifeOfLoanAmount(prepaymentPenaltyLifetimeRule.PrepaymentPenaltyMaximumLifeOfLoanAmount);
 		loanTermsPrepaymentPenalty.setPrepaymentPenaltyExpirationMonthsCount(prepaymentPenaltyLifetimeRule.PrepaymentPenaltyExpirationMonthsCount);	
 
 		//LoanTermsBalloonPayment
-		if("true".equalsIgnoreCase(loanDetail.balloonIndicator))
-			loanTermsBalloonPayment.setStatus("YES");
-		else
-			loanTermsBalloonPayment.setStatus("NO");
-		
 		loanTermsBalloonPayment.setBalloonIndicator(loanDetail.balloonIndicator);
 		loanTermsBalloonPayment.setBalloonPaymentAmount(loanDetail.balloonPaymentAmount);
 		
 		//LoanTermsIntialEscrow
-		
 		if(null != escrowItems && null != escrowItem)
 		{
 			EscrowItem escrowsItem = getEscrowItem(escrowItems,"InitialEscrowPaymentAtClosing");
@@ -568,7 +537,7 @@ public class ClosingDisclosureConverter {
 		ProjectedPaymentsModel projectedPaymentsModel = new ProjectedPaymentsModel();
 		List<ProjectedPaymentsDetails> projectedPaymentList = new LinkedList<>();
 		InterestOnly interestOnly = new InterestOnly((Element)deal.getElementAddNS("LOANS/LOAN/INTEREST_ONLY"));
-		String monthscount  = interestOnly.InterestOnlyTermMonthsCount;
+		String monthscount  = interestOnly.interestOnlyTermMonthsCount;
 		int interestOnlyTermMonthsCount = 0;
 			if(null != monthscount && !"".equalsIgnoreCase(monthscount)){
 				interestOnlyTermMonthsCount = Integer.parseInt(monthscount);
