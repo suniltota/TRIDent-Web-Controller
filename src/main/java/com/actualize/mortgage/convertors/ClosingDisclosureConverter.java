@@ -400,7 +400,6 @@ public class ClosingDisclosureConverter {
 		else
 			interest = termsOfLoan.noteRatePercent;
         
-		loanTermsInterestRate.setInterest(interest);
         loanTermsInterestRate.setBuydownTemporarySubsidyFundingIndicator(loanDetail.buydownTemporarySubsidyFundingIndicator);
  	    loanTermsInterestRate.setGseBuydownReflectedInNoteIndicator(other.BuydownReflectedInNoteIndicator);
  	    loanTermsInterestRate.setBuydownInitialEffectiveInterestRatePercent(buydownOccurence.BuydownInitialEffectiveInterestRatePercent);
@@ -448,7 +447,7 @@ public class ClosingDisclosureConverter {
 		loanTermsPI.setFirstPrincipalAndInterestPaymentChangeMonthsCount(principalAndInterestPaymentLifetimeAdjustmentRule.FirstPrincipalAndInterestPaymentChangeMonthsCount);
 		loanTermsPI.setPrincipalAndInterestPaymentMaximumAmountEarliestEffectiveMonthsCount(principalAndInterestPaymentLifetimeAdjustmentRule.PrincipalAndInterestPaymentMaximumAmountEarliestEffectiveMonthsCount);
 		loanTermsPI.setPrincipalAndInterestPaymentMaximumAmount(principalAndInterestPaymentLifetimeAdjustmentRule.PrincipalAndInterestPaymentMaximumAmount);
- 	 
+		loanTermsPI.setPaymentIncreaseIndicator(loanDetail.paymentIncreaseIndicator);
 		//loanTermsPrepaymentPenalty
 		loanTermsPrepaymentPenalty.setPrepaymentPenaltyIndicator(loanDetail.prepaymentPenaltyIndicator);
 		loanTermsPrepaymentPenalty.setPrepaymentPenaltyMaximumLifeOfLoanAmount(prepaymentPenaltyLifetimeRule.PrepaymentPenaltyMaximumLifeOfLoanAmount);

@@ -2411,9 +2411,7 @@ public class JsonToUcd {
 		insertData(document, element, "MortgageType", loanInformation.getMortgageType());
 		insertData(document, element, "MortgageTypeOtherDescription", loanInformation.getMortgageTypeOtherDescription());
 		insertData(document, element, "NoteAmount", loanTermsLoanAmount.getNoteAmount());
-		insertData(document, element, "NoteRatePercent", loanTermsInterestRate.getInterest());
 		insertData(document, element, "NoteRatePercent", loanTermsInterestRate.getNoteRatePercent());
-		insertData(document, element, "WeightedAverageInterestRatePercent",loanTermsInterestRate.getInterest());
 		insertData(document, element, "WeightedAverageInterestRatePercent", "");// TODO Need to add this data to Object
 	}
 }
