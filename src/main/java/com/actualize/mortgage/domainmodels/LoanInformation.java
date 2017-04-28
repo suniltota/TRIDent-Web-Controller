@@ -15,6 +15,7 @@ public class LoanInformation implements Serializable {
 	private String product;
 	private String loanType;
 	private String loanId;
+	private boolean constructionLoan;
 	private String constructionLoanType;
 	private String constructionPeriodNumberOfMonthsCount;
 	private String constructionLoanTotalTermMonthsCount;
@@ -323,6 +324,18 @@ public class LoanInformation implements Serializable {
 	 */
 	public void setInterestOnlyTermMonthsCount(String interestOnlyTermMonthsCount) {
 		this.interestOnlyTermMonthsCount = interestOnlyTermMonthsCount;
+	}
+	/**
+	 * @return the constructionLoan
+	 */
+	public boolean isConstructionLoan() {
+		return constructionLoan;
+	}
+	/**
+	 * @param constructionLoan the constructionLoan to set
+	 */
+	public void setConstructionLoan(boolean constructionLoan) {
+		this.constructionLoan = constructionLoan;
 	} 
 	
 	

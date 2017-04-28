@@ -318,6 +318,7 @@ public class ClosingDisclosureConverter {
  	    loanInformationSection.setProduct(loanProduct); 
  	    loanInformationSection.setLoanType(loanType);
  	    loanInformationSection.setLoanId(loanId);
+ 	    loanInformationSection.setConstructionLoan(Convertor.stringToBoolean(loanDetail.constructionLoanIndicator));
  	    loanInformationSection.setConstructionLoanType(construction.ConstructionLoanType);
  	    loanInformationSection.setConstructionPeriodNumberOfMonthsCount(construction.ConstructionPeriodNumberOfMonthsCount);
  	    loanInformationSection.setConstructionLoanTotalTermMonthsCount(construction.ConstructionLoanTotalTermMonthsCount); 
