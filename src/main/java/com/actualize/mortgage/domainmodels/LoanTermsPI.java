@@ -18,7 +18,7 @@ public class LoanTermsPI implements Serializable {
 	private String firstPrincipalAndInterestPaymentChangeMonthsCount;
 	private String principalAndInterestPaymentMaximumAmountEarliestEffectiveMonthsCount;
 	private String principalAndInterestPaymentMaximumAmount;
-	private String paymentIncreaseIndicator;
+	private boolean paymentIncreaseIndicator;
 	
 	/**
 	 * @return the paymentFrequencyType
@@ -135,15 +135,16 @@ public class LoanTermsPI implements Serializable {
 	/**
 	 * @return the paymentIncreaseIndicator
 	 */
-	public String getPaymentIncreaseIndicator() {
+	public boolean isPaymentIncreaseIndicator() {
 		return paymentIncreaseIndicator;
 	}
 	/**
 	 * @param paymentIncreaseIndicator the paymentIncreaseIndicator to set
 	 */
-	public void setPaymentIncreaseIndicator(String paymentIncreaseIndicator) {
+	public void setPaymentIncreaseIndicator(boolean paymentIncreaseIndicator) {
 		this.paymentIncreaseIndicator = paymentIncreaseIndicator;
 	}
+	
 	
 	
 	

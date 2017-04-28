@@ -498,7 +498,7 @@ public class JsonToUcd {
 		insertData(document, element, "FirstYearTotalEscrowPaymentDescription", "");
 		insertData(document, element, "FirstYearTotalNonEscrowPaymentAmount", loanTermsEscrowAccount.getFirstYearTotalNonEscrowPaymentAmount());
 		insertData(document, element, "FirstYearTotalNonEscrowPaymentDescription", loanTermsEscrowAccount.getFirstYearTotalNonEscrowPaymentDescription());
-		insertData(document, element, "IntegratedDisclosureHomeEquityLoanIndicator", loanInformation.getIntegratedDisclosureHomeEquityLoanIndicator());
+		insertData(document, element, "IntegratedDisclosureHomeEquityLoanIndicator",Convertor.booleanToString(loanInformation.isIntegratedDisclosureHomeEquityLoanIndicator()));
 		insertData(document, element, "IntegratedDisclosureLoanProductDescription", loanInformation.getIntegratedDisclosureLoanProductDescription());
 		insertData(document, element, "IntegratedDisclosureIssuedDate", closingInformation.getDateIssued());
 	}
@@ -920,8 +920,8 @@ public class JsonToUcd {
 		insertData(document, element, "InterestRateIncreaseIndicator", loanTermsInterestRate.getInterestRateIncreaseIndicator());
 		insertData(document, element, "LoanAmountIncreaseIndicator", "");//TODO Need to add this data to the object "LoanTermsLoanAmount"
 		insertData(document, element, "LoanLevelCreditScoreValue", ""); //TODO Not Found in UCD-Spec
-		insertData(document, element, "MIRequiredIndicator", jsonDocument.getPageOne().getLoanInformation().getMiRequiredIndicator());
-		insertData(document, element, "NegativeAmortizationIndicator", loanTermsLoanAmount.getNegativeAmoritzationIndicator());
+		insertData(document, element, "MIRequiredIndicator",Convertor.booleanToString(jsonDocument.getPageOne().getLoanInformation().isMiRequiredIndicator()));
+		insertData(document, element, "NegativeAmortizationIndicator",Convertor.booleanToString(loanTermsLoanAmount.isNegativeAmoritzationIndicator()));
 		insertData(document, element, "PaymentIncreaseIndicator", ""); //TODO Need to add this to Object 
 		insertData(document, element, "PrepaymentPenaltyIndicator", loanTermsPrepaymentPenalty.getPrepaymentPenaltyIndicator());
 		insertData(document, element, "SeasonalPaymentFeatureIndicator", "");

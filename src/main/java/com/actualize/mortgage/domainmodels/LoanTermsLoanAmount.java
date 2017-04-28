@@ -14,7 +14,7 @@ public class LoanTermsLoanAmount implements	Serializable {
 	private static final long serialVersionUID = 4527019703978052244L;
 	
 	private String noteAmount;
-	private String negativeAmoritzationIndicator;
+	private boolean negativeAmoritzationIndicator;
 	private String negativeAmortizationMaximumLoanBalanceAmount;
 	private String negativeAmortizationLimitMonthsCount;
 	
@@ -29,18 +29,6 @@ public class LoanTermsLoanAmount implements	Serializable {
 	 */
 	public void setNoteAmount(String noteAmount) {
 		this.noteAmount = noteAmount;
-	}
-	/**
-	 * @return the negativeAmoritzationIndicator
-	 */
-	public String getNegativeAmoritzationIndicator() {
-		return negativeAmoritzationIndicator;
-	}
-	/**
-	 * @param negativeAmoritzationIndicator the negativeAmoritzationIndicator to set
-	 */
-	public void setNegativeAmoritzationIndicator(String negativeAmoritzationIndicator) {
-		this.negativeAmoritzationIndicator = negativeAmoritzationIndicator;
 	}
 	/**
 	 * @return the negativeAmortizationMaximumLoanBalanceAmount
@@ -65,6 +53,18 @@ public class LoanTermsLoanAmount implements	Serializable {
 	 */
 	public void setNegativeAmortizationLimitMonthsCount(String negativeAmortizationLimitMonthsCount) {
 		this.negativeAmortizationLimitMonthsCount = negativeAmortizationLimitMonthsCount;
+	}
+	/**
+	 * @return the negativeAmoritzationIndicator
+	 */
+	public boolean isNegativeAmoritzationIndicator() {
+		return negativeAmoritzationIndicator;
+	}
+	/**
+	 * @param negativeAmoritzationIndicator the negativeAmoritzationIndicator to set
+	 */
+	public void setNegativeAmoritzationIndicator(boolean negativeAmoritzationIndicator) {
+		this.negativeAmoritzationIndicator = negativeAmoritzationIndicator;
 	}
 	
 }

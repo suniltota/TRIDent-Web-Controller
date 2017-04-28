@@ -1,21 +1,5 @@
 package com.actualize.mortgage.utils;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-
-import org.mismo.residential._2009.schemas.DOCUMENT;
-import org.mismo.residential._2009.schemas.ESCROWITEM;
-import org.mismo.residential._2009.schemas.ESCROWITEMPAYMENT;
-import org.mismo.residential._2009.schemas.FEE;
-import org.mismo.residential._2009.schemas.FEEPAYMENT;
-import org.mismo.residential._2009.schemas.FEEPAYMENTS;
-import org.mismo.residential._2009.schemas.INTEGRATEDDISCLOSURESECTIONSUMMARY;
-import org.mismo.residential._2009.schemas.INTEGRATEDDISCLOSURESUBSECTIONPAYMENT;
-import org.mismo.residential._2009.schemas.PREPAIDITEM;
-
-
 /**
  * This class is perform various operations such as conversions and extractions of MISMO Objects
  * @author sboragala

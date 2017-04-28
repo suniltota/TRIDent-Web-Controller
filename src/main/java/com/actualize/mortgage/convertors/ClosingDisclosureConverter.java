@@ -91,6 +91,7 @@ import com.actualize.mortgage.ledatamodels.MIDataDetail;
 import com.actualize.mortgage.ledatamodels.MISMODocument;
 import com.actualize.mortgage.ledatamodels.MaturityRule;
 import com.actualize.mortgage.ledatamodels.Name;
+import com.actualize.mortgage.ledatamodels.NegativeAmortization;
 import com.actualize.mortgage.ledatamodels.NegativeAmortizationRule;
 import com.actualize.mortgage.ledatamodels.Other;
 import com.actualize.mortgage.ledatamodels.Parties;
@@ -246,6 +247,8 @@ public class ClosingDisclosureConverter {
         LoanIdentifiers loanidentifiers = new LoanIdentifiers((Element)deal.getElementAddNS(loan + "/LOAN_IDENTIFIERS"));
         Underwriting underwriting = new Underwriting(null, (Element)deal.getElementAddNS(loan+"/UNDERWRITING"));
         InterestOnly interestOnly = new InterestOnly((Element)deal.getElementAddNS(loan+"/INTEREST_ONLY"));
+        NegativeAmortization negativeAmortization = new NegativeAmortization(null, (Element)deal.getElementAddNS(loan+"/NEGATIVE_AMORTIZATION_RULE"));
+        
         
         List<LoanInformationLoanIdentifier> loanInformationLoanIdentifiers = new LinkedList<>();
         List<AutomatedUnderwritingsModel> automatedUnderwritingsModelList = new LinkedList<>();
@@ -324,20 +327,25 @@ public class ClosingDisclosureConverter {
  	    loanInformationSection.setConstructionLoanTotalTermMonthsCount(construction.ConstructionLoanTotalTermMonthsCount); 
  	    loanInformationSection.setLoanMaturityPeriodType(maturityRule.LoanMaturityPeriodType);
  	    loanInformationSection.setLoanMaturityPeriodCount(maturityRule.LoanMaturityPeriodCount);
- 	    loanInformationSection.setIntegratedDisclosureHomeEquityLoanIndicator(idDetail.IntegratedDisclosureHomeEquityLoanIndicator);
+ 	    loanInformationSection.setIntegratedDisclosureHomeEquityLoanIndicator(Convertor.stringToBoolean(idDetail.IntegratedDisclosureHomeEquityLoanIndicator));
  	    loanInformationSection.setLienPriorityType(loanTerms.lienPriorityType);
  	    loanInformationSection.setIntegratedDisclosureLoanProductDescription(idDetail.IntegratedDisclosureLoanProductDescription);
  	    loanInformationSection.setMortgageType(loanTerms.mortgageType);
  	    loanInformationSection.setMortgageTypeOtherDescription(loanTerms.mortgageTypeOtherDescription);
- 	    loanInformationSection.setMiRequiredIndicator(loanDetail.miRequiredIndicator);
+ 	    loanInformationSection.setMiRequiredIndicator(Convertor.stringToBoolean(loanDetail.miRequiredIndicator));
  	    loanInformationSection.setMiCertificateIdentifier(miDataDetail.MICertificateIdentifier);
  	    loanInformationSection.setLoanIdentifiers(loanInformationLoanIdentifiers);
  	    loanInformationSection.setAmortizationType(amortization.AmortizationType);
  	    loanInformationSection.setAutomatedUnderwritings(automatedUnderwritingsModelList);
  	    loanInformationSection.setLoanManualUnderwritingIndicator(underwriting.underwritingDetail.loanManualUnderwritingIndicator);
- 	    loanInformationSection.setInterestRateIncreaseIndicator(loanDetail.interestRateIncreaseIndicator);
- 	    loanInformationSection.setNegativeAmoritzationIndicator(loanDetail.negativeAmortizationIndicator);
+ 	    loanInformationSection.setInterestRateIncreaseIndicator(Convertor.stringToBoolean(loanDetail.interestRateIncreaseIndicator));
+ 	    loanInformationSection.setInterestOnlyIndicator(Convertor.stringToBoolean(loanDetail.interestOnlyIndicator));
+ 	    loanInformationSection.setNegativeAmoritzationIndicator(Convertor.stringToBoolean(loanDetail.negativeAmortizationIndicator));
+ 	    loanInformationSection.setNegativeAmoritzationType(negativeAmortization.negativeAmortizationType);
  	    loanInformationSection.setInterestOnlyTermMonthsCount(interestOnly.interestOnlyTermMonthsCount);
+ 	    loanInformationSection.setSeasonalPaymentFeatureIndicator(false);
+ 	    loanInformationSection.setStepPaymentsFeatureIndicator(false);
+ 	    loanInformationSection.setOptionalPaymentsFeatureIndicator(false);
  	    return loanInformationSection;
     }
     
@@ -388,7 +396,7 @@ public class ClosingDisclosureConverter {
       
         
         loanTermsLoanAmount.setNoteAmount(termsOfLoan.noteAmount);
-        loanTermsLoanAmount.setNegativeAmoritzationIndicator(loanDetail.negativeAmortizationIndicator);
+        loanTermsLoanAmount.setNegativeAmoritzationIndicator(Convertor.stringToBoolean(loanDetail.negativeAmortizationIndicator));
         loanTermsLoanAmount.setNegativeAmortizationLimitMonthsCount(negativeAmortizationRule.NegativeAmortizationLimitMonthsCount);
         loanTermsLoanAmount.setNegativeAmortizationMaximumLoanBalanceAmount(negativeAmortizationRule.NegativeAmortizationMaximumLoanBalanceAmount);
        
@@ -448,7 +456,7 @@ public class ClosingDisclosureConverter {
 		loanTermsPI.setFirstPrincipalAndInterestPaymentChangeMonthsCount(principalAndInterestPaymentLifetimeAdjustmentRule.FirstPrincipalAndInterestPaymentChangeMonthsCount);
 		loanTermsPI.setPrincipalAndInterestPaymentMaximumAmountEarliestEffectiveMonthsCount(principalAndInterestPaymentLifetimeAdjustmentRule.PrincipalAndInterestPaymentMaximumAmountEarliestEffectiveMonthsCount);
 		loanTermsPI.setPrincipalAndInterestPaymentMaximumAmount(principalAndInterestPaymentLifetimeAdjustmentRule.PrincipalAndInterestPaymentMaximumAmount);
-		loanTermsPI.setPaymentIncreaseIndicator(loanDetail.paymentIncreaseIndicator);
+		loanTermsPI.setPaymentIncreaseIndicator(Convertor.stringToBoolean(loanDetail.paymentIncreaseIndicator));
 		//loanTermsPrepaymentPenalty
 		loanTermsPrepaymentPenalty.setPrepaymentPenaltyIndicator(loanDetail.prepaymentPenaltyIndicator);
 		loanTermsPrepaymentPenalty.setPrepaymentPenaltyMaximumLifeOfLoanAmount(prepaymentPenaltyLifetimeRule.PrepaymentPenaltyMaximumLifeOfLoanAmount);

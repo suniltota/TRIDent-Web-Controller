@@ -21,20 +21,25 @@ public class LoanInformation implements Serializable {
 	private String constructionLoanTotalTermMonthsCount;
 	private String loanMaturityPeriodType;
 	private String loanMaturityPeriodCount;
-	private String integratedDisclosureHomeEquityLoanIndicator;
+	private boolean integratedDisclosureHomeEquityLoanIndicator;
 	private String lienPriorityType;
 	private String amortizationType;
 	private String integratedDisclosureLoanProductDescription;
 	private String mortgageType;
 	private String mortgageTypeOtherDescription;
 	private List<LoanInformationLoanIdentifier> loanIdentifiers;
-	private String miRequiredIndicator;
+	private boolean miRequiredIndicator;
 	private String miCertificateIdentifier;
 	private List<AutomatedUnderwritingsModel> automatedUnderwritings;
 	private String loanManualUnderwritingIndicator;
-	private String interestRateIncreaseIndicator;
-	private String negativeAmoritzationIndicator;
+	private boolean interestRateIncreaseIndicator;
+	private boolean negativeAmortizationIndicator;
 	private String interestOnlyTermMonthsCount;
+	private boolean interestOnlyIndicator;
+	private String negativeAmortizationType;
+	private boolean seasonalPaymentFeatureIndicator;
+	private boolean stepPaymentsFeatureIndicator;
+	private boolean optionalPaymentsFeatureIndicator;
 	
 	
 	/**
@@ -158,18 +163,6 @@ public class LoanInformation implements Serializable {
 		this.loanMaturityPeriodCount = loanMaturityPeriodCount;
 	}
 	/**
-	 * @return the integratedDisclosureHomeEquityLoanIndicator
-	 */
-	public String getIntegratedDisclosureHomeEquityLoanIndicator() {
-		return integratedDisclosureHomeEquityLoanIndicator;
-	}
-	/**
-	 * @param integratedDisclosureHomeEquityLoanIndicator the integratedDisclosureHomeEquityLoanIndicator to set
-	 */
-	public void setIntegratedDisclosureHomeEquityLoanIndicator(String integratedDisclosureHomeEquityLoanIndicator) {
-		this.integratedDisclosureHomeEquityLoanIndicator = integratedDisclosureHomeEquityLoanIndicator;
-	}
-	/**
 	 * @return the lienPriorityType
 	 */
 	public String getLienPriorityType() {
@@ -242,18 +235,6 @@ public class LoanInformation implements Serializable {
 		this.loanIdentifiers = loanIdentifiers;
 	}
 	/**
-	 * @return the miRequiredIndicator
-	 */
-	public String getMiRequiredIndicator() {
-		return miRequiredIndicator;
-	}
-	/**
-	 * @param miRequiredIndicator the miRequiredIndicator to set
-	 */
-	public void setMiRequiredIndicator(String miRequiredIndicator) {
-		this.miRequiredIndicator = miRequiredIndicator;
-	}
-	/**
 	 * @return the miCertificateIdentifier
 	 */
 	public String getMiCertificateIdentifier() {
@@ -290,28 +271,40 @@ public class LoanInformation implements Serializable {
 		this.loanManualUnderwritingIndicator = loanManualUnderwritingIndicator;
 	}
 	/**
+	 * @return the constructionLoan
+	 */
+	public boolean isConstructionLoan() {
+		return constructionLoan;
+	}
+	/**
+	 * @param constructionLoan the constructionLoan to set
+	 */
+	public void setConstructionLoan(boolean constructionLoan) {
+		this.constructionLoan = constructionLoan;
+	}
+	/**
 	 * @return the interestRateIncreaseIndicator
 	 */
-	public String getInterestRateIncreaseIndicator() {
+	public boolean isInterestRateIncreaseIndicator() {
 		return interestRateIncreaseIndicator;
 	}
 	/**
 	 * @param interestRateIncreaseIndicator the interestRateIncreaseIndicator to set
 	 */
-	public void setInterestRateIncreaseIndicator(String interestRateIncreaseIndicator) {
+	public void setInterestRateIncreaseIndicator(boolean interestRateIncreaseIndicator) {
 		this.interestRateIncreaseIndicator = interestRateIncreaseIndicator;
 	}
 	/**
 	 * @return the negativeAmoritzationIndicator
 	 */
-	public String getNegativeAmoritzationIndicator() {
-		return negativeAmoritzationIndicator;
+	public boolean isNegativeAmoritzationIndicator() {
+		return negativeAmortizationIndicator;
 	}
 	/**
 	 * @param negativeAmoritzationIndicator the negativeAmoritzationIndicator to set
 	 */
-	public void setNegativeAmoritzationIndicator(String negativeAmoritzationIndicator) {
-		this.negativeAmoritzationIndicator = negativeAmoritzationIndicator;
+	public void setNegativeAmoritzationIndicator(boolean negativeAmoritzationIndicator) {
+		this.negativeAmortizationIndicator = negativeAmoritzationIndicator;
 	}
 	/**
 	 * @return the interestOnlyTermMonthsCount
@@ -326,18 +319,113 @@ public class LoanInformation implements Serializable {
 		this.interestOnlyTermMonthsCount = interestOnlyTermMonthsCount;
 	}
 	/**
-	 * @return the constructionLoan
+	 * @return the interestOnlyIndicator
 	 */
-	public boolean isConstructionLoan() {
-		return constructionLoan;
+	public boolean isInterestOnlyIndicator() {
+		return interestOnlyIndicator;
 	}
 	/**
-	 * @param constructionLoan the constructionLoan to set
+	 * @param interestOnlyIndicator the interestOnlyIndicator to set
 	 */
-	public void setConstructionLoan(boolean constructionLoan) {
-		this.constructionLoan = constructionLoan;
-	} 
-	
+	public void setInterestOnlyIndicator(boolean interestOnlyIndicator) {
+		this.interestOnlyIndicator = interestOnlyIndicator;
+	}
+	/**
+	 * @return the integratedDisclosureHomeEquityLoanIndicator
+	 */
+	public boolean isIntegratedDisclosureHomeEquityLoanIndicator() {
+		return integratedDisclosureHomeEquityLoanIndicator;
+	}
+	/**
+	 * @param integratedDisclosureHomeEquityLoanIndicator the integratedDisclosureHomeEquityLoanIndicator to set
+	 */
+	public void setIntegratedDisclosureHomeEquityLoanIndicator(boolean integratedDisclosureHomeEquityLoanIndicator) {
+		this.integratedDisclosureHomeEquityLoanIndicator = integratedDisclosureHomeEquityLoanIndicator;
+	}
+	/**
+	 * @return the miRequiredIndicator
+	 */
+	public boolean isMiRequiredIndicator() {
+		return miRequiredIndicator;
+	}
+	/**
+	 * @param miRequiredIndicator the miRequiredIndicator to set
+	 */
+	public void setMiRequiredIndicator(boolean miRequiredIndicator) {
+		this.miRequiredIndicator = miRequiredIndicator;
+	}
+	/**
+	 * @return the negativeAmoritzationType
+	 */
+	public String getNegativeAmoritzationType() {
+		return negativeAmortizationType;
+	}
+	/**
+	 * @param negativeAmoritzationType the negativeAmoritzationType to set
+	 */
+	public void setNegativeAmoritzationType(String negativeAmoritzationType) {
+		this.negativeAmortizationType = negativeAmoritzationType;
+	}
+	/**
+	 * @return the negativeAmortizationIndicator
+	 */
+	public boolean isNegativeAmortizationIndicator() {
+		return negativeAmortizationIndicator;
+	}
+	/**
+	 * @param negativeAmortizationIndicator the negativeAmortizationIndicator to set
+	 */
+	public void setNegativeAmortizationIndicator(boolean negativeAmortizationIndicator) {
+		this.negativeAmortizationIndicator = negativeAmortizationIndicator;
+	}
+	/**
+	 * @return the negativeAmortizationType
+	 */
+	public String getNegativeAmortizationType() {
+		return negativeAmortizationType;
+	}
+	/**
+	 * @param negativeAmortizationType the negativeAmortizationType to set
+	 */
+	public void setNegativeAmortizationType(String negativeAmortizationType) {
+		this.negativeAmortizationType = negativeAmortizationType;
+	}
+	/**
+	 * @return the seasonalPaymentFeatureIndicator
+	 */
+	public boolean isSeasonalPaymentFeatureIndicator() {
+		return seasonalPaymentFeatureIndicator;
+	}
+	/**
+	 * @param seasonalPaymentFeatureIndicator the seasonalPaymentFeatureIndicator to set
+	 */
+	public void setSeasonalPaymentFeatureIndicator(boolean seasonalPaymentFeatureIndicator) {
+		this.seasonalPaymentFeatureIndicator = seasonalPaymentFeatureIndicator;
+	}
+	/**
+	 * @return the stepPaymentsFeatureIndicator
+	 */
+	public boolean isStepPaymentsFeatureIndicator() {
+		return stepPaymentsFeatureIndicator;
+	}
+	/**
+	 * @param stepPaymentsFeatureIndicator the stepPaymentsFeatureIndicator to set
+	 */
+	public void setStepPaymentsFeatureIndicator(boolean stepPaymentsFeatureIndicator) {
+		this.stepPaymentsFeatureIndicator = stepPaymentsFeatureIndicator;
+	}
+	/**
+	 * @return the optionalPaymentsFeatureIndicator
+	 */
+	public boolean isOptionalPaymentsFeatureIndicator() {
+		return optionalPaymentsFeatureIndicator;
+	}
+	/**
+	 * @param optionalPaymentsFeatureIndicator the optionalPaymentsFeatureIndicator to set
+	 */
+	public void setOptionalPaymentsFeatureIndicator(boolean optionalPaymentsFeatureIndicator) {
+		this.optionalPaymentsFeatureIndicator = optionalPaymentsFeatureIndicator;
+	}
 	
 
 		
