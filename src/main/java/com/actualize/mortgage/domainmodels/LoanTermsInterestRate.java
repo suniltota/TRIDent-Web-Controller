@@ -9,14 +9,14 @@ public class LoanTermsInterestRate implements Serializable {
 	 */
 	private static final long serialVersionUID = 7964998098675066631L;
 	
-	private String buydownTemporarySubsidyFundingIndicator;
-	private String gseBuydownReflectedInNoteIndicator;
+	private boolean buydownTemporarySubsidyFundingIndicator;
+	private boolean gseBuydownReflectedInNoteIndicator;
 	private String buydownInitialEffectiveInterestRatePercent;
 	private String buydownChangeFrequencyMonthsCount;
 	private String buydownIncreaseRatePercent;
 	private String noteRatePercent;
 	private String disclosedFullyIndexedRatePercent;
-	private String interestRateIncreaseIndicator;
+	private boolean interestRateIncreaseIndicator;
 	private String adjustmentRuleTypeFirst;
 	private String perChangeRateAdjustmentFrequencyMonthsCount;
 	private String firstRateChangeMonthsCount;
@@ -26,25 +26,25 @@ public class LoanTermsInterestRate implements Serializable {
 	/**
 	 * @return the buydownTemporarySubsidyFundingIndicator
 	 */
-	public String getBuydownTemporarySubsidyFundingIndicator() {
+	public boolean isBuydownTemporarySubsidyFundingIndicator() {
 		return buydownTemporarySubsidyFundingIndicator;
 	}
 	/**
 	 * @param buydownTemporarySubsidyFundingIndicator the buydownTemporarySubsidyFundingIndicator to set
 	 */
-	public void setBuydownTemporarySubsidyFundingIndicator(String buydownTemporarySubsidyFundingIndicator) {
+	public void setBuydownTemporarySubsidyFundingIndicator(boolean buydownTemporarySubsidyFundingIndicator) {
 		this.buydownTemporarySubsidyFundingIndicator = buydownTemporarySubsidyFundingIndicator;
 	}
 	/**
 	 * @return the gseBuydownReflectedInNoteIndicator
 	 */
-	public String getGseBuydownReflectedInNoteIndicator() {
+	public boolean isGseBuydownReflectedInNoteIndicator() {
 		return gseBuydownReflectedInNoteIndicator;
 	}
 	/**
 	 * @param gseBuydownReflectedInNoteIndicator the gseBuydownReflectedInNoteIndicator to set
 	 */
-	public void setGseBuydownReflectedInNoteIndicator(String gseBuydownReflectedInNoteIndicator) {
+	public void setGseBuydownReflectedInNoteIndicator(boolean gseBuydownReflectedInNoteIndicator) {
 		this.gseBuydownReflectedInNoteIndicator = gseBuydownReflectedInNoteIndicator;
 	}
 	/**
@@ -110,13 +110,13 @@ public class LoanTermsInterestRate implements Serializable {
 	/**
 	 * @return the interestRateIncreaseIndicator
 	 */
-	public String getInterestRateIncreaseIndicator() {
+	public boolean isInterestRateIncreaseIndicator() {
 		return interestRateIncreaseIndicator;
 	}
 	/**
 	 * @param interestRateIncreaseIndicator the interestRateIncreaseIndicator to set
 	 */
-	public void setInterestRateIncreaseIndicator(String interestRateIncreaseIndicator) {
+	public void setInterestRateIncreaseIndicator(boolean interestRateIncreaseIndicator) {
 		this.interestRateIncreaseIndicator = interestRateIncreaseIndicator;
 	}
 	/**

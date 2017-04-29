@@ -13,20 +13,33 @@ public class LoanTermsBalloonPayment implements Serializable {
 	 */
 	private static final long serialVersionUID = 6088742886056212820L;
 	
-	private String balloonIndicator;
+	private boolean balloonIndicator;
 	private String balloonPaymentAmount;
 	
-	public String getBalloonIndicator() {
+	/**
+	 * @return the balloonIndicator
+	 */
+	public boolean isBalloonIndicator() {
 		return balloonIndicator;
 	}
-	public void setBalloonIndicator(String balloonIndicator) {
+	/**
+	 * @param balloonIndicator the balloonIndicator to set
+	 */
+	public void setBalloonIndicator(boolean balloonIndicator) {
 		this.balloonIndicator = balloonIndicator;
 	}
+	/**
+	 * @return the balloonPaymentAmount
+	 */
 	public String getBalloonPaymentAmount() {
 		return balloonPaymentAmount;
 	}
+	/**
+	 * @param balloonPaymentAmount the balloonPaymentAmount to set
+	 */
 	public void setBalloonPaymentAmount(String balloonPaymentAmount) {
 		this.balloonPaymentAmount = balloonPaymentAmount;
 	}
-
+	
+	
 }

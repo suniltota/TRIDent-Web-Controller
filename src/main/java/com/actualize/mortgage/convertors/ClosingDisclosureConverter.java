@@ -409,14 +409,14 @@ public class ClosingDisclosureConverter {
 		else
 			interest = termsOfLoan.noteRatePercent;
         
-        loanTermsInterestRate.setBuydownTemporarySubsidyFundingIndicator(loanDetail.buydownTemporarySubsidyFundingIndicator);
- 	    loanTermsInterestRate.setGseBuydownReflectedInNoteIndicator(other.BuydownReflectedInNoteIndicator);
+        loanTermsInterestRate.setBuydownTemporarySubsidyFundingIndicator(Convertor.stringToBoolean(loanDetail.buydownTemporarySubsidyFundingIndicator));
+ 	    loanTermsInterestRate.setGseBuydownReflectedInNoteIndicator(Convertor.stringToBoolean(other.BuydownReflectedInNoteIndicator));
  	    loanTermsInterestRate.setBuydownInitialEffectiveInterestRatePercent(buydownOccurence.BuydownInitialEffectiveInterestRatePercent);
  	    loanTermsInterestRate.setBuydownChangeFrequencyMonthsCount(buydownRule.BuydownChangeFrequencyMonthsCount);
  	    loanTermsInterestRate.setBuydownIncreaseRatePercent(buydownRule.BuydownIncreaseRatePercent);
  	    loanTermsInterestRate.setNoteRatePercent(termsOfLoan.noteRatePercent);
  	    loanTermsInterestRate.setDisclosedFullyIndexedRatePercent(termsOfLoan.disclosedFullyIndexedRatePercent);
- 	    loanTermsInterestRate.setInterestRateIncreaseIndicator(loanDetail.interestRateIncreaseIndicator);
+ 	    loanTermsInterestRate.setInterestRateIncreaseIndicator(Convertor.stringToBoolean(loanDetail.interestRateIncreaseIndicator));
  	    loanTermsInterestRate.setAdjustmentRuleTypeFirst("First");
  	    loanTermsInterestRate.setPerChangeRateAdjustmentFrequencyMonthsCount(interestRatePerChangeAdjustmentRule.PerChangeRateAdjustmentFrequencyMonthsCount);
  	    loanTermsInterestRate.setFirstRateChangeMonthsCount(interestRateLifetimeAdjustmentRule.FirstRateChangeMonthsCount);
@@ -458,19 +458,19 @@ public class ClosingDisclosureConverter {
 		loanTermsPI.setPrincipalAndInterestPaymentMaximumAmount(principalAndInterestPaymentLifetimeAdjustmentRule.PrincipalAndInterestPaymentMaximumAmount);
 		loanTermsPI.setPaymentIncreaseIndicator(Convertor.stringToBoolean(loanDetail.paymentIncreaseIndicator));
 		//loanTermsPrepaymentPenalty
-		loanTermsPrepaymentPenalty.setPrepaymentPenaltyIndicator(loanDetail.prepaymentPenaltyIndicator);
+		loanTermsPrepaymentPenalty.setPrepaymentPenaltyIndicator(Convertor.stringToBoolean(loanDetail.prepaymentPenaltyIndicator));
 		loanTermsPrepaymentPenalty.setPrepaymentPenaltyMaximumLifeOfLoanAmount(prepaymentPenaltyLifetimeRule.PrepaymentPenaltyMaximumLifeOfLoanAmount);
 		loanTermsPrepaymentPenalty.setPrepaymentPenaltyExpirationMonthsCount(prepaymentPenaltyLifetimeRule.PrepaymentPenaltyExpirationMonthsCount);	
 
 		//LoanTermsBalloonPayment
-		loanTermsBalloonPayment.setBalloonIndicator(loanDetail.balloonIndicator);
+		loanTermsBalloonPayment.setBalloonIndicator(Convertor.stringToBoolean(loanDetail.balloonIndicator));
 		loanTermsBalloonPayment.setBalloonPaymentAmount(loanDetail.balloonPaymentAmount);
 		
 		//LoanTermsIntialEscrow
 		if(null != escrowItems && null != escrowItem)
 		{
 			EscrowItem escrowsItem = getEscrowItem(escrowItems,"InitialEscrowPaymentAtClosing");
-			loanTermsIntialEscrow.setEscrowIndicator("YES");
+			loanTermsIntialEscrow.setEscrowIndicator(true);
 			loanTermsIntialEscrow.setEscrowItemType(escrowsItem.escrowItemDetail.escrowItemType);
 			loanTermsIntialEscrow.setDisplayLabelText(escrowsItem.escrowItemDetail.displayLabelText);
 			loanTermsIntialEscrow.setFeePaidToType(escrowsItem.escrowItemDetail.feePaidToType);
@@ -492,7 +492,7 @@ public class ClosingDisclosureConverter {
 		 }
 		 else
 		 {
-		 	loanTermsIntialEscrow.setEscrowIndicator("NO");
+		 	loanTermsIntialEscrow.setEscrowIndicator(false);
 		 	if(fees.fees.length > 0 )
 		 		for(int i=0;i<fees.fees.length;i++){
 		 			FeeDetail feedetail = fees.fees[i].feeDetail;
@@ -569,7 +569,9 @@ public class ClosingDisclosureConverter {
 				projectedPayment.setSequenceNumber(payment.sequenceNumber);
 				int startYear = Integer.parseInt(payment.projectedPaymentCalculationPeriodStartNumber);
 				if ((startYear-1)*12 < interestOnlyTermMonthsCount && "true".equalsIgnoreCase(loanDetail.interestOnlyIndicator))
-					projectedPayment.setInterestOnlyStatus("true");
+					projectedPayment.setInterestOnlyStatus(true);
+				else
+					projectedPayment.setInterestOnlyStatus(false);
 			projectedPaymentList.add(projectedPayment);
 		}
 		projectedPaymentsModel.setProjectedPaymentsDetails(projectedPaymentList);
@@ -616,7 +618,7 @@ public class ClosingDisclosureConverter {
 			costsAtClosingCashToClose.setCashToBorrowerAtClosingAmount(closingDetail.CashToBorrowerAtClosingAmount);
 		
 		if("ClosingDisclosure:AlternateForm".equalsIgnoreCase(documentClass.documentTypeOtherDescription)){
-			costsAtClosingCashToClose.setFromType("".equals(closingDetail.CashFromBorrowerAtClosingAmount.trim())?"false":"true");
+			costsAtClosingCashToClose.setFromType("".equals(closingDetail.CashFromBorrowerAtClosingAmount.trim()) ? false : true);
         }
 		
 		CostsAtClosing costsAtClosing = new CostsAtClosing();

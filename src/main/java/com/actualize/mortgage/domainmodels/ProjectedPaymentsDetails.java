@@ -13,7 +13,7 @@ public class ProjectedPaymentsDetails {
     private String projectedPaymentPrincipalAndInterestMaximumPaymentAmount;
     private String projectedPaymentPrincipalAndInterestMinimumPaymentAmount;
     private String sequenceNumber;
-    private String interestOnlyStatus;
+    private boolean interestOnlyStatus;
 	/**
 	 * @return the paymentFrequencyType
 	 */
@@ -166,16 +166,14 @@ public class ProjectedPaymentsDetails {
 	/**
 	 * @return the interestOnlyStatus
 	 */
-	public String getInterestOnlyStatus() {
+	public boolean isInterestOnlyStatus() {
 		return interestOnlyStatus;
 	}
 	/**
 	 * @param interestOnlyStatus the interestOnlyStatus to set
 	 */
-	public void setInterestOnlyStatus(String interestOnlyStatus) {
+	public void setInterestOnlyStatus(boolean interestOnlyStatus) {
 		this.interestOnlyStatus = interestOnlyStatus;
 	}
-    
-    
 
 }

@@ -14,20 +14,20 @@ public class LoanTermsPrepaymentPenalty implements Serializable {
 	 */
 	private static final long serialVersionUID = 4614387411448264728L;
 	
-	private String prepaymentPenaltyIndicator;
+	private boolean prepaymentPenaltyIndicator;
 	private String prepaymentPenaltyMaximumLifeOfLoanAmount;
 	private String prepaymentPenaltyExpirationMonthsCount;
 	
 	/**
 	 * @return the prepaymentPenaltyIndicator
 	 */
-	public String getPrepaymentPenaltyIndicator() {
+	public boolean isPrepaymentPenaltyIndicator() {
 		return prepaymentPenaltyIndicator;
 	}
 	/**
 	 * @param prepaymentPenaltyIndicator the prepaymentPenaltyIndicator to set
 	 */
-	public void setPrepaymentPenaltyIndicator(String prepaymentPenaltyIndicator) {
+	public void setPrepaymentPenaltyIndicator(boolean prepaymentPenaltyIndicator) {
 		this.prepaymentPenaltyIndicator = prepaymentPenaltyIndicator;
 	}
 	/**
@@ -54,6 +54,7 @@ public class LoanTermsPrepaymentPenalty implements Serializable {
 	public void setPrepaymentPenaltyExpirationMonthsCount(String prepaymentPenaltyExpirationMonthsCount) {
 		this.prepaymentPenaltyExpirationMonthsCount = prepaymentPenaltyExpirationMonthsCount;
 	}
+	
 	
 	
 	

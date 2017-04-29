@@ -11,7 +11,7 @@ public class CostsAtClosingCashToClose implements Serializable {
 	private static final long serialVersionUID = -3001522846265870603L;
 	
 	private String amount;
-	private String fromType;
+	private boolean fromType;
 	private String cashFromBorrowerAtClosingAmount;
 	private String cashToBorrowerAtClosingAmount;
 	
@@ -30,13 +30,13 @@ public class CostsAtClosingCashToClose implements Serializable {
 	/**
 	 * @return the fromType
 	 */
-	public String getFromType() {
+	public boolean isFromType() {
 		return fromType;
 	}
 	/**
 	 * @param fromType the fromType to set
 	 */
-	public void setFromType(String fromType) {
+	public void setFromType(boolean fromType) {
 		this.fromType = fromType;
 	}
 	/**
@@ -63,6 +63,8 @@ public class CostsAtClosingCashToClose implements Serializable {
 	public void setCashToBorrowerAtClosingAmount(String cashToBorrowerAtClosingAmount) {
 		this.cashToBorrowerAtClosingAmount = cashToBorrowerAtClosingAmount;
 	}
+	
+	
 	
 	
 	
