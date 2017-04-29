@@ -907,23 +907,23 @@ public class JsonToUcd {
 		
 		insertData(document, element, "AssumedIndicator", ""); //TODO Not Found in UCD-Spec
 		insertData(document, element, "AssumabilityIndicator", "");
-		insertData(document, element, "BalloonIndicator", loanTermsBalloonPayment.getBalloonIndicator());
+		insertData(document, element, "BalloonIndicator",Convertor.booleanToString(loanTermsBalloonPayment.isBalloonIndicator()));
 		insertData(document, element, "BalloonPaymentAmount", loanTermsBalloonPayment.getBalloonPaymentAmount());
-		insertData(document, element, "BuydownTemporarySubsidyFundingIndicator", loanTermsInterestRate.getBuydownTemporarySubsidyFundingIndicator());
+		insertData(document, element, "BuydownTemporarySubsidyFundingIndicator", Convertor.booleanToString(loanTermsInterestRate.isBuydownTemporarySubsidyFundingIndicator()));
 		insertData(document, element, "ConstructionLoanIndicator", "");
 		insertData(document, element, "CreditorServicingOfLoanStatementType", ""); //TODO Not Found in UCD-Spec
 		insertData(document, element, "DemandFeatureIndicator", "");
 		insertData(document, element, "EscrowAbsenceReasonType", ""); 
-		insertData(document, element, "EscrowIndicator", loanTermsIntialEscrow.getEscrowIndicator());
-		//insertData(document, element, "InterestOnlyIndicator", loanTermsPI.getInterestOnlyIndicator());
+		insertData(document, element, "EscrowIndicator", Convertor.booleanToString(loanTermsIntialEscrow.isEscrowIndicator()));
+		//insertData(document, element, "InterestOnlyIndicator",Boolean.toString( loanTermsPI.isInterestOnlyIndicator()));
 		System.out.println("insertLoanDetail");
-		insertData(document, element, "InterestRateIncreaseIndicator", loanTermsInterestRate.getInterestRateIncreaseIndicator());
+		insertData(document, element, "InterestRateIncreaseIndicator",Boolean.toString(loanTermsInterestRate.isInterestRateIncreaseIndicator()));
 		insertData(document, element, "LoanAmountIncreaseIndicator", "");//TODO Need to add this data to the object "LoanTermsLoanAmount"
 		insertData(document, element, "LoanLevelCreditScoreValue", ""); //TODO Not Found in UCD-Spec
 		insertData(document, element, "MIRequiredIndicator",Convertor.booleanToString(jsonDocument.getPageOne().getLoanInformation().isMiRequiredIndicator()));
 		insertData(document, element, "NegativeAmortizationIndicator",Convertor.booleanToString(loanTermsLoanAmount.isNegativeAmoritzationIndicator()));
 		insertData(document, element, "PaymentIncreaseIndicator", ""); //TODO Need to add this to Object 
-		insertData(document, element, "PrepaymentPenaltyIndicator", loanTermsPrepaymentPenalty.getPrepaymentPenaltyIndicator());
+		insertData(document, element, "PrepaymentPenaltyIndicator", Convertor.booleanToString(loanTermsPrepaymentPenalty.isPrepaymentPenaltyIndicator()));
 		insertData(document, element, "SeasonalPaymentFeatureIndicator", "");
 		insertData(document, element, "StepPaymentsFeatureDescription", "");//TODO Not Found in UCD-Spec
 		insertData(document, element, "TotalSubordinateFinancingAmount", "");
