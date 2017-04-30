@@ -52,7 +52,7 @@ public class FeeDetail extends MISMODataAccessObject {
 		integratedDisclosureSectionType = getValueAddNS("IntegratedDisclosureSectionType");
 		optionalCostIndicator = getValueAddNS("OptionalCostIndicator");
 		regulationZPointsAndFeesIndicator = getValueAddNS("RegulationZPointsAndFeesIndicator");
-		paymentIncludedInAPRIndicator = getValueAddNS("EXTENSION/MISMO/RegulationZPointsAndFeesIndicator");
+		paymentIncludedInAPRIndicator = getValueAddNS("EXTENSION/MISMO/PaymentIncludedInAPRIndicator");
 	}
 	
 	public String displayName() {

@@ -6,12 +6,17 @@
 package com.actualize.mortgage.cdpagemodels;
 
 import java.io.Serializable;
+import java.util.List;
 
+import com.actualize.mortgage.domainmodels.CashToClose;
+import com.actualize.mortgage.domainmodels.ClosingCostDetailsLoanCosts;
+import com.actualize.mortgage.domainmodels.ClosingCostDetailsOtherCosts;
 import com.actualize.mortgage.domainmodels.ClosingInformation;
 import com.actualize.mortgage.domainmodels.CostsAtClosing;
 import com.actualize.mortgage.domainmodels.LoanInformation;
 import com.actualize.mortgage.domainmodels.LoanTerms;
 import com.actualize.mortgage.domainmodels.ProjectedPaymentsModel;
+import com.actualize.mortgage.domainmodels.SummariesofTransactions;
 import com.actualize.mortgage.domainmodels.TransactionInformation;
 
 /**
@@ -31,10 +36,11 @@ public class ClosingDisclosure implements Serializable {
     private LoanTerms loanTerms;
     private ProjectedPaymentsModel projectedPayments;
     private CostsAtClosing costsAtClosing;
-    private ClosingDisclosurePageTwo closingDisclosurePageTwo;
-    private ClosingDisclosurePageThree closingDisclosurePageThree;
-    private ClosingDisclosurePageFour closingDisclosurePageFour;
-    private ClosingDisclosurePageFive closingDisclosurePageFive;
+    private ClosingCostDetailsLoanCosts closingCostDetailsLoanCosts;
+    private ClosingCostDetailsOtherCosts closingCostDetailsOtherCosts;
+    private List<CashToClose> cashToCloses;
+    private SummariesofTransactions summariesofTransactions;
+    
 	/**
 	 * @return the closingDisclosureDocType
 	 */
@@ -120,53 +126,56 @@ public class ClosingDisclosure implements Serializable {
 		this.costsAtClosing = costsAtClosing;
 	}
 	/**
-	 * @return the closingDisclosurePageTwo
+	 * @return the closingCostDetailsLoanCosts
 	 */
-	public ClosingDisclosurePageTwo getClosingDisclosurePageTwo() {
-		return closingDisclosurePageTwo;
+	public ClosingCostDetailsLoanCosts getClosingCostDetailsLoanCosts() {
+		return closingCostDetailsLoanCosts;
 	}
 	/**
-	 * @param closingDisclosurePageTwo the closingDisclosurePageTwo to set
+	 * @param closingCostDetailsLoanCosts the closingCostDetailsLoanCosts to set
 	 */
-	public void setClosingDisclosurePageTwo(ClosingDisclosurePageTwo closingDisclosurePageTwo) {
-		this.closingDisclosurePageTwo = closingDisclosurePageTwo;
+	public void setClosingCostDetailsLoanCosts(ClosingCostDetailsLoanCosts closingCostDetailsLoanCosts) {
+		this.closingCostDetailsLoanCosts = closingCostDetailsLoanCosts;
 	}
 	/**
-	 * @return the closingDisclosurePageThree
+	 * @return the closingCostDetailsOtherCosts
 	 */
-	public ClosingDisclosurePageThree getClosingDisclosurePageThree() {
-		return closingDisclosurePageThree;
+	public ClosingCostDetailsOtherCosts getClosingCostDetailsOtherCosts() {
+		return closingCostDetailsOtherCosts;
 	}
 	/**
-	 * @param closingDisclosurePageThree the closingDisclosurePageThree to set
+	 * @param closingCostDetailsOtherCosts the closingCostDetailsOtherCosts to set
 	 */
-	public void setClosingDisclosurePageThree(ClosingDisclosurePageThree closingDisclosurePageThree) {
-		this.closingDisclosurePageThree = closingDisclosurePageThree;
+	public void setClosingCostDetailsOtherCosts(ClosingCostDetailsOtherCosts closingCostDetailsOtherCosts) {
+		this.closingCostDetailsOtherCosts = closingCostDetailsOtherCosts;
 	}
 	/**
-	 * @return the closingDisclosurePageFour
+	 * @return the cashToCloses
 	 */
-	public ClosingDisclosurePageFour getClosingDisclosurePageFour() {
-		return closingDisclosurePageFour;
+	public List<CashToClose> getCashToCloses() {
+		return cashToCloses;
 	}
 	/**
-	 * @param closingDisclosurePageFour the closingDisclosurePageFour to set
+	 * @param cashToCloses the cashToCloses to set
 	 */
-	public void setClosingDisclosurePageFour(ClosingDisclosurePageFour closingDisclosurePageFour) {
-		this.closingDisclosurePageFour = closingDisclosurePageFour;
+	public void setCashToCloses(List<CashToClose> cashToCloses) {
+		this.cashToCloses = cashToCloses;
 	}
 	/**
-	 * @return the closingDisclosurePageFive
+	 * @return the summariesofTransactions
 	 */
-	public ClosingDisclosurePageFive getClosingDisclosurePageFive() {
-		return closingDisclosurePageFive;
+	public SummariesofTransactions getSummariesofTransactions() {
+		return summariesofTransactions;
 	}
 	/**
-	 * @param closingDisclosurePageFive the closingDisclosurePageFive to set
+	 * @param summariesofTransactions the summariesofTransactions to set
 	 */
-	public void setClosingDisclosurePageFive(ClosingDisclosurePageFive closingDisclosurePageFive) {
-		this.closingDisclosurePageFive = closingDisclosurePageFive;
+	public void setSummariesofTransactions(SummariesofTransactions summariesofTransactions) {
+		this.summariesofTransactions = summariesofTransactions;
 	}
-
+  
+    
+	
+    
     
 }

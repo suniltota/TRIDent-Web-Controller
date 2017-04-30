@@ -1,6 +1,7 @@
 package com.actualize.mortgage.domainmodels;
 
 import java.io.Serializable;
+import java.util.List;
 /**
  * Defines ClosingCostProperties for UI Response
  * @author sboragala
@@ -15,7 +16,7 @@ public class ClosingCostProperties implements Serializable {
 	
 	private String displayLabel;
 	private String gseDisplayLabel;
-	private String feeActualTotalAmount;
+	private String feePaidTo;
 	private String feePaidToType;
 	private String feePaidToTypeOtherDescription;
 	private String feePercentBasisType;
@@ -23,14 +24,10 @@ public class ClosingCostProperties implements Serializable {
 	private String feeType;
 	private String feeTypeOtherDescription;
 	private String integratedDisclosureSectionType;
-	private String optionalCostIndicator;
-	private String regulationZPointsAndFeesIndicator;
-	private String bpAtClosing;
-	private String bpB4Closing;
-	private String spAtClosing;
-	private String spB4Closing;
-	private String paidByOthers;
-	private String lenderStatus;
+	private boolean optionalCostIndicator;
+	private boolean regulationZPointsAndFeesIndicator;
+	private boolean paymentIncludedInAPRIndicator;
+	private List<FeePaymentsModel> feePayments;
 	
 	/**
 	 * @return the displayLabel
@@ -57,16 +54,16 @@ public class ClosingCostProperties implements Serializable {
 		this.gseDisplayLabel = gseDisplayLabel;
 	}
 	/**
-	 * @return the feeActualTotalAmount
+	 * @return the feePaidTo
 	 */
-	public String getFeeActualTotalAmount() {
-		return feeActualTotalAmount;
+	public String getFeePaidTo() {
+		return feePaidTo;
 	}
 	/**
-	 * @param feeActualTotalAmount the feeActualTotalAmount to set
+	 * @param feePaidTo the feePaidTo to set
 	 */
-	public void setFeeActualTotalAmount(String feeActualTotalAmount) {
-		this.feeActualTotalAmount = feeActualTotalAmount;
+	public void setFeePaidTo(String feePaidTo) {
+		this.feePaidTo = feePaidTo;
 	}
 	/**
 	 * @return the feePaidToType
@@ -155,99 +152,52 @@ public class ClosingCostProperties implements Serializable {
 	/**
 	 * @return the optionalCostIndicator
 	 */
-	public String getOptionalCostIndicator() {
+	public boolean isOptionalCostIndicator() {
 		return optionalCostIndicator;
 	}
 	/**
 	 * @param optionalCostIndicator the optionalCostIndicator to set
 	 */
-	public void setOptionalCostIndicator(String optionalCostIndicator) {
+	public void setOptionalCostIndicator(boolean optionalCostIndicator) {
 		this.optionalCostIndicator = optionalCostIndicator;
 	}
 	/**
 	 * @return the regulationZPointsAndFeesIndicator
 	 */
-	public String getRegulationZPointsAndFeesIndicator() {
+	public boolean isRegulationZPointsAndFeesIndicator() {
 		return regulationZPointsAndFeesIndicator;
 	}
 	/**
 	 * @param regulationZPointsAndFeesIndicator the regulationZPointsAndFeesIndicator to set
 	 */
-	public void setRegulationZPointsAndFeesIndicator(String regulationZPointsAndFeesIndicator) {
+	public void setRegulationZPointsAndFeesIndicator(boolean regulationZPointsAndFeesIndicator) {
 		this.regulationZPointsAndFeesIndicator = regulationZPointsAndFeesIndicator;
 	}
 	/**
-	 * @return the bpAtClosing
+	 * @return the paymentIncludedInAPRIndicator
 	 */
-	public String getBpAtClosing() {
-		return bpAtClosing;
+	public boolean isPaymentIncludedInAPRIndicator() {
+		return paymentIncludedInAPRIndicator;
 	}
 	/**
-	 * @param bpAtClosing the bpAtClosing to set
+	 * @param paymentIncludedInAPRIndicator the paymentIncludedInAPRIndicator to set
 	 */
-	public void setBpAtClosing(String bpAtClosing) {
-		this.bpAtClosing = bpAtClosing;
+	public void setPaymentIncludedInAPRIndicator(boolean paymentIncludedInAPRIndicator) {
+		this.paymentIncludedInAPRIndicator = paymentIncludedInAPRIndicator;
 	}
 	/**
-	 * @return the bpB4Closing
+	 * @return the feePayments
 	 */
-	public String getBpB4Closing() {
-		return bpB4Closing;
+	public List<FeePaymentsModel> getFeePayments() {
+		return feePayments;
 	}
 	/**
-	 * @param bpB4Closing the bpB4Closing to set
+	 * @param feePayments the feePayments to set
 	 */
-	public void setBpB4Closing(String bpB4Closing) {
-		this.bpB4Closing = bpB4Closing;
+	public void setFeePayments(List<FeePaymentsModel> feePayments) {
+		this.feePayments = feePayments;
 	}
-	/**
-	 * @return the spAtClosing
-	 */
-	public String getSpAtClosing() {
-		return spAtClosing;
-	}
-	/**
-	 * @param spAtClosing the spAtClosing to set
-	 */
-	public void setSpAtClosing(String spAtClosing) {
-		this.spAtClosing = spAtClosing;
-	}
-	/**
-	 * @return the spB4Closing
-	 */
-	public String getSpB4Closing() {
-		return spB4Closing;
-	}
-	/**
-	 * @param spB4Closing the spB4Closing to set
-	 */
-	public void setSpB4Closing(String spB4Closing) {
-		this.spB4Closing = spB4Closing;
-	}
-	/**
-	 * @return the paidByOthers
-	 */
-	public String getPaidByOthers() {
-		return paidByOthers;
-	}
-	/**
-	 * @param paidByOthers the paidByOthers to set
-	 */
-	public void setPaidByOthers(String paidByOthers) {
-		this.paidByOthers = paidByOthers;
-	}
-	/**
-	 * @return the lenderStatus
-	 */
-	public String getLenderStatus() {
-		return lenderStatus;
-	}
-	/**
-	 * @param lenderStatus the lenderStatus to set
-	 */
-	public void setLenderStatus(String lenderStatus) {
-		this.lenderStatus = lenderStatus;
-	}
+	
 	
 	
 }

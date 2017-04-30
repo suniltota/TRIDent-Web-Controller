@@ -1,51 +1,5 @@
 package com.actualize.mortgage.utils;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-
-import org.mismo.residential._2009.schemas.CASHTOCLOSEITEM;
-import org.mismo.residential._2009.schemas.CLOSINGADJUSTMENTITEM;
-import org.mismo.residential._2009.schemas.CLOSINGADJUSTMENTITEMDETAIL;
-import org.mismo.residential._2009.schemas.CLOSINGCOSTFUND;
-import org.mismo.residential._2009.schemas.COLLATERAL;
-import org.mismo.residential._2009.schemas.DEAL;
-import org.mismo.residential._2009.schemas.DOCUMENT;
-import org.mismo.residential._2009.schemas.ESCROWITEM;
-import org.mismo.residential._2009.schemas.ESTIMATEDPROPERTYCOSTCOMPONENT;
-import org.mismo.residential._2009.schemas.FEE;
-import org.mismo.residential._2009.schemas.INTEGRATEDDISCLOSURESECTIONSUMMARY;
-import org.mismo.residential._2009.schemas.INTEGRATEDDISCLOSURESECTIONSUMMARYDETAIL;
-import org.mismo.residential._2009.schemas.INTEGRATEDDISCLOSURESUBSECTIONPAYMENT;
-import org.mismo.residential._2009.schemas.INTERESTRATEPERCHANGEADJUSTMENTRULE;
-import org.mismo.residential._2009.schemas.LIABILITY;
-import org.mismo.residential._2009.schemas.LIABILITYDETAIL;
-import org.mismo.residential._2009.schemas.LOAN;
-import org.mismo.residential._2009.schemas.LOANIDENTIFIER;
-import org.mismo.residential._2009.schemas.PAIDBY;
-import org.mismo.residential._2009.schemas.PRORATIONITEM;
-import org.mismo.residential._2009.schemas.SALESCONTRACTDETAIL;
-
-import com.actualize.mortgage.domainmodels.AdjustmentsModel;
-import com.actualize.mortgage.domainmodels.CashToCloseModel;
-import com.actualize.mortgage.domainmodels.ClosingCostFundModel;
-import com.actualize.mortgage.domainmodels.FeeModel;
-import com.actualize.mortgage.domainmodels.ID_SubsectionModel;
-import com.actualize.mortgage.domainmodels.LiabilitiesModel;
-import com.actualize.mortgage.domainmodels.LoanInformation;
-import com.actualize.mortgage.domainmodels.LoanInformationLoanIdentifier;
-import com.actualize.mortgage.domainmodels.LoanTermsBalloonPayment;
-import com.actualize.mortgage.domainmodels.LoanTermsETIA;
-import com.actualize.mortgage.domainmodels.LoanTermsEscrowAccount;
-import com.actualize.mortgage.domainmodels.LoanTermsInterestRate;
-import com.actualize.mortgage.domainmodels.LoanTermsIntialEscrow;
-import com.actualize.mortgage.domainmodels.LoanTermsLoanAmount;
-import com.actualize.mortgage.domainmodels.LoanTermsPI;
-import com.actualize.mortgage.domainmodels.LoanTermsPrepaymentPenalty;
-import com.actualize.mortgage.domainmodels.ProrationsModel;
-import com.actualize.mortgage.domainmodels.SalesContractDetailModel;
-
 public class PopulateData {
 /*	
 	public static LoanInformation populateLoanInformation(DOCUMENT document)

@@ -31,7 +31,7 @@ public class LoanInformation implements Serializable {
 	private boolean miRequiredIndicator;
 	private String miCertificateIdentifier;
 	private List<AutomatedUnderwritingsModel> automatedUnderwritings;
-	private String loanManualUnderwritingIndicator;
+	private boolean loanManualUnderwritingIndicator;
 	private boolean interestRateIncreaseIndicator;
 	private boolean negativeAmortizationIndicator;
 	private String interestOnlyTermMonthsCount;
@@ -259,18 +259,6 @@ public class LoanInformation implements Serializable {
 		this.automatedUnderwritings = automatedUnderwritings;
 	}
 	/**
-	 * @return the loanManualUnderwritingIndicator
-	 */
-	public String getLoanManualUnderwritingIndicator() {
-		return loanManualUnderwritingIndicator;
-	}
-	/**
-	 * @param loanManualUnderwritingIndicator the loanManualUnderwritingIndicator to set
-	 */
-	public void setLoanManualUnderwritingIndicator(String loanManualUnderwritingIndicator) {
-		this.loanManualUnderwritingIndicator = loanManualUnderwritingIndicator;
-	}
-	/**
 	 * @return the constructionLoan
 	 */
 	public boolean isConstructionLoan() {
@@ -425,6 +413,18 @@ public class LoanInformation implements Serializable {
 	 */
 	public void setOptionalPaymentsFeatureIndicator(boolean optionalPaymentsFeatureIndicator) {
 		this.optionalPaymentsFeatureIndicator = optionalPaymentsFeatureIndicator;
+	}
+	/**
+	 * @return the loanManualUnderwritingIndicator
+	 */
+	public boolean isLoanManualUnderwritingIndicator() {
+		return loanManualUnderwritingIndicator;
+	}
+	/**
+	 * @param loanManualUnderwritingIndicator the loanManualUnderwritingIndicator to set
+	 */
+	public void setLoanManualUnderwritingIndicator(boolean loanManualUnderwritingIndicator) {
+		this.loanManualUnderwritingIndicator = loanManualUnderwritingIndicator;
 	}
 	
 

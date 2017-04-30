@@ -20,6 +20,7 @@ public class PrepaidItemDetail extends MISMODataAccessObject {
 	public final String prepaidItemType;
 	public final String prepaidItemTypeOtherDescription;
 	public final String regulationZPointsAndFeesIndicator;
+	public final String paymentIncludedInAPRIndicator;
 	
 	public PrepaidItemDetail(Element element) {
 		super(element);
@@ -52,6 +53,7 @@ public class PrepaidItemDetail extends MISMODataAccessObject {
 
 		prepaidItemTypeOtherDescription = getValueAddNS("PrepaidItemTypeOtherDescription");
 		regulationZPointsAndFeesIndicator = getValueAddNS("RegulationZPointsAndFeesIndicator");
+		paymentIncludedInAPRIndicator = getValueAddNS("EXTENSION/MISMO/PaymentIncludedInAPRIndicator");
 	}
 	
 	public String displayName() {

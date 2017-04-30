@@ -3,19 +3,22 @@ package com.actualize.mortgage.ledatamodels;
 import org.w3c.dom.Element;
 
 import com.actualize.mortgage.domainmodels.MISMODataAccessObject;
-
+/**
+ * Represents Fee Payments in MISMO XML
+ * @author sboragala
+ *
+ */
 public class FeePayment extends MISMODataAccessObject {
 
-	public final String FeeActualPaymentAmount;
-	public final String FeePaymentPaidByType;
-	public final String FeePaymentPaidOutsideOfClosingIndicator;
+	public final String feeActualPaymentAmount;
+	public final String feePaymentPaidByType;
+	public final String feePaymentPaidOutsideOfClosingIndicator;
 		
 	public FeePayment(Element element) {
 		super(element);
-		// TODO 
-		FeeActualPaymentAmount = getValueAddNS("FeeActualPaymentAmount"); 
-		FeePaymentPaidByType = getValueAddNS("FeePaymentPaidByType"); 
-		FeePaymentPaidOutsideOfClosingIndicator = getValueAddNS("FeePaymentPaidOutsideOfClosingIndicator"); 
+		feeActualPaymentAmount = getValueAddNS("FeeActualPaymentAmount"); 
+		feePaymentPaidByType = getValueAddNS("FeePaymentPaidByType"); 
+		feePaymentPaidOutsideOfClosingIndicator = getValueAddNS("FeePaymentPaidOutsideOfClosingIndicator"); 
 	}
 
 }
