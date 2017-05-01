@@ -2,7 +2,7 @@ package com.actualize.mortgage.domainmodels;
 
 import java.io.Serializable;
 
-public class LoanTermsETIA implements Serializable {
+public class ETIA implements Serializable {
 
 	private static final long serialVersionUID = -3720790984820770245L;
 	

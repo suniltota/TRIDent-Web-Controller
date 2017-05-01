@@ -19,7 +19,7 @@ import com.actualize.mortgage.domainmodels.LoanInformation;
 import com.actualize.mortgage.domainmodels.LoanInformationLoanIdentifier;
 import com.actualize.mortgage.domainmodels.LoanTerms;
 import com.actualize.mortgage.domainmodels.LoanTermsBalloonPayment;
-import com.actualize.mortgage.domainmodels.LoanTermsETIA;
+import com.actualize.mortgage.domainmodels.ETIA;
 import com.actualize.mortgage.domainmodels.LoanTermsEscrowAccount;
 import com.actualize.mortgage.domainmodels.LoanTermsInterestRate;
 import com.actualize.mortgage.domainmodels.LoanTermsIntialEscrow;
@@ -493,11 +493,12 @@ public class JsonToUcd {
 	private void insertIntegratedDisclosureDetail(Document document, Element element, ClosingDisclosureDocument jsonDocument) {
 		ClosingInformation closingInformation = jsonDocument.getPageOne().getClosingInformation();
 		LoanInformation loanInformation = jsonDocument.getPageOne().getLoanInformation();
-		LoanTermsEscrowAccount  loanTermsEscrowAccount = jsonDocument.getPageOne().getLoanTerms().getLoanTermsEscrowAccount();
+		//LoanTermsEscrowAccount  loanTermsEscrowAccount = jsonDocument.getPageOne().getLoanTerms().getLoanTermsEscrowAccount();
+		System.out.println("TO DO insertIntegratedDisclosureDetail");
 		insertData(document, element, "FirstYearTotalEscrowPaymentAmount", "");
 		insertData(document, element, "FirstYearTotalEscrowPaymentDescription", "");
-		insertData(document, element, "FirstYearTotalNonEscrowPaymentAmount", loanTermsEscrowAccount.getFirstYearTotalNonEscrowPaymentAmount());
-		insertData(document, element, "FirstYearTotalNonEscrowPaymentDescription", loanTermsEscrowAccount.getFirstYearTotalNonEscrowPaymentDescription());
+		//insertData(document, element, "FirstYearTotalNonEscrowPaymentAmount", loanTermsEscrowAccount.getFirstYearTotalNonEscrowPaymentAmount());
+		//insertData(document, element, "FirstYearTotalNonEscrowPaymentDescription", loanTermsEscrowAccount.getFirstYearTotalNonEscrowPaymentDescription());
 		insertData(document, element, "IntegratedDisclosureHomeEquityLoanIndicator",Convertor.booleanToString(loanInformation.isIntegratedDisclosureHomeEquityLoanIndicator()));
 		insertData(document, element, "IntegratedDisclosureLoanProductDescription", loanInformation.getIntegratedDisclosureLoanProductDescription());
 		insertData(document, element, "IntegratedDisclosureIssuedDate", closingInformation.getDateIssued());
@@ -903,7 +904,7 @@ public class JsonToUcd {
 		LoanTermsPI loanTermsPI = loanterms.getLoanTermsPI();
 		LoanTermsPrepaymentPenalty loanTermsPrepaymentPenalty = loanterms.getLoanTermsPrepaymentPenalty();
 		LoanTermsBalloonPayment loanTermsBalloonPayment = loanterms.getLoanTermsBalloonPayment();
-		LoanTermsIntialEscrow loanTermsIntialEscrow = loanterms.getLoanTermsIntialEscrow();
+		LoanTermsIntialEscrow loanTermsIntialEscrow = new LoanTermsIntialEscrow();
 		
 		insertData(document, element, "AssumedIndicator", ""); //TODO Not Found in UCD-Spec
 		insertData(document, element, "AssumabilityIndicator", "");
@@ -1451,8 +1452,8 @@ public class JsonToUcd {
 	private void insertEstimatedPropertyCostDetail(Document document, Element element,
 			ClosingDisclosureDocument jsonDocument) {
 		// TODO Auto-generated method stub
-		
-		insertData(document, element, "ProjectedPaymentEstimatedTaxesInsuranceAssessmentTotalAmount", jsonDocument.getPageOne().getProjectedPayments().getProjectedPaymentsETIA().getAmount());
+		System.out.println("insertEstimatedPropertyCostDetail");
+	//	insertData(document, element, "ProjectedPaymentEstimatedTaxesInsuranceAssessmentTotalAmount", jsonDocument.getPageOne().getProjectedPayments().getProjectedPaymentsETIA().getAmount());
 	}
 	/**
      * Inserts Estimated Property Cost Components from JSON Object
@@ -1464,9 +1465,10 @@ public class JsonToUcd {
 			ClosingDisclosureDocument jsonDocument) {
 		// TODO Auto-generated method stub
 		//element.setAttribute("gse:DisplayLabelText", estimatedPropertyCostComponents.getgseDispalyLabelText()); //TODO Data Not found for this field
-		List<LoanTermsETIA> loanTermsETIA = jsonDocument.getPageOne().getLoanTerms().getLoanTermsETIA();
-		for (LoanTermsETIA LoanTermsETIA : loanTermsETIA)
-			insertEstimatedPropertyCostComponent(document, insertLevels(document, element, "ESTIMATED_PROPERTY_COST_COMPONENT"), LoanTermsETIA);
+		System.out.println("insertEstimatedPropertyCostComponents");
+		/*List<ETIA> eTIA = jsonDocument.getPageOne().getLoanTerms().getLoanTermsETIA();
+		for (ETIA ETIA : eTIA)
+			insertEstimatedPropertyCostComponent(document, insertLevels(document, element, "ESTIMATED_PROPERTY_COST_COMPONENT"), ETIA);*/
 	}
 	/**
      * Inserts Estimated Property Cost Component from JSON Object
@@ -1475,14 +1477,14 @@ public class JsonToUcd {
      * @param jsonDocument Input JSON Object
      */
 	private void insertEstimatedPropertyCostComponent(Document document, Element element,
-			LoanTermsETIA loanTermsETIA) {
+			ETIA eTIA) {
 		// TODO Auto-generated method stub
 		
-		insertData(document, element, "ProjectedPaymentEscrowedType", loanTermsETIA.getProjectedPaymentEscrowedType());
+		insertData(document, element, "ProjectedPaymentEscrowedType", eTIA.getProjectedPaymentEscrowedType());
 		insertData(document, element, 
-				"ProjectedPaymentEstimatedTaxesInsuranceAssessmentComponentType", loanTermsETIA.getProjectedPaymentEstimatedTaxesInsuranceAssessmentComponentType()); //TODO Need to Add Object Data
+				"ProjectedPaymentEstimatedTaxesInsuranceAssessmentComponentType", eTIA.getProjectedPaymentEstimatedTaxesInsuranceAssessmentComponentType()); //TODO Need to Add Object Data
 		insertData(document, element,
-				"ProjectedPaymentEstimatedTaxesInsuranceAssessmentComponentTypeOtherDescription", loanTermsETIA.getProjectedPaymentEstimatedTaxesInsuranceAssessmentComponentTypeOtherDescription());
+				"ProjectedPaymentEstimatedTaxesInsuranceAssessmentComponentTypeOtherDescription", eTIA.getProjectedPaymentEstimatedTaxesInsuranceAssessmentComponentTypeOtherDescription());
 	
 	}
 	/**

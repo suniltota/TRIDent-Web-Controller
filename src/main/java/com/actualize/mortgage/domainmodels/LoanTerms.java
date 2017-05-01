@@ -22,12 +22,7 @@ public class LoanTerms implements Serializable {
 	private LoanTermsPrepaymentPenalty loanTermsPrepaymentPenalty;
 	@JsonProperty("balloonPayment")
 	private LoanTermsBalloonPayment loanTermsBalloonPayment;
-	@JsonProperty("intialEscrow")
-	private LoanTermsIntialEscrow loanTermsIntialEscrow;
-	@JsonProperty("ETIA")
-	private List<LoanTermsETIA> loanTermsETIA;
-	@JsonProperty("escrowAccount")
-	private LoanTermsEscrowAccount loanTermsEscrowAccount;
+	
 	/**
 	 * @return the loanTermsLoanAmount
 	 */
@@ -87,24 +82,6 @@ public class LoanTerms implements Serializable {
 	 */
 	public void setLoanTermsBalloonPayment(LoanTermsBalloonPayment loanTermsBalloonPayment) {
 		this.loanTermsBalloonPayment = loanTermsBalloonPayment;
-	}
-	public LoanTermsIntialEscrow getLoanTermsIntialEscrow() {
-		return loanTermsIntialEscrow;
-	}
-	public void setLoanTermsIntialEscrow(LoanTermsIntialEscrow loanTermsIntialEscrow) {
-		this.loanTermsIntialEscrow = loanTermsIntialEscrow;
-	}
-	public LoanTermsEscrowAccount getLoanTermsEscrowAccount() {
-		return loanTermsEscrowAccount;
-	}
-	public void setLoanTermsEscrowAccount(LoanTermsEscrowAccount loanTermsEscrowAccount) {
-		this.loanTermsEscrowAccount = loanTermsEscrowAccount;
-	}
-	public List<LoanTermsETIA> getLoanTermsETIA() {
-		return loanTermsETIA;
-	}
-	public void setLoanTermsETIA(List<LoanTermsETIA> loanTermsETIA) {
-		this.loanTermsETIA = loanTermsETIA;
 	}
 	
 }

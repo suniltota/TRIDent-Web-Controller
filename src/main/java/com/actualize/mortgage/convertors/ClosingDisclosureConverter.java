@@ -35,7 +35,8 @@ import com.actualize.mortgage.domainmodels.LoanInformation;
 import com.actualize.mortgage.domainmodels.LoanInformationLoanIdentifier;
 import com.actualize.mortgage.domainmodels.LoanTerms;
 import com.actualize.mortgage.domainmodels.LoanTermsBalloonPayment;
-import com.actualize.mortgage.domainmodels.LoanTermsETIA;
+import com.actualize.mortgage.domainmodels.ETIA;
+import com.actualize.mortgage.domainmodels.ETIASection;
 import com.actualize.mortgage.domainmodels.LoanTermsEscrowAccount;
 import com.actualize.mortgage.domainmodels.LoanTermsInterestRate;
 import com.actualize.mortgage.domainmodels.LoanTermsIntialEscrow;
@@ -133,6 +134,7 @@ public class ClosingDisclosureConverter {
 	        closingDisclosure.setLoanInformation(createLoanInformation(deal));
 	        closingDisclosure.setLoanTerms(createLoanTerms(mismodoc));
 	        closingDisclosure.setProjectedPayments(createProjectedPayments(deal));
+	        closingDisclosure.setEtiaSection(createETIASection(deal));
 	        closingDisclosure.setCostsAtClosing(createCostsAtClosing(deal));
         
 	        closingDisclosure.setClosingCostDetailsLoanCosts(ClosingCostDetailsLoanCosts(deal));
@@ -359,8 +361,6 @@ public class ClosingDisclosureConverter {
     	LoanTermsPI loanTermsPI = new LoanTermsPI();
     	LoanTermsPrepaymentPenalty loanTermsPrepaymentPenalty = new LoanTermsPrepaymentPenalty();
     	LoanTermsBalloonPayment loanTermsBalloonPayment = new LoanTermsBalloonPayment();
-    	LoanTermsIntialEscrow loanTermsIntialEscrow = new LoanTermsIntialEscrow();
-		LoanTermsEscrowAccount  loanTermsEscrowAccount = new LoanTermsEscrowAccount();
 
     	String interest ="";
     	String principalAmount = "";
@@ -383,11 +383,10 @@ public class ClosingDisclosureConverter {
         PrincipalAndInterestPaymentLifetimeAdjustmentRule principalAndInterestPaymentLifetimeAdjustmentRule = new PrincipalAndInterestPaymentLifetimeAdjustmentRule((Element)deal.getElementAddNS(loan + "/ADJUSTMENT/PRINCIPAL_AND_INTEREST_PAYMENT_ADJUSTMENT/PRINCIPAL_AND_INTEREST_PAYMENT_LIFETIME_ADJUSTMENT_RULE"));
         InterestRatePerChangeAdjustmentRules interestRatePerChangeAdjustmentRules = new InterestRatePerChangeAdjustmentRules((Element)deal.getElementAddNS(loan + "/ADJUSTMENT/INTEREST_RATE_ADJUSTMENT/INTEREST_RATE_PER_CHANGE_ADJUSTMENT_RULES"));
         PrepaymentPenaltyLifetimeRule prepaymentPenaltyLifetimeRule = new PrepaymentPenaltyLifetimeRule((Element)deal.getElementAddNS(loan + "/PREPAYMENT_PENALTY/PREPAYMENT_PENALTY_LIFETIME_RULE"));
-        EscrowItems escrowItems = new EscrowItems((Element)deal.getElementAddNS(loan + "/ESCROW/ESCROW_ITEMS"));
+       /* EscrowItems escrowItems = new EscrowItems((Element)deal.getElementAddNS(loan + "/ESCROW/ESCROW_ITEMS"));
         EscrowItem escrowItem = new EscrowItem((Element)deal.getElementAddNS(loan + "/ESCROW/ESCROW_ITEMS/ESCROW_ITEM"));
         Fees fees = new Fees((Element)deal.getElementAddNS(loan + "/FEE_INFORMATION/FEES"));
-        EstimatedPropertyCostComponents estimatedPropertyCostComponents = new EstimatedPropertyCostComponents((Element)deal.getElementAddNS(loan + "/DOCUMENT_SPECIFIC_DATA_SETS/DOCUMENT_SPECIFIC_DATA_SET/INTEGRATED_DISCLOSURE/ESTIMATED_PROPERTY_COST/ESTIMATED_PROPERTY_COST_COMPONENTS"));
-        IntegratedDisclosureDetail idDetail = new IntegratedDisclosureDetail((Element)deal.getElementAddNS(loan + "/DOCUMENT_SPECIFIC_DATA_SETS/DOCUMENT_SPECIFIC_DATA_SET/INTEGRATED_DISCLOSURE/INTEGRATED_DISCLOSURE_DETAIL"));
+        IntegratedDisclosureDetail idDetail = new IntegratedDisclosureDetail((Element)deal.getElementAddNS(loan + "/DOCUMENT_SPECIFIC_DATA_SETS/DOCUMENT_SPECIFIC_DATA_SET/INTEGRATED_DISCLOSURE/INTEGRATED_DISCLOSURE_DETAIL"));*/
         AboutVersions aboutVersions = document.aboutVersions;
         List<AboutVersion> aboutVersionList = new LinkedList<>();
       
@@ -464,7 +463,7 @@ public class ClosingDisclosureConverter {
 		loanTermsBalloonPayment.setBalloonPaymentAmount(loanDetail.balloonPaymentAmount);
 		
 		//LoanTermsIntialEscrow
-		if(null != escrowItems && null != escrowItem)
+		/*if(null != escrowItems && null != escrowItem)
 		{
 			EscrowItem escrowsItem = getEscrowItem(escrowItems,"InitialEscrowPaymentAtClosing");
 			loanTermsIntialEscrow.setEscrowIndicator(true);
@@ -502,32 +501,43 @@ public class ClosingDisclosureConverter {
 		loanTermsIntialEscrow.setFeeType("EscrowWaiverFee");
 		loanTermsIntialEscrow.setIntegratedDisclosureSectionType("InitialEscrowPaymentAtClosing");
 		
-		//loanTermsETIA
-		List<LoanTermsETIA>  loanTermsETIAs = new LinkedList<>();
-
-		for(int i=0; i<estimatedPropertyCostComponents.estimatedPropertyCostComponent.length; i++){
-			LoanTermsETIA  loanTermsETIA = new LoanTermsETIA();
-			loanTermsETIA.setProjectedPaymentEscrowedType(estimatedPropertyCostComponents.estimatedPropertyCostComponent[i].projectedPaymentEscrowedType);
-			loanTermsETIA.setProjectedPaymentEstimatedTaxesInsuranceAssessmentComponentType(estimatedPropertyCostComponents.estimatedPropertyCostComponent[i].projectedPaymentEstimatedTaxesInsuranceAssessmentComponentType);
-			loanTermsETIA.setProjectedPaymentEstimatedTaxesInsuranceAssessmentComponentTypeOtherDescription(estimatedPropertyCostComponents.estimatedPropertyCostComponent[i].projectedPaymentEstimatedTaxesInsuranceAssessmentComponentTypeOtherDescription);
-			loanTermsETIAs.add(loanTermsETIA);
-		}
+		
 		
 		loanTermsEscrowAccount.setFirstYearTotalNonEscrowPaymentDescription(idDetail.FirstYearTotalNonEscrowPaymentAmount);
 		loanTermsEscrowAccount.setFirstYearTotalNonEscrowPaymentAmount(idDetail.FirstYearTotalNonEscrowPaymentDescription);
-	
+	*/
         loanTerms.setLoanTermsLoanAmount(loanTermsLoanAmount);
  	    loanTerms.setLoanTermsInterestRate(loanTermsInterestRate);
  	    loanTerms.setLoanTermsPI(loanTermsPI);
  	    loanTerms.setLoanTermsPrepaymentPenalty(loanTermsPrepaymentPenalty);
  	    loanTerms.setLoanTermsBalloonPayment(loanTermsBalloonPayment);
- 	    loanTerms.setLoanTermsIntialEscrow(loanTermsIntialEscrow);
- 	    loanTerms.setLoanTermsETIA(loanTermsETIAs);
- 	    loanTerms.setLoanTermsEscrowAccount(loanTermsEscrowAccount);
  	    
     	return loanTerms;
     }
     
+  	private ETIASection createETIASection(Deal deal)
+  	{
+  		ETIASection etiaSection = new ETIASection();
+  		EstimatedPropertyCostComponents estimatedPropertyCostComponents = new EstimatedPropertyCostComponents((Element)deal.getElementAddNS("LOANS/LOAN/DOCUMENT_SPECIFIC_DATA_SETS/DOCUMENT_SPECIFIC_DATA_SET/INTEGRATED_DISCLOSURE/ESTIMATED_PROPERTY_COST/ESTIMATED_PROPERTY_COST_COMPONENTS"));
+  		
+  		String projectedPaymentEstimatedTaxesInsuranceAssessmentTotalAmount = deal.getValueAddNS("LOANS/LOAN/DOCUMENT_SPECIFIC_DATA_SETS/DOCUMENT_SPECIFIC_DATA_SET/INTEGRATED_DISCLOSURE/ESTIMATED_PROPERTY_COST/ESTIMATED_PROPERTY_COST_COMPONENTS/ESTIMATED_PROPERTY_COST_DETAIL/ProjectedPaymentEstimatedTaxesInsuranceAssessmentTotalAmount");
+  		
+  		List<ETIA>  eTIAs = new LinkedList<>();
+  		
+  		for(int i=0; i<estimatedPropertyCostComponents.estimatedPropertyCostComponent.length; i++){
+  			ETIA  eTIA = new ETIA();
+  			eTIA.setProjectedPaymentEscrowedType(estimatedPropertyCostComponents.estimatedPropertyCostComponent[i].projectedPaymentEscrowedType);
+  			eTIA.setProjectedPaymentEstimatedTaxesInsuranceAssessmentComponentType(estimatedPropertyCostComponents.estimatedPropertyCostComponent[i].projectedPaymentEstimatedTaxesInsuranceAssessmentComponentType);
+  			eTIA.setProjectedPaymentEstimatedTaxesInsuranceAssessmentComponentTypeOtherDescription(estimatedPropertyCostComponents.estimatedPropertyCostComponent[i].projectedPaymentEstimatedTaxesInsuranceAssessmentComponentTypeOtherDescription);
+  			eTIAs.add(eTIA);
+  		}
+  		
+  		etiaSection.setEtiaValues(eTIAs);
+		etiaSection.setProjectedPaymentEstimatedTaxesInsuranceAssessmentTotalAmount(projectedPaymentEstimatedTaxesInsuranceAssessmentTotalAmount);
+  		
+  		return etiaSection;
+  	}
+  	
     /**
 	 * calculates all the projected payments elements
 	 * @param deal

@@ -30,9 +30,6 @@ public class ProjectedPaymentsModel implements Serializable {
 	private List<String> projectedPaymentsEstimatedTotalPayment;
 	@JsonProperty("estimatedTotalPaymentType")
 	private String projectedPaymentsEstimatedTotalPaymentType;
-	@JsonProperty("etia")
-	private ProjectedPaymentsETIA projectedPaymentsETIA;
-	//above to delete
     private List<ProjectedPaymentsDetails> projectedPaymentsDetails;
     private String paymentFrequencyType;
 	
@@ -108,18 +105,6 @@ public class ProjectedPaymentsModel implements Serializable {
 	 */
 	public void setProjectedPaymentsEstimatedTotalPaymentType(String projectedPaymentsEstimatedTotalPaymentType) {
 		this.projectedPaymentsEstimatedTotalPaymentType = projectedPaymentsEstimatedTotalPaymentType;
-	}
-	/**
-	 * @return the projectedPaymentsETIA
-	 */
-	public ProjectedPaymentsETIA getProjectedPaymentsETIA() {
-		return projectedPaymentsETIA;
-	}
-	/**
-	 * @param projectedPaymentsETIA the projectedPaymentsETIA to set
-	 */
-	public void setProjectedPaymentsETIA(ProjectedPaymentsETIA projectedPaymentsETIA) {
-		this.projectedPaymentsETIA = projectedPaymentsETIA;
 	}
 	/**
 	 * @return the projectedPaymentsDetails

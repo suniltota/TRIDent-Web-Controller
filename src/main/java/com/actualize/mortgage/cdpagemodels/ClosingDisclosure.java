@@ -13,6 +13,7 @@ import com.actualize.mortgage.domainmodels.ClosingCostDetailsLoanCosts;
 import com.actualize.mortgage.domainmodels.ClosingCostDetailsOtherCosts;
 import com.actualize.mortgage.domainmodels.ClosingInformation;
 import com.actualize.mortgage.domainmodels.CostsAtClosing;
+import com.actualize.mortgage.domainmodels.ETIASection;
 import com.actualize.mortgage.domainmodels.LoanInformation;
 import com.actualize.mortgage.domainmodels.LoanTerms;
 import com.actualize.mortgage.domainmodels.ProjectedPaymentsModel;
@@ -35,6 +36,7 @@ public class ClosingDisclosure implements Serializable {
     private LoanInformation loanInformation;
     private LoanTerms loanTerms;
     private ProjectedPaymentsModel projectedPayments;
+    private ETIASection etiaSection;
     private CostsAtClosing costsAtClosing;
     private ClosingCostDetailsLoanCosts closingCostDetailsLoanCosts;
     private ClosingCostDetailsOtherCosts closingCostDetailsOtherCosts;
@@ -172,6 +174,18 @@ public class ClosingDisclosure implements Serializable {
 	 */
 	public void setSummariesofTransactions(SummariesofTransactions summariesofTransactions) {
 		this.summariesofTransactions = summariesofTransactions;
+	}
+	/**
+	 * @return the etiaSection
+	 */
+	public ETIASection getEtiaSection() {
+		return etiaSection;
+	}
+	/**
+	 * @param etiaSection the etiaSection to set
+	 */
+	public void setEtiaSection(ETIASection etiaSection) {
+		this.etiaSection = etiaSection;
 	}
   
     
