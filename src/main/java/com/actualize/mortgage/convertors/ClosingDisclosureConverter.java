@@ -552,7 +552,7 @@ public class ClosingDisclosureConverter {
 		LoanDetail loanDetail = new LoanDetail((Element)deal.getElementAddNS("LOANS/LOAN/LOAN_DETAIL"));
 		ProjectedPaymentsModel projectedPaymentsModel = new ProjectedPaymentsModel();
 		
-		ProjectedPaymentsDetails projectedPaymentList = new ProjectedPaymentsDetails();
+		ProjectedPaymentsDetails projectedPayments = new ProjectedPaymentsDetails();
 		List<String> paymentFrequencyType = new LinkedList<>();
 		List<String> projectedPaymentCalculationPeriodEndNumber = new LinkedList<>();
 		List<String> projectedPaymentCalculationPeriodStartNumber = new LinkedList<>();
@@ -600,19 +600,22 @@ public class ClosingDisclosureConverter {
 				
 		}
 		
-		projectedPaymentList.setPaymentFrequencyType(paymentFrequencyType);
-		projectedPaymentList.setInterestOnlyStatus(interestOnlyStatus);
-		projectedPaymentList.setProjectedPaymentCalculationPeriodEndNumber(projectedPaymentCalculationPeriodEndNumber);
-		projectedPaymentList.setProjectedPaymentCalculationPeriodStartNumber(projectedPaymentCalculationPeriodStartNumber);
-		projectedPaymentList.setProjectedPaymentCalculationPeriodTermType(projectedPaymentCalculationPeriodTermType);
-		projectedPaymentList.setProjectedPaymentCalculationPeriodTermTypeOtherDescription(projectedPaymentCalculationPeriodTermTypeOtherDescription);
-		projectedPaymentList.setProjectedPaymentEstimatedEscrowPaymentAmount(projectedPaymentEstimatedEscrowPaymentAmount);
-		projectedPaymentList.setProjectedPaymentEstimatedTotalMinimumPaymentAmount(projectedPaymentEstimatedTotalMinimumPaymentAmount);
-		projectedPaymentList.setProjectedPaymentEstimatedTotalMaximumPaymentAmount(projectedPaymentEstimatedTotalMaximumPaymentAmount);
-		projectedPaymentList.setProjectedPaymentMIPaymentAmount(projectedPaymentMIPaymentAmount);
-		projectedPaymentList.setProjectedPaymentPrincipalAndInterestMaximumPaymentAmount(projectedPaymentPrincipalAndInterestMaximumPaymentAmount);
-		projectedPaymentList.setProjectedPaymentPrincipalAndInterestMinimumPaymentAmount(projectedPaymentPrincipalAndInterestMinimumPaymentAmount);
-		projectedPaymentList.setSequenceNumber(sequenceNumber);
+		projectedPayments.setPaymentFrequencyType(paymentFrequencyType);
+		projectedPayments.setInterestOnlyStatus(interestOnlyStatus);
+		projectedPayments.setProjectedPaymentCalculationPeriodEndNumber(projectedPaymentCalculationPeriodEndNumber);
+		projectedPayments.setProjectedPaymentCalculationPeriodStartNumber(projectedPaymentCalculationPeriodStartNumber);
+		projectedPayments.setProjectedPaymentCalculationPeriodTermType(projectedPaymentCalculationPeriodTermType);
+		projectedPayments.setProjectedPaymentCalculationPeriodTermTypeOtherDescription(projectedPaymentCalculationPeriodTermTypeOtherDescription);
+		projectedPayments.setProjectedPaymentEstimatedEscrowPaymentAmount(projectedPaymentEstimatedEscrowPaymentAmount);
+		projectedPayments.setProjectedPaymentEstimatedTotalMinimumPaymentAmount(projectedPaymentEstimatedTotalMinimumPaymentAmount);
+		projectedPayments.setProjectedPaymentEstimatedTotalMaximumPaymentAmount(projectedPaymentEstimatedTotalMaximumPaymentAmount);
+		projectedPayments.setProjectedPaymentMIPaymentAmount(projectedPaymentMIPaymentAmount);
+		projectedPayments.setProjectedPaymentPrincipalAndInterestMaximumPaymentAmount(projectedPaymentPrincipalAndInterestMaximumPaymentAmount);
+		projectedPayments.setProjectedPaymentPrincipalAndInterestMinimumPaymentAmount(projectedPaymentPrincipalAndInterestMinimumPaymentAmount);
+		projectedPayments.setSequenceNumber(sequenceNumber);
+			
+		projectedPaymentsModel.setProjectedPaymentsDetails(projectedPayments);
+		
 		return projectedPaymentsModel;
 	}
 	

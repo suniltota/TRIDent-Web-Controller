@@ -30,7 +30,7 @@ public class ProjectedPaymentsModel implements Serializable {
 	private List<String> projectedPaymentsEstimatedTotalPayment;
 	@JsonProperty("estimatedTotalPaymentType")
 	private String projectedPaymentsEstimatedTotalPaymentType;
-    private List<ProjectedPaymentsDetails> projectedPaymentsDetails;
+    private ProjectedPaymentsDetails projectedPaymentsDetails;
     private String paymentFrequencyType;
 	
     
@@ -106,18 +106,7 @@ public class ProjectedPaymentsModel implements Serializable {
 	public void setProjectedPaymentsEstimatedTotalPaymentType(String projectedPaymentsEstimatedTotalPaymentType) {
 		this.projectedPaymentsEstimatedTotalPaymentType = projectedPaymentsEstimatedTotalPaymentType;
 	}
-	/**
-	 * @return the projectedPaymentsDetails
-	 */
-	public List<ProjectedPaymentsDetails> getProjectedPaymentsDetails() {
-		return projectedPaymentsDetails;
-	}
-	/**
-	 * @param projectedPaymentsDetails the projectedPaymentsDetails to set
-	 */
-	public void setProjectedPaymentsDetails(List<ProjectedPaymentsDetails> projectedPaymentsDetails) {
-		this.projectedPaymentsDetails = projectedPaymentsDetails;
-	}
+	
 	/**
 	 * @return the paymentFrequencyType
 	 */
@@ -129,6 +118,18 @@ public class ProjectedPaymentsModel implements Serializable {
 	 */
 	public void setPaymentFrequencyType(String paymentFrequencyType) {
 		this.paymentFrequencyType = paymentFrequencyType;
+	}
+	/**
+	 * @return the projectedPaymentsDetails
+	 */
+	public ProjectedPaymentsDetails getProjectedPaymentsDetails() {
+		return projectedPaymentsDetails;
+	}
+	/**
+	 * @param projectedPaymentsDetails the projectedPaymentsDetails to set
+	 */
+	public void setProjectedPaymentsDetails(ProjectedPaymentsDetails projectedPaymentsDetails) {
+		this.projectedPaymentsDetails = projectedPaymentsDetails;
 	}
 	
 }
