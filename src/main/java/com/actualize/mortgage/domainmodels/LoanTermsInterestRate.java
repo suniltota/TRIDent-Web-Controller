@@ -9,11 +9,8 @@ public class LoanTermsInterestRate implements Serializable {
 	 */
 	private static final long serialVersionUID = 7964998098675066631L;
 	
-	private boolean buydownTemporarySubsidyFundingIndicator;
-	private boolean gseBuydownReflectedInNoteIndicator;
-	private String buydownInitialEffectiveInterestRatePercent;
-	private String buydownChangeFrequencyMonthsCount;
-	private String buydownIncreaseRatePercent;
+	
+	
 	private String noteRatePercent;
 	private String disclosedFullyIndexedRatePercent;
 	private boolean interestRateIncreaseIndicator;
@@ -22,67 +19,10 @@ public class LoanTermsInterestRate implements Serializable {
 	private String firstRateChangeMonthsCount;
 	private String ceilingRatePercentEarliestEffectiveMonthsCount;
 	private String ceilingRatePercent;
+	private String currentRateSetDate ="TBD";
+	private String loanPriceQuote = "TBD";
+	private String apor = "TBD";
 	
-	/**
-	 * @return the buydownTemporarySubsidyFundingIndicator
-	 */
-	public boolean isBuydownTemporarySubsidyFundingIndicator() {
-		return buydownTemporarySubsidyFundingIndicator;
-	}
-	/**
-	 * @param buydownTemporarySubsidyFundingIndicator the buydownTemporarySubsidyFundingIndicator to set
-	 */
-	public void setBuydownTemporarySubsidyFundingIndicator(boolean buydownTemporarySubsidyFundingIndicator) {
-		this.buydownTemporarySubsidyFundingIndicator = buydownTemporarySubsidyFundingIndicator;
-	}
-	/**
-	 * @return the gseBuydownReflectedInNoteIndicator
-	 */
-	public boolean isGseBuydownReflectedInNoteIndicator() {
-		return gseBuydownReflectedInNoteIndicator;
-	}
-	/**
-	 * @param gseBuydownReflectedInNoteIndicator the gseBuydownReflectedInNoteIndicator to set
-	 */
-	public void setGseBuydownReflectedInNoteIndicator(boolean gseBuydownReflectedInNoteIndicator) {
-		this.gseBuydownReflectedInNoteIndicator = gseBuydownReflectedInNoteIndicator;
-	}
-	/**
-	 * @return the buydownInitialEffectiveInterestRatePercent
-	 */
-	public String getBuydownInitialEffectiveInterestRatePercent() {
-		return buydownInitialEffectiveInterestRatePercent;
-	}
-	/**
-	 * @param buydownInitialEffectiveInterestRatePercent the buydownInitialEffectiveInterestRatePercent to set
-	 */
-	public void setBuydownInitialEffectiveInterestRatePercent(String buydownInitialEffectiveInterestRatePercent) {
-		this.buydownInitialEffectiveInterestRatePercent = buydownInitialEffectiveInterestRatePercent;
-	}
-	/**
-	 * @return the buydownChangeFrequencyMonthsCount
-	 */
-	public String getBuydownChangeFrequencyMonthsCount() {
-		return buydownChangeFrequencyMonthsCount;
-	}
-	/**
-	 * @param buydownChangeFrequencyMonthsCount the buydownChangeFrequencyMonthsCount to set
-	 */
-	public void setBuydownChangeFrequencyMonthsCount(String buydownChangeFrequencyMonthsCount) {
-		this.buydownChangeFrequencyMonthsCount = buydownChangeFrequencyMonthsCount;
-	}
-	/**
-	 * @return the buydownIncreaseRatePercent
-	 */
-	public String getBuydownIncreaseRatePercent() {
-		return buydownIncreaseRatePercent;
-	}
-	/**
-	 * @param buydownIncreaseRatePercent the buydownIncreaseRatePercent to set
-	 */
-	public void setBuydownIncreaseRatePercent(String buydownIncreaseRatePercent) {
-		this.buydownIncreaseRatePercent = buydownIncreaseRatePercent;
-	}
 	/**
 	 * @return the noteRatePercent
 	 */
@@ -178,6 +118,42 @@ public class LoanTermsInterestRate implements Serializable {
 	 */
 	public void setCeilingRatePercent(String ceilingRatePercent) {
 		this.ceilingRatePercent = ceilingRatePercent;
+	}
+	/**
+	 * @return the currentRateSetDate
+	 */
+	public String getCurrentRateSetDate() {
+		return currentRateSetDate;
+	}
+	/**
+	 * @param currentRateSetDate the currentRateSetDate to set
+	 */
+	public void setCurrentRateSetDate(String currentRateSetDate) {
+		this.currentRateSetDate = currentRateSetDate;
+	}
+	/**
+	 * @return the loanPriceQuote
+	 */
+	public String getLoanPriceQuote() {
+		return loanPriceQuote;
+	}
+	/**
+	 * @param loanPriceQuote the loanPriceQuote to set
+	 */
+	public void setLoanPriceQuote(String loanPriceQuote) {
+		this.loanPriceQuote = loanPriceQuote;
+	}
+	/**
+	 * @return the apor
+	 */
+	public String getApor() {
+		return apor;
+	}
+	/**
+	 * @param apor the apor to set
+	 */
+	public void setApor(String apor) {
+		this.apor = apor;
 	}
 	
 	

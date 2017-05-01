@@ -22,6 +22,8 @@ public class LoanTerms implements Serializable {
 	private LoanTermsPrepaymentPenalty loanTermsPrepaymentPenalty;
 	@JsonProperty("balloonPayment")
 	private LoanTermsBalloonPayment loanTermsBalloonPayment;
+	@JsonProperty("temporaryBuydown")
+	private LoanTermsTemporaryBuydown loanTermsTemporaryBuydown;
 	
 	/**
 	 * @return the loanTermsLoanAmount
@@ -82,6 +84,18 @@ public class LoanTerms implements Serializable {
 	 */
 	public void setLoanTermsBalloonPayment(LoanTermsBalloonPayment loanTermsBalloonPayment) {
 		this.loanTermsBalloonPayment = loanTermsBalloonPayment;
+	}
+	/**
+	 * @return the loanTermsTemporaryBuydown
+	 */
+	public LoanTermsTemporaryBuydown getLoanTermsTemporaryBuydown() {
+		return loanTermsTemporaryBuydown;
+	}
+	/**
+	 * @param loanTermsTemporaryBuydown the loanTermsTemporaryBuydown to set
+	 */
+	public void setLoanTermsTemporaryBuydown(LoanTermsTemporaryBuydown loanTermsTemporaryBuydown) {
+		this.loanTermsTemporaryBuydown = loanTermsTemporaryBuydown;
 	}
 	
 }

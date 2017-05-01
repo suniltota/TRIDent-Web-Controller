@@ -43,6 +43,7 @@ import com.actualize.mortgage.domainmodels.LoanTermsIntialEscrow;
 import com.actualize.mortgage.domainmodels.LoanTermsLoanAmount;
 import com.actualize.mortgage.domainmodels.LoanTermsPI;
 import com.actualize.mortgage.domainmodels.LoanTermsPrepaymentPenalty;
+import com.actualize.mortgage.domainmodels.LoanTermsTemporaryBuydown;
 import com.actualize.mortgage.domainmodels.NameModel;
 import com.actualize.mortgage.domainmodels.OtherCostsToGovtFees;
 import com.actualize.mortgage.domainmodels.PrepaidPayments;
@@ -315,11 +316,8 @@ public class ClosingDisclosureConverter {
 				loanId = loanidentifierdata.getLoanIdentifier();
 		}
 		
- 	    loanInformationSection.setLoanTerm(loanTotalTerm); 
  	    loanInformationSection.setPurpose(loanPurpose); 
  	    loanInformationSection.setProduct(loanProduct); 
- 	    loanInformationSection.setLoanType(loanType);
- 	    loanInformationSection.setLoanId(loanId);
  	    loanInformationSection.setConstructionLoan(Convertor.stringToBoolean(loanDetail.constructionLoanIndicator));
  	    loanInformationSection.setConstructionLoanType(construction.ConstructionLoanType);
  	    loanInformationSection.setConstructionPeriodNumberOfMonthsCount(construction.ConstructionPeriodNumberOfMonthsCount);
@@ -361,6 +359,7 @@ public class ClosingDisclosureConverter {
     	LoanTermsPI loanTermsPI = new LoanTermsPI();
     	LoanTermsPrepaymentPenalty loanTermsPrepaymentPenalty = new LoanTermsPrepaymentPenalty();
     	LoanTermsBalloonPayment loanTermsBalloonPayment = new LoanTermsBalloonPayment();
+    	LoanTermsTemporaryBuydown loanTermsTemporaryBuydown = new LoanTermsTemporaryBuydown();
 
     	String interest ="";
     	String principalAmount = "";
@@ -405,11 +404,7 @@ public class ClosingDisclosureConverter {
 		else
 			interest = termsOfLoan.noteRatePercent;
         
-        loanTermsInterestRate.setBuydownTemporarySubsidyFundingIndicator(Convertor.stringToBoolean(loanDetail.buydownTemporarySubsidyFundingIndicator));
- 	    loanTermsInterestRate.setGseBuydownReflectedInNoteIndicator(Convertor.stringToBoolean(other.BuydownReflectedInNoteIndicator));
- 	    loanTermsInterestRate.setBuydownInitialEffectiveInterestRatePercent(buydownOccurence.BuydownInitialEffectiveInterestRatePercent);
- 	    loanTermsInterestRate.setBuydownChangeFrequencyMonthsCount(buydownRule.BuydownChangeFrequencyMonthsCount);
- 	    loanTermsInterestRate.setBuydownIncreaseRatePercent(buydownRule.BuydownIncreaseRatePercent);
+       
  	    loanTermsInterestRate.setNoteRatePercent(termsOfLoan.noteRatePercent);
  	    loanTermsInterestRate.setDisclosedFullyIndexedRatePercent(termsOfLoan.disclosedFullyIndexedRatePercent);
  	    loanTermsInterestRate.setInterestRateIncreaseIndicator(Convertor.stringToBoolean(loanDetail.interestRateIncreaseIndicator));
@@ -462,6 +457,12 @@ public class ClosingDisclosureConverter {
 		loanTermsBalloonPayment.setBalloonIndicator(Convertor.stringToBoolean(loanDetail.balloonIndicator));
 		loanTermsBalloonPayment.setBalloonPaymentAmount(loanDetail.balloonPaymentAmount);
 		
+		//TemporaryBuydown
+		loanTermsTemporaryBuydown.setGseBuydownReflectedInNoteIndicator(Convertor.stringToBoolean(other.BuydownReflectedInNoteIndicator));
+        loanTermsTemporaryBuydown.setBuydownInitialEffectiveInterestRatePercent(buydownOccurence.BuydownInitialEffectiveInterestRatePercent);
+        loanTermsTemporaryBuydown.setBuydownTemporarySubsidyFundingIndicator(Convertor.stringToBoolean(loanDetail.buydownTemporarySubsidyFundingIndicator));
+        loanTermsTemporaryBuydown.setBuydownChangeFrequencyMonthsCount(buydownRule.BuydownChangeFrequencyMonthsCount);
+        loanTermsTemporaryBuydown.setBuydownIncreaseRatePercent(buydownRule.BuydownIncreaseRatePercent);
 		//LoanTermsIntialEscrow
 		/*if(null != escrowItems && null != escrowItem)
 		{
@@ -509,6 +510,7 @@ public class ClosingDisclosureConverter {
         loanTerms.setLoanTermsLoanAmount(loanTermsLoanAmount);
  	    loanTerms.setLoanTermsInterestRate(loanTermsInterestRate);
  	    loanTerms.setLoanTermsPI(loanTermsPI);
+ 	    loanTerms.setLoanTermsTemporaryBuydown(loanTermsTemporaryBuydown);
  	    loanTerms.setLoanTermsPrepaymentPenalty(loanTermsPrepaymentPenalty);
  	    loanTerms.setLoanTermsBalloonPayment(loanTermsBalloonPayment);
  	    
