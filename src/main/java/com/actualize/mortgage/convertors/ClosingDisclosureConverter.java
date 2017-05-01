@@ -522,7 +522,7 @@ public class ClosingDisclosureConverter {
   		ETIASection etiaSection = new ETIASection();
   		EstimatedPropertyCostComponents estimatedPropertyCostComponents = new EstimatedPropertyCostComponents((Element)deal.getElementAddNS("LOANS/LOAN/DOCUMENT_SPECIFIC_DATA_SETS/DOCUMENT_SPECIFIC_DATA_SET/INTEGRATED_DISCLOSURE/ESTIMATED_PROPERTY_COST/ESTIMATED_PROPERTY_COST_COMPONENTS"));
   		
-  		String projectedPaymentEstimatedTaxesInsuranceAssessmentTotalAmount = deal.getValueAddNS("LOANS/LOAN/DOCUMENT_SPECIFIC_DATA_SETS/DOCUMENT_SPECIFIC_DATA_SET/INTEGRATED_DISCLOSURE/ESTIMATED_PROPERTY_COST/ESTIMATED_PROPERTY_COST_COMPONENTS/ESTIMATED_PROPERTY_COST_DETAIL/ProjectedPaymentEstimatedTaxesInsuranceAssessmentTotalAmount");
+  		String projectedPaymentEstimatedTaxesInsuranceAssessmentTotalAmount = deal.getValueAddNS("LOANS/LOAN/DOCUMENT_SPECIFIC_DATA_SETS/DOCUMENT_SPECIFIC_DATA_SET/INTEGRATED_DISCLOSURE/ESTIMATED_PROPERTY_COST/ESTIMATED_PROPERTY_COST_DETAIL/ProjectedPaymentEstimatedTaxesInsuranceAssessmentTotalAmount");
   		
   		List<ETIA>  eTIAs = new LinkedList<>();
   		
@@ -551,7 +551,22 @@ public class ClosingDisclosureConverter {
 		EstimatedPropertyCost propertyCost = new EstimatedPropertyCost((Element)deal.getElementAddNS("LOANS/LOAN/DOCUMENT_SPECIFIC_DATA_SETS/DOCUMENT_SPECIFIC_DATA_SET/INTEGRATED_DISCLOSURE/ESTIMATED_PROPERTY_COST"));
 		LoanDetail loanDetail = new LoanDetail((Element)deal.getElementAddNS("LOANS/LOAN/LOAN_DETAIL"));
 		ProjectedPaymentsModel projectedPaymentsModel = new ProjectedPaymentsModel();
-		List<ProjectedPaymentsDetails> projectedPaymentList = new LinkedList<>();
+		
+		ProjectedPaymentsDetails projectedPaymentList = new ProjectedPaymentsDetails();
+		List<String> paymentFrequencyType = new LinkedList<>();
+		List<String> projectedPaymentCalculationPeriodEndNumber = new LinkedList<>();
+		List<String> projectedPaymentCalculationPeriodStartNumber = new LinkedList<>();
+		List<String> projectedPaymentCalculationPeriodTermType = new LinkedList<>();
+		List<String> projectedPaymentCalculationPeriodTermTypeOtherDescription = new LinkedList<>();
+		List<String> projectedPaymentEstimatedEscrowPaymentAmount = new LinkedList<>();
+		List<String> projectedPaymentEstimatedTotalMaximumPaymentAmount = new LinkedList<>();
+		List<String> projectedPaymentEstimatedTotalMinimumPaymentAmount = new LinkedList<>();
+		List<String> projectedPaymentMIPaymentAmount = new LinkedList<>();
+		List<String> projectedPaymentPrincipalAndInterestMaximumPaymentAmount = new LinkedList<>();
+		List<String> projectedPaymentPrincipalAndInterestMinimumPaymentAmount = new LinkedList<>();
+		List<String> sequenceNumber = new LinkedList<>();
+		List<Boolean> interestOnlyStatus = new LinkedList<>();
+		
 		InterestOnly interestOnly = new InterestOnly((Element)deal.getElementAddNS("LOANS/LOAN/INTEREST_ONLY"));
 		String monthscount  = interestOnly.interestOnlyTermMonthsCount;
 		int interestOnlyTermMonthsCount = 0;
@@ -563,26 +578,41 @@ public class ClosingDisclosureConverter {
 			ProjectedPayment payment = payments.projectedPayments[i];
 			projectedPaymentsModel.setPaymentFrequencyType(payment.paymentFrequencyType);
 			ProjectedPaymentsDetails projectedPayment = new ProjectedPaymentsDetails();
-				projectedPayment.setPaymentFrequencyType(payment.paymentFrequencyType);
-				projectedPayment.setProjectedPaymentCalculationPeriodEndNumber(payment.projectedPaymentCalculationPeriodEndNumber);
-				projectedPayment.setProjectedPaymentCalculationPeriodStartNumber(payment.projectedPaymentCalculationPeriodStartNumber);
-				projectedPayment.setProjectedPaymentCalculationPeriodTermType(payment.projectedPaymentCalculationPeriodTermType);
-				projectedPayment.setProjectedPaymentCalculationPeriodTermTypeOtherDescription(payment.projectedPaymentCalculationPeriodTermTypeOtherDescription);
-				projectedPayment.setProjectedPaymentEstimatedEscrowPaymentAmount(payment.projectedPaymentEstimatedEscrowPaymentAmount);
-				projectedPayment.setProjectedPaymentEstimatedTotalMaximumPaymentAmount(payment.projectedPaymentEstimatedTotalMaximumPaymentAmount);
-				projectedPayment.setProjectedPaymentEstimatedTotalMinimumPaymentAmount(payment.projectedPaymentEstimatedTotalMinimumPaymentAmount);
-				projectedPayment.setProjectedPaymentMIPaymentAmount(payment.projectedPaymentMIPaymentAmount);
-				projectedPayment.setProjectedPaymentPrincipalAndInterestMaximumPaymentAmount(payment.projectedPaymentPrincipalAndInterestMaximumPaymentAmount);
-				projectedPayment.setProjectedPaymentPrincipalAndInterestMinimumPaymentAmount(payment.projectedPaymentPrincipalAndInterestMinimumPaymentAmount);
-				projectedPayment.setSequenceNumber(payment.sequenceNumber);
+			
+				paymentFrequencyType.add(payment.paymentFrequencyType);
+				projectedPaymentCalculationPeriodEndNumber.add(payment.projectedPaymentCalculationPeriodEndNumber);
+				projectedPaymentCalculationPeriodStartNumber.add(payment.projectedPaymentCalculationPeriodStartNumber);
+				projectedPaymentCalculationPeriodTermType.add(payment.projectedPaymentCalculationPeriodTermType);
+				projectedPaymentCalculationPeriodTermTypeOtherDescription.add(payment.projectedPaymentCalculationPeriodTermTypeOtherDescription);
+				projectedPaymentEstimatedEscrowPaymentAmount.add(payment.projectedPaymentEstimatedEscrowPaymentAmount);
+				projectedPaymentEstimatedTotalMaximumPaymentAmount.add(payment.projectedPaymentEstimatedTotalMaximumPaymentAmount);
+				projectedPaymentEstimatedTotalMinimumPaymentAmount.add(payment.projectedPaymentEstimatedTotalMinimumPaymentAmount);
+				projectedPaymentMIPaymentAmount.add(payment.projectedPaymentMIPaymentAmount);
+				projectedPaymentPrincipalAndInterestMaximumPaymentAmount.add(payment.projectedPaymentPrincipalAndInterestMaximumPaymentAmount);
+				projectedPaymentPrincipalAndInterestMinimumPaymentAmount.add(payment.projectedPaymentPrincipalAndInterestMinimumPaymentAmount);
+				sequenceNumber.add(payment.sequenceNumber);
 				int startYear = Integer.parseInt(payment.projectedPaymentCalculationPeriodStartNumber);
 				if ((startYear-1)*12 < interestOnlyTermMonthsCount && "true".equalsIgnoreCase(loanDetail.interestOnlyIndicator))
-					projectedPayment.setInterestOnlyStatus(true);
+					interestOnlyStatus.add(true);
 				else
-					projectedPayment.setInterestOnlyStatus(false);
-			projectedPaymentList.add(projectedPayment);
+					interestOnlyStatus.add(false);
+			//projectedPaymentList.add(projectedPayment);
+				
 		}
-		projectedPaymentsModel.setProjectedPaymentsDetails(projectedPaymentList);
+		
+		projectedPaymentList.setPaymentFrequencyType(paymentFrequencyType);
+		projectedPaymentList.setInterestOnlyStatus(interestOnlyStatus);
+		projectedPaymentList.setProjectedPaymentCalculationPeriodEndNumber(projectedPaymentCalculationPeriodEndNumber);
+		projectedPaymentList.setProjectedPaymentCalculationPeriodStartNumber(projectedPaymentCalculationPeriodStartNumber);
+		projectedPaymentList.setProjectedPaymentCalculationPeriodTermType(projectedPaymentCalculationPeriodTermType);
+		projectedPaymentList.setProjectedPaymentCalculationPeriodTermTypeOtherDescription(projectedPaymentCalculationPeriodTermTypeOtherDescription);
+		projectedPaymentList.setProjectedPaymentEstimatedEscrowPaymentAmount(projectedPaymentEstimatedEscrowPaymentAmount);
+		projectedPaymentList.setProjectedPaymentEstimatedTotalMinimumPaymentAmount(projectedPaymentEstimatedTotalMinimumPaymentAmount);
+		projectedPaymentList.setProjectedPaymentEstimatedTotalMaximumPaymentAmount(projectedPaymentEstimatedTotalMaximumPaymentAmount);
+		projectedPaymentList.setProjectedPaymentMIPaymentAmount(projectedPaymentMIPaymentAmount);
+		projectedPaymentList.setProjectedPaymentPrincipalAndInterestMaximumPaymentAmount(projectedPaymentPrincipalAndInterestMaximumPaymentAmount);
+		projectedPaymentList.setProjectedPaymentPrincipalAndInterestMinimumPaymentAmount(projectedPaymentPrincipalAndInterestMinimumPaymentAmount);
+		projectedPaymentList.setSequenceNumber(sequenceNumber);
 		return projectedPaymentsModel;
 	}
 	
