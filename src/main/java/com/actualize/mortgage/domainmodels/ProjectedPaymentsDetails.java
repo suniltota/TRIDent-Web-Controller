@@ -20,6 +20,11 @@ public class ProjectedPaymentsDetails implements Serializable{
 	private List<ProjectedPaymentsPI>  principalInterest;
 	@JsonProperty("mortgageInsurance")
 	private List<ProjectedPaymentsMI>  mortgageInsurance;
+	private boolean isMIRequired;
+	private String miMonthsDuration;
+	private String miSTDate;
+	private String miCompanyName;
+	private String miCompanyNameOtherDescription;
 	@JsonProperty("estimatedEscrow")
 	private List<ProjectedPaymentsEE>  estimatedEscrow;
 	@JsonProperty("estimatedTotal")
@@ -72,6 +77,66 @@ public class ProjectedPaymentsDetails implements Serializable{
 	 */
 	public void setMortgageInsurance(List<ProjectedPaymentsMI> mortgageInsurance) {
 		this.mortgageInsurance = mortgageInsurance;
+	}
+	/**
+	 * @return the isMIRequired
+	 */
+	public boolean isMIRequired() {
+		return isMIRequired;
+	}
+	/**
+	 * @param isMIRequired the isMIRequired to set
+	 */
+	public void setMIRequired(boolean isMIRequired) {
+		this.isMIRequired = isMIRequired;
+	}
+	/**
+	 * @return the miMonthsDuration
+	 */
+	public String getMiMonthsDuration() {
+		return miMonthsDuration;
+	}
+	/**
+	 * @param miMonthsDuration the miMonthsDuration to set
+	 */
+	public void setMiMonthsDuration(String miMonthsDuration) {
+		this.miMonthsDuration = miMonthsDuration;
+	}
+	/**
+	 * @return the miSTDate
+	 */
+	public String getMiSTDate() {
+		return miSTDate;
+	}
+	/**
+	 * @param miSTDate the miSTDate to set
+	 */
+	public void setMiSTDate(String miSTDate) {
+		this.miSTDate = miSTDate;
+	}
+	/**
+	 * @return the miCompanyName
+	 */
+	public String getMiCompanyName() {
+		return miCompanyName;
+	}
+	/**
+	 * @param miCompanyName the miCompanyName to set
+	 */
+	public void setMiCompanyName(String miCompanyName) {
+		this.miCompanyName = miCompanyName;
+	}
+	/**
+	 * @return the miCompanyNameOtherDescription
+	 */
+	public String getMiCompanyNameOtherDescription() {
+		return miCompanyNameOtherDescription;
+	}
+	/**
+	 * @param miCompanyNameOtherDescription the miCompanyNameOtherDescription to set
+	 */
+	public void setMiCompanyNameOtherDescription(String miCompanyNameOtherDescription) {
+		this.miCompanyNameOtherDescription = miCompanyNameOtherDescription;
 	}
 	/**
 	 * @return the estimatedEscrow

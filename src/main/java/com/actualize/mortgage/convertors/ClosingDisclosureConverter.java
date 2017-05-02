@@ -303,7 +303,7 @@ public class ClosingDisclosureConverter {
 		//Loan Mic && Loan Id
 		if("true".equalsIgnoreCase(loanDetail.miRequiredIndicator)){
 			if("Conventional".equalsIgnoreCase(loanTerms.mortgageType))
-				loanMic = miDataDetail.MICertificateIdentifier;
+				loanMic = miDataDetail.miCertificateIdentifier;
 			else
 				for(LoanInformationLoanIdentifier loanidentifierdata : loanInformationLoanIdentifiers){
 					if("AgencyCase".equalsIgnoreCase(loanidentifierdata.getLoanIdentifierType()))
@@ -330,7 +330,7 @@ public class ClosingDisclosureConverter {
  	    loanInformationSection.setMortgageType(loanTerms.mortgageType);
  	    loanInformationSection.setMortgageTypeOtherDescription(loanTerms.mortgageTypeOtherDescription);
  	    loanInformationSection.setMiRequiredIndicator(Convertor.stringToBoolean(loanDetail.miRequiredIndicator));
- 	    loanInformationSection.setMiCertificateIdentifier(miDataDetail.MICertificateIdentifier);
+ 	    loanInformationSection.setMiCertificateIdentifier(miDataDetail.miCertificateIdentifier);
  	    loanInformationSection.setLoanIdentifiers(loanInformationLoanIdentifiers);
  	    loanInformationSection.setAmortizationType(amortization.AmortizationType);
  	    loanInformationSection.setAutomatedUnderwritings(automatedUnderwritingsModelList);
@@ -382,10 +382,6 @@ public class ClosingDisclosureConverter {
         PrincipalAndInterestPaymentLifetimeAdjustmentRule principalAndInterestPaymentLifetimeAdjustmentRule = new PrincipalAndInterestPaymentLifetimeAdjustmentRule((Element)deal.getElementAddNS(loan + "/ADJUSTMENT/PRINCIPAL_AND_INTEREST_PAYMENT_ADJUSTMENT/PRINCIPAL_AND_INTEREST_PAYMENT_LIFETIME_ADJUSTMENT_RULE"));
         InterestRatePerChangeAdjustmentRules interestRatePerChangeAdjustmentRules = new InterestRatePerChangeAdjustmentRules((Element)deal.getElementAddNS(loan + "/ADJUSTMENT/INTEREST_RATE_ADJUSTMENT/INTEREST_RATE_PER_CHANGE_ADJUSTMENT_RULES"));
         PrepaymentPenaltyLifetimeRule prepaymentPenaltyLifetimeRule = new PrepaymentPenaltyLifetimeRule((Element)deal.getElementAddNS(loan + "/PREPAYMENT_PENALTY/PREPAYMENT_PENALTY_LIFETIME_RULE"));
-       /* EscrowItems escrowItems = new EscrowItems((Element)deal.getElementAddNS(loan + "/ESCROW/ESCROW_ITEMS"));
-        EscrowItem escrowItem = new EscrowItem((Element)deal.getElementAddNS(loan + "/ESCROW/ESCROW_ITEMS/ESCROW_ITEM"));
-        Fees fees = new Fees((Element)deal.getElementAddNS(loan + "/FEE_INFORMATION/FEES"));
-        IntegratedDisclosureDetail idDetail = new IntegratedDisclosureDetail((Element)deal.getElementAddNS(loan + "/DOCUMENT_SPECIFIC_DATA_SETS/DOCUMENT_SPECIFIC_DATA_SET/INTEGRATED_DISCLOSURE/INTEGRATED_DISCLOSURE_DETAIL"));*/
         AboutVersions aboutVersions = document.aboutVersions;
         List<AboutVersion> aboutVersionList = new LinkedList<>();
       
@@ -548,14 +544,13 @@ public class ClosingDisclosureConverter {
 	private ProjectedPaymentsDetails createProjectedPayments(Deal deal)
 	{
 		ProjectedPayments payments = new ProjectedPayments((Element)deal.getElementAddNS("LOANS/LOAN/DOCUMENT_SPECIFIC_DATA_SETS/DOCUMENT_SPECIFIC_DATA_SET/INTEGRATED_DISCLOSURE/PROJECTED_PAYMENTS"));	
-		EstimatedPropertyCost propertyCost = new EstimatedPropertyCost((Element)deal.getElementAddNS("LOANS/LOAN/DOCUMENT_SPECIFIC_DATA_SETS/DOCUMENT_SPECIFIC_DATA_SET/INTEGRATED_DISCLOSURE/ESTIMATED_PROPERTY_COST"));
+		MIDataDetail miDataDetail = new MIDataDetail((Element)deal.getElementAddNS("LOANS/LOAN/MI_DATA/MI_DATA_DETAIL"));
 		LoanDetail loanDetail = new LoanDetail((Element)deal.getElementAddNS("LOANS/LOAN/LOAN_DETAIL"));
 		InterestOnly interestOnly = new InterestOnly((Element)deal.getElementAddNS("LOANS/LOAN/INTEREST_ONLY"));
 		
 		ProjectedPaymentsDetails projectedPayments = new ProjectedPaymentsDetails();
 
 		String monthscount  = interestOnly.interestOnlyTermMonthsCount;
-		String paymentFrequencyType = "";
 		
 		List<ProjectedPaymentsPC>  paymentCalculationList = new LinkedList<>();
 		List<ProjectedPaymentsPI>  principalInterestList = new LinkedList<>();
@@ -616,6 +611,12 @@ public class ClosingDisclosureConverter {
 		projectedPayments.setMortgageInsurance(mortgageInsuranceList);
 		projectedPayments.setPaymentCalculation(paymentCalculationList);
 		projectedPayments.setPrincipalInterest(principalInterestList);
+		projectedPayments.setMiMonthsDuration("");
+		projectedPayments.setMiSTDate(miDataDetail.miScheduledTerminationDate);
+		projectedPayments.setMIRequired(Boolean.parseBoolean(loanDetail.miRequiredIndicator));
+		projectedPayments.setMiCompanyName(miDataDetail.miCompanyNameType);
+		projectedPayments.setMiCompanyNameOtherDescription(miDataDetail.miCompanyNameTypeOtherDescription);
+		
 		return projectedPayments;
 	}
 	
