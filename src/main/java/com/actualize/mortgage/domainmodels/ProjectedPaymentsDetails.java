@@ -1,183 +1,102 @@
 package com.actualize.mortgage.domainmodels;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class ProjectedPaymentsDetails {
-	private List<String> paymentFrequencyType;
-    private List<String> projectedPaymentCalculationPeriodEndNumber;
-    private List<String> projectedPaymentCalculationPeriodStartNumber;
-    private List<String> projectedPaymentCalculationPeriodTermType;
-    private List<String> projectedPaymentCalculationPeriodTermTypeOtherDescription;
-    private List<String> projectedPaymentEstimatedEscrowPaymentAmount;
-    private List<String> projectedPaymentEstimatedTotalMaximumPaymentAmount;
-    private List<String> projectedPaymentEstimatedTotalMinimumPaymentAmount;
-    private List<String> projectedPaymentMIPaymentAmount;
-    private List<String> projectedPaymentPrincipalAndInterestMaximumPaymentAmount;
-    private List<String> projectedPaymentPrincipalAndInterestMinimumPaymentAmount;
-    private List<String> sequenceNumber;
-    private List<Boolean> interestOnlyStatus;
+import com.fasterxml.jackson.annotation.JsonProperty;
+/**
+ * this class defines ProjectedPayments details in JSON Response
+ * @author sboragala
+ *
+ */
+public class ProjectedPaymentsDetails implements Serializable{
+	
+	private static final long serialVersionUID = 5298423138196096381L;
+	
+	private String paymentFrequencyType;
+	@JsonProperty("paymentCalculation")
+	private List<ProjectedPaymentsPC>  paymentCalculation;
+	@JsonProperty("principalInterest")
+	private List<ProjectedPaymentsPI>  principalInterest;
+	@JsonProperty("mortgageInsurance")
+	private List<ProjectedPaymentsMI>  mortgageInsurance;
+	@JsonProperty("estimatedEscrow")
+	private List<ProjectedPaymentsEE>  estimatedEscrow;
+	@JsonProperty("estimatedTotal")
+	private List<ProjectedPaymentsET>  estimatedTotal;
+	
 	/**
 	 * @return the paymentFrequencyType
 	 */
-	public List<String> getPaymentFrequencyType() {
+	public String getPaymentFrequencyType() {
 		return paymentFrequencyType;
 	}
 	/**
 	 * @param paymentFrequencyType the paymentFrequencyType to set
 	 */
-	public void setPaymentFrequencyType(List<String> paymentFrequencyType) {
+	public void setPaymentFrequencyType(String paymentFrequencyType) {
 		this.paymentFrequencyType = paymentFrequencyType;
 	}
 	/**
-	 * @return the projectedPaymentCalculationPeriodEndNumber
+	 * @return the paymentCalculation
 	 */
-	public List<String> getProjectedPaymentCalculationPeriodEndNumber() {
-		return projectedPaymentCalculationPeriodEndNumber;
+	public List<ProjectedPaymentsPC> getPaymentCalculation() {
+		return paymentCalculation;
 	}
 	/**
-	 * @param projectedPaymentCalculationPeriodEndNumber the projectedPaymentCalculationPeriodEndNumber to set
+	 * @param paymentCalculation the paymentCalculation to set
 	 */
-	public void setProjectedPaymentCalculationPeriodEndNumber(List<String> projectedPaymentCalculationPeriodEndNumber) {
-		this.projectedPaymentCalculationPeriodEndNumber = projectedPaymentCalculationPeriodEndNumber;
+	public void setPaymentCalculation(List<ProjectedPaymentsPC> paymentCalculation) {
+		this.paymentCalculation = paymentCalculation;
 	}
 	/**
-	 * @return the projectedPaymentCalculationPeriodStartNumber
+	 * @return the principalInterest
 	 */
-	public List<String> getProjectedPaymentCalculationPeriodStartNumber() {
-		return projectedPaymentCalculationPeriodStartNumber;
+	public List<ProjectedPaymentsPI> getPrincipalInterest() {
+		return principalInterest;
 	}
 	/**
-	 * @param projectedPaymentCalculationPeriodStartNumber the projectedPaymentCalculationPeriodStartNumber to set
+	 * @param principalInterest the principalInterest to set
 	 */
-	public void setProjectedPaymentCalculationPeriodStartNumber(List<String> projectedPaymentCalculationPeriodStartNumber) {
-		this.projectedPaymentCalculationPeriodStartNumber = projectedPaymentCalculationPeriodStartNumber;
+	public void setPrincipalInterest(List<ProjectedPaymentsPI> principalInterest) {
+		this.principalInterest = principalInterest;
 	}
 	/**
-	 * @return the projectedPaymentCalculationPeriodTermType
+	 * @return the mortgageInsurance
 	 */
-	public List<String> getProjectedPaymentCalculationPeriodTermType() {
-		return projectedPaymentCalculationPeriodTermType;
+	public List<ProjectedPaymentsMI> getMortgageInsurance() {
+		return mortgageInsurance;
 	}
 	/**
-	 * @param projectedPaymentCalculationPeriodTermType the projectedPaymentCalculationPeriodTermType to set
+	 * @param mortgageInsurance the mortgageInsurance to set
 	 */
-	public void setProjectedPaymentCalculationPeriodTermType(List<String> projectedPaymentCalculationPeriodTermType) {
-		this.projectedPaymentCalculationPeriodTermType = projectedPaymentCalculationPeriodTermType;
+	public void setMortgageInsurance(List<ProjectedPaymentsMI> mortgageInsurance) {
+		this.mortgageInsurance = mortgageInsurance;
 	}
 	/**
-	 * @return the projectedPaymentCalculationPeriodTermTypeOtherDescription
+	 * @return the estimatedEscrow
 	 */
-	public List<String> getProjectedPaymentCalculationPeriodTermTypeOtherDescription() {
-		return projectedPaymentCalculationPeriodTermTypeOtherDescription;
+	public List<ProjectedPaymentsEE> getEstimatedEscrow() {
+		return estimatedEscrow;
 	}
 	/**
-	 * @param projectedPaymentCalculationPeriodTermTypeOtherDescription the projectedPaymentCalculationPeriodTermTypeOtherDescription to set
+	 * @param estimatedEscrow the estimatedEscrow to set
 	 */
-	public void setProjectedPaymentCalculationPeriodTermTypeOtherDescription(
-			List<String> projectedPaymentCalculationPeriodTermTypeOtherDescription) {
-		this.projectedPaymentCalculationPeriodTermTypeOtherDescription = projectedPaymentCalculationPeriodTermTypeOtherDescription;
+	public void setEstimatedEscrow(List<ProjectedPaymentsEE> estimatedEscrow) {
+		this.estimatedEscrow = estimatedEscrow;
 	}
 	/**
-	 * @return the projectedPaymentEstimatedEscrowPaymentAmount
+	 * @return the estimatedTotal
 	 */
-	public List<String> getProjectedPaymentEstimatedEscrowPaymentAmount() {
-		return projectedPaymentEstimatedEscrowPaymentAmount;
+	public List<ProjectedPaymentsET> getEstimatedTotal() {
+		return estimatedTotal;
 	}
 	/**
-	 * @param projectedPaymentEstimatedEscrowPaymentAmount the projectedPaymentEstimatedEscrowPaymentAmount to set
+	 * @param estimatedTotal the estimatedTotal to set
 	 */
-	public void setProjectedPaymentEstimatedEscrowPaymentAmount(List<String> projectedPaymentEstimatedEscrowPaymentAmount) {
-		this.projectedPaymentEstimatedEscrowPaymentAmount = projectedPaymentEstimatedEscrowPaymentAmount;
-	}
-	/**
-	 * @return the projectedPaymentEstimatedTotalMaximumPaymentAmount
-	 */
-	public List<String> getProjectedPaymentEstimatedTotalMaximumPaymentAmount() {
-		return projectedPaymentEstimatedTotalMaximumPaymentAmount;
-	}
-	/**
-	 * @param projectedPaymentEstimatedTotalMaximumPaymentAmount the projectedPaymentEstimatedTotalMaximumPaymentAmount to set
-	 */
-	public void setProjectedPaymentEstimatedTotalMaximumPaymentAmount(
-			List<String> projectedPaymentEstimatedTotalMaximumPaymentAmount) {
-		this.projectedPaymentEstimatedTotalMaximumPaymentAmount = projectedPaymentEstimatedTotalMaximumPaymentAmount;
-	}
-	/**
-	 * @return the projectedPaymentEstimatedTotalMinimumPaymentAmount
-	 */
-	public List<String> getProjectedPaymentEstimatedTotalMinimumPaymentAmount() {
-		return projectedPaymentEstimatedTotalMinimumPaymentAmount;
-	}
-	/**
-	 * @param projectedPaymentEstimatedTotalMinimumPaymentAmount the projectedPaymentEstimatedTotalMinimumPaymentAmount to set
-	 */
-	public void setProjectedPaymentEstimatedTotalMinimumPaymentAmount(
-			List<String> projectedPaymentEstimatedTotalMinimumPaymentAmount) {
-		this.projectedPaymentEstimatedTotalMinimumPaymentAmount = projectedPaymentEstimatedTotalMinimumPaymentAmount;
-	}
-	/**
-	 * @return the projectedPaymentMIPaymentAmount
-	 */
-	public List<String> getProjectedPaymentMIPaymentAmount() {
-		return projectedPaymentMIPaymentAmount;
-	}
-	/**
-	 * @param projectedPaymentMIPaymentAmount the projectedPaymentMIPaymentAmount to set
-	 */
-	public void setProjectedPaymentMIPaymentAmount(List<String> projectedPaymentMIPaymentAmount) {
-		this.projectedPaymentMIPaymentAmount = projectedPaymentMIPaymentAmount;
-	}
-	/**
-	 * @return the projectedPaymentPrincipalAndInterestMaximumPaymentAmount
-	 */
-	public List<String> getProjectedPaymentPrincipalAndInterestMaximumPaymentAmount() {
-		return projectedPaymentPrincipalAndInterestMaximumPaymentAmount;
-	}
-	/**
-	 * @param projectedPaymentPrincipalAndInterestMaximumPaymentAmount the projectedPaymentPrincipalAndInterestMaximumPaymentAmount to set
-	 */
-	public void setProjectedPaymentPrincipalAndInterestMaximumPaymentAmount(
-			List<String> projectedPaymentPrincipalAndInterestMaximumPaymentAmount) {
-		this.projectedPaymentPrincipalAndInterestMaximumPaymentAmount = projectedPaymentPrincipalAndInterestMaximumPaymentAmount;
-	}
-	/**
-	 * @return the projectedPaymentPrincipalAndInterestMinimumPaymentAmount
-	 */
-	public List<String> getProjectedPaymentPrincipalAndInterestMinimumPaymentAmount() {
-		return projectedPaymentPrincipalAndInterestMinimumPaymentAmount;
-	}
-	/**
-	 * @param projectedPaymentPrincipalAndInterestMinimumPaymentAmount the projectedPaymentPrincipalAndInterestMinimumPaymentAmount to set
-	 */
-	public void setProjectedPaymentPrincipalAndInterestMinimumPaymentAmount(
-			List<String> projectedPaymentPrincipalAndInterestMinimumPaymentAmount) {
-		this.projectedPaymentPrincipalAndInterestMinimumPaymentAmount = projectedPaymentPrincipalAndInterestMinimumPaymentAmount;
-	}
-	/**
-	 * @return the sequenceNumber
-	 */
-	public List<String> getSequenceNumber() {
-		return sequenceNumber;
-	}
-	/**
-	 * @param sequenceNumber the sequenceNumber to set
-	 */
-	public void setSequenceNumber(List<String> sequenceNumber) {
-		this.sequenceNumber = sequenceNumber;
-	}
-	/**
-	 * @return the interestOnlyStatus
-	 */
-	public List<Boolean> getInterestOnlyStatus() {
-		return interestOnlyStatus;
-	}
-	/**
-	 * @param interestOnlyStatus the interestOnlyStatus to set
-	 */
-	public void setInterestOnlyStatus(List<Boolean> interestOnlyStatus) {
-		this.interestOnlyStatus = interestOnlyStatus;
+	public void setEstimatedTotal(List<ProjectedPaymentsET> estimatedTotal) {
+		this.estimatedTotal = estimatedTotal;
 	}
 	
-    
-
+	
 }

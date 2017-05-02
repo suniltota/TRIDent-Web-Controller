@@ -16,7 +16,7 @@ import com.actualize.mortgage.domainmodels.CostsAtClosing;
 import com.actualize.mortgage.domainmodels.ETIASection;
 import com.actualize.mortgage.domainmodels.LoanInformation;
 import com.actualize.mortgage.domainmodels.LoanTerms;
-import com.actualize.mortgage.domainmodels.ProjectedPaymentsModel;
+import com.actualize.mortgage.domainmodels.ProjectedPaymentsDetails;
 import com.actualize.mortgage.domainmodels.SummariesofTransactions;
 import com.actualize.mortgage.domainmodels.TransactionInformation;
 
@@ -35,7 +35,7 @@ public class ClosingDisclosure implements Serializable {
     private TransactionInformation transactionInformation;
     private LoanInformation loanInformation;
     private LoanTerms loanTerms;
-    private ProjectedPaymentsModel projectedPayments;
+    private ProjectedPaymentsDetails projectedPayments;
     private ETIASection etiaSection;
     private CostsAtClosing costsAtClosing;
     private ClosingCostDetailsLoanCosts closingCostDetailsLoanCosts;
@@ -106,14 +106,26 @@ public class ClosingDisclosure implements Serializable {
 	/**
 	 * @return the projectedPayments
 	 */
-	public ProjectedPaymentsModel getProjectedPayments() {
+	public ProjectedPaymentsDetails getProjectedPayments() {
 		return projectedPayments;
 	}
 	/**
 	 * @param projectedPayments the projectedPayments to set
 	 */
-	public void setProjectedPayments(ProjectedPaymentsModel projectedPayments) {
+	public void setProjectedPayments(ProjectedPaymentsDetails projectedPayments) {
 		this.projectedPayments = projectedPayments;
+	}
+	/**
+	 * @return the etiaSection
+	 */
+	public ETIASection getEtiaSection() {
+		return etiaSection;
+	}
+	/**
+	 * @param etiaSection the etiaSection to set
+	 */
+	public void setEtiaSection(ETIASection etiaSection) {
+		this.etiaSection = etiaSection;
 	}
 	/**
 	 * @return the costsAtClosing
@@ -175,21 +187,6 @@ public class ClosingDisclosure implements Serializable {
 	public void setSummariesofTransactions(SummariesofTransactions summariesofTransactions) {
 		this.summariesofTransactions = summariesofTransactions;
 	}
-	/**
-	 * @return the etiaSection
-	 */
-	public ETIASection getEtiaSection() {
-		return etiaSection;
-	}
-	/**
-	 * @param etiaSection the etiaSection to set
-	 */
-	public void setEtiaSection(ETIASection etiaSection) {
-		this.etiaSection = etiaSection;
-	}
-  
     
 	
-    
-    
 }

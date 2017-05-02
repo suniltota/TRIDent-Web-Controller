@@ -1,45 +1,54 @@
 package com.actualize.mortgage.domainmodels;
 
-public class ProjectedPaymentsPI {
-	private String minValue;
-	private String maxValue;
-	private String interestOnly;
-	
-	/**
-	 * @return the minValue
-	 */
-	public String getMinValue() {
-		return minValue;
-	}
-	/**
-	 * @param minValue the minValue to set
-	 */
-	public void setMinValue(String minValue) {
-		this.minValue = minValue;
-	}
-	/**
-	 * @return the maxValue
-	 */
-	public String getMaxValue() {
-		return maxValue;
-	}
-	/**
-	 * @param maxValue the maxValue to set
-	 */
-	public void setMaxValue(String maxValue) {
-		this.maxValue = maxValue;
-	}
-	/**
-	 * @return the interestOnly
-	 */
-	public String getInterestOnly() {
-		return interestOnly;
-	}
-	/**
-	 * @param interestOnly the interestOnly to set
-	 */
-	public void setInterestOnly(String interestOnly) {
-		this.interestOnly = interestOnly;
-	}
+import java.io.Serializable;
 
+public class ProjectedPaymentsPI implements Serializable {
+
+	private static final long serialVersionUID = -773708562272145688L;
+	
+	private String projectedPaymentPrincipalAndInterestMaximumPaymentAmount;
+    private String projectedPaymentPrincipalAndInterestMinimumPaymentAmount;
+    private boolean interestOnlyStatus;
+    
+	/**
+	 * @return the projectedPaymentPrincipalAndInterestMaximumPaymentAmount
+	 */
+	public String getProjectedPaymentPrincipalAndInterestMaximumPaymentAmount() {
+		return projectedPaymentPrincipalAndInterestMaximumPaymentAmount;
+	}
+	/**
+	 * @param projectedPaymentPrincipalAndInterestMaximumPaymentAmount the projectedPaymentPrincipalAndInterestMaximumPaymentAmount to set
+	 */
+	public void setProjectedPaymentPrincipalAndInterestMaximumPaymentAmount(
+			String projectedPaymentPrincipalAndInterestMaximumPaymentAmount) {
+		this.projectedPaymentPrincipalAndInterestMaximumPaymentAmount = projectedPaymentPrincipalAndInterestMaximumPaymentAmount;
+	}
+	/**
+	 * @return the projectedPaymentPrincipalAndInterestMinimumPaymentAmount
+	 */
+	public String getProjectedPaymentPrincipalAndInterestMinimumPaymentAmount() {
+		return projectedPaymentPrincipalAndInterestMinimumPaymentAmount;
+	}
+	/**
+	 * @param projectedPaymentPrincipalAndInterestMinimumPaymentAmount the projectedPaymentPrincipalAndInterestMinimumPaymentAmount to set
+	 */
+	public void setProjectedPaymentPrincipalAndInterestMinimumPaymentAmount(
+			String projectedPaymentPrincipalAndInterestMinimumPaymentAmount) {
+		this.projectedPaymentPrincipalAndInterestMinimumPaymentAmount = projectedPaymentPrincipalAndInterestMinimumPaymentAmount;
+	}
+	/**
+	 * @return the interestOnlyStatus
+	 */
+	public boolean isInterestOnlyStatus() {
+		return interestOnlyStatus;
+	}
+	/**
+	 * @param interestOnlyStatus the interestOnlyStatus to set
+	 */
+	public void setInterestOnlyStatus(boolean interestOnlyStatus) {
+		this.interestOnlyStatus = interestOnlyStatus;
+	}
+    
+    
+	
 }
