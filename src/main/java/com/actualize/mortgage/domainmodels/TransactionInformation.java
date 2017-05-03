@@ -13,6 +13,7 @@ public class TransactionInformation implements Serializable {
 	
 	private static final long serialVersionUID = 2048295015514864504L;
 	
+	private String refinanceSameLender;
 	@JsonProperty(value="borrowerDetails")
 	private List<Borrower> borrower;
 	@JsonProperty(value="sellerDetails")
@@ -20,6 +21,18 @@ public class TransactionInformation implements Serializable {
 	@JsonProperty(value="lenderDetails")
 	private List<Borrower> lender;
 	
+	/**
+	 * @return the refinanceSameLender
+	 */
+	public String getRefinanceSameLender() {
+		return refinanceSameLender;
+	}
+	/**
+	 * @param refinanceSameLender the refinanceSameLender to set
+	 */
+	public void setRefinanceSameLender(String refinanceSameLender) {
+		this.refinanceSameLender = refinanceSameLender;
+	}
 	/**
 	 * @return the borrower
 	 */
@@ -56,6 +69,8 @@ public class TransactionInformation implements Serializable {
 	public void setLender(List<Borrower> lender) {
 		this.lender = lender;
 	}
+	
+	
 	
 
 }

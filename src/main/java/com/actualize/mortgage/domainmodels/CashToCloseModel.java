@@ -6,50 +6,113 @@ public class CashToCloseModel implements Serializable {
 
 	private static final long serialVersionUID = -4771787160333094672L;
 	
-	private String isAmountChangedIndicator = "";
-	private String  itemChangeDescription = "";
-	private String  itemEstimatedAmount = "";
-	private String  itemFinalAmount = "";
-	private String  itemType = "";
-	private String  itemPaymentType = "";
-	
-	public String getItemChangeDescription() {
-		return itemChangeDescription;
+	private String integratedDisclosureCashToCloseItemAmountChangedIndicator;
+    private String integratedDisclosureCashToCloseItemChangeDescription;
+    private String integratedDisclosureCashToCloseItemEstimatedAmount;
+    private String integratedDisclosureCashToCloseItemFinalAmount;
+    private String integratedDisclosureCashToCloseItemPaymentType;
+    private String integratedDisclosureCashToCloseItemType;
+    private boolean toDisplay = false;
+    private String index;
+	/**
+	 * @return the integratedDisclosureCashToCloseItemAmountChangedIndicator
+	 */
+	public String getIntegratedDisclosureCashToCloseItemAmountChangedIndicator() {
+		return integratedDisclosureCashToCloseItemAmountChangedIndicator;
 	}
-	public void setItemChangeDescription(String itemChangeDescription) {
-		this.itemChangeDescription = itemChangeDescription;
+	/**
+	 * @param integratedDisclosureCashToCloseItemAmountChangedIndicator the integratedDisclosureCashToCloseItemAmountChangedIndicator to set
+	 */
+	public void setIntegratedDisclosureCashToCloseItemAmountChangedIndicator(
+			String integratedDisclosureCashToCloseItemAmountChangedIndicator) {
+		this.integratedDisclosureCashToCloseItemAmountChangedIndicator = integratedDisclosureCashToCloseItemAmountChangedIndicator;
 	}
-	public String getItemEstimatedAmount() {
-		return itemEstimatedAmount;
+	/**
+	 * @return the integratedDisclosureCashToCloseItemChangeDescription
+	 */
+	public String getIntegratedDisclosureCashToCloseItemChangeDescription() {
+		return integratedDisclosureCashToCloseItemChangeDescription;
 	}
-	public void setItemEstimatedAmount(String itemEstimatedAmount) {
-		this.itemEstimatedAmount = itemEstimatedAmount;
+	/**
+	 * @param integratedDisclosureCashToCloseItemChangeDescription the integratedDisclosureCashToCloseItemChangeDescription to set
+	 */
+	public void setIntegratedDisclosureCashToCloseItemChangeDescription(
+			String integratedDisclosureCashToCloseItemChangeDescription) {
+		this.integratedDisclosureCashToCloseItemChangeDescription = integratedDisclosureCashToCloseItemChangeDescription;
 	}
-	public String getItemFinalAmount() {
-		return itemFinalAmount;
+	/**
+	 * @return the integratedDisclosureCashToCloseItemEstimatedAmount
+	 */
+	public String getIntegratedDisclosureCashToCloseItemEstimatedAmount() {
+		return integratedDisclosureCashToCloseItemEstimatedAmount;
 	}
-	public void setItemFinalAmount(String itemFinalAmount) {
-		this.itemFinalAmount = itemFinalAmount;
+	/**
+	 * @param integratedDisclosureCashToCloseItemEstimatedAmount the integratedDisclosureCashToCloseItemEstimatedAmount to set
+	 */
+	public void setIntegratedDisclosureCashToCloseItemEstimatedAmount(
+			String integratedDisclosureCashToCloseItemEstimatedAmount) {
+		this.integratedDisclosureCashToCloseItemEstimatedAmount = integratedDisclosureCashToCloseItemEstimatedAmount;
 	}
-	public String getItemType() {
-		return itemType;
+	/**
+	 * @return the integratedDisclosureCashToCloseItemFinalAmount
+	 */
+	public String getIntegratedDisclosureCashToCloseItemFinalAmount() {
+		return integratedDisclosureCashToCloseItemFinalAmount;
 	}
-	public void setItemType(String itemType) {
-		this.itemType = itemType;
+	/**
+	 * @param integratedDisclosureCashToCloseItemFinalAmount the integratedDisclosureCashToCloseItemFinalAmount to set
+	 */
+	public void setIntegratedDisclosureCashToCloseItemFinalAmount(String integratedDisclosureCashToCloseItemFinalAmount) {
+		this.integratedDisclosureCashToCloseItemFinalAmount = integratedDisclosureCashToCloseItemFinalAmount;
 	}
-	public String getItemPaymentType() {
-		return itemPaymentType;
+	/**
+	 * @return the integratedDisclosureCashToCloseItemPaymentType
+	 */
+	public String getIntegratedDisclosureCashToCloseItemPaymentType() {
+		return integratedDisclosureCashToCloseItemPaymentType;
 	}
-	public void setItemPaymentType(String itemPaymentType) {
-		this.itemPaymentType = itemPaymentType;
+	/**
+	 * @param integratedDisclosureCashToCloseItemPaymentType the integratedDisclosureCashToCloseItemPaymentType to set
+	 */
+	public void setIntegratedDisclosureCashToCloseItemPaymentType(String integratedDisclosureCashToCloseItemPaymentType) {
+		this.integratedDisclosureCashToCloseItemPaymentType = integratedDisclosureCashToCloseItemPaymentType;
 	}
-	public String getIsAmountChangedIndicator() {
-		return isAmountChangedIndicator;
+	/**
+	 * @return the integratedDisclosureCashToCloseItemType
+	 */
+	public String getIntegratedDisclosureCashToCloseItemType() {
+		return integratedDisclosureCashToCloseItemType;
 	}
-	public void setIsAmountChangedIndicator(String isAmountChangedIndicator) {
-		this.isAmountChangedIndicator = isAmountChangedIndicator;
+	/**
+	 * @param integratedDisclosureCashToCloseItemType the integratedDisclosureCashToCloseItemType to set
+	 */
+	public void setIntegratedDisclosureCashToCloseItemType(String integratedDisclosureCashToCloseItemType) {
+		this.integratedDisclosureCashToCloseItemType = integratedDisclosureCashToCloseItemType;
 	}
-	
-	
+	/**
+	 * @return the toDisplay
+	 */
+	public boolean isToDisplay() {
+		return toDisplay;
+	}
+	/**
+	 * @param toDisplay the toDisplay to set
+	 */
+	public void setToDisplay(boolean toDisplay) {
+		this.toDisplay = toDisplay;
+	}
+	/**
+	 * @return the index
+	 */
+	public String getIndex() {
+		return index;
+	}
+	/**
+	 * @param index the index to set
+	 */
+	public void setIndex(String index) {
+		this.index = index;
+	}
+    
 	
 }
