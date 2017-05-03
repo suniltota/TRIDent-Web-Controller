@@ -1,7 +1,11 @@
 package com.actualize.mortgage.domainmodels;
 
 import java.io.Serializable;
-
+/**
+ * this class  
+ * @author sboragala
+ *
+ */
 public class CashToCloseModel implements Serializable {
 
 	private static final long serialVersionUID = -4771787160333094672L;
@@ -12,8 +16,8 @@ public class CashToCloseModel implements Serializable {
     private String integratedDisclosureCashToCloseItemFinalAmount;
     private String integratedDisclosureCashToCloseItemPaymentType;
     private String integratedDisclosureCashToCloseItemType;
-    private boolean toDisplay = false;
     private String index;
+    
 	/**
 	 * @return the integratedDisclosureCashToCloseItemAmountChangedIndicator
 	 */
@@ -88,18 +92,6 @@ public class CashToCloseModel implements Serializable {
 	 */
 	public void setIntegratedDisclosureCashToCloseItemType(String integratedDisclosureCashToCloseItemType) {
 		this.integratedDisclosureCashToCloseItemType = integratedDisclosureCashToCloseItemType;
-	}
-	/**
-	 * @return the toDisplay
-	 */
-	public boolean isToDisplay() {
-		return toDisplay;
-	}
-	/**
-	 * @param toDisplay the toDisplay to set
-	 */
-	public void setToDisplay(boolean toDisplay) {
-		this.toDisplay = toDisplay;
 	}
 	/**
 	 * @return the index

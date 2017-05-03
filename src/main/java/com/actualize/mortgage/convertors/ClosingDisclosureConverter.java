@@ -907,101 +907,71 @@ public class ClosingDisclosureConverter {
     /**
      * Creates createCalculatingCashtoClose UI response
      * @param document
-     * @return 
+     * @return CashToClose
      */
-    public List<CashToClose> createCalculatingCashtoClose(Deal deal) {
-    	List<CashToClose> cashToCloseList = new LinkedList<>();
-		
-    	DocumentClass documentClass = new DocumentClass((Element)deal.getElementAddNS("../../../../DOCUMENT_CLASSIFICATION/DOCUMENT_CLASSES/DOCUMENT_CLASS[DocumentType='Other']"));
-		boolean alternateView = "ClosingDisclosure:AlternateForm".equalsIgnoreCase(documentClass.documentTypeOtherDescription) ? true : false ;
+    public CashToClose createCalculatingCashtoClose(Deal deal) {
 
-		List<CashToCloseModel> cashToCloseModels = populateCashToCloseModel(deal);
-		CashToCloseItems cashToCloseItems = new CashToCloseItems((Element)deal.getElementAddNS("LOANS/LOAN/DOCUMENT_SPECIFIC_DATA_SETS/DOCUMENT_SPECIFIC_DATA_SET/INTEGRATED_DISCLOSURE/CASH_TO_CLOSE_ITEMS"));
-		String closingCostsFinancedDetail = "";
-		String closingCostsFinancedFinalAmount = "";
-		for (CashToCloseItem cashToCloseItem : cashToCloseItems.cashToCloseItems) {
+    	CashToClose cashToClose = new CashToClose();
+    	List<CashToCloseModel> cashToCloseModelList = new LinkedList<>();
+    	
+    	DocumentClass documentClass = new DocumentClass((Element)deal.getElementAddNS("../../../../DOCUMENT_CLASSIFICATION/DOCUMENT_CLASSES/DOCUMENT_CLASS[DocumentType='Other']"));
+    	CashToCloseItems cashToCloseItems = new CashToCloseItems((Element)deal.getElementAddNS("LOANS/LOAN/DOCUMENT_SPECIFIC_DATA_SETS/DOCUMENT_SPECIFIC_DATA_SET/INTEGRATED_DISCLOSURE/CASH_TO_CLOSE_ITEMS"));
+    	
+    	boolean alternateView = "ClosingDisclosure:AlternateForm".equalsIgnoreCase(documentClass.documentTypeOtherDescription) ? true : false ;
+		
+    	cashToClose.setAlternateView(alternateView);
+    	
+    	for (CashToCloseItem cashToCloseItem : cashToCloseItems.cashToCloseItems) {
 			switch (cashToCloseItem.integratedDisclosureCashToCloseItemType) {
 				case "LoanAmount":
-					setValuesAndInsert(cashToCloseItem,"Loan Amount",!alternateView ? "-1" : "1");
+					cashToClose.setLoanAmount(setCashToClose(cashToCloseItem,"Loan Amount",!alternateView ? "-1" : "1"));
 					break;
 				case "TotalClosingCosts":
-					setValuesAndInsert(cashToCloseItem,"Total Closing Costs (J)",!alternateView ? "1" : "2");
+					cashToClose.setTotalClosingCosts(setCashToClose(cashToCloseItem,"Total Closing Costs (J)",!alternateView ? "1" : "2"));
 					break;
 				case "ClosingCostsPaidBeforeClosing":
-					setValuesAndInsert(cashToCloseItem,"Closing Costs Paid Before Closing",!alternateView ? "2" : "3");
+					cashToClose.setClosingCostsPaidBeforeClosing(setCashToClose(cashToCloseItem,"Closing Costs Paid Before Closing",!alternateView ? "2" : "3"));
 					break;
 				case "ClosingCostsFinanced":
-					closingCostsFinancedDetail = "Closing Costs Financed (Paid from your Loan Amount)";
-					
-					setValuesAndInsert(cashToCloseItem,"Closing Costs Financed \n (Paid from your Loan Amount)",!alternateView ? "3" : "-1");
+					cashToClose.setClosingCostsFinanced(setCashToClose(cashToCloseItem,"Closing Costs Financed \n (Paid from your Loan Amount)",!alternateView ? "3" : "-1"));
 					break;
 				case "DownPayment":
-					setValuesAndInsert(cashToCloseItem,"Down Payment/Funds from Borrower",!alternateView ? "4" : "-1");
+					cashToClose.setDownPayment(setCashToClose(cashToCloseItem,"Down Payment/Funds from Borrower",!alternateView ? "4" : "-1"));
 					break;
 				case "TotalPayoffsAndPayments":
-					setValuesAndInsert(cashToCloseItem,"Total Payoffs and Payments (K)",!alternateView ? "-1" : "4");
+					cashToClose.setTotalPayoffsAndPayments(setCashToClose(cashToCloseItem,"Total Payoffs and Payments (K)",!alternateView ? "-1" : "4"));
 					break;
 				case "Deposit":
-					setValuesAndInsert(cashToCloseItem,"Deposit",!alternateView ? "5" : "-1");
+					cashToClose.setDeposit(setCashToClose(cashToCloseItem,"Deposit",!alternateView ? "5" : "-1"));
 					break;
 				case "FundsForBorrower":
-					setValuesAndInsert(cashToCloseItem,"Funds for Borrower",!alternateView ? "6" : "-1");
+					cashToClose.setFundsForBorrower(setCashToClose(cashToCloseItem,"Funds for Borrower",!alternateView ? "6" : "-1"));
 					break;
 				case "SellerCredits":
-					setValuesAndInsert(cashToCloseItem,"Seller Credits",!alternateView ? "7" : "-1");
+					cashToClose.setSellerCredits(setCashToClose(cashToCloseItem,"Seller Credits",!alternateView ? "7" : "-1"));
 					break;
 				case "AdjustmentsAndOtherCredits":
-					setValuesAndInsert(cashToCloseItem,"Adjustments and Other Credits",!alternateView ? "8" : "-1");
+					cashToClose.setAdjustmentsAndOtherCredits(setCashToClose(cashToCloseItem,"Adjustments and Other Credits",!alternateView ? "8" : "-1"));
 					break;
 				case "CashToCloseTotal":
-					CashToClose cashToClose = new CashToClose();
-					cashToClose.setLabel("Cash to Close");
-					cashToClose.setIndex(!alternateView ? "9" : "5");
-					if(alternateView){
-						if (!cashToCloseItem.getItemEstimatedAmount().isEmpty()) {
-							if(cashToCloseItem.getItemPaymentType().equalsIgnoreCase("FromBorrower")){
-								cashToClose.setDtcStatus("YES");
-							} else if(cashToCloseItem.getItemPaymentType().equalsIgnoreCase("ToBorrower")){
-								cashToClose.setDtcStatus("NO");
-							}
-						} else if(!cashToCloseItem.getItemFinalAmount().isEmpty()) {
-							if (cashToCloseItem.getItemPaymentType().equalsIgnoreCase("FromBorrower")) {
-								cashToClose.setDtcStatus("YES");
-							} else if(cashToCloseItem.getItemPaymentType().equalsIgnoreCase("ToBorrower")){
-								cashToClose.setDtcStatus("NO");
-							}
-						}
-						if(!closingCostsFinancedFinalAmount.isEmpty()){
-							cashToClose.setClosingCostsFinancedTotalAmount(closingCostsFinancedFinalAmount);
-							cashToClose.setDtcDetail(closingCostsFinancedDetail);
-						}
-					}
-					cashToClose.setType(cashToCloseItem.getItemType());
-					cashToClose.setLeFromBorrower(cashToCloseItem.getItemEstimatedAmount());
-					cashToClose.setFinalFromBorrower(cashToCloseItem.getItemFinalAmount());
-					cashToCloseList.add(cashToClose);
+					cashToCloseModelList.add(setCashToClose(cashToCloseItem,"Cash to Close",!alternateView ? "9" : "5"));
 					break;
 			}
 		}
 		
-		Collections.sort(cashToCloseList,new Comparator<CashToClose>(){
-			@Override
-			public int compare(CashToClose o1, CashToClose o2) {
-				return o1.getIndex().compareTo(o2.getIndex());
-			}
-		});
+    	cashToClose.setCashToCloseTotal(cashToCloseModelList);
 		
-		return cashToCloseList;
+		return cashToClose;
 	}
-	
+    
     /**
-     * Insert values to UI response
-     * @param cashToCloseList
+     * insert values to UI response
      * @param cashToCloseItem
      * @param displayLabel
      * @param index
+     * @return CashToCloseModel
      */
-	private CashToCloseModel setValuesAndInsert(CashToCloseItem cashToCloseItem, String displayLabel, String index)
+	private CashToCloseModel setCashToClose(CashToCloseItem cashToCloseItem, String displayLabel, String index)
 	{
 		CashToCloseModel cashToCashToCloseModel = new CashToCloseModel();
 		if(!"-1".equals(index))
@@ -1013,36 +983,8 @@ public class ClosingDisclosureConverter {
 			cashToCashToCloseModel.setIntegratedDisclosureCashToCloseItemFinalAmount(cashToCloseItem.integratedDisclosureCashToCloseItemFinalAmount);
 			cashToCashToCloseModel.setIntegratedDisclosureCashToCloseItemPaymentType(cashToCloseItem.integratedDisclosureCashToCloseItemPaymentType);
 			cashToCashToCloseModel.setIntegratedDisclosureCashToCloseItemType(cashToCloseItem.integratedDisclosureCashToCloseItemType);
-			cashToCashToCloseModel.setToDisplay(true);
 		}
 		return cashToCashToCloseModel;
-	}
-	
-	/**
-	 * Insert CashToClose values to populate in UI response
-	 * @param deal
-	 * @return CashToCloseModel List
-	 */
-	public List<CashToCloseModel> populateCashToCloseModel(Deal deal)
-	{
-		List<CashToCloseModel> cashToCloseModels = new LinkedList<>();
-		CashToCloseItems cashToCloseItems = new CashToCloseItems((Element)deal.getElementAddNS("LOANS/LOAN/DOCUMENT_SPECIFIC_DATA_SETS/DOCUMENT_SPECIFIC_DATA_SET/INTEGRATED_DISCLOSURE/CASH_TO_CLOSE_ITEMS"));
-
-		if(null != cashToCloseItems && cashToCloseItems.cashToCloseItems.length>0)
-		{
-			for(CashToCloseItem cashtocloseitem : cashToCloseItems.cashToCloseItems)
-			{
-				CashToCloseModel cashToCloseModel = new CashToCloseModel();
-					cashToCloseModel.setIsAmountChangedIndicator(!"".equals(cashtocloseitem.integratedDisclosureCashToCloseItemAmountChangedIndicator) ? cashtocloseitem.integratedDisclosureCashToCloseItemAmountChangedIndicator : "");
-					cashToCloseModel.setItemChangeDescription(!"".equals(cashtocloseitem.integratedDisclosureCashToCloseItemChangeDescription) ? cashtocloseitem.integratedDisclosureCashToCloseItemChangeDescription : "");
-					cashToCloseModel.setItemEstimatedAmount(!"".equals(cashtocloseitem.integratedDisclosureCashToCloseItemEstimatedAmount) ? cashtocloseitem.integratedDisclosureCashToCloseItemEstimatedAmount : "");
-					cashToCloseModel.setItemPaymentType(!"".equals(cashtocloseitem.integratedDisclosureCashToCloseItemPaymentType) ? cashtocloseitem.integratedDisclosureCashToCloseItemPaymentType : "");
-					cashToCloseModel.setItemType(!"".equals(cashtocloseitem.integratedDisclosureCashToCloseItemType) ? cashtocloseitem.integratedDisclosureCashToCloseItemType : "" );
-					cashToCloseModel.setItemFinalAmount(!"".equals(cashtocloseitem.integratedDisclosureCashToCloseItemFinalAmount) ? cashtocloseitem.integratedDisclosureCashToCloseItemFinalAmount : "");
-				cashToCloseModels.add(cashToCloseModel);
-			}	
-		}
-		return cashToCloseModels;
 	}
 	
     /**

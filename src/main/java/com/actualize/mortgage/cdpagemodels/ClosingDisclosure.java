@@ -6,7 +6,6 @@
 package com.actualize.mortgage.cdpagemodels;
 
 import java.io.Serializable;
-import java.util.List;
 
 import com.actualize.mortgage.domainmodels.CashToClose;
 import com.actualize.mortgage.domainmodels.ClosingCostDetailsLoanCosts;
@@ -40,7 +39,7 @@ public class ClosingDisclosure implements Serializable {
     private CostsAtClosing costsAtClosing;
     private ClosingCostDetailsLoanCosts closingCostDetailsLoanCosts;
     private ClosingCostDetailsOtherCosts closingCostDetailsOtherCosts;
-    private List<CashToClose> cashToCloses;
+    private CashToClose cashToCloses;
     private SummariesofTransactions summariesofTransactions;
     
 	/**
@@ -166,13 +165,13 @@ public class ClosingDisclosure implements Serializable {
 	/**
 	 * @return the cashToCloses
 	 */
-	public List<CashToClose> getCashToCloses() {
+	public CashToClose getCashToCloses() {
 		return cashToCloses;
 	}
 	/**
 	 * @param cashToCloses the cashToCloses to set
 	 */
-	public void setCashToCloses(List<CashToClose> cashToCloses) {
+	public void setCashToCloses(CashToClose cashToCloses) {
 		this.cashToCloses = cashToCloses;
 	}
 	/**
