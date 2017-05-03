@@ -1,17 +1,13 @@
 package com.actualize.mortgage.domainmodels;
 
 import java.io.Serializable;
-import java.util.List;
 /**
  * Defines ClosingCostProperties for UI Response
  * @author sboragala
  *
  */
-public class ClosingCostProperties implements Serializable {
+public class ClosingCostProperties extends TLCostsModel implements Serializable {
 		
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 943579811603225142L;
 	
 	private String displayLabel;
@@ -27,7 +23,7 @@ public class ClosingCostProperties implements Serializable {
 	private boolean optionalCostIndicator;
 	private boolean regulationZPointsAndFeesIndicator;
 	private boolean paymentIncludedInAPRIndicator;
-	private List<FeePaymentsModel> feePayments;
+	
 	
 	/**
 	 * @return the displayLabel
@@ -185,19 +181,5 @@ public class ClosingCostProperties implements Serializable {
 	public void setPaymentIncludedInAPRIndicator(boolean paymentIncludedInAPRIndicator) {
 		this.paymentIncludedInAPRIndicator = paymentIncludedInAPRIndicator;
 	}
-	/**
-	 * @return the feePayments
-	 */
-	public List<FeePaymentsModel> getFeePayments() {
-		return feePayments;
-	}
-	/**
-	 * @param feePayments the feePayments to set
-	 */
-	public void setFeePayments(List<FeePaymentsModel> feePayments) {
-		this.feePayments = feePayments;
-	}
-	
-	
 	
 }

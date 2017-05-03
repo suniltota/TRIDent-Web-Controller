@@ -7,9 +7,6 @@ package com.actualize.mortgage.domainmodels;
  */
 public class OtherCostsToGovtFees extends ClosingCostProperties{
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 3838593012086916344L;
 	
 	private String deedAmt;

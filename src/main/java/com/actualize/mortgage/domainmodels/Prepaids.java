@@ -1,14 +1,13 @@
 package com.actualize.mortgage.domainmodels;
 
 import java.io.Serializable;
-import java.util.List;
 
 /**
  * Defines prepaids Model in UI response
  * @author sboragala
  *
  */
-public class Prepaids implements Serializable{
+public class Prepaids extends TLCostsModel implements Serializable{
 
 	private static final long serialVersionUID = -3311207376960972497L;
 	
@@ -27,7 +26,7 @@ public class Prepaids implements Serializable{
 	private boolean regulationZPointsAndFeesIndicator;
 	private boolean paymentIncludedInAPRIndicator;
 	private String prepaidPaidTo;
-	private List<PrepaidPayments> prepaidPayments;
+	
 	
 	/**
 	 * @return the gseDisplayLabelText
@@ -208,18 +207,6 @@ public class Prepaids implements Serializable{
 	 */
 	public void setPrepaidPaidTo(String prepaidPaidTo) {
 		this.prepaidPaidTo = prepaidPaidTo;
-	}
-	/**
-	 * @return the prepaidPayments
-	 */
-	public List<PrepaidPayments> getPrepaidPayments() {
-		return prepaidPayments;
-	}
-	/**
-	 * @param prepaidPayments the prepaidPayments to set
-	 */
-	public void setPrepaidPayments(List<PrepaidPayments> prepaidPayments) {
-		this.prepaidPayments = prepaidPayments;
 	}
 	
 }
