@@ -1146,7 +1146,7 @@ public class ClosingDisclosureConverter {
 		closingCostProperties.setRegulationZPointsAndFeesIndicator(Convertor.stringToBoolean(fee.feeDetail.regulationZPointsAndFeesIndicator));
 		closingCostProperties.setPaymentIncludedInAPRIndicator(Convertor.stringToBoolean(fee.feeDetail.paymentIncludedInAPRIndicator));
 		closingCostProperties.setFeeTotalPercent(fee.feeDetail.feeTotalPercent);
-		closingCostProperties.setFeePaidTo(fee.feePaidTo.legalEntity.legalEntityDetail.fullName);
+		closingCostProperties.setFeePaidToFullName(fee.feePaidTo.legalEntity.legalEntityDetail.fullName);
 		
 		if(!"".equals(fee.feeDetail.displayLabelText))
 			closingCostProperties.setDisplayLabel(fee.feeDetail.displayLabelText);

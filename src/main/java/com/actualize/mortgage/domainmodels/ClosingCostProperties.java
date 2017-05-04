@@ -12,7 +12,7 @@ public class ClosingCostProperties extends TLCostsModel implements Serializable 
 	
 	private String displayLabel;
 	private String gseDisplayLabel;
-	private String feePaidTo;
+	private String feePaidToFullName;
 	private String feePaidToType;
 	private String feePaidToTypeOtherDescription;
 	private String feePercentBasisType;
@@ -50,16 +50,16 @@ public class ClosingCostProperties extends TLCostsModel implements Serializable 
 		this.gseDisplayLabel = gseDisplayLabel;
 	}
 	/**
-	 * @return the feePaidTo
+	 * @return the feePaidToFullName
 	 */
-	public String getFeePaidTo() {
-		return feePaidTo;
+	public String getFeePaidToFullName() {
+		return feePaidToFullName;
 	}
 	/**
-	 * @param feePaidTo the feePaidTo to set
+	 * @param feePaidToFullName the feePaidToFullName to set
 	 */
-	public void setFeePaidTo(String feePaidTo) {
-		this.feePaidTo = feePaidTo;
+	public void setFeePaidToFullName(String feePaidToFullName) {
+		this.feePaidToFullName = feePaidToFullName;
 	}
 	/**
 	 * @return the feePaidToType
