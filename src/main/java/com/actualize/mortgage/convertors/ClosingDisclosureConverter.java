@@ -21,7 +21,6 @@ import com.actualize.mortgage.domainmodels.AutomatedUnderwritingsModel;
 import com.actualize.mortgage.domainmodels.Borrower;
 import com.actualize.mortgage.domainmodels.CashToClose;
 import com.actualize.mortgage.domainmodels.CashToCloseModel;
-import com.actualize.mortgage.domainmodels.ClosingCostDetails;
 import com.actualize.mortgage.domainmodels.ClosingCostDetailsLoanCosts;
 import com.actualize.mortgage.domainmodels.ClosingCostDetailsOtherCosts;
 import com.actualize.mortgage.domainmodels.ClosingCostProperties;
@@ -31,7 +30,6 @@ import com.actualize.mortgage.domainmodels.CostsAtClosingCashToClose;
 import com.actualize.mortgage.domainmodels.CostsAtClosingClosingCosts;
 import com.actualize.mortgage.domainmodels.ETIA;
 import com.actualize.mortgage.domainmodels.ETIASection;
-import com.actualize.mortgage.domainmodels.FeePaymentsModel;
 import com.actualize.mortgage.domainmodels.IEPatClosing;
 import com.actualize.mortgage.domainmodels.LoanInformation;
 import com.actualize.mortgage.domainmodels.LoanInformationLoanIdentifier;
@@ -43,8 +41,6 @@ import com.actualize.mortgage.domainmodels.LoanTermsPI;
 import com.actualize.mortgage.domainmodels.LoanTermsPrepaymentPenalty;
 import com.actualize.mortgage.domainmodels.LoanTermsTemporaryBuydown;
 import com.actualize.mortgage.domainmodels.NameModel;
-import com.actualize.mortgage.domainmodels.OtherCostsToGovtFees;
-import com.actualize.mortgage.domainmodels.PrepaidPayments;
 import com.actualize.mortgage.domainmodels.Prepaids;
 import com.actualize.mortgage.domainmodels.ProjectedPaymentsDetails;
 import com.actualize.mortgage.domainmodels.ProjectedPaymentsEE;
@@ -210,12 +206,15 @@ public class ClosingDisclosureConverter {
     {
     	TransactionInformation transactionInformation = new TransactionInformation();
         
+    	String refinanceSameLenderIndicator = deal.getValueAddNS("LOANS/LOAN/REFINANCE/RefinanceSameLenderIndicator");
+    	
     	Parties borrowerParties = new Parties((Element)deal.getElementAddNS("PARTIES"), "[ROLES/ROLE/ROLE_DETAIL/PartyRoleType='Borrower']");
     	Parties sellerParties = new Parties((Element)deal.getElementAddNS("PARTIES"), "[ROLES/ROLE/ROLE_DETAIL/PartyRoleType='PropertySeller']");
     	Parties lenders = new Parties((Element)deal.getElementAddNS("PARTIES"), "[ROLES/ROLE/ROLE_DETAIL/PartyRoleType='NotePayTo']");
     	transactionInformation.setBorrower(createBorrowers(borrowerParties,"Borrower"));
     	transactionInformation.setSeller(createBorrowers(sellerParties,"PropertySeller"));
     	transactionInformation.setLender(createBorrowers(lenders,"NotePayTo"));
+    	transactionInformation.setRefinanceSameLenderIndicator(Boolean.parseBoolean(refinanceSameLenderIndicator));
     	
 		return transactionInformation;
     	
@@ -317,7 +316,6 @@ public class ClosingDisclosureConverter {
 		}
 		
  	    loanInformationSection.setPurpose(loanPurpose); 
- 	    loanInformationSection.setProduct(loanProduct); 
  	    loanInformationSection.setConstructionLoan(Convertor.stringToBoolean(loanDetail.constructionLoanIndicator));
  	    loanInformationSection.setConstructionLoanType(construction.ConstructionLoanType);
  	    loanInformationSection.setConstructionPeriodNumberOfMonthsCount(construction.ConstructionPeriodNumberOfMonthsCount);
@@ -775,6 +773,8 @@ public class ClosingDisclosureConverter {
 		List<Prepaids> prepaidsList = new LinkedList<>();
 		List<IEPatClosing> iePatClosingList = new LinkedList<>();
 		List<ClosingCostProperties> otherCostsList = new LinkedList<>();
+		List<TLCostsModel> totalOtherCosts = new LinkedList<>();
+		List<TLCostsModel> otherClosingCosts = new LinkedList<>();
 		
     	Fees taxesAndOtherGovernmentFees = new Fees((Element)deal.getElementAddNS("LOANS/LOAN/FEE_INFORMATION/FEES"),"[FEE_DETAIL/IntegratedDisclosureSectionType = 'TaxesAndOtherGovernmentFees']");
     	EscrowItems escrowItems = new EscrowItems((Element)deal.getElementAddNS("LOANS/LOAN/ESCROW/ESCROW_ITEMS"));
@@ -1207,7 +1207,6 @@ public class ClosingDisclosureConverter {
 	private Prepaids setPrepaids(PrepaidItem prepaidItem, boolean to)
 	{
 		Prepaids prepaid = new Prepaids();
-		List<PrepaidPayments> prepaidPaymentsList = new ArrayList<>();
 		
 		prepaid.setPrepaidItemType(prepaidItem.prepaidItemDetail.prepaidItemType);
 		prepaid.setPrepaidItemTypeOtherDescription(prepaidItem.prepaidItemDetail.prepaidItemTypeOtherDescription);
@@ -1318,6 +1317,8 @@ public class ClosingDisclosureConverter {
 		iePatClosing.setFeePaidToTypeOtherDescription(escrowItemDetail.feePaidToTypeOtherDescription);
 		iePatClosing.setIntegratedDisclosureSectionType(escrowItemDetail.integratedDisclosureSectionType);
 		iePatClosing.setRegulationZPointsAndFeesIndicator(escrowItemDetail.regulationZPointsAndFeesIndicator);
+		iePatClosing.setPaymentIncludedInAPRIndicator(escrowItemDetail.paymentIncludedInAPRIndicator);
+		iePatClosing.setPaymentIncludedInAPRIndicator(escrowItemDetail.paymentIncludedInAPRIndicator);
 		
 		for(EscrowItemPayment escrowitempayment : escrowItem.escrowItemPayments.escrowItemPayment)
 		{

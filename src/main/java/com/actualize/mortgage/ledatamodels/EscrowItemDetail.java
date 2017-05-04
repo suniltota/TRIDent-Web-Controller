@@ -17,6 +17,7 @@ public class EscrowItemDetail extends MISMODataAccessObject {
 	public final String feePaidToTypeOtherDescription;
 	public final String integratedDisclosureSectionType;
 	public final String regulationZPointsAndFeesIndicator;
+	public final String paymentIncludedInAPRIndicator;
 	  
 	public EscrowItemDetail(Element element) {
 		super(element);
@@ -45,6 +46,7 @@ public class EscrowItemDetail extends MISMODataAccessObject {
 		feePaidToTypeOtherDescription = getValueAddNS("FeePaidToTypeOtherDescription");
 		integratedDisclosureSectionType = getValueAddNS("IntegratedDisclosureSectionType");
 		regulationZPointsAndFeesIndicator = getValueAddNS("RegulationZPointsAndFeesIndicator");
+		paymentIncludedInAPRIndicator = getValueAddNS("EXTENSION/MISMO/PaymentIncludedInAPRIndicator");
 	}
 	
 	public String displayName() {
