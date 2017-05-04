@@ -1,47 +1,10 @@
 package com.actualize.mortgage.services.impl;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBElement;
-import javax.xml.bind.Unmarshaller;
-import javax.xml.transform.OutputKeys;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMResult;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
-
-import org.mismo.residential._2009.schemas.MESSAGE;
-import org.mismo.residential._2009.schemas.ObjectFactory;
-import org.w3c.dom.Document;
-
-import com.actualize.mortgage.domainmodels.ConversionError;
-import com.actualize.mortgage.domainmodels.DataElement;
-import com.actualize.mortgage.domainmodels.IntermediateXMLData;
 import com.actualize.mortgage.services.MortgageServices;
-import com.actualize.mortgage.utils.OutputFormatter;
-
-import transformer.TRIDTransformer;
-import ucdutils.UCDArcRolesParty;
-import ucdutils.UCDArcRolesSignatory;
-import xmlutils.Utils;
 
 public class MortgageServicesImpl implements MortgageServices{
 	
-    List<ConversionError> conversionErrorList = null;
+   /* List<ConversionError> conversionErrorList = null;
 	
 	@Override
     public MESSAGE generateMasterXML(IntermediateXMLData intermediateXMLData) throws Exception {
@@ -280,6 +243,6 @@ public class MortgageServicesImpl implements MortgageServices{
     
     private String canonicalSearchString(String str) {
         return str.replaceAll("\\s", "").toUpperCase();
-    }
+    }*/
 
 }

@@ -31,7 +31,6 @@ import com.actualize.mortgage.lepagemodels.LoanEstimateSectionBorrower;
 import com.actualize.mortgage.lepagemodels.LoanEstimateSectionRateLock;
 import com.actualize.mortgage.utils.StringFormatter;
 
-import leform.Formatter;
 
 /**
  * 
@@ -94,10 +93,10 @@ public class LoanEstimateConvertor {
 		
 		loanEstimateSection.setLenderFullName(StringFormatter.STRINGCLEAN.formatString(lenderDetail.fullName));
 		loanEstimateSection.setLenderAddress(toAddressModel(lenderAddress));
-		loanEstimateSection.setDateIssued(Formatter.DATE.format(idDetail.IntegratedDisclosureIssuedDate));
+		loanEstimateSection.setDateIssued(idDetail.IntegratedDisclosureIssuedDate);
 		loanEstimateSection.setApplicants(applicants(borrowerParties));
-		loanEstimateSection.setEstimatedPropValue(Formatter.ZEROTRUNCDOLLARS.format(salePrice(loanTerms, salesContractDetail, propertyValuationDetail, propertyDetail)));
-		loanEstimateSection.setLoanTerm(Formatter.YEARSMONTHS.format(loanTerm(loanDetail, maturityRule, construction)));
+		loanEstimateSection.setEstimatedPropValue(salePrice(loanTerms, salesContractDetail, propertyValuationDetail, propertyDetail));
+		loanEstimateSection.setLoanTerm(loanTerm(loanDetail, maturityRule, construction));
 		loanEstimateSection.setPurpose(loanTerms.loanPurposeType);
 		loanEstimateSection.setProduct(idDetail.IntegratedDisclosureLoanProductDescription);
 		loanEstimateSection.setLoanType("Other".equalsIgnoreCase(loanType) ? loanTerms.mortgageTypeOtherDescription :loanType);
@@ -221,7 +220,7 @@ public class LoanEstimateConvertor {
 		String timezone = "";
 		if (locks.locks.length > 0)
 			if (locks.locks[locks.locks.length - 1].LockStatusType.equalsIgnoreCase("Locked")) {
-				loanEstimateSectionRateLock.setUntillDate(Formatter.DATETIME.format(locks.locks[locks.locks.length - 1].LockExpirationDatetime)) ;
+				loanEstimateSectionRateLock.setUntillDate(locks.locks[locks.locks.length - 1].LockExpirationDatetime);
 				loanEstimateSectionRateLock.setUntillTimeZone(locks.locks[locks.locks.length - 1].extension.other.LockExpirationTimezoneType);
 			}
 	
@@ -236,8 +235,8 @@ public class LoanEstimateConvertor {
 		// Append subsequent lines
 		timezone = idDetail.extension.other.IntegratedDisclosureEstimatedClosingCostsExpirationTimezoneType;
 		String formattedTimezone = timezone.equals("") ? "" : (" " + timezone);
-			loanEstimateSectionRateLock.setExpireDate(Formatter.DATE.format(idDetail.IntegratedDisclosureEstimatedClosingCostsExpirationDatetime));
-			loanEstimateSectionRateLock.setExpireTime(Formatter.TIME.format(idDetail.IntegratedDisclosureEstimatedClosingCostsExpirationDatetime));
+			loanEstimateSectionRateLock.setExpireDate(idDetail.IntegratedDisclosureEstimatedClosingCostsExpirationDatetime);
+			loanEstimateSectionRateLock.setExpireTime(idDetail.IntegratedDisclosureEstimatedClosingCostsExpirationDatetime);
 			loanEstimateSectionRateLock.setExpireTimeZone(formattedTimezone);
 	
 		return loanEstimateSectionRateLock;

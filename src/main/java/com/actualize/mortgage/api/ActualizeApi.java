@@ -1,43 +1,14 @@
 package com.actualize.mortgage.api;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
 import java.io.StringReader;
-import java.io.StringWriter;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Properties;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBElement;
-import javax.xml.bind.Unmarshaller;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.transform.OutputKeys;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
-
-import org.mismo.residential._2009.schemas.MESSAGE;
-import org.mismo.residential._2009.schemas.ObjectFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import org.w3c.dom.Document;
 
-import com.actualize.mortgage.domainmodels.IntermediateXMLData;
-import com.actualize.mortgage.domainmodels.PDFResponse;
 import com.actualize.mortgage.sercurity.SessionContext;
 import com.actualize.mortgage.services.MortgageServices;
-import com.uniformdisclosure.UniformDisclosureBuilder;
-import com.uniformdisclosure.UniformDisclosureBuilderSeller;
-
-import datalayer.InputData;
-import datalayer.PopulateInputData;
 
 @RestController
 @RequestMapping(value="/actualize")
@@ -55,7 +26,7 @@ public class ActualizeApi {
 	 * @return PDF document 
 	 * @throws Exception
 	 */
-    @RequestMapping(value = "/generatePDF", method = { RequestMethod.POST })
+   /* @RequestMapping(value = "/generatePDF", method = { RequestMethod.POST })
     public List<PDFResponse> saveModifiedUCD(@RequestBody String xmldoc) throws Exception {
         PopulateInputData reader = new PopulateInputData();
         List<InputData> inputData = reader.getData(new ByteArrayInputStream(xmldoc.getBytes("utf-8")));
@@ -78,14 +49,14 @@ public class ActualizeApi {
         }
         return pdfResponseList;
     }
-    
+    */
     /**
      * converts MESSAGE JAXB Object to String 
      * @param message
      * @return xml as String
      * @throws Exception
      */
-    public String transformObjectToXML(MESSAGE message) throws Exception{
+   /* public String transformObjectToXML(MESSAGE message) throws Exception{
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         DocumentBuilder db = dbf.newDocumentBuilder();
         Document document = db.newDocument();
@@ -99,7 +70,7 @@ public class ActualizeApi {
        t.transform(source, result);
        
        return  result.getWriter().toString();
-   }
+   }*/
     
     /**
      * converts org.w3c.dom.document to JAXB MESSAGE object
@@ -107,7 +78,7 @@ public class ActualizeApi {
      * @return MESSAGE as JAXB Object
      * @throws Exception
      */
-	private MESSAGE transformXmlToObject(Document xmlout) throws Exception{
+	/*private MESSAGE transformXmlToObject(Document xmlout) throws Exception{
         // Prepare document to write
         Transformer tr = TransformerFactory.newInstance().newTransformer();
         tr.setOutputProperty(OutputKeys.INDENT, "yes");
@@ -125,7 +96,7 @@ public class ActualizeApi {
         JAXBElement<MESSAGE> unmarshalledObject = (JAXBElement<MESSAGE>) jaxbUnmarshaller.unmarshal(new ByteArrayInputStream(out.toByteArray()));
 
         return unmarshalledObject.getValue();
-    }
+    }*/
 	
 	/**
 	 * when a user inputs the plain text in a defined format as an input, will return UCD xml  
@@ -133,14 +104,14 @@ public class ActualizeApi {
 	 * @return master xml as String
 	 * @throws Exception
 	 */
-	@RequestMapping(value = "/textToXml", method = { RequestMethod.POST })
+	/*@RequestMapping(value = "/textToXml", method = { RequestMethod.POST })
     public String generateXmlFromTxtTemplate(@RequestBody String txtdoc) throws Exception {
         Properties propFile = parsePropertiesString(txtdoc);
         InputStream mappingFileStream = getClass().getClassLoader().getResourceAsStream("TextTemplateMap.xml");
         IntermediateXMLData intermediateXMLData = mortgageServices.generateIntermediateXMLForTxtTemplate(mappingFileStream, propFile);
         MESSAGE message = mortgageServices.generateMasterXML(intermediateXMLData);
         return transformObjectToXML(message);
-    }
+    }*/
 	
     /**
      * parses the String to Properties
