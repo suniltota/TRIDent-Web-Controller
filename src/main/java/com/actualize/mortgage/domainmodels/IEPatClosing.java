@@ -27,7 +27,7 @@ public class IEPatClosing implements Serializable{
 	private String spAtClosing;
 	private String spB4Closing;
 	private String paidByOthers;
-	private String lenderStatus;
+	private boolean lenderStatus;
 	
 	/**
 	 * @return the displayLabel
@@ -224,16 +224,15 @@ public class IEPatClosing implements Serializable{
 	/**
 	 * @return the lenderStatus
 	 */
-	public String getLenderStatus() {
+	public boolean isLenderStatus() {
 		return lenderStatus;
 	}
 	/**
 	 * @param lenderStatus the lenderStatus to set
 	 */
-	public void setLenderStatus(String lenderStatus) {
+	public void setLenderStatus(boolean lenderStatus) {
 		this.lenderStatus = lenderStatus;
 	}
-	
 	
 	
 }
