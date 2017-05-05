@@ -2,7 +2,11 @@ package com.actualize.mortgage.domainmodels;
 
 import java.io.Serializable;
 import java.util.List;
-
+/**
+ * this class defines Other Costs for  Closing Cost Details in JSON response 
+ * @author sboragala
+ *
+ */
 public class ClosingCostDetailsOtherCosts implements Serializable {
 
 
@@ -13,123 +17,133 @@ public class ClosingCostDetailsOtherCosts implements Serializable {
 	private String iEPatClosingTotalAmount;
 	private String otherTotalAmount;
 	private String totalOtherCostsTotalAmount;
-	private String totalClosingCostsTotalAmount;
-	private ClosingCostProperties totalOtherCosts;
-	private List<ClosingCostProperties> totalClosingCosts;
+	private TLCostsModel totalOtherCosts;
 	private List<ClosingCostProperties> tOGovtFeesList;
 	private List<Prepaids> prepaidsList;
 	private List<IEPatClosing> iEPatClosingList;
 	private List<ClosingCostProperties> OtherCostsList;
-
-	public ClosingCostProperties getTotalOtherCosts() {
-		return totalOtherCosts;
-	}
-
-	public void setTotalOtherCosts(ClosingCostProperties totalOtherCosts) {
-		this.totalOtherCosts = totalOtherCosts;
-	}
-
-	public List<ClosingCostProperties> getTotalClosingCosts() {
-		return totalClosingCosts;
-	}
-
-	public void setTotalClosingCosts(List<ClosingCostProperties> totalClosingCosts) {
-		this.totalClosingCosts = totalClosingCosts;
-	}
-
+	/**
+	 * @return the tOGovtFeesTotalAmount
+	 */
 	public String gettOGovtFeesTotalAmount() {
 		return tOGovtFeesTotalAmount;
 	}
-
-	
+	/**
+	 * @param tOGovtFeesTotalAmount the tOGovtFeesTotalAmount to set
+	 */
 	public void settOGovtFeesTotalAmount(String tOGovtFeesTotalAmount) {
 		this.tOGovtFeesTotalAmount = tOGovtFeesTotalAmount;
 	}
-
-	
+	/**
+	 * @return the prepaidsTotalAmount
+	 */
 	public String getPrepaidsTotalAmount() {
 		return prepaidsTotalAmount;
 	}
-
-	
+	/**
+	 * @param prepaidsTotalAmount the prepaidsTotalAmount to set
+	 */
 	public void setPrepaidsTotalAmount(String prepaidsTotalAmount) {
 		this.prepaidsTotalAmount = prepaidsTotalAmount;
 	}
-
-	
+	/**
+	 * @return the iEPatClosingTotalAmount
+	 */
 	public String getiEPatClosingTotalAmount() {
 		return iEPatClosingTotalAmount;
 	}
-
-	
+	/**
+	 * @param iEPatClosingTotalAmount the iEPatClosingTotalAmount to set
+	 */
 	public void setiEPatClosingTotalAmount(String iEPatClosingTotalAmount) {
 		this.iEPatClosingTotalAmount = iEPatClosingTotalAmount;
 	}
-
-	
+	/**
+	 * @return the otherTotalAmount
+	 */
 	public String getOtherTotalAmount() {
 		return otherTotalAmount;
 	}
-
-	
+	/**
+	 * @param otherTotalAmount the otherTotalAmount to set
+	 */
 	public void setOtherTotalAmount(String otherTotalAmount) {
 		this.otherTotalAmount = otherTotalAmount;
 	}
-
-	
+	/**
+	 * @return the totalOtherCostsTotalAmount
+	 */
 	public String getTotalOtherCostsTotalAmount() {
 		return totalOtherCostsTotalAmount;
 	}
-
-	
+	/**
+	 * @param totalOtherCostsTotalAmount the totalOtherCostsTotalAmount to set
+	 */
 	public void setTotalOtherCostsTotalAmount(String totalOtherCostsTotalAmount) {
 		this.totalOtherCostsTotalAmount = totalOtherCostsTotalAmount;
 	}
-
-	
-	public String getTotalClosingCostsTotalAmount() {
-		return totalClosingCostsTotalAmount;
+	/**
+	 * @return the totalOtherCosts
+	 */
+	public TLCostsModel getTotalOtherCosts() {
+		return totalOtherCosts;
 	}
-
-	
-	public void setTotalClosingCostsTotalAmount(String totalClosingCostsTotalAmount) {
-		this.totalClosingCostsTotalAmount = totalClosingCostsTotalAmount;
+	/**
+	 * @param totalOtherCosts the totalOtherCosts to set
+	 */
+	public void setTotalOtherCosts(TLCostsModel totalOtherCosts) {
+		this.totalOtherCosts = totalOtherCosts;
 	}
-
-	public List<Prepaids> getPrepaidsList() {
-		return prepaidsList;
-	}
-
-	public void setPrepaidsList(List<Prepaids> prepaidsList) {
-		this.prepaidsList = prepaidsList;
-	}
-
-	public List<IEPatClosing> getiEPatClosingList() {
-		return iEPatClosingList;
-	}
-
-	public void setiEPatClosingList(List<IEPatClosing> iEPatClosingList) {
-		this.iEPatClosingList = iEPatClosingList;
-	}
-
-	
-
+	/**
+	 * @return the tOGovtFeesList
+	 */
 	public List<ClosingCostProperties> gettOGovtFeesList() {
 		return tOGovtFeesList;
 	}
-
+	/**
+	 * @param tOGovtFeesList the tOGovtFeesList to set
+	 */
 	public void settOGovtFeesList(List<ClosingCostProperties> tOGovtFeesList) {
 		this.tOGovtFeesList = tOGovtFeesList;
 	}
-
+	/**
+	 * @return the prepaidsList
+	 */
+	public List<Prepaids> getPrepaidsList() {
+		return prepaidsList;
+	}
+	/**
+	 * @param prepaidsList the prepaidsList to set
+	 */
+	public void setPrepaidsList(List<Prepaids> prepaidsList) {
+		this.prepaidsList = prepaidsList;
+	}
+	/**
+	 * @return the iEPatClosingList
+	 */
+	public List<IEPatClosing> getiEPatClosingList() {
+		return iEPatClosingList;
+	}
+	/**
+	 * @param iEPatClosingList the iEPatClosingList to set
+	 */
+	public void setiEPatClosingList(List<IEPatClosing> iEPatClosingList) {
+		this.iEPatClosingList = iEPatClosingList;
+	}
+	/**
+	 * @return the otherCostsList
+	 */
 	public List<ClosingCostProperties> getOtherCostsList() {
 		return OtherCostsList;
 	}
-
+	/**
+	 * @param otherCostsList the otherCostsList to set
+	 */
 	public void setOtherCostsList(List<ClosingCostProperties> otherCostsList) {
 		OtherCostsList = otherCostsList;
 	}
 
+	
 
 	
 }

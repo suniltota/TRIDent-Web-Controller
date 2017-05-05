@@ -25,7 +25,7 @@ public class Prepaids extends TLCostsModel implements Serializable{
 	private String prepaidItemTypeOtherDescription;
 	private boolean regulationZPointsAndFeesIndicator;
 	private boolean paymentIncludedInAPRIndicator;
-	private String prepaidPaidTo;
+	private String prepaidPaidToFullName;
 	
 	
 	/**
@@ -197,16 +197,17 @@ public class Prepaids extends TLCostsModel implements Serializable{
 		this.paymentIncludedInAPRIndicator = paymentIncludedInAPRIndicator;
 	}
 	/**
-	 * @return the prepaidPaidTo
+	 * @return the prepaidPaidToFullName
 	 */
-	public String getPrepaidPaidTo() {
-		return prepaidPaidTo;
+	public String getPrepaidPaidToFullName() {
+		return prepaidPaidToFullName;
 	}
 	/**
-	 * @param prepaidPaidTo the prepaidPaidTo to set
+	 * @param prepaidPaidToFullName the prepaidPaidToFullName to set
 	 */
-	public void setPrepaidPaidTo(String prepaidPaidTo) {
-		this.prepaidPaidTo = prepaidPaidTo;
+	public void setPrepaidPaidToFullName(String prepaidPaidToFullName) {
+		this.prepaidPaidToFullName = prepaidPaidToFullName;
 	}
+	
 	
 }

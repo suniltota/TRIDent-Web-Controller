@@ -10,6 +10,7 @@ import java.io.Serializable;
 import com.actualize.mortgage.domainmodels.CashToClose;
 import com.actualize.mortgage.domainmodels.ClosingCostDetailsLoanCosts;
 import com.actualize.mortgage.domainmodels.ClosingCostDetailsOtherCosts;
+import com.actualize.mortgage.domainmodels.ClosingCostsTotal;
 import com.actualize.mortgage.domainmodels.ClosingInformation;
 import com.actualize.mortgage.domainmodels.CostsAtClosing;
 import com.actualize.mortgage.domainmodels.ETIASection;
@@ -39,6 +40,7 @@ public class ClosingDisclosure implements Serializable {
     private CostsAtClosing costsAtClosing;
     private ClosingCostDetailsLoanCosts closingCostDetailsLoanCosts;
     private ClosingCostDetailsOtherCosts closingCostDetailsOtherCosts;
+    private ClosingCostsTotal closingCostsTotal;
     private CashToClose cashToCloses;
     private SummariesofTransactions summariesofTransactions;
     
@@ -161,6 +163,18 @@ public class ClosingDisclosure implements Serializable {
 	 */
 	public void setClosingCostDetailsOtherCosts(ClosingCostDetailsOtherCosts closingCostDetailsOtherCosts) {
 		this.closingCostDetailsOtherCosts = closingCostDetailsOtherCosts;
+	}
+	/**
+	 * @return the closingCostsTotal
+	 */
+	public ClosingCostsTotal getClosingCostsTotal() {
+		return closingCostsTotal;
+	}
+	/**
+	 * @param closingCostsTotal the closingCostsTotal to set
+	 */
+	public void setClosingCostsTotal(ClosingCostsTotal closingCostsTotal) {
+		this.closingCostsTotal = closingCostsTotal;
 	}
 	/**
 	 * @return the cashToCloses

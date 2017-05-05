@@ -24,6 +24,7 @@ import com.actualize.mortgage.domainmodels.CashToCloseModel;
 import com.actualize.mortgage.domainmodels.ClosingCostDetailsLoanCosts;
 import com.actualize.mortgage.domainmodels.ClosingCostDetailsOtherCosts;
 import com.actualize.mortgage.domainmodels.ClosingCostProperties;
+import com.actualize.mortgage.domainmodels.ClosingCostsTotal;
 import com.actualize.mortgage.domainmodels.ClosingInformation;
 import com.actualize.mortgage.domainmodels.CostsAtClosing;
 import com.actualize.mortgage.domainmodels.CostsAtClosingCashToClose;
@@ -50,11 +51,13 @@ import com.actualize.mortgage.domainmodels.ProjectedPaymentsPC;
 import com.actualize.mortgage.domainmodels.ProjectedPaymentsPI;
 import com.actualize.mortgage.domainmodels.PropertyValuationDetailModel;
 import com.actualize.mortgage.domainmodels.SalesContractDetailModel;
+import com.actualize.mortgage.domainmodels.SummariesofTransactions;
 import com.actualize.mortgage.domainmodels.TLCostsModel;
 import com.actualize.mortgage.domainmodels.TransactionInformation;
 import com.actualize.mortgage.ledatamodels.AboutVersion;
 import com.actualize.mortgage.ledatamodels.AboutVersions;
 import com.actualize.mortgage.ledatamodels.Address;
+import com.actualize.mortgage.ledatamodels.Adjustment;
 import com.actualize.mortgage.ledatamodels.AmortizationRule;
 import com.actualize.mortgage.ledatamodels.BuydownOccurence;
 import com.actualize.mortgage.ledatamodels.BuydownRule;
@@ -84,6 +87,7 @@ import com.actualize.mortgage.ledatamodels.InterestRateLifetimeAdjustmentRule;
 import com.actualize.mortgage.ledatamodels.InterestRatePerChangeAdjustmentRule;
 import com.actualize.mortgage.ledatamodels.InterestRatePerChangeAdjustmentRules;
 import com.actualize.mortgage.ledatamodels.LegalEntityDetail;
+import com.actualize.mortgage.ledatamodels.Liabilities;
 import com.actualize.mortgage.ledatamodels.LoanDetail;
 import com.actualize.mortgage.ledatamodels.LoanIdentifiers;
 import com.actualize.mortgage.ledatamodels.MIDataDetail;
@@ -136,8 +140,10 @@ public class ClosingDisclosureConverter {
 	        closingDisclosure.setCostsAtClosing(createCostsAtClosing(deal));
 	        closingDisclosure.setClosingCostDetailsLoanCosts(ClosingCostDetailsLoanCosts(deal));
 	     	closingDisclosure.setClosingCostDetailsOtherCosts(createClosingCostOtherCosts(deal)); 
+	     	closingDisclosure.setClosingCostsTotal(createClosingCostsTotal(deal));
 	     	closingDisclosure.setCashToCloses(createCalculatingCashtoClose(deal));
-        
+	     	closingDisclosure.setSummariesofTransactions(createSummariesofTransactions(deal));
+	     	
         //PAGE THREE OF CD
         /*ClosingDisclosurePageThree closingDisclosurePageThree = new ClosingDisclosurePageThree();
             closingDisclosurePageThree.setCashToCloses(createCalculatingCashtoClose(deal));
@@ -438,9 +444,9 @@ public class ClosingDisclosureConverter {
  	    loanTermsPI.setInitialPrincipalAndInterestPaymentAmount(paymentRule.InitialPrincipalAndInterestPaymentAmount);
 		loanTermsPI.setFullyIndexedInitialPrincipalAndInterestPaymentAmount(paymentRule.FullyIndexedInitialPrincipalAndInterestPaymentAmount);
 		loanTermsPI.setAdjustmentRuleType("First");
-		loanTermsPI.setFirstPrincipalAndInterestPaymentChangeMonthsCount(principalAndInterestPaymentLifetimeAdjustmentRule.FirstPrincipalAndInterestPaymentChangeMonthsCount);
-		loanTermsPI.setPrincipalAndInterestPaymentMaximumAmountEarliestEffectiveMonthsCount(principalAndInterestPaymentLifetimeAdjustmentRule.PrincipalAndInterestPaymentMaximumAmountEarliestEffectiveMonthsCount);
-		loanTermsPI.setPrincipalAndInterestPaymentMaximumAmount(principalAndInterestPaymentLifetimeAdjustmentRule.PrincipalAndInterestPaymentMaximumAmount);
+		loanTermsPI.setFirstPrincipalAndInterestPaymentChangeMonthsCount(principalAndInterestPaymentLifetimeAdjustmentRule.firstPrincipalAndInterestPaymentChangeMonthsCount);
+		loanTermsPI.setPrincipalAndInterestPaymentMaximumAmountEarliestEffectiveMonthsCount(principalAndInterestPaymentLifetimeAdjustmentRule.principalAndInterestPaymentMaximumAmountEarliestEffectiveMonthsCount);
+		loanTermsPI.setPrincipalAndInterestPaymentMaximumAmount(principalAndInterestPaymentLifetimeAdjustmentRule.principalAndInterestPaymentMaximumAmount);
 		loanTermsPI.setPaymentIncreaseIndicator(Convertor.stringToBoolean(loanDetail.paymentIncreaseIndicator));
 		//loanTermsPrepaymentPenalty
 		loanTermsPrepaymentPenalty.setPrepaymentPenaltyIndicator(Convertor.stringToBoolean(loanDetail.prepaymentPenaltyIndicator));
@@ -762,8 +768,6 @@ public class ClosingDisclosureConverter {
 		
 		return closingCostDetailsLoanCosts;
 	}
-	
-	
 		
 	/**
      * create ClosingCostDetailsOtherCosts UI response
@@ -776,13 +780,12 @@ public class ClosingDisclosureConverter {
 		String idSummaryBase = loan + "/DOCUMENT_SPECIFIC_DATA_SETS/DOCUMENT_SPECIFIC_DATA_SET/INTEGRATED_DISCLOSURE/INTEGRATED_DISCLOSURE_SECTION_SUMMARIES/";
     			
     	ClosingCostDetailsOtherCosts closingCostDetailsOtherCosts = new ClosingCostDetailsOtherCosts();
+    	TLCostsModel totalOtherCosts = new TLCostsModel();
     	
     	List<ClosingCostProperties> tOGovtFeesList = new ArrayList<>();
 		List<Prepaids> prepaidsList = new LinkedList<>();
 		List<IEPatClosing> iePatClosingList = new LinkedList<>();
 		List<ClosingCostProperties> otherCostsList = new LinkedList<>();
-		List<TLCostsModel> totalOtherCosts = new LinkedList<>();
-		List<TLCostsModel> otherClosingCosts = new LinkedList<>();
 		
 		IntegratedDisclosureSectionSummaries idSectionSummaries = new IntegratedDisclosureSectionSummaries((Element)deal.getElementAddNS(idSummaryBase));
 		Fees taxesAndOtherGovernmentFees = new Fees((Element)deal.getElementAddNS("LOANS/LOAN/FEE_INFORMATION/FEES"),"[FEE_DETAIL/IntegratedDisclosureSectionType = 'TaxesAndOtherGovernmentFees']");
@@ -800,6 +803,38 @@ public class ClosingDisclosureConverter {
 				closingCostDetailsOtherCosts.setPrepaidsTotalAmount(idSectionSummaries.integratedDisclosureSectionSummaries[i].integratedDisclosureSectionSummaryDetail.integratedDisclosureSectionTotalAmount);
     		else if("InitialEscrowPaymentAtClosing".equalsIgnoreCase(idSectionSummaries.integratedDisclosureSectionSummaries[i].integratedDisclosureSectionSummaryDetail.integratedDisclosureSectionType))
 				closingCostDetailsOtherCosts.setiEPatClosingTotalAmount(idSectionSummaries.integratedDisclosureSectionSummaries[i].integratedDisclosureSectionSummaryDetail.integratedDisclosureSectionTotalAmount);
+    		else if("TotalOtherCosts".equalsIgnoreCase(idSectionSummaries.integratedDisclosureSectionSummaries[i].integratedDisclosureSectionSummaryDetail.integratedDisclosureSectionType))
+				closingCostDetailsOtherCosts.setTotalOtherCostsTotalAmount(idSectionSummaries.integratedDisclosureSectionSummaries[i].integratedDisclosureSectionSummaryDetail.integratedDisclosureSectionTotalAmount);
+    		else if("OtherCostsSubtotal".equalsIgnoreCase(idSectionSummaries.integratedDisclosureSectionSummaries[i].integratedDisclosureSectionSummaryDetail.integratedDisclosureSubsectionType))
+    		{
+    			
+    			IntegratedDisclosureSubsectionPayment[] integratedDisclosureSubsectionPayments = idSectionSummaries.integratedDisclosureSectionSummaries[i].integratedDisclosureSubsectionPayments.integratedDisclosureSubsectionPayments;
+    			for(int j=0; j< integratedDisclosureSubsectionPayments.length; j++)
+    			{
+    				String paidBy = integratedDisclosureSubsectionPayments[j].integratedDisclosureSubsectionPaidByType;
+    				if("Buyer".equalsIgnoreCase(paidBy))
+    				{
+    					if("AtClosing".equalsIgnoreCase(integratedDisclosureSubsectionPayments[j].integratedDisclosureSubsectionPaymentTimingType))
+    						totalOtherCosts.setBpAtClosing(integratedDisclosureSubsectionPayments[j].integratedDisclosureSubsectionPaymentAmount);
+    					else if("BeforeClosing".equalsIgnoreCase(integratedDisclosureSubsectionPayments[j].integratedDisclosureSubsectionPaymentTimingType))
+    						totalOtherCosts.setBpB4Closing(integratedDisclosureSubsectionPayments[j].integratedDisclosureSubsectionPaymentAmount);
+    				}
+    				else if("Seller".equalsIgnoreCase(paidBy))
+    				{
+    					if("AtClosing".equalsIgnoreCase(integratedDisclosureSubsectionPayments[j].integratedDisclosureSubsectionPaymentTimingType))
+    						totalOtherCosts.setSpAtClosing(integratedDisclosureSubsectionPayments[j].integratedDisclosureSubsectionPaymentAmount);
+    					else if("BeforeClosing".equalsIgnoreCase(integratedDisclosureSubsectionPayments[j].integratedDisclosureSubsectionPaymentTimingType))
+    						totalOtherCosts.setSpB4Closing(integratedDisclosureSubsectionPayments[j].integratedDisclosureSubsectionPaymentAmount);
+    				}
+    				else
+    					totalOtherCosts.setPaidByOthers(integratedDisclosureSubsectionPayments[j].integratedDisclosureSubsectionPaymentAmount);
+    					
+    					if("Lender".equalsIgnoreCase(paidBy))
+    						totalOtherCosts.setLenderStatus(true);
+    					else
+    						totalOtherCosts.setLenderStatus(false);
+    			}
+    		}
     	}
     	
     	
@@ -863,12 +898,70 @@ public class ClosingDisclosureConverter {
 			if(!"".equals(otherFees.fees[i].feeDetail.feeType))
 				otherCostsList.add(feeCostsTableRow(otherFees.fees[i]));
 		 
+		closingCostDetailsOtherCosts.settOGovtFeesList(tOGovtFeesList);
 		closingCostDetailsOtherCosts.setPrepaidsList(prepaidsList);
 		closingCostDetailsOtherCosts.setiEPatClosingList(iePatClosingList);
 		closingCostDetailsOtherCosts.setOtherCostsList(otherCostsList);
+		closingCostDetailsOtherCosts.setTotalOtherCosts(totalOtherCosts);
 		
 		return closingCostDetailsOtherCosts;
     	
+    }
+    
+    
+    private ClosingCostsTotal createClosingCostsTotal(Deal deal)
+    {
+    	String loan = "LOANS/LOAN";
+		String idSummaryBase = loan + "/DOCUMENT_SPECIFIC_DATA_SETS/DOCUMENT_SPECIFIC_DATA_SET/INTEGRATED_DISCLOSURE/INTEGRATED_DISCLOSURE_SECTION_SUMMARIES/INTEGRATED_DISCLOSURE_SECTION_SUMMARY";
+		String idSummary = idSummaryBase + "/INTEGRATED_DISCLOSURE_SECTION_SUMMARY_DETAIL";
+		
+    	ClosingCostsTotal closingCostsTotal = new ClosingCostsTotal();
+    	TLCostsModel totalOtherCosts = new TLCostsModel();
+
+    	IntegratedDisclosureSubsectionPayment idPayment = new IntegratedDisclosureSubsectionPayment((Element)deal.getElementAddNS(idSummaryBase + "[INTEGRATED_DISCLOSURE_SECTION_SUMMARY_DETAIL/IntegratedDisclosureSubsectionType='ClosingCostsSubtotal']/INTEGRATED_DISCLOSURE_SUBSECTION_PAYMENTS/INTEGRATED_DISCLOSURE_SUBSECTION_PAYMENT"));
+    	closingCostsTotal.setTotalClosingCosts(idPayment.integratedDisclosureSubsectionPaymentAmount);
+    	
+    	
+    	idPayment = new IntegratedDisclosureSubsectionPayment((Element)deal.getElementAddNS(idSummaryBase + "[INTEGRATED_DISCLOSURE_SECTION_SUMMARY_DETAIL/IntegratedDisclosureSubsectionType='LenderCredits']/INTEGRATED_DISCLOSURE_SUBSECTION_PAYMENTS/INTEGRATED_DISCLOSURE_SUBSECTION_PAYMENT"));
+    	
+    	if (idPayment.integratedDisclosureSubsectionPaymentAmount.equals("")) {
+			IntegratedDisclosureSectionSummaryDetail idLenderCreditTwo = new IntegratedDisclosureSectionSummaryDetail((Element)deal.getElementAddNS(idSummary + "[IntegratedDisclosureSubsectionType='LenderCredits']"));
+			closingCostsTotal.setLenderCredits(idLenderCreditTwo.integratedDisclosureSubsectionTotalAmount);
+		} else
+			closingCostsTotal.setLenderCredits(idPayment.integratedDisclosureSubsectionPaymentAmount);
+    	
+    	
+    	/*IntegratedDisclosureSubsectionPayments integratedDisclosureSubsectionPayments = integratedDisclosureSectionSummary.integratedDisclosureSubsectionPayments;
+	    if(integratedDisclosureSubsectionPayments.integratedDisclosureSubsectionPayments.length>0)
+		for(IntegratedDisclosureSubsectionPayment integrateddisclosuresubsectionpayment : integratedDisclosureSubsectionPayments.integratedDisclosureSubsectionPayments)
+		{
+								
+			if(("Buyer").equalsIgnoreCase(integrateddisclosuresubsectionpayment.integratedDisclosureSubsectionPaidByType))
+			{
+				if(("AtClosing").equalsIgnoreCase(integrateddisclosuresubsectionpayment.integratedDisclosureSubsectionPaymentTimingType))
+					totalOtherCosts.setBpAtClosing(integrateddisclosuresubsectionpayment.integratedDisclosureSubsectionPaymentAmount);
+				else
+					totalOtherCosts.setBpB4Closing(integrateddisclosuresubsectionpayment.integratedDisclosureSubsectionPaymentAmount);
+			}
+			else if(("Seller").equalsIgnoreCase(integrateddisclosuresubsectionpayment.integratedDisclosureSubsectionPaidByType))
+			{
+				if(("AtClosing").equalsIgnoreCase(integrateddisclosuresubsectionpayment.integratedDisclosureSubsectionPaymentTimingType))
+					totalOtherCosts.setBpAtClosing(integrateddisclosuresubsectionpayment.integratedDisclosureSubsectionPaymentAmount);
+				else
+					totalOtherCosts.setBpB4Closing(integrateddisclosuresubsectionpayment.integratedDisclosureSubsectionPaymentAmount);
+			}
+			if("Lender".equalsIgnoreCase(integrateddisclosuresubsectionpayment.integratedDisclosureSubsectionPaidByType))
+				totalOtherCosts.setLenderStatus(true);
+			else
+				totalOtherCosts.setLenderStatus(false);
+		}
+    	*/
+    	
+    	
+    	
+    	
+    	
+		return closingCostsTotal;
     }
     
     /**
@@ -930,6 +1023,14 @@ public class ClosingDisclosureConverter {
 		
 		return cashToClose;
 	}
+    
+    private SummariesofTransactions createSummariesofTransactions(Deal deal)
+    {
+    	SummariesofTransactions summariesofTransactions = new SummariesofTransactions();
+    	Liabilities liabilities = new Liabilities(null, (Element)deal.getElementAddNS("LIABILITIES/")); 
+    	Adjustment adjustment = new Adjustment(null, (Element)deal.getElementAddNS("LOANS/LOAN/ADJUSTMENT"));
+		return summariesofTransactions;
+    }
     
     /**
      * insert values to UI response
@@ -1248,16 +1349,15 @@ public class ClosingDisclosureConverter {
 		else
 			prepaid.setDisplayLabelText(StringFormatter.CAMEL.formatString(prepaidItem.prepaidItemDetail.prepaidItemType));
 		
-				prepaid.setPrepaidItemPerDiemAmount(prepaidItem.prepaidItemDetail.prepaidItemPerDiemAmount);
-				prepaid.setPrepaidItemPaidFromDate(prepaidItem.prepaidItemDetail.prepaidItemPaidFromDate);
-				prepaid.setPrepaidItemPaidThroughDate(prepaidItem.prepaidItemDetail.prepaidItemPaidThroughDate);
-				prepaid.setPrepaidItemMonthsPaidCount(prepaidItem.prepaidItemDetail.prepaidItemMonthsPaidCount);
-				prepaid.setFeePaidToType(prepaidItem.prepaidItemDetail.feePaidToType);
-				prepaid.setFeePaidToTypeOtherDescription(prepaidItem.prepaidItemDetail.feePaidToTypeOtherDescription);
-				prepaid.setIntegratedDisclosureSectionType(prepaidItem.prepaidItemDetail.integratedDisclosureSectionType);
-				prepaid.setPrepaidItemPerDiemCalculationMethodType(prepaidItem.prepaidItemDetail.prepaidItemPerDiemCalculationMethodType);
-				
-   			 	prepaid.setPrepaidPaidTo(prepaidItem.prepaidItemPaidTo.legalEntity.legalEntityDetail.fullName);
+		prepaid.setPrepaidItemPerDiemAmount(prepaidItem.prepaidItemDetail.prepaidItemPerDiemAmount);
+		prepaid.setPrepaidItemPaidFromDate(prepaidItem.prepaidItemDetail.prepaidItemPaidFromDate);
+		prepaid.setPrepaidItemPaidThroughDate(prepaidItem.prepaidItemDetail.prepaidItemPaidThroughDate);
+		prepaid.setPrepaidItemMonthsPaidCount(prepaidItem.prepaidItemDetail.prepaidItemMonthsPaidCount);
+		prepaid.setFeePaidToType(prepaidItem.prepaidItemDetail.feePaidToType);
+		prepaid.setFeePaidToTypeOtherDescription(prepaidItem.prepaidItemDetail.feePaidToTypeOtherDescription);
+		prepaid.setIntegratedDisclosureSectionType(prepaidItem.prepaidItemDetail.integratedDisclosureSectionType);
+		prepaid.setPrepaidItemPerDiemCalculationMethodType(prepaidItem.prepaidItemDetail.prepaidItemPerDiemCalculationMethodType);
+	 	prepaid.setPrepaidPaidToFullName(prepaidItem.prepaidItemPaidTo.legalEntity.legalEntityDetail.fullName);
 		
 		for(PrepaidItemPayment prepaidPayment: prepaidItem.prepaidItemPayments.prepaidItemPayments)
 		{
