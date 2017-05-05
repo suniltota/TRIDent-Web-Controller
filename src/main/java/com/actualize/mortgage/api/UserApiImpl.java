@@ -65,4 +65,14 @@ public class UserApiImpl {
             throw e;
         }
     }
+    
+    @RequestMapping(value = "/isLoggedIn", method = { RequestMethod.GET, RequestMethod.POST })
+    public String isLoggedIn() throws Exception {
+        String username = "";
+        if (sessionContext.getUserDetails()!=null) {
+            UserDetails userDetails = sessionContext.getUserDetails();
+            username = userDetails.getLoginName();
+        }
+        return username;
+    }
 }

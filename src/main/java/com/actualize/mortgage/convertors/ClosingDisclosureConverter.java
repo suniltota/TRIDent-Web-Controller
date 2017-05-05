@@ -930,8 +930,9 @@ public class ClosingDisclosureConverter {
 		} else
 			closingCostsTotal.setLenderCredits(idPayment.integratedDisclosureSubsectionPaymentAmount);
     	
+    	IntegratedDisclosureSectionSummary integratedDisclosureSectionSummary = new IntegratedDisclosureSectionSummary((Element)deal.getElementAddNS(idSummaryBase + "[INTEGRATED_DISCLOSURE_SECTION_SUMMARY_DETAIL/IntegratedDisclosureSubsectionType='ClosingCostsSubtotal']"));
     	
-    	/*IntegratedDisclosureSubsectionPayments integratedDisclosureSubsectionPayments = integratedDisclosureSectionSummary.integratedDisclosureSubsectionPayments;
+    	IntegratedDisclosureSubsectionPayments integratedDisclosureSubsectionPayments = integratedDisclosureSectionSummary.integratedDisclosureSubsectionPayments;
 	    if(integratedDisclosureSubsectionPayments.integratedDisclosureSubsectionPayments.length>0)
 		for(IntegratedDisclosureSubsectionPayment integrateddisclosuresubsectionpayment : integratedDisclosureSubsectionPayments.integratedDisclosureSubsectionPayments)
 		{
@@ -955,7 +956,7 @@ public class ClosingDisclosureConverter {
 			else
 				totalOtherCosts.setLenderStatus(false);
 		}
-    	*/
+    	
     	
     	
     	
@@ -1026,6 +1027,17 @@ public class ClosingDisclosureConverter {
     
     private SummariesofTransactions createSummariesofTransactions(Deal deal)
     {
+    	String adjustmentTypes ="FuelCosts,RelocationFunds,Repairs,SellersEscrowAssumption,SellersMortgageInsuranceAssumption,SweatEquity.TenantSecurityDeposit,TradeEquity,Other";
+		String cityTaxFees   = "CityPropertyTax,DistrictPropertyTax,TownPropertyTax";
+		String countyTaxFees = "BoroughPropertyTax,CountyPropertyTax";
+		String assesmentFees = "CondominiumAssociationSpecialAssessment,CooperativeAssociationSpecialAssessment,HomeownersAssociationSpecialAssessment";
+		String[] adjustmentFees	 = {"CondominiumAssociationDues","CooperativeAssociationDues","EarthquakeInsurancePremium","FloodInsurancePremium",
+								"GroundRent","HailInsurancePremium","HazardInsurancePremium","HomeownersAssociationDues",
+								"HomeownersInsurancePremium","InterestOnLoanAssumption","MortgageInsurancePremium","PastDuePropertyTax",
+								"RentFromSubjectProperty","StatePropertyTax","Utilities","VolcanoInsurancePremium","WindAndStormInsurancePremium","Other"};
+		String paidAlready   =  "ProceedsOfSubordinateLiens,SatisfactionOfSubordinateLien,";
+		String liabilityFromSeller = "DelinquentTaxes,HELOC,TaxLien,Taxes,ThirdPositionMortgage,Other";
+		
     	SummariesofTransactions summariesofTransactions = new SummariesofTransactions();
     	Liabilities liabilities = new Liabilities(null, (Element)deal.getElementAddNS("LIABILITIES/")); 
     	Adjustment adjustment = new Adjustment(null, (Element)deal.getElementAddNS("LOANS/LOAN/ADJUSTMENT"));
@@ -1248,6 +1260,7 @@ public class ClosingDisclosureConverter {
 		closingCostProperties.setPaymentIncludedInAPRIndicator(Convertor.stringToBoolean(fee.feeDetail.paymentIncludedInAPRIndicator));
 		closingCostProperties.setFeeTotalPercent(fee.feeDetail.feeTotalPercent);
 		closingCostProperties.setFeePaidToFullName(fee.feePaidTo.legalEntity.legalEntityDetail.fullName);
+		closingCostProperties.setFeeActualTotalAmount(fee.feeDetail.feeActualTotalAmount);
 		
 		if(!"".equals(fee.feeDetail.displayLabelText))
 			closingCostProperties.setDisplayLabel(fee.feeDetail.displayLabelText);
