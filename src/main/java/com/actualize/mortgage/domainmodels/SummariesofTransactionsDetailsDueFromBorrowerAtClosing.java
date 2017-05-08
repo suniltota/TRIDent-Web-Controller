@@ -15,10 +15,10 @@ public class SummariesofTransactionsDetailsDueFromBorrowerAtClosing implements S
 	private String salePriceOfProperty;
 	private String salePriceOfPersonalProperty;
 	private String closingCostsPaidAtClosing;
-	private String dueFromBorrowerAtClosingTotalAmount;
 	private List<LiabilityModel> dueFromBorrowerAtClosing;
 	private List<ClosingAdjustmentItemModel> adjustments;
 	private List<ProrationModel> adjustmentsPaidBySellerInAdvance;
+	private IntegratedDisclosureSectionSummaryModel dueFromBorrowerAtClosingTotalAmount;
 	
 	/**
 	 * @return the salePriceOfProperty
@@ -57,18 +57,6 @@ public class SummariesofTransactionsDetailsDueFromBorrowerAtClosing implements S
 		this.closingCostsPaidAtClosing = closingCostsPaidAtClosing;
 	}
 	/**
-	 * @return the dueFromBorrowerAtClosingTotalAmount
-	 */
-	public String getDueFromBorrowerAtClosingTotalAmount() {
-		return dueFromBorrowerAtClosingTotalAmount;
-	}
-	/**
-	 * @param dueFromBorrowerAtClosingTotalAmount the dueFromBorrowerAtClosingTotalAmount to set
-	 */
-	public void setDueFromBorrowerAtClosingTotalAmount(String dueFromBorrowerAtClosingTotalAmount) {
-		this.dueFromBorrowerAtClosingTotalAmount = dueFromBorrowerAtClosingTotalAmount;
-	}
-	/**
 	 * @return the dueFromBorrowerAtClosing
 	 */
 	public List<LiabilityModel> getDueFromBorrowerAtClosing() {
@@ -104,7 +92,19 @@ public class SummariesofTransactionsDetailsDueFromBorrowerAtClosing implements S
 	public void setAdjustmentsPaidBySellerInAdvance(List<ProrationModel> adjustmentsPaidBySellerInAdvance) {
 		this.adjustmentsPaidBySellerInAdvance = adjustmentsPaidBySellerInAdvance;
 	}
-	
+	/**
+	 * @return the dueFromBorrowerAtClosingTotalAmount
+	 */
+	public IntegratedDisclosureSectionSummaryModel getDueFromBorrowerAtClosingTotalAmount() {
+		return dueFromBorrowerAtClosingTotalAmount;
+	}
+	/**
+	 * @param dueFromBorrowerAtClosingTotalAmount the dueFromBorrowerAtClosingTotalAmount to set
+	 */
+	public void setDueFromBorrowerAtClosingTotalAmount(
+			IntegratedDisclosureSectionSummaryModel dueFromBorrowerAtClosingTotalAmount) {
+		this.dueFromBorrowerAtClosingTotalAmount = dueFromBorrowerAtClosingTotalAmount;
+	}
 	
 	
 }

@@ -8,9 +8,10 @@ import java.io.Serializable;
  */
 public class CashToCloseModel implements Serializable {
 
+	
 	private static final long serialVersionUID = -4771787160333094672L;
 	
-	private String integratedDisclosureCashToCloseItemAmountChangedIndicator;
+	private boolean integratedDisclosureCashToCloseItemAmountChangedIndicator;
     private String integratedDisclosureCashToCloseItemChangeDescription;
     private String integratedDisclosureCashToCloseItemEstimatedAmount;
     private String integratedDisclosureCashToCloseItemFinalAmount;
@@ -18,19 +19,20 @@ public class CashToCloseModel implements Serializable {
     private String integratedDisclosureCashToCloseItemType;
     private String index;
     
-	/**
+    /**
 	 * @return the integratedDisclosureCashToCloseItemAmountChangedIndicator
 	 */
-	public String getIntegratedDisclosureCashToCloseItemAmountChangedIndicator() {
+	public boolean isIntegratedDisclosureCashToCloseItemAmountChangedIndicator() {
 		return integratedDisclosureCashToCloseItemAmountChangedIndicator;
 	}
 	/**
 	 * @param integratedDisclosureCashToCloseItemAmountChangedIndicator the integratedDisclosureCashToCloseItemAmountChangedIndicator to set
 	 */
 	public void setIntegratedDisclosureCashToCloseItemAmountChangedIndicator(
-			String integratedDisclosureCashToCloseItemAmountChangedIndicator) {
+			boolean integratedDisclosureCashToCloseItemAmountChangedIndicator) {
 		this.integratedDisclosureCashToCloseItemAmountChangedIndicator = integratedDisclosureCashToCloseItemAmountChangedIndicator;
 	}
+	
 	/**
 	 * @return the integratedDisclosureCashToCloseItemChangeDescription
 	 */

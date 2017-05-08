@@ -17,7 +17,7 @@ public class SummariesofTransactionsDetailsDueFromSellerAtClosing implements Ser
 	private static final long serialVersionUID = -3735613389375681749L;
 	
 	private ClosingCostFundModel excessDeposit;
-	private String closingCostPaidAtClosing;
+	private IntegratedDisclosureSectionSummaryModel closingCostPaidAtClosing;
 	private String existingLoan;
 	private LiabilityModel payoffFirstMortgage;
 	private LiabilityModel payOffSecondMortgage;
@@ -25,7 +25,7 @@ public class SummariesofTransactionsDetailsDueFromSellerAtClosing implements Ser
 	private List<LiabilityModel> dueFromSellerLiabilities;
 	private List<ClosingAdjustmentItemModel> dueFromSellerAdjustments;
 	private List<ProrationModel> dueFromSellerAdjustmentsUnPaidBySeller;
-	private String dueFromSellerTotalAmount;
+	private IntegratedDisclosureSectionSummaryModel dueFromSellerTotalAmount;
 	
 	/**
 	 * @return the excessDeposit
@@ -42,13 +42,13 @@ public class SummariesofTransactionsDetailsDueFromSellerAtClosing implements Ser
 	/**
 	 * @return the closingCostPaidAtClosing
 	 */
-	public String getClosingCostPaidAtClosing() {
+	public IntegratedDisclosureSectionSummaryModel getClosingCostPaidAtClosing() {
 		return closingCostPaidAtClosing;
 	}
 	/**
 	 * @param closingCostPaidAtClosing the closingCostPaidAtClosing to set
 	 */
-	public void setClosingCostPaidAtClosing(String closingCostPaidAtClosing) {
+	public void setClosingCostPaidAtClosing(IntegratedDisclosureSectionSummaryModel closingCostPaidAtClosing) {
 		this.closingCostPaidAtClosing = closingCostPaidAtClosing;
 	}
 	/**
@@ -138,13 +138,13 @@ public class SummariesofTransactionsDetailsDueFromSellerAtClosing implements Ser
 	/**
 	 * @return the dueFromSellerTotalAmount
 	 */
-	public String getDueFromSellerTotalAmount() {
+	public IntegratedDisclosureSectionSummaryModel getDueFromSellerTotalAmount() {
 		return dueFromSellerTotalAmount;
 	}
 	/**
 	 * @param dueFromSellerTotalAmount the dueFromSellerTotalAmount to set
 	 */
-	public void setDueFromSellerTotalAmount(String dueFromSellerTotalAmount) {
+	public void setDueFromSellerTotalAmount(IntegratedDisclosureSectionSummaryModel dueFromSellerTotalAmount) {
 		this.dueFromSellerTotalAmount = dueFromSellerTotalAmount;
 	}
 	

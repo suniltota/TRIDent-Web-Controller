@@ -9,10 +9,10 @@ public class SummariesofTransactionsDetailsDueToSellerAtClosing implements Seria
 
 	private String salePriceOfProperty;
 	private String salePriceOfPersonalProperty;
-	private String closingCostsPaidAtClosing;
+	private IntegratedDisclosureSectionSummaryModel closingCostsPaidAtClosing;
 	private List<ClosingAdjustmentItemModel> dueToSellerAdjustments;
 	private List<ProrationModel> dueToSellerAdjustmentsPaidBySeller;
-	private String dueToSellerTotalAmount;
+	private IntegratedDisclosureSectionSummaryModel dueToSellerTotalAmount;
 	
 	/**
 	 * @return the salePriceOfProperty
@@ -41,13 +41,13 @@ public class SummariesofTransactionsDetailsDueToSellerAtClosing implements Seria
 	/**
 	 * @return the closingCostsPaidAtClosing
 	 */
-	public String getClosingCostsPaidAtClosing() {
+	public IntegratedDisclosureSectionSummaryModel getClosingCostsPaidAtClosing() {
 		return closingCostsPaidAtClosing;
 	}
 	/**
 	 * @param closingCostsPaidAtClosing the closingCostsPaidAtClosing to set
 	 */
-	public void setClosingCostsPaidAtClosing(String closingCostsPaidAtClosing) {
+	public void setClosingCostsPaidAtClosing(IntegratedDisclosureSectionSummaryModel closingCostsPaidAtClosing) {
 		this.closingCostsPaidAtClosing = closingCostsPaidAtClosing;
 	}
 	/**
@@ -77,14 +77,15 @@ public class SummariesofTransactionsDetailsDueToSellerAtClosing implements Seria
 	/**
 	 * @return the dueToSellerTotalAmount
 	 */
-	public String getDueToSellerTotalAmount() {
+	public IntegratedDisclosureSectionSummaryModel getDueToSellerTotalAmount() {
 		return dueToSellerTotalAmount;
 	}
 	/**
 	 * @param dueToSellerTotalAmount the dueToSellerTotalAmount to set
 	 */
-	public void setDueToSellerTotalAmount(String dueToSellerTotalAmount) {
+	public void setDueToSellerTotalAmount(IntegratedDisclosureSectionSummaryModel dueToSellerTotalAmount) {
 		this.dueToSellerTotalAmount = dueToSellerTotalAmount;
 	}
+	
 	
 }

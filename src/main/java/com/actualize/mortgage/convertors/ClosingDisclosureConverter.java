@@ -36,6 +36,9 @@ import com.actualize.mortgage.domainmodels.CostsAtClosingClosingCosts;
 import com.actualize.mortgage.domainmodels.ETIA;
 import com.actualize.mortgage.domainmodels.ETIASection;
 import com.actualize.mortgage.domainmodels.IEPatClosing;
+import com.actualize.mortgage.domainmodels.IntegratedDisclosureSectionSummaryDetailModel;
+import com.actualize.mortgage.domainmodels.IntegratedDisclosureSectionSummaryModel;
+import com.actualize.mortgage.domainmodels.IntegratedDisclosureSubsectionPaymentModel;
 import com.actualize.mortgage.domainmodels.LiabilityModel;
 import com.actualize.mortgage.domainmodels.LoanInformation;
 import com.actualize.mortgage.domainmodels.LoanInformationLoanIdentifier;
@@ -1080,98 +1083,101 @@ public class ClosingDisclosureConverter {
 		{
 			for(int i=0;i<integratedDisclosureSectionSummaryList.integratedDisclosureSectionSummaries.length;i++)
 				if("DueFromBorrowerAtClosing".equalsIgnoreCase(integratedDisclosureSectionSummaryList.integratedDisclosureSectionSummaries[i].integratedDisclosureSectionSummaryDetail.integratedDisclosureSectionType))
-					duefromBorroweratClosing.setDueFromBorrowerAtClosingTotalAmount(integratedDisclosureSectionSummaryList.integratedDisclosureSectionSummaries[i].integratedDisclosureSectionSummaryDetail.integratedDisclosureSectionTotalAmount);
+					duefromBorroweratClosing.setDueFromBorrowerAtClosingTotalAmount(toIntegratedDisclosureSectionSummaryModel(integratedDisclosureSectionSummaryList.integratedDisclosureSectionSummaries[i]));
 				else if("PaidAlreadyByOrOnBehalfOfBorrowerAtClosing".equalsIgnoreCase(integratedDisclosureSectionSummaryList.integratedDisclosureSectionSummaries[i].integratedDisclosureSectionSummaryDetail.integratedDisclosureSectionType))
-					paidByAlready.setPaidByAlreadyTotalAmount(integratedDisclosureSectionSummaryList.integratedDisclosureSectionSummaries[i].integratedDisclosureSectionSummaryDetail.integratedDisclosureSectionTotalAmount);
+					paidByAlready.setPaidByAlreadyTotalAmount(toIntegratedDisclosureSectionSummaryModel(integratedDisclosureSectionSummaryList.integratedDisclosureSectionSummaries[i]));
+		
+			if(!liabilityModels.isEmpty())	
+				liabilityModels.stream()
+					.filter(liability -> "DueFromBorrowerAtClosing".equalsIgnoreCase(liability.getIntegratedDisclosureSectionType()))
+						.forEach(liability -> duefromBorroweratClosingList.add(liability));
 			
-			liabilityModels.stream()
-				.filter(liability -> "DueFromBorrowerAtClosing".equalsIgnoreCase(liability.getIntegratedDisclosureSectionType()))
-					.forEach(liability -> duefromBorroweratClosingList.add(liability));
+			if(!closingAdjustmentItemModels.isEmpty())
+				closingAdjustmentItemModels.stream()
+						.forEach(adjustmentItem ->{
+						if("DueFromBorrowerAtClosing".equalsIgnoreCase(adjustmentItem.getIntegratedDisclosureSectionType())
+								&& "Adjustments".equalsIgnoreCase(adjustmentItem.getIntegratedDisclosureSubsectionType())
+								&& adjustmentTypes.contains(adjustmentItem.getClosingAdjustmentItemType()))
+							duefromBorroweratClosingAdjustmentsList.add(adjustmentItem);
+						
+						if ("PaidAlreadyByOrOnBehalfOfBorrowerAtClosing".equalsIgnoreCase(adjustmentItem.getIntegratedDisclosureSectionType())
+								&& !"SellerCredit".equalsIgnoreCase(adjustmentItem.getClosingAdjustmentItemType())
+								&& !"OtherCredits".equalsIgnoreCase(adjustmentItem.getIntegratedDisclosureSubsectionType())
+								&& !"Adjustments".equalsIgnoreCase(adjustmentItem.getIntegratedDisclosureSubsectionType())) {
+									if (paidAlready.contains(adjustmentItem.getClosingAdjustmentItemType()) && paidAlready.contains(adjustmentItem.getClosingAdjustmentItemTypeOtherDescription()))
+										paidByAlready.setTotalSubordinateFinancingAmount(loanDetail.totalSubordinateFinancingAmount);
+									else
+										paidByAlready.setSubordinateLien(adjustmentItem);	
+								}
+						
+						if ("PaidAlreadyByOrOnBehalfOfBorrowerAtClosing".equalsIgnoreCase(adjustmentItem.getIntegratedDisclosureSectionType())
+								&& "SellerCredit".equalsIgnoreCase(adjustmentItem.getClosingAdjustmentItemType()))
+							paidByAlready.setSellerCredit(adjustmentItem);
+						
+						if ("OtherCredits".equalsIgnoreCase(adjustmentItem.getIntegratedDisclosureSubsectionType()))
+							paidByAlreadyOtherCredits.add(adjustmentItem);
+						
+						if (adjustmentItem.getIntegratedDisclosureSectionType().equals("PaidAlreadyByOrOnBehalfOfBorrowerAtClosing")
+								&& adjustmentItem.getIntegratedDisclosureSubsectionType().equals("Adjustments")
+								&& adjustmentTypes.contains(adjustmentItem.getClosingAdjustmentItemType()))
+							paidByAlreadyAdjustments.add(adjustmentItem);
+						
+						});
 			
-			closingAdjustmentItemModels.stream()
-					.forEach(adjustmentItem ->{
-					if("DueFromBorrowerAtClosing".equalsIgnoreCase(adjustmentItem.getIntegratedDisclosureSectionType())
-							&& "Adjustments".equalsIgnoreCase(adjustmentItem.getIntegratedDisclosureSubsectionType())
-							&& adjustmentTypes.contains(adjustmentItem.getClosingAdjustmentItemType()))
-						duefromBorroweratClosingAdjustmentsList.add(adjustmentItem);
+			if(!prorationsModels.isEmpty())
+				prorationsModels.forEach(prorationItemModel -> {
 					
-					if ("PaidAlreadyByOrOnBehalfOfBorrowerAtClosing".equalsIgnoreCase(adjustmentItem.getIntegratedDisclosureSectionType())
-							&& !"SellerCredit".equalsIgnoreCase(adjustmentItem.getClosingAdjustmentItemType())
-							&& !"OtherCredits".equalsIgnoreCase(adjustmentItem.getIntegratedDisclosureSubsectionType())
-							&& !"Adjustments".equalsIgnoreCase(adjustmentItem.getIntegratedDisclosureSubsectionType())) {
-								if (paidAlready.contains(adjustmentItem.getClosingAdjustmentItemType()) && paidAlready.contains(adjustmentItem.getClosingAdjustmentItemTypeOtherDescription()))
-									paidByAlready.setTotalSubordinateFinancingAmount(loanDetail.totalSubordinateFinancingAmount);
-								else
-									paidByAlready.setSubordinateLien(adjustmentItem);	
-							}
+					if ("DueFromBorrowerAtClosing".equalsIgnoreCase(prorationItemModel.getIntegratedDisclosureSectionType())
+							&& "AdjustmentsForItemsPaidBySellerInAdvance".equalsIgnoreCase(prorationItemModel.getIntegratedDisclosureSubsectionType()))
+					{
+						if (cityTaxFees.contains(prorationItemModel.getProrationItemType()))
+						{
+							prorationItemModel.setDisplayLabelText("City/Town Taxes");
+							paidBySellerInAdvance.add(prorationItemModel);
+						}
+						else if(countyTaxFees.contains(prorationItemModel.getProrationItemType()))
+						{
+							prorationItemModel.setDisplayLabelText("County Taxes");
+							paidBySellerInAdvance.add(prorationItemModel);
+						}
+						else if(assesmentFees.contains(prorationItemModel.getProrationItemType()))
+						{
+							prorationItemModel.setDisplayLabelText("Assessments");
+							paidBySellerInAdvance.add(prorationItemModel);
+						}
+						else
+							paidBySellerInAdvance.add(prorationItemModel);
+					}
+					else if ("PaidAlreadyByOrOnBehalfOfBorrowerAtClosing".equalsIgnoreCase(prorationItemModel.getIntegratedDisclosureSectionType())
+							&& "AdjustmentsForItemsUnpaidBySeller".equalsIgnoreCase(prorationItemModel.getIntegratedDisclosureSubsectionType()))
+					{
+						if (cityTaxFees.contains(prorationItemModel.getProrationItemType()))
+						{
+							prorationItemModel.setDisplayLabelText("City/Town Taxes");
+							paidByAlreadyAdjustmentsUnpaidBySeller.add(prorationItemModel);
+						}
+						else if(countyTaxFees.contains(prorationItemModel.getProrationItemType()))
+						{
+							prorationItemModel.setDisplayLabelText("County Taxes");
+							paidByAlreadyAdjustmentsUnpaidBySeller.add(prorationItemModel);
+						}
+						else if(assesmentFees.contains(prorationItemModel.getProrationItemType()))
+						{
+							prorationItemModel.setDisplayLabelText("Assessments");
+							paidByAlreadyAdjustmentsUnpaidBySeller.add(prorationItemModel);
+						}
+						else if(Arrays.asList(adjustmentFees).contains(prorationItemModel.getProrationItemType()))
+							paidByAlreadyAdjustmentsUnpaidBySeller.add(prorationItemModel);
+					}
 					
-					if ("PaidAlreadyByOrOnBehalfOfBorrowerAtClosing".equalsIgnoreCase(adjustmentItem.getIntegratedDisclosureSectionType())
-							&& "SellerCredit".equalsIgnoreCase(adjustmentItem.getClosingAdjustmentItemType()))
-						paidByAlready.setSellerCredit(adjustmentItem);
-					
-					if ("OtherCredits".equalsIgnoreCase(adjustmentItem.getIntegratedDisclosureSubsectionType()))
-						paidByAlreadyOtherCredits.add(adjustmentItem);
-					
-					if (adjustmentItem.getIntegratedDisclosureSectionType().equals("PaidAlreadyByOrOnBehalfOfBorrowerAtClosing")
-							&& adjustmentItem.getIntegratedDisclosureSubsectionType().equals("Adjustments")
-							&& adjustmentTypes.contains(adjustmentItem.getClosingAdjustmentItemType()))
-						paidByAlreadyAdjustments.add(adjustmentItem);
-					
-					});
-			
-			
-			prorationsModels.forEach(prorationItemModel -> {
-				
-				if ("DueFromBorrowerAtClosing".equalsIgnoreCase(prorationItemModel.getIntegratedDisclosureSectionType())
-						&& "AdjustmentsForItemsPaidBySellerInAdvance".equalsIgnoreCase(prorationItemModel.getIntegratedDisclosureSubsectionType()))
-				{
-					if (cityTaxFees.contains(prorationItemModel.getProrationItemType()))
-					{
-						prorationItemModel.setDisplayLabelText("City/Town Taxes");
-						paidBySellerInAdvance.add(0,prorationItemModel);
-					}
-					else if(countyTaxFees.contains(prorationItemModel.getProrationItemType()))
-					{
-						prorationItemModel.setDisplayLabelText("County Taxes");
-						paidBySellerInAdvance.add(1,prorationItemModel);
-					}
-					else if(assesmentFees.contains(prorationItemModel.getProrationItemType()))
-					{
-						prorationItemModel.setDisplayLabelText("Assessments");
-						paidBySellerInAdvance.add(2,prorationItemModel);
-					}
-					else
-						paidBySellerInAdvance.add(prorationItemModel);
-				}
-				else if ("PaidAlreadyByOrOnBehalfOfBorrowerAtClosing".equalsIgnoreCase(prorationItemModel.getIntegratedDisclosureSectionType())
-						&& "AdjustmentsForItemsUnpaidBySeller".equalsIgnoreCase(prorationItemModel.getIntegratedDisclosureSubsectionType()))
-				{
-					if (cityTaxFees.contains(prorationItemModel.getProrationItemType()))
-					{
-						prorationItemModel.setDisplayLabelText("City/Town Taxes");
-						paidByAlreadyAdjustmentsUnpaidBySeller.add(0,prorationItemModel);
-					}
-					else if(countyTaxFees.contains(prorationItemModel.getProrationItemType()))
-					{
-						prorationItemModel.setDisplayLabelText("County Taxes");
-						paidByAlreadyAdjustmentsUnpaidBySeller.add(1,prorationItemModel);
-					}
-					else if(assesmentFees.contains(prorationItemModel.getProrationItemType()))
-					{
-						prorationItemModel.setDisplayLabelText("Assessments");
-						paidByAlreadyAdjustmentsUnpaidBySeller.add(2,prorationItemModel);
-					}
-					else if(Arrays.asList(adjustmentFees).contains(prorationItemModel.getProrationItemType()))
-						paidByAlreadyAdjustmentsUnpaidBySeller.add(3,prorationItemModel);
-				}
-				
-			});
+				});
 			
 		//PAID ALREADY BY
-			closingCostFundModels.stream()
-			.filter(closingCostFundModel -> "PaidAlreadyByOrOnBehalfOfBorrowerAtClosing".equalsIgnoreCase(closingCostFundModel.getIntegratedDisclosureSectionType())
-											 && "DepositOnSalesContract".equalsIgnoreCase(closingCostFundModel.getFundsType()))
-			.forEach(closingCostFundModel -> paidByAlready.setDeposit(closingCostFundModel));
+			if(!closingCostFundModels.isEmpty())
+				closingCostFundModels.stream()
+					.filter(closingCostFundModel -> "PaidAlreadyByOrOnBehalfOfBorrowerAtClosing".equalsIgnoreCase(closingCostFundModel.getIntegratedDisclosureSectionType())
+														&& "DepositOnSalesContract".equalsIgnoreCase(closingCostFundModel.getFundsType()))
+						.forEach(closingCostFundModel -> paidByAlready.setDeposit(closingCostFundModel));
 			
 			
 			paidByAlready.setAdjustments(paidByAlreadyAdjustments);
@@ -1203,89 +1209,82 @@ public class ClosingDisclosureConverter {
 			for(int i=0;i<integratedDisclosureSectionSummaryList.integratedDisclosureSectionSummaries.length;i++)
 			{
 				if("DueToSellerAtClosing".equalsIgnoreCase(integratedDisclosureSectionSummaryList.integratedDisclosureSectionSummaries[i].integratedDisclosureSectionSummaryDetail.integratedDisclosureSectionType))
-						dueToSellerAtClosing.setDueToSellerTotalAmount(integratedDisclosureSectionSummaryList.integratedDisclosureSectionSummaries[i].integratedDisclosureSectionSummaryDetail.integratedDisclosureSectionTotalAmount);
+						dueToSellerAtClosing.setDueToSellerTotalAmount(toIntegratedDisclosureSectionSummaryModel(integratedDisclosureSectionSummaryList.integratedDisclosureSectionSummaries[i]));
 				 else if("DueFromSellerAtClosing".equalsIgnoreCase(integratedDisclosureSectionSummaryList.integratedDisclosureSectionSummaries[i].integratedDisclosureSectionSummaryDetail.integratedDisclosureSectionType))
-						dueFromSellerAtClosing.setDueFromSellerTotalAmount(integratedDisclosureSectionSummaryList.integratedDisclosureSectionSummaries[i].integratedDisclosureSectionSummaryDetail.integratedDisclosureSectionTotalAmount);
+						dueFromSellerAtClosing.setDueFromSellerTotalAmount(toIntegratedDisclosureSectionSummaryModel(integratedDisclosureSectionSummaryList.integratedDisclosureSectionSummaries[i]));
 			//Closing Costs Paid at Closing 	
 				if(false)//seller only
 				{
 					if ("TotalClosingCostsSellerOnly".equalsIgnoreCase(integratedDisclosureSectionSummaryList.integratedDisclosureSectionSummaries[i].integratedDisclosureSectionSummaryDetail.integratedDisclosureSubsectionType))
-						//
-						//if (!idsLocal.isPaidOutsideOfClosingIndicator())
-							//str = idsLocal.getPaymentAmount();
-						System.out.println("TODO");
+						dueToSellerAtClosing.setClosingCostsPaidAtClosing(toIntegratedDisclosureSectionSummaryModel(integratedDisclosureSectionSummaryList.integratedDisclosureSectionSummaries[i]));
 				} else {
 					if("TotalClosingCosts".equalsIgnoreCase(integratedDisclosureSectionSummaryList.integratedDisclosureSectionSummaries[i].integratedDisclosureSectionSummaryDetail.integratedDisclosureSectionType)
 						&& "ClosingCostsSubtotal".equalsIgnoreCase(integratedDisclosureSectionSummaryList.integratedDisclosureSectionSummaries[i].integratedDisclosureSectionSummaryDetail.integratedDisclosureSubsectionType))
-									
-						//&& idsLocal.getPaymentPaidByType().equals("Seller") && !idsLocal.isPaidOutsideOfClosingIndicator())
-							//	str = idsLocal.getPaymentAmount();
-						System.out.println("TODO");
+							dueToSellerAtClosing.setClosingCostsPaidAtClosing(toIntegratedDisclosureSectionSummaryModel(integratedDisclosureSectionSummaryList.integratedDisclosureSectionSummaries[i]));
 				}
 			}
 
-			
-			closingCostFundModels.stream()
-				.filter(costFund -> "DueFromSellerAtClosing".equalsIgnoreCase(costFund.getIntegratedDisclosureSectionType()) && "ExcessDeposit".equals(costFund.getFundsType()))
-				.forEach(costFund -> dueFromSellerAtClosing.setExcessDeposit(costFund));
-				
-			closingAdjustmentItemModels.stream()
-					.forEach(closingAdjustment -> {
-						if("DueToSellerAtClosing".equalsIgnoreCase(closingAdjustment.getIntegratedDisclosureSectionType()))
-							dueToSellerAdjustments.add(closingAdjustment);
-						else if("DueToSellerAtClosing".equalsIgnoreCase(closingAdjustment.getIntegratedDisclosureSectionType()))
-							dueFromSellerAdjustments.add(closingAdjustment);
+			if(!closingCostFundModels.isEmpty())
+				closingCostFundModels.stream()
+					.filter(costFund -> "DueFromSellerAtClosing".equalsIgnoreCase(costFund.getIntegratedDisclosureSectionType()) && "ExcessDeposit".equals(costFund.getFundsType()))
+					.forEach(costFund -> dueFromSellerAtClosing.setExcessDeposit(costFund));
+			if(!closingAdjustmentItemModels.isEmpty())
+				closingAdjustmentItemModels.stream()
+						.forEach(closingAdjustment -> {
+							if("DueToSellerAtClosing".equalsIgnoreCase(closingAdjustment.getIntegratedDisclosureSectionType()))
+								dueToSellerAdjustments.add(closingAdjustment);
+							else if("DueFromSellerAtClosing".equalsIgnoreCase(closingAdjustment.getIntegratedDisclosureSectionType()))
+								dueFromSellerAdjustments.add(closingAdjustment);
+						});
+			if(!prorationsModels.isEmpty())
+				prorationsModels.stream()
+					.forEach(prorationModel -> {
+						if("DueToSellerAtClosing".equalsIgnoreCase(prorationModel.getIntegratedDisclosureSectionType())
+												&& "AdjustmentsForItemsPaidBySellerInAdvance".equalsIgnoreCase(prorationModel.getIntegratedDisclosureSubsectionType()))
+						{
+							if(cityTaxFees.contains(prorationModel.getProrationItemType())){
+								prorationModel.setDisplayLabelText("City/Town Taxes");
+								dueToSellerAdjustmentsPaidBySeller.add(prorationModel);
+							}
+							if (countyTaxFees.contains(prorationModel.getProrationItemType())) {
+								prorationModel.setDisplayLabelText("County Taxes");
+								dueToSellerAdjustmentsPaidBySeller.add(prorationModel);
+							}
+							if (assesmentFees.contains(prorationModel.getProrationItemType())) {
+								prorationModel.setDisplayLabelText("Assessments");
+								dueToSellerAdjustmentsPaidBySeller.add(prorationModel);
+							}
+							if (Arrays.asList(adjustmentFees).contains(prorationModel.getProrationItemType())) {
+								dueToSellerAdjustmentsPaidBySeller.add(prorationModel);
+							}
+						}
+						else if("DueFromSellerAtClosing".equalsIgnoreCase(prorationModel.getIntegratedDisclosureSectionType())
+								&& "AdjustmentsForItemsUnpaidBySeller".equalsIgnoreCase(prorationModel.getIntegratedDisclosureSubsectionType()))
+						{
+							if(cityTaxFees.contains(prorationModel.getProrationItemType())){
+								prorationModel.setDisplayLabelText("City/Town Taxes");
+								dueFromSellerAdjustmentsUnPaidBySeller.add(prorationModel);
+							}
+							if (countyTaxFees.contains(prorationModel.getProrationItemType())) {
+								prorationModel.setDisplayLabelText("County Taxes");
+								dueFromSellerAdjustmentsUnPaidBySeller.add(prorationModel);
+							}
+							if (assesmentFees.contains(prorationModel.getProrationItemType())) {
+								prorationModel.setDisplayLabelText("Assessments");
+								dueFromSellerAdjustmentsUnPaidBySeller.add(prorationModel);
+							}
+							if (Arrays.asList(adjustmentFees).contains(prorationModel.getProrationItemType())) {
+								dueFromSellerAdjustmentsUnPaidBySeller.add(prorationModel);
+							}
+						}
 					});
 			
-			prorationsModels.stream()
-				.forEach(prorationModel -> {
-					if("DueToSellerAtClosing".equalsIgnoreCase(prorationModel.getIntegratedDisclosureSectionType())
-											&& "AdjustmentsForItemsPaidBySellerInAdvance".equalsIgnoreCase(prorationModel.getIntegratedDisclosureSubsectionType()))
-					{
-						if(cityTaxFees.contains(prorationModel.getProrationItemType())){
-							prorationModel.setDisplayLabelText("City/Town Taxes");
-							dueToSellerAdjustmentsPaidBySeller.add(0,prorationModel);
-						}
-						if (countyTaxFees.contains(prorationModel.getProrationItemType())) {
-							prorationModel.setDisplayLabelText("County Taxes");
-							dueToSellerAdjustmentsPaidBySeller.add(1,prorationModel);
-						}
-						if (assesmentFees.contains(prorationModel.getProrationItemType())) {
-							prorationModel.setDisplayLabelText("Assessments");
-							dueToSellerAdjustmentsPaidBySeller.add(2,prorationModel);
-						}
-						if (Arrays.asList(adjustmentFees).contains(prorationModel.getProrationItemType())) {
-							dueToSellerAdjustmentsPaidBySeller.add(3,prorationModel);
-						}
-					}
-					else if("DueFromSellerAtClosing".equalsIgnoreCase(prorationModel.getIntegratedDisclosureSectionType())
-							&& "AdjustmentsForItemsUnpaidBySeller".equalsIgnoreCase(prorationModel.getIntegratedDisclosureSubsectionType()))
-					{
-						if(cityTaxFees.contains(prorationModel.getProrationItemType())){
-							prorationModel.setDisplayLabelText("City/Town Taxes");
-							dueFromSellerAdjustmentsUnPaidBySeller.add(0,prorationModel);
-						}
-						if (countyTaxFees.contains(prorationModel.getProrationItemType())) {
-							prorationModel.setDisplayLabelText("County Taxes");
-							dueFromSellerAdjustmentsUnPaidBySeller.add(1,prorationModel);
-						}
-						if (assesmentFees.contains(prorationModel.getProrationItemType())) {
-							prorationModel.setDisplayLabelText("Assessments");
-							dueFromSellerAdjustmentsUnPaidBySeller.add(2,prorationModel);
-						}
-						if (Arrays.asList(adjustmentFees).contains(prorationModel.getProrationItemType())) {
-							dueFromSellerAdjustmentsUnPaidBySeller.add(3,prorationModel);
-						}
-					}
-				});
 			
-			dueToSellerAtClosing.setClosingCostsPaidAtClosing("TODO");
 			dueToSellerAtClosing.setDueToSellerAdjustments(dueToSellerAdjustments);
 			dueToSellerAtClosing.setDueToSellerAdjustmentsPaidBySeller(dueToSellerAdjustmentsPaidBySeller);
 			dueToSellerAtClosing.setSalePriceOfPersonalProperty(salesContractDetail.PersonalPropertyAmount);
 			if(firstLien)
 				dueToSellerAtClosing.setSalePriceOfProperty(!"".equals(salesContractDetail.RealPropertyAmount) ? salesContractDetail.RealPropertyAmount : salesContractDetail.SalesContractAmount);
-			
 			
 			dueFromSellerAtClosing.setDueFromSellerAdjustments(dueFromSellerAdjustments);
 			dueFromSellerAtClosing.setDueFromSellerAdjustmentsUnPaidBySeller(dueFromSellerAdjustmentsUnPaidBySeller);
@@ -1300,6 +1299,35 @@ public class ClosingDisclosureConverter {
 		summariesofTransactions.setPaidByAlready(paidByAlready);
 			
 		return summariesofTransactions;
+    }
+    
+    private IntegratedDisclosureSectionSummaryModel toIntegratedDisclosureSectionSummaryModel(IntegratedDisclosureSectionSummary integratedDisclosureSectionSummary)
+    {
+    	IntegratedDisclosureSectionSummaryModel integratedDisclosureSectionSummaryModel = new IntegratedDisclosureSectionSummaryModel();
+    	IntegratedDisclosureSectionSummaryDetailModel integratedDisclosureSectionSummaryDetailModel = new IntegratedDisclosureSectionSummaryDetailModel();
+    	IntegratedDisclosureSectionSummaryDetail integratedDisclosureSectionSummaryDetail = integratedDisclosureSectionSummary.integratedDisclosureSectionSummaryDetail;
+    	
+    	integratedDisclosureSectionSummaryDetailModel.setIntegratedDisclosureSectionTotalAmount(integratedDisclosureSectionSummaryDetail.integratedDisclosureSectionTotalAmount);
+    	integratedDisclosureSectionSummaryDetailModel.setIntegratedDisclosureSectionType(integratedDisclosureSectionSummaryDetail.integratedDisclosureSectionType);
+    	integratedDisclosureSectionSummaryDetailModel.setIntegratedDisclosureSubsectionTotalAmount(integratedDisclosureSectionSummaryDetail.integratedDisclosureSubsectionTotalAmount);
+    	integratedDisclosureSectionSummaryDetailModel.setIntegratedDisclosureSubsectionType(integratedDisclosureSectionSummaryDetail.integratedDisclosureSubsectionType);
+    	integratedDisclosureSectionSummaryDetailModel.setIntegratedDisclosureSubsectionTypeOtherDescription(integratedDisclosureSectionSummaryDetail.integratedDisclosureSubsectionTypeOtherDescription);
+    	integratedDisclosureSectionSummaryDetailModel.setLenderCreditToleranceCureAmount(integratedDisclosureSectionSummaryDetail.lenderCreditToleranceCureAmount);
+    		
+    	IntegratedDisclosureSubsectionPayment[] integratedDisclosureSubsectionPayments = integratedDisclosureSectionSummary.integratedDisclosureSubsectionPayments.integratedDisclosureSubsectionPayments;
+    		
+    	for(int i=0; i<integratedDisclosureSubsectionPayments.length; i++)
+    	{
+    		IntegratedDisclosureSubsectionPaymentModel integratedDisclosureSubsectionPaymentModel = new IntegratedDisclosureSubsectionPaymentModel();
+    			integratedDisclosureSubsectionPaymentModel.setIntegratedDisclosureSubsectionPaidByType(integratedDisclosureSubsectionPayments[i].integratedDisclosureSubsectionPaidByType);
+    			integratedDisclosureSubsectionPaymentModel.setIntegratedDisclosureSubsectionPaymentAmount(integratedDisclosureSubsectionPayments[i].integratedDisclosureSubsectionPaymentAmount);
+    			integratedDisclosureSubsectionPaymentModel.setIntegratedDisclosureSubsectionPaymentTimingType(integratedDisclosureSubsectionPayments[i].integratedDisclosureSubsectionPaymentTimingType);
+    		integratedDisclosureSectionSummaryModel.getIntegratedDisclosureSubsectionPayments().add(integratedDisclosureSubsectionPaymentModel);
+    	}
+    	
+    	integratedDisclosureSectionSummaryModel.setIntegratedDisclosureSectionSummaryDetailModel(integratedDisclosureSectionSummaryDetailModel);
+    	
+		return integratedDisclosureSectionSummaryModel;
     }
     
     /**
@@ -1427,7 +1455,7 @@ public class ClosingDisclosureConverter {
 		if(!"-1".equals(index))
 		{
 			cashToCashToCloseModel.setIndex(index);
-			cashToCashToCloseModel.setIntegratedDisclosureCashToCloseItemAmountChangedIndicator(cashToCloseItem.integratedDisclosureCashToCloseItemAmountChangedIndicator);
+			cashToCashToCloseModel.setIntegratedDisclosureCashToCloseItemAmountChangedIndicator(Boolean.parseBoolean(cashToCloseItem.integratedDisclosureCashToCloseItemAmountChangedIndicator));
 			cashToCashToCloseModel.setIntegratedDisclosureCashToCloseItemChangeDescription(cashToCloseItem.integratedDisclosureCashToCloseItemChangeDescription);
 			cashToCashToCloseModel.setIntegratedDisclosureCashToCloseItemEstimatedAmount(cashToCloseItem.integratedDisclosureCashToCloseItemEstimatedAmount);
 			cashToCashToCloseModel.setIntegratedDisclosureCashToCloseItemFinalAmount(cashToCloseItem.integratedDisclosureCashToCloseItemFinalAmount);

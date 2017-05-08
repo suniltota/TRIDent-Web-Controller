@@ -18,7 +18,7 @@ public class SummariesofTransactionsDetailsPaidByAlready implements Serializable
 	private List<ClosingAdjustmentItemModel> otherCredits;
 	private List<ClosingAdjustmentItemModel> adjustments;
 	private List<ProrationModel> adjustmentsUnpaidBySeller;
-	private String paidByAlreadyTotalAmount;
+	private IntegratedDisclosureSectionSummaryModel paidByAlreadyTotalAmount;
 	
 	/**
 	 * @return the deposit
@@ -143,16 +143,15 @@ public class SummariesofTransactionsDetailsPaidByAlready implements Serializable
 	/**
 	 * @return the paidByAlreadyTotalAmount
 	 */
-	public String getPaidByAlreadyTotalAmount() {
+	public IntegratedDisclosureSectionSummaryModel getPaidByAlreadyTotalAmount() {
 		return paidByAlreadyTotalAmount;
 	}
 	/**
 	 * @param paidByAlreadyTotalAmount the paidByAlreadyTotalAmount to set
 	 */
-	public void setPaidByAlreadyTotalAmount(String paidByAlreadyTotalAmount) {
+	public void setPaidByAlreadyTotalAmount(IntegratedDisclosureSectionSummaryModel paidByAlreadyTotalAmount) {
 		this.paidByAlreadyTotalAmount = paidByAlreadyTotalAmount;
 	}
-	
 	
 	
 }
