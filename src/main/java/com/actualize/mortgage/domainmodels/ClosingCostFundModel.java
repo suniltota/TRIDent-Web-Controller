@@ -6,22 +6,22 @@ public class ClosingCostFundModel implements Serializable {
 
 	private static final long serialVersionUID = 1672245049297531156L;
 	
-	private String displayLabelText;
+	private String displayLabel;
 	private String closingCostFundAmount;
 	private String fundsType;
 	private String integratedDisclosureSectionType;
 	
 	/**
-	 * @return the displayLabelText
+	 * @return the displayLabel
 	 */
-	public String getDisplayLabelText() {
-		return displayLabelText;
+	public String getDisplayLabel() {
+		return displayLabel;
 	}
 	/**
-	 * @param displayLabelText the displayLabelText to set
+	 * @param displayLabel the displayLabel to set
 	 */
-	public void setDisplayLabelText(String displayLabelText) {
-		this.displayLabelText = displayLabelText;
+	public void setDisplayLabel(String displayLabel) {
+		this.displayLabel = displayLabel;
 	}
 	/**
 	 * @return the closingCostFundAmount

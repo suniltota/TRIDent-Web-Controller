@@ -14,8 +14,7 @@ public class ClosingAdjustmentItemModel implements Serializable {
 
 	private static final long serialVersionUID = 1932939085882946292L;
 	
-	private String gseDisplayLabelText;
-	private String displayLabelText;
+	private String displayLabel;
 	private String closingAdjustmentItemAmount;
 	private boolean closingAdjustmentItemPaidOutsideOfClosingIndicator;
 	private String closingAdjustmentItemType;
@@ -26,30 +25,17 @@ public class ClosingAdjustmentItemModel implements Serializable {
 	private String paidByEntityFullName;
 	private String paidToEntityFullName;
 	
-	
 	/**
-	 * @return the gseDisplayLabelText
+	 * @return the displayLabel
 	 */
-	public String getGseDisplayLabelText() {
-		return gseDisplayLabelText;
+	public String getDisplayLabel() {
+		return displayLabel;
 	}
 	/**
-	 * @param gseDisplayLabelText the gseDisplayLabelText to set
+	 * @param displayLabel the displayLabel to set
 	 */
-	public void setGseDisplayLabelText(String gseDisplayLabelText) {
-		this.gseDisplayLabelText = gseDisplayLabelText;
-	}
-	/**
-	 * @return the displayLabelText
-	 */
-	public String getDisplayLabelText() {
-		return displayLabelText;
-	}
-	/**
-	 * @param displayLabelText the displayLabelText to set
-	 */
-	public void setDisplayLabelText(String displayLabelText) {
-		this.displayLabelText = displayLabelText;
+	public void setDisplayLabel(String displayLabel) {
+		this.displayLabel = displayLabel;
 	}
 	/**
 	 * @return the closingAdjustmentItemAmount

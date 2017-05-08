@@ -15,8 +15,7 @@ public class ProrationModel implements Serializable {
 
 	private static final long serialVersionUID = 3059763857881609541L;
 
-	private String gseDisplayLabelText;
-	private String displayLabelText;
+	private String displayLabel;
 	private String integratedDisclosureSectionType;
     private String integratedDisclosureSubsectionType;
     private String prorationItemAmount;
@@ -25,30 +24,17 @@ public class ProrationModel implements Serializable {
     private String prorationItemType;
     private String prorationItemTypeOtherDescription;
     
-    
 	/**
-	 * @return the gseDisplayLabelText
+	 * @return the displayLabel
 	 */
-	public String getGseDisplayLabelText() {
-		return gseDisplayLabelText;
+	public String getDisplayLabel() {
+		return displayLabel;
 	}
 	/**
-	 * @param gseDisplayLabelText the gseDisplayLabelText to set
+	 * @param displayLabel the displayLabel to set
 	 */
-	public void setGseDisplayLabelText(String gseDisplayLabelText) {
-		this.gseDisplayLabelText = gseDisplayLabelText;
-	}
-	/**
-	 * @return the displayLabelText
-	 */
-	public String getDisplayLabelText() {
-		return displayLabelText;
-	}
-	/**
-	 * @param displayLabelText the displayLabelText to set
-	 */
-	public void setDisplayLabelText(String displayLabelText) {
-		this.displayLabelText = displayLabelText;
+	public void setDisplayLabel(String displayLabel) {
+		this.displayLabel = displayLabel;
 	}
 	/**
 	 * @return the integratedDisclosureSectionType

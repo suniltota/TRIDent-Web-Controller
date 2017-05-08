@@ -18,7 +18,33 @@ public class SummariesofTransactions implements Serializable {
 	private SummariesofTransactionsDetailsPaidByAlready paidByAlready;
 	private SummariesofTransactionsDetailsDueToSellerAtClosing dueToSeller;
 	private SummariesofTransactionsDetailsDueFromSellerAtClosing dueFromSeller;
+	private SummariesofTransactionsDetailsBorrowerTransaction borrowerTransaction;
+	private SummariesofTransactionsDetailsSellerTransaction sellerTransaction;
 	
+	/**
+	 * @return the borrowerTransaction
+	 */
+	public SummariesofTransactionsDetailsBorrowerTransaction getBorrowerTransaction() {
+		return borrowerTransaction;
+	}
+	/**
+	 * @param borrowerTransaction the borrowerTransaction to set
+	 */
+	public void setBorrowerTransaction(SummariesofTransactionsDetailsBorrowerTransaction borrowerTransaction) {
+		this.borrowerTransaction = borrowerTransaction;
+	}
+	/**
+	 * @return the sellerTransaction
+	 */
+	public SummariesofTransactionsDetailsSellerTransaction getSellerTransaction() {
+		return sellerTransaction;
+	}
+	/**
+	 * @param sellerTransaction the sellerTransaction to set
+	 */
+	public void setSellerTransaction(SummariesofTransactionsDetailsSellerTransaction sellerTransaction) {
+		this.sellerTransaction = sellerTransaction;
+	}
 	/**
 	 * @return the dueFromBorroweratClosing
 	 */

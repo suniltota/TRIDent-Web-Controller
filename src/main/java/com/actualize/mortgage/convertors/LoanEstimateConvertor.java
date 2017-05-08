@@ -121,9 +121,9 @@ public class LoanEstimateConvertor {
 				return propertyDetail.propertyEstimatedValueAmount;
 			else
 				return propertyValuationDetail.propertyValuationAmount;		
-		if (salesContractDetail.PersonalPropertyIncludedIndicator.equalsIgnoreCase("true"))
-			return salesContractDetail.RealPropertyAmount;
-		return salesContractDetail.SalesContractAmount;
+		if (salesContractDetail.personalPropertyIncludedIndicator.equalsIgnoreCase("true"))
+			return salesContractDetail.realPropertyAmount;
+		return salesContractDetail.salesContractAmount;
 	}
 	
 	/**

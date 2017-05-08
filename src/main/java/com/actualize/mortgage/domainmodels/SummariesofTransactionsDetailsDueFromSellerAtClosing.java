@@ -21,7 +21,7 @@ public class SummariesofTransactionsDetailsDueFromSellerAtClosing implements Ser
 	private String existingLoan;
 	private LiabilityModel payoffFirstMortgage;
 	private LiabilityModel payOffSecondMortgage;
-	private String sellerCredit;
+	private ClosingAdjustmentItemModel sellerCredit;
 	private List<LiabilityModel> dueFromSellerLiabilities;
 	private List<ClosingAdjustmentItemModel> dueFromSellerAdjustments;
 	private List<ProrationModel> dueFromSellerAdjustmentsUnPaidBySeller;
@@ -102,13 +102,13 @@ public class SummariesofTransactionsDetailsDueFromSellerAtClosing implements Ser
 	/**
 	 * @return the sellerCredit
 	 */
-	public String getSellerCredit() {
+	public ClosingAdjustmentItemModel getSellerCredit() {
 		return sellerCredit;
 	}
 	/**
 	 * @param sellerCredit the sellerCredit to set
 	 */
-	public void setSellerCredit(String sellerCredit) {
+	public void setSellerCredit(ClosingAdjustmentItemModel sellerCredit) {
 		this.sellerCredit = sellerCredit;
 	}
 	/**

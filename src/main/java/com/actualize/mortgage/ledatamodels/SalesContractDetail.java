@@ -3,18 +3,22 @@ package com.actualize.mortgage.ledatamodels;
 import org.w3c.dom.Element;
 
 import com.actualize.mortgage.domainmodels.MISMODataAccessObject;
-
+/**
+ * this class defines SalesContractDetail in MISMO XML
+ * @author sboragala
+ *
+ */
 public class SalesContractDetail extends MISMODataAccessObject {
-	public final String PersonalPropertyAmount;
-	public final String PersonalPropertyIncludedIndicator;
-	public final String RealPropertyAmount;
-	public final String SalesContractAmount;
+	public final String personalPropertyAmount;
+	public final String personalPropertyIncludedIndicator;
+	public final String realPropertyAmount;
+	public final String salesContractAmount;
 	
 	public SalesContractDetail(Element element) {
 		super(element);
-		PersonalPropertyAmount = getValueAddNS("PersonalPropertyAmount");
-		PersonalPropertyIncludedIndicator = getValueAddNS("PersonalPropertyIncludedIndicator");
-		RealPropertyAmount = getValueAddNS("RealPropertyAmount");
-		SalesContractAmount = getValueAddNS("SalesContractAmount");
+		personalPropertyAmount = getValueAddNS("PersonalPropertyAmount");
+		personalPropertyIncludedIndicator = getValueAddNS("PersonalPropertyIncludedIndicator");
+		realPropertyAmount = getValueAddNS("RealPropertyAmount");
+		salesContractAmount = getValueAddNS("SalesContractAmount");
 	}
 }
