@@ -15,7 +15,7 @@ public class SummariesofTransactions implements Serializable {
 	private static final long serialVersionUID = 1672551641387366652L;
 	
 	private SummariesofTransactionsDetailsDueFromBorrowerAtClosing dueFromBorroweratClosing;
-	private v PaidByAlready paidByAlready;
+	private SummariesofTransactionsDetailsPaidByAlready paidByAlready;
 	private SummariesofTransactionsDetailsDueToSellerAtClosing dueToSeller;
 	private SummariesofTransactionsDetailsDueFromSellerAtClosing dueFromSeller;
 	

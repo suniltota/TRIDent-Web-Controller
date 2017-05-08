@@ -16,6 +16,6 @@ public class SummariesofTransactionsDetailsBorrowerTransaction implements Serial
 	 */
 	private static final long serialVersionUID = -4380364076683782942L;
 	
-	private 
+	//private 
 
 }

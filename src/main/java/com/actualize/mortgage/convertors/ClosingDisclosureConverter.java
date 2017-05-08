@@ -1331,9 +1331,8 @@ public class ClosingDisclosureConverter {
     	for(int i=0;i<closingAdjustmentItemList.length;i++)
     	{
     		ClosingAdjustmentItemModel closingAdjustmentItemModel = new ClosingAdjustmentItemModel();
-    		String gseDisplayLabel = closingAdjustmentItemList[i].closingAdjustmentItemDetail.displayLabelText;
     			closingAdjustmentItemModel.setGseDisplayLabelText(closingAdjustmentItemList[i].closingAdjustmentItemDetail.displayLabelText);
-    			closingAdjustmentItemModel.setDisplayLabelText("TODO");
+    			closingAdjustmentItemModel.setDisplayLabelText(getDisplayLabelText(closingAdjustmentItemList[i].closingAdjustmentItemDetail.displayLabelText, closingAdjustmentItemList[i].closingAdjustmentItemDetail.closingAdjustmentItemType, closingAdjustmentItemList[i].closingAdjustmentItemDetail.closingAdjustmentItemTypeOtherDescription));
     			closingAdjustmentItemModel.setClosingAdjustmentItemAmount(closingAdjustmentItemList[i].closingAdjustmentItemDetail.closingAdjustmentItemAmount);
     			closingAdjustmentItemModel.setClosingAdjustmentItemPaidOutsideOfClosingIndicator(Boolean.parseBoolean(closingAdjustmentItemList[i].closingAdjustmentItemDetail.closingAdjustmentItemPaidOutsideOfClosingIndicator));
     			closingAdjustmentItemModel.setClosingAdjustmentItemType(closingAdjustmentItemList[i].closingAdjustmentItemDetail.closingAdjustmentItemType);
@@ -1362,7 +1361,7 @@ public class ClosingDisclosureConverter {
     	{
     		LiabilityModel liabilityModel = new LiabilityModel();
     			liabilityModel.setGseDisplayLabelText(liability[i].liabilityDetail.displayLabelText);
-    			liabilityModel.setDisplayLabelText("TODO");
+    			liabilityModel.setDisplayLabelText(getDisplayLabelText(liability[i].liabilityDetail.displayLabelText,liability[i].liabilityDetail.liabilityType,liability[i].liabilityDetail.liabilityTypeOtherDescription));
 	    		liabilityModel.setIntegratedDisclosureSectionType(liability[i].liabilityDetail.other.integratedDisclosureSectionType);
 	    		liabilityModel.setLiabilityDescription(liability[i].liabilityDetail.liabilityDescription);
 	    		liabilityModel.setLiabilityHolderFullName(liability[i].liabilityholderName.FullName);
@@ -1389,7 +1388,7 @@ public class ClosingDisclosureConverter {
     	{
     		ProrationModel prorationsModel = new ProrationModel();
     			prorationsModel.setGseDisplayLabelText(prorationItemList[i].displayLabelText);
-    			prorationsModel.setDisplayLabelText("TODO");
+    			prorationsModel.setDisplayLabelText(getDisplayLabelText(prorationItemList[i].displayLabelText, prorationItemList[i].prorationItemType, prorationItemList[i].prorationItemTypeOtherDescription));
     			prorationsModel.setIntegratedDisclosureSectionType(prorationItemList[i].integratedDisclosureSectionType);
     			prorationsModel.setIntegratedDisclosureSubsectionType(prorationItemList[i].integratedDisclosureSubsectionType);
     			prorationsModel.setProrationItemAmount(prorationItemList[i].prorationItemAmount);
@@ -1402,7 +1401,19 @@ public class ClosingDisclosureConverter {
     	
 		return prorationsModels;
 	}
-
+	
+	private String getDisplayLabelText(String gseDisplayLabelText,String type,String typeOtherDescription)
+	{
+		String displayLabelText = "";
+			if(!"".equals(gseDisplayLabelText))
+				displayLabelText = gseDisplayLabelText;
+			else if("Other".equalsIgnoreCase(type) && !"".equals(typeOtherDescription))
+				displayLabelText = StringFormatter.CAMEL.formatString(typeOtherDescription);
+			else
+				displayLabelText = StringFormatter.CAMEL.formatString(type);
+		return displayLabelText;
+		
+	}
 	/**
      * insert values to UI response
      * @param cashToCloseItem
