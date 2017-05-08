@@ -9,7 +9,7 @@ public class PageOne implements Serializable {
 	 */
 	private static final long serialVersionUID = -1863609605772249336L;
 	
-	private ClosingInformation closingInformation;
+	private ClosingInformationModel closingInformationModel;
 	private TransactionInformation transactionInformation;
 	private LoanInformation loanInformation;
 	private LoanTerms loanTerms;
@@ -19,14 +19,14 @@ public class PageOne implements Serializable {
 	/**
 	 * @return the closingInformation
 	 */
-	public ClosingInformation getClosingInformation() {
-		return closingInformation;
+	public ClosingInformationModel getClosingInformation() {
+		return closingInformationModel;
 	}
 	/**
-	 * @param closingInformation the closingInformation to set
+	 * @param closingInformationModel the closingInformation to set
 	 */
-	public void setClosingInformation(ClosingInformation closingInformation) {
-		this.closingInformation = closingInformation;
+	public void setClosingInformation(ClosingInformationModel closingInformationModel) {
+		this.closingInformationModel = closingInformationModel;
 	}
 	/**
 	 * @return the transactionInformation

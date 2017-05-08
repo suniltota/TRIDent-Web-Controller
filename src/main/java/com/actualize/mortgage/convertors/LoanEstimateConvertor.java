@@ -221,7 +221,7 @@ public class LoanEstimateConvertor {
 		if (locks.locks.length > 0)
 			if (locks.locks[locks.locks.length - 1].LockStatusType.equalsIgnoreCase("Locked")) {
 				loanEstimateSectionRateLock.setUntillDate(locks.locks[locks.locks.length - 1].LockExpirationDatetime);
-				loanEstimateSectionRateLock.setUntillTimeZone(locks.locks[locks.locks.length - 1].extension.other.LockExpirationTimezoneType);
+				loanEstimateSectionRateLock.setUntillTimeZone(locks.locks[locks.locks.length - 1].extension.other.lockExpirationTimezoneType);
 			}
 	
 		// Build first line
@@ -233,7 +233,7 @@ public class LoanEstimateConvertor {
 	
 		
 		// Append subsequent lines
-		timezone = idDetail.extension.other.IntegratedDisclosureEstimatedClosingCostsExpirationTimezoneType;
+		timezone = idDetail.extension.other.integratedDisclosureEstimatedClosingCostsExpirationTimezoneType;
 		String formattedTimezone = timezone.equals("") ? "" : (" " + timezone);
 			loanEstimateSectionRateLock.setExpireDate(idDetail.IntegratedDisclosureEstimatedClosingCostsExpirationDatetime);
 			loanEstimateSectionRateLock.setExpireTime(idDetail.IntegratedDisclosureEstimatedClosingCostsExpirationDatetime);

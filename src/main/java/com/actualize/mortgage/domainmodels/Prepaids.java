@@ -7,7 +7,7 @@ import java.io.Serializable;
  * @author sboragala
  *
  */
-public class Prepaids extends TLCostsModel implements Serializable{
+public class Prepaids extends PaymentsModel implements Serializable{
 
 	private static final long serialVersionUID = -3311207376960972497L;
 	

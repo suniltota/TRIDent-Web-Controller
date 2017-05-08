@@ -2,33 +2,109 @@ package com.actualize.mortgage.domainmodels;
 
 import java.io.Serializable;
 import java.util.List;
-
+/**
+ * this class defines DueFromBorrowerAtClosing for SummariesofTransactions in JSON response
+ * @author sboragala
+ *
+ */
 public class SummariesofTransactionsDetailsDueFromBorrowerAtClosing implements Serializable{
 	
 
 	private static final long serialVersionUID = -7422950890798131710L;
-
-	private List<SummariesofTransactionsDetails> duefromBorrowerList;
-	private List<SummariesofTransactionsDetails> adjustmentsList;
-	private List<SummariesofTransactionsDetails> adjustmentsforItemsList;
 	
-	public List<SummariesofTransactionsDetails> getDuefromBorrowerList() {
-		return duefromBorrowerList;
+	private String salePriceOfProperty;
+	private String salePriceOfPersonalProperty;
+	private String closingCostsPaidAtClosing;
+	private String dueFromBorrowerAtClosingTotalAmount;
+	private List<LiabilityModel> dueFromBorrowerAtClosing;
+	private List<ClosingAdjustmentItemModel> adjustments;
+	private List<ProrationModel> adjustmentsPaidBySellerInAdvance;
+	
+	/**
+	 * @return the salePriceOfProperty
+	 */
+	public String getSalePriceOfProperty() {
+		return salePriceOfProperty;
 	}
-	public void setDuefromBorrowerList(List<SummariesofTransactionsDetails> duefromBorrowerList) {
-		this.duefromBorrowerList = duefromBorrowerList;
+	/**
+	 * @param salePriceOfProperty the salePriceOfProperty to set
+	 */
+	public void setSalePriceOfProperty(String salePriceOfProperty) {
+		this.salePriceOfProperty = salePriceOfProperty;
 	}
-	public List<SummariesofTransactionsDetails> getAdjustmentsList() {
-		return adjustmentsList;
+	/**
+	 * @return the salePriceOfPersonalProperty
+	 */
+	public String getSalePriceOfPersonalProperty() {
+		return salePriceOfPersonalProperty;
 	}
-	public void setAdjustmentsList(List<SummariesofTransactionsDetails> adjustmentsList) {
-		this.adjustmentsList = adjustmentsList;
+	/**
+	 * @param salePriceOfPersonalProperty the salePriceOfPersonalProperty to set
+	 */
+	public void setSalePriceOfPersonalProperty(String salePriceOfPersonalProperty) {
+		this.salePriceOfPersonalProperty = salePriceOfPersonalProperty;
 	}
-	public List<SummariesofTransactionsDetails> getAdjustmentsforItemsList() {
-		return adjustmentsforItemsList;
+	/**
+	 * @return the closingCostsPaidAtClosing
+	 */
+	public String getClosingCostsPaidAtClosing() {
+		return closingCostsPaidAtClosing;
 	}
-	public void setAdjustmentsforItemsList(List<SummariesofTransactionsDetails> adjustmentsforItemsList) {
-		this.adjustmentsforItemsList = adjustmentsforItemsList;
+	/**
+	 * @param closingCostsPaidAtClosing the closingCostsPaidAtClosing to set
+	 */
+	public void setClosingCostsPaidAtClosing(String closingCostsPaidAtClosing) {
+		this.closingCostsPaidAtClosing = closingCostsPaidAtClosing;
 	}
+	/**
+	 * @return the dueFromBorrowerAtClosingTotalAmount
+	 */
+	public String getDueFromBorrowerAtClosingTotalAmount() {
+		return dueFromBorrowerAtClosingTotalAmount;
+	}
+	/**
+	 * @param dueFromBorrowerAtClosingTotalAmount the dueFromBorrowerAtClosingTotalAmount to set
+	 */
+	public void setDueFromBorrowerAtClosingTotalAmount(String dueFromBorrowerAtClosingTotalAmount) {
+		this.dueFromBorrowerAtClosingTotalAmount = dueFromBorrowerAtClosingTotalAmount;
+	}
+	/**
+	 * @return the dueFromBorrowerAtClosing
+	 */
+	public List<LiabilityModel> getDueFromBorrowerAtClosing() {
+		return dueFromBorrowerAtClosing;
+	}
+	/**
+	 * @param dueFromBorrowerAtClosing the dueFromBorrowerAtClosing to set
+	 */
+	public void setDueFromBorrowerAtClosing(List<LiabilityModel> dueFromBorrowerAtClosing) {
+		this.dueFromBorrowerAtClosing = dueFromBorrowerAtClosing;
+	}
+	/**
+	 * @return the adjustments
+	 */
+	public List<ClosingAdjustmentItemModel> getAdjustments() {
+		return adjustments;
+	}
+	/**
+	 * @param adjustments the adjustments to set
+	 */
+	public void setAdjustments(List<ClosingAdjustmentItemModel> adjustments) {
+		this.adjustments = adjustments;
+	}
+	/**
+	 * @return the adjustmentsPaidBySellerInAdvance
+	 */
+	public List<ProrationModel> getAdjustmentsPaidBySellerInAdvance() {
+		return adjustmentsPaidBySellerInAdvance;
+	}
+	/**
+	 * @param adjustmentsPaidBySellerInAdvance the adjustmentsPaidBySellerInAdvance to set
+	 */
+	public void setAdjustmentsPaidBySellerInAdvance(List<ProrationModel> adjustmentsPaidBySellerInAdvance) {
+		this.adjustmentsPaidBySellerInAdvance = adjustmentsPaidBySellerInAdvance;
+	}
+	
+	
 	
 }

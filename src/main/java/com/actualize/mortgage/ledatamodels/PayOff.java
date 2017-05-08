@@ -9,12 +9,13 @@ import com.actualize.mortgage.domainmodels.MISMODataAccessObject;
  *
  */
 public class PayOff extends MISMODataAccessObject{
-	private String payoffAmount;
-	private String payoffPrepaymentPenaltyAmount;
+	public final String payoffAmount;
+	public final String payoffPrepaymentPenaltyAmount;
 	
 	protected PayOff(Element e) {
 		super(e);
-		
+		payoffAmount = getValueAddNS("PayoffAmount");
+		payoffPrepaymentPenaltyAmount = getValueAddNS("PayoffPrepaymentPenaltyAmount");
 	}
 	
 

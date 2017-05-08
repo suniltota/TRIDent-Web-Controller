@@ -1,28 +1,22 @@
+/**
+ * 
+ */
 package com.actualize.mortgage.domainmodels;
 
 import java.io.Serializable;
 
-public class ClosingCostFundModel implements Serializable {
+/**
+ * this class defines ClosingCostFunds in JSON response
+ * @author sboragala
+ *
+ */
+public class ClosingCostFundsModel implements Serializable {
 
-	private static final long serialVersionUID = 1672245049297531156L;
-	
-	private String displayLabelText;
+	private static final long serialVersionUID = -3886823912278061107L;
 	private String closingCostFundAmount;
-	private String fundsType;
-	private String integratedDisclosureSectionType;
-	
-	/**
-	 * @return the displayLabelText
-	 */
-	public String getDisplayLabelText() {
-		return displayLabelText;
-	}
-	/**
-	 * @param displayLabelText the displayLabelText to set
-	 */
-	public void setDisplayLabelText(String displayLabelText) {
-		this.displayLabelText = displayLabelText;
-	}
+    private String fundsType;
+    private String integratedDisclosureSectionType;
+    
 	/**
 	 * @return the closingCostFundAmount
 	 */
@@ -59,8 +53,7 @@ public class ClosingCostFundModel implements Serializable {
 	public void setIntegratedDisclosureSectionType(String integratedDisclosureSectionType) {
 		this.integratedDisclosureSectionType = integratedDisclosureSectionType;
 	}
-	
-	
-	
-	
+    
+    
+
 }

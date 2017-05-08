@@ -15,7 +15,7 @@ public class ClosingCostsTotal implements Serializable {
 	private static final long serialVersionUID = -2686016371514724570L;
 	
 	private String totalClosingCosts;
-	private TLCostsModel  closingCostsSubtotal;
+	private PaymentsModel  closingCostsSubtotal;
 	private String lenderCredits;
 	private String lenderCreditToleranceCureAmount;
 	
@@ -34,13 +34,13 @@ public class ClosingCostsTotal implements Serializable {
 	/**
 	 * @return the closingCostsSubtotal
 	 */
-	public TLCostsModel getClosingCostsSubtotal() {
+	public PaymentsModel getClosingCostsSubtotal() {
 		return closingCostsSubtotal;
 	}
 	/**
 	 * @param closingCostsSubtotal the closingCostsSubtotal to set
 	 */
-	public void setClosingCostsSubtotal(TLCostsModel closingCostsSubtotal) {
+	public void setClosingCostsSubtotal(PaymentsModel closingCostsSubtotal) {
 		this.closingCostsSubtotal = closingCostsSubtotal;
 	}
 	/**

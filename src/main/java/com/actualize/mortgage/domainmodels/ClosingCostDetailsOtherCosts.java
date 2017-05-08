@@ -17,7 +17,7 @@ public class ClosingCostDetailsOtherCosts implements Serializable {
 	private String iEPatClosingTotalAmount;
 	private String otherTotalAmount;
 	private String totalOtherCostsTotalAmount;
-	private TLCostsModel totalOtherCosts;
+	private PaymentsModel totalOtherCosts;
 	private List<ClosingCostProperties> tOGovtFeesList;
 	private List<Prepaids> prepaidsList;
 	private List<IEPatClosing> iEPatClosingList;
@@ -85,13 +85,13 @@ public class ClosingCostDetailsOtherCosts implements Serializable {
 	/**
 	 * @return the totalOtherCosts
 	 */
-	public TLCostsModel getTotalOtherCosts() {
+	public PaymentsModel getTotalOtherCosts() {
 		return totalOtherCosts;
 	}
 	/**
 	 * @param totalOtherCosts the totalOtherCosts to set
 	 */
-	public void setTotalOtherCosts(TLCostsModel totalOtherCosts) {
+	public void setTotalOtherCosts(PaymentsModel totalOtherCosts) {
 		this.totalOtherCosts = totalOtherCosts;
 	}
 	/**

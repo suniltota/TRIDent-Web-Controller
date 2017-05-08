@@ -13,8 +13,6 @@ import com.actualize.mortgage.domainmodels.MISMODataAccessObject;
  */
 public class InterestRateAdjustment extends MISMODataAccessObject {
 
-	// protected INTERESTRATELIFETIMEADJUSTMENTRULE interestratelifetimeadjustmentrule;
-	    //@XmlElement(name = "INTEREST_RATE_PER_CHANGE_ADJUSTMENT_RULES")
 	public final InterestRateLifetimeAdjustmentRule interestRateLifetimeAdjustmentRule;
 	public final InterestRatePerChangeAdjustmentRules interestRatePerChangeAdjustmentRulesList ;
 	protected InterestRateAdjustment(Element e) {

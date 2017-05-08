@@ -5,33 +5,33 @@ import org.w3c.dom.Element;
 import com.actualize.mortgage.domainmodels.MISMODataAccessObject;
 
 public class Other extends MISMODataAccessObject {
-	public final String IntegratedDisclosureEstimatedClosingCostsExpirationTimezoneType;
-	public final String LockExpirationTimezoneType;
-	public final String BuydownReflectedInNoteIndicator;                                 
-	public final String DocumentSignatureRequiredIndicator;                              
-	public final String EscrowAccountRolloverAmount;                                     
-	public final String IntegratedDisclosureSectionType;                                 
-	public final String LiabilitySecuredBySubjectPropertyIndicator;                      
-	public final String TotalOptionalPaymentCount;                                       
-	public final String TotalStepCount;                                                  
-	public final String TotalStepPaymentCount;                                           
-	public final String SubordinateFinancingIsNewIndicator;                              
+	public final String integratedDisclosureEstimatedClosingCostsExpirationTimezoneType;
+	public final String lockExpirationTimezoneType;
+	public final String buydownReflectedInNoteIndicator;                                 
+	public final String documentSignatureRequiredIndicator;                              
+	public final String escrowAccountRolloverAmount;                                     
+	public final String integratedDisclosureSectionType;                                 
+	public final String liabilitySecuredBySubjectPropertyIndicator;                      
+	public final String totalOptionalPaymentCount;                                       
+	public final String totalStepCount;                                                  
+	public final String totalStepPaymentCount;                                           
+	public final String subordinateFinancingIsNewIndicator;                              
 	
 	
 	
 	public Other(Element element) {
 		super(element);
-		IntegratedDisclosureEstimatedClosingCostsExpirationTimezoneType = getValue("gse:IntegratedDisclosureEstimatedClosingCostsExpirationTimezoneType");
-		LockExpirationTimezoneType = getValue("gse:LockExpirationTimezoneType");
-		BuydownReflectedInNoteIndicator = getValue("gse:BuydownReflectedInNoteIndicator");
-		DocumentSignatureRequiredIndicator = getValue("gse:DocumentSignatureRequiredIndicator");
-		EscrowAccountRolloverAmount = getValue("gse:EscrowAccountRolloverAmount");
-		IntegratedDisclosureSectionType = getValue("gse:IntegratedDisclosureSectionType");
-		LiabilitySecuredBySubjectPropertyIndicator = getValue("gse:LiabilitySecuredBySubjectPropertyIndicator");
-		TotalOptionalPaymentCount = getValue("gse:TotalOptionalPaymentCount");
-		TotalStepCount = getValue("gse:TotalStepCount");
-		TotalStepPaymentCount = getValue("gse:TotalStepPaymentCount");
-		SubordinateFinancingIsNewIndicator = getValue("gse:SubordinateFinancingIsNewIndicator");
+		integratedDisclosureEstimatedClosingCostsExpirationTimezoneType = getValue("gse:IntegratedDisclosureEstimatedClosingCostsExpirationTimezoneType");
+		lockExpirationTimezoneType = getValue("gse:LockExpirationTimezoneType");
+		buydownReflectedInNoteIndicator = getValue("gse:BuydownReflectedInNoteIndicator");
+		documentSignatureRequiredIndicator = getValue("gse:DocumentSignatureRequiredIndicator");
+		escrowAccountRolloverAmount = getValue("gse:EscrowAccountRolloverAmount");
+		integratedDisclosureSectionType = getValue("gse:IntegratedDisclosureSectionType");
+		liabilitySecuredBySubjectPropertyIndicator = getValue("gse:LiabilitySecuredBySubjectPropertyIndicator");
+		totalOptionalPaymentCount = getValue("gse:TotalOptionalPaymentCount");
+		totalStepCount = getValue("gse:TotalStepCount");
+		totalStepPaymentCount = getValue("gse:TotalStepPaymentCount");
+		subordinateFinancingIsNewIndicator = getValue("gse:SubordinateFinancingIsNewIndicator");
 	
 	}
 }

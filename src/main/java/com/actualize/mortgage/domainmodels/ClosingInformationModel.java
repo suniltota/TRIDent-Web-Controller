@@ -2,7 +2,7 @@ package com.actualize.mortgage.domainmodels;
 
 import java.io.Serializable;
 
-public class ClosingInformation implements Serializable {
+public class ClosingInformationModel implements Serializable {
 	
 	private static final long serialVersionUID = 8557982875024822649L;
 	

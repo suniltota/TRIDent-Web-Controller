@@ -15,7 +15,7 @@ public class SummariesofTransactionsBorrowerSection  implements Serializable{
 	@JsonProperty(value = "duefromBorroweratClosing")
 	private SummariesofTransactionsDetailsDueFromBorrowerAtClosing duefromBorroweratClosing;
 	@JsonProperty(value = "paidAlreadybyoronBehalf")
-	private SummariesofTransactionsDetailsPaidAlreadyby paidAlreadyby; 
+	private SummariesofTransactionsDetailsPaidByAlready paidAlreadyby; 
 	@JsonProperty(value = "calculation") 
 	private List<SummariesofTransactionsCalculation> summariesofTransactionsCalculation;
 	
@@ -45,10 +45,10 @@ public class SummariesofTransactionsBorrowerSection  implements Serializable{
 			List<SummariesofTransactionsCalculation> summariesofTransactionsCalculation) {
 		this.summariesofTransactionsCalculation = summariesofTransactionsCalculation;
 	}
-	public SummariesofTransactionsDetailsPaidAlreadyby getPaidAlreadyby() {
+	public SummariesofTransactionsDetailsPaidByAlready getPaidAlreadyby() {
 		return paidAlreadyby;
 	}
-	public void setPaidAlreadyby(SummariesofTransactionsDetailsPaidAlreadyby paidAlreadyby) {
+	public void setPaidAlreadyby(SummariesofTransactionsDetailsPaidByAlready paidAlreadyby) {
 		this.paidAlreadyby = paidAlreadyby;
 	}
 	

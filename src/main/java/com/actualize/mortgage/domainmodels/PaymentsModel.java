@@ -6,7 +6,7 @@ import java.io.Serializable;
  * @author sboragala
  *
  */
-public class TLCostsModel implements Serializable{
+public class PaymentsModel implements Serializable{
 	
 	private static final long serialVersionUID = -8897752986596663579L;
 	
@@ -15,7 +15,7 @@ public class TLCostsModel implements Serializable{
 	private String spAtClosing;
 	private String spB4Closing;
 	private String paidByOthers;
-	private boolean lenderStatus;
+	private boolean lenderStatus = false;
 	
 	/**
 	 * @return the bpAtClosing

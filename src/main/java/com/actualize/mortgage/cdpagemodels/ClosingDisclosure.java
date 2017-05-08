@@ -11,7 +11,7 @@ import com.actualize.mortgage.domainmodels.CashToClose;
 import com.actualize.mortgage.domainmodels.ClosingCostDetailsLoanCosts;
 import com.actualize.mortgage.domainmodels.ClosingCostDetailsOtherCosts;
 import com.actualize.mortgage.domainmodels.ClosingCostsTotal;
-import com.actualize.mortgage.domainmodels.ClosingInformation;
+import com.actualize.mortgage.domainmodels.ClosingInformationModel;
 import com.actualize.mortgage.domainmodels.CostsAtClosing;
 import com.actualize.mortgage.domainmodels.ETIASection;
 import com.actualize.mortgage.domainmodels.LoanInformation;
@@ -19,6 +19,7 @@ import com.actualize.mortgage.domainmodels.LoanTerms;
 import com.actualize.mortgage.domainmodels.ProjectedPaymentsDetails;
 import com.actualize.mortgage.domainmodels.SummariesofTransactions;
 import com.actualize.mortgage.domainmodels.TransactionInformation;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * This class represents the all the pages present in Closing Disclosure
@@ -31,7 +32,7 @@ public class ClosingDisclosure implements Serializable {
 
     private static final long serialVersionUID = 3808831045060865597L;
     private ClosingDisclosureDocumentType closingDisclosureDocType;
-    private ClosingInformation closingInformation;
+    private ClosingInformationModel closingInformationModel;
     private TransactionInformation transactionInformation;
     private LoanInformation loanInformation;
     private LoanTerms loanTerms;
@@ -59,14 +60,14 @@ public class ClosingDisclosure implements Serializable {
 	/**
 	 * @return the closingInformation
 	 */
-	public ClosingInformation getClosingInformation() {
-		return closingInformation;
+	public ClosingInformationModel getClosingInformation() {
+		return closingInformationModel;
 	}
 	/**
-	 * @param closingInformation the closingInformation to set
+	 * @param closingInformationModel the closingInformation to set
 	 */
-	public void setClosingInformation(ClosingInformation closingInformation) {
-		this.closingInformation = closingInformation;
+	public void setClosingInformation(ClosingInformationModel closingInformationModel) {
+		this.closingInformationModel = closingInformationModel;
 	}
 	/**
 	 * @return the transactionInformation

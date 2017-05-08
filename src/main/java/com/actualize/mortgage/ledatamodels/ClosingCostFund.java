@@ -1,6 +1,3 @@
-/**
- * 
- */
 package com.actualize.mortgage.ledatamodels;
 
 import org.w3c.dom.Element;
@@ -9,21 +6,21 @@ import org.w3c.dom.NodeList;
 import com.actualize.mortgage.domainmodels.MISMODataAccessObject;
 
 /**
- * defines LiabilityDetail in MISMO XML
+ *  this class defines the ClosingCostFund in MISMO XML
  * @author sboragala
  *
  */
-public class LiabilityDetail extends MISMODataAccessObject {
+public class ClosingCostFund extends MISMODataAccessObject {
 	public String displayLabelText;
-	public final String liabilityDescription;
-	public final String liabilityType;
-	public final String liabilityTypeOtherDescription;
-	public final Other other;
-	protected LiabilityDetail(Element e) {
+	public final String closingCostFundAmount;
+    public final String fundsType;
+    public final String integratedDisclosureSectionType;
+	
+	protected ClosingCostFund(Element e) {
 		super(e);
-		liabilityDescription = getValueAddNS("LiabilityDescription");
-		liabilityType = getValueAddNS("LiabilityType");
-		NodeList node = getElementsAddNS("LiabilityType");
+		closingCostFundAmount = getValueAddNS("ClosingCostFundAmount");
+	    fundsType = getValueAddNS("FundsType"); 
+	    NodeList node = getElementsAddNS("FundsType");
 		if(null != node)
 		{	
 			Element ele =(Element)node.item(0);
@@ -38,8 +35,7 @@ public class LiabilityDetail extends MISMODataAccessObject {
 			displayLabelText = getAttributeValue("gse:DisplayLabelText");
 		if("".equals(displayLabelText) || displayLabelText.isEmpty())
 			displayLabelText = getAttributeValue("DisplayLabelText");
-		liabilityTypeOtherDescription = getValueAddNS("LiabilityTypeOtherDescription");
-		other = new Other((Element)getElementAddNS("EXTENSION/OTHER"));
+	    integratedDisclosureSectionType = getValueAddNS("IntegratedDisclosureSectionType");
 	}
 
 }

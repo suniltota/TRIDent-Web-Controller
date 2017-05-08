@@ -18,7 +18,7 @@ public class Liability extends MISMODataAccessObject {
 	public final PayOff payOff;
 	protected Liability(Element e) {
 		super(e);
-		liabilityDetail = new LiabilityDetail((Element)getElementAddNS("FEE_DETAIL"));
+		liabilityDetail = new LiabilityDetail((Element)getElementAddNS("LIABILITY_DETAIL"));
 		liabilityholderName = new Name((Element)getElementAddNS("LIABILITY_HOLDER/NAME"));
 		payOff = new PayOff((Element)getElementAddNS("PAYOFF"));
 	}

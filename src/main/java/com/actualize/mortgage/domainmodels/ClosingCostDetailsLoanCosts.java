@@ -18,7 +18,7 @@ public class ClosingCostDetailsLoanCosts implements Serializable {
 	private List<ClosingCostProperties> originationCharges;
 	private List<ClosingCostProperties> sbDidNotShopFors;
 	private List<ClosingCostProperties> sbDidShopFors;
-	private TLCostsModel tlCosts;
+	private PaymentsModel tlCosts;
 	
 	/**
 	 * @return the ocTotalAmount
@@ -107,13 +107,13 @@ public class ClosingCostDetailsLoanCosts implements Serializable {
 	/**
 	 * @return the tlCosts
 	 */
-	public TLCostsModel getTlCosts() {
+	public PaymentsModel getTlCosts() {
 		return tlCosts;
 	}
 	/**
 	 * @param tlCosts the tlCosts to set
 	 */
-	public void setTlCosts(TLCostsModel tlCosts) {
+	public void setTlCosts(PaymentsModel tlCosts) {
 		this.tlCosts = tlCosts;
 	}
 	

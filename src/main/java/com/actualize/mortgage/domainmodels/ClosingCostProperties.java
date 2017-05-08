@@ -6,7 +6,7 @@ import java.io.Serializable;
  * @author sboragala
  *
  */
-public class ClosingCostProperties extends TLCostsModel implements Serializable {
+public class ClosingCostProperties extends PaymentsModel implements Serializable {
 		
 	private static final long serialVersionUID = 943579811603225142L;
 	
