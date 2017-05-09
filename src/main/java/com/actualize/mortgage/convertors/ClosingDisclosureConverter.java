@@ -122,6 +122,7 @@ import com.actualize.mortgage.ledatamodels.PrepaidItem;
 import com.actualize.mortgage.ledatamodels.PrepaidItems;
 import com.actualize.mortgage.ledatamodels.PrepaymentPenaltyLifetimeRule;
 import com.actualize.mortgage.ledatamodels.PrincipalAndInterestPaymentLifetimeAdjustmentRule;
+import com.actualize.mortgage.ledatamodels.PrincipalAndInterestPaymentPerChangeAdjustmentRules;
 import com.actualize.mortgage.ledatamodels.ProjectedPayment;
 import com.actualize.mortgage.ledatamodels.ProjectedPayments;
 import com.actualize.mortgage.ledatamodels.PropertyDetail;
@@ -406,6 +407,7 @@ public class ClosingDisclosureConverter {
         InterestRatePerChangeAdjustmentRules interestRatePerChangeAdjustmentRules = new InterestRatePerChangeAdjustmentRules((Element)deal.getElementAddNS(loan + "/ADJUSTMENT/INTEREST_RATE_ADJUSTMENT/INTEREST_RATE_PER_CHANGE_ADJUSTMENT_RULES"));
         PrepaymentPenaltyLifetimeRule prepaymentPenaltyLifetimeRule = new PrepaymentPenaltyLifetimeRule((Element)deal.getElementAddNS(loan + "/PREPAYMENT_PENALTY/PREPAYMENT_PENALTY_LIFETIME_RULE"));
         AboutVersions aboutVersions = document.aboutVersions;
+        PrincipalAndInterestPaymentPerChangeAdjustmentRules principalAndInterestPaymentPerChangeAdjustmentRules = new PrincipalAndInterestPaymentPerChangeAdjustmentRules((Element)deal.getElementAddNS(loan + "/ADJUSTMENT/PRINCIPAL_AND_INTEREST_PAYMENT_ADJUSTMENT/PRINCIPAL_AND_INTEREST_PAYMENT_PER_CHANGE_ADJUSTMENT_RULES"));
         List<AboutVersion> aboutVersionList = new LinkedList<>();
       
         
@@ -445,19 +447,12 @@ public class ClosingDisclosureConverter {
 			aboutVersionList.add(aboutVersions.aboutVersions[i]);
 	    }
 		   
-		if(interestRatePerChangeAdjustmentRules.interestRatePerChangeAdjustmentRules.length>0)
-	        for(int i=0; i<interestRatePerChangeAdjustmentRules.interestRatePerChangeAdjustmentRules.length;i++)
+		if(principalAndInterestPaymentPerChangeAdjustmentRules.principalAndInterestPaymentPerChangeAdjustmentRules.length>0)
+	        for(int i=0; i<principalAndInterestPaymentPerChangeAdjustmentRules.principalAndInterestPaymentPerChangeAdjustmentRules.length;i++)
 	 	    {
-	        	for(AboutVersion aboutVersion : aboutVersionList){
-		        	
-					if("DDOFileNumber".equalsIgnoreCase(aboutVersion.AboutVersionIdentifier))
-						loanTermsPI.setPerChangePrincipalAndInterestPaymentAdjustmentFrequencyMonthsCount(interestRatePerChangeAdjustmentRules.interestRatePerChangeAdjustmentRules[i].PerChangeRateAdjustmentFrequencyMonthsCount);
-					else
-						if("First".equalsIgnoreCase(interestRatePerChangeAdjustmentRules.interestRatePerChangeAdjustmentRules[i].AdjustmentRuleType))
-							loanTermsPI.setPerChangePrincipalAndInterestPaymentAdjustmentFrequencyMonthsCount(interestRatePerChangeAdjustmentRules.interestRatePerChangeAdjustmentRules[i].PerChangeRateAdjustmentFrequencyMonthsCount);
-	        	}
+	        	if("First".equalsIgnoreCase(principalAndInterestPaymentPerChangeAdjustmentRules.principalAndInterestPaymentPerChangeAdjustmentRules[i].AdjustmentRuleType))
+					loanTermsPI.setPerChangePrincipalAndInterestPaymentAdjustmentFrequencyMonthsCount(principalAndInterestPaymentPerChangeAdjustmentRules.principalAndInterestPaymentPerChangeAdjustmentRules[i].PerChangePrincipalAndInterestPaymentAdjustmentFrequencyMonthsCount);
 	        }
-		
  	    loanTermsPI.setPaymentFrequencyType(paymentRule.PaymentFrequencyType);
 		loanTermsPI.setAmount(principalAmount);
  	    loanTermsPI.setInitialPrincipalAndInterestPaymentAmount(paymentRule.InitialPrincipalAndInterestPaymentAmount);
