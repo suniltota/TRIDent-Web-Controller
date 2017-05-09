@@ -14,7 +14,7 @@ public class SummariesofTransactionsDetailsDueFromBorrowerAtClosing implements S
 	
 	private String salePriceOfProperty;
 	private String salePriceOfPersonalProperty;
-	private String closingCostsPaidAtClosing;
+	private IntegratedDisclosureSectionSummaryModel closingCostsPaidAtClosing;
 	private List<LiabilityModel> dueFromBorrowerAtClosing;
 	private List<ClosingAdjustmentItemModel> adjustments;
 	private List<ProrationModel> adjustmentsPaidBySellerInAdvance;
@@ -47,13 +47,13 @@ public class SummariesofTransactionsDetailsDueFromBorrowerAtClosing implements S
 	/**
 	 * @return the closingCostsPaidAtClosing
 	 */
-	public String getClosingCostsPaidAtClosing() {
+	public IntegratedDisclosureSectionSummaryModel getClosingCostsPaidAtClosing() {
 		return closingCostsPaidAtClosing;
 	}
 	/**
 	 * @param closingCostsPaidAtClosing the closingCostsPaidAtClosing to set
 	 */
-	public void setClosingCostsPaidAtClosing(String closingCostsPaidAtClosing) {
+	public void setClosingCostsPaidAtClosing(IntegratedDisclosureSectionSummaryModel closingCostsPaidAtClosing) {
 		this.closingCostsPaidAtClosing = closingCostsPaidAtClosing;
 	}
 	/**
@@ -105,6 +105,7 @@ public class SummariesofTransactionsDetailsDueFromBorrowerAtClosing implements S
 			IntegratedDisclosureSectionSummaryModel dueFromBorrowerAtClosingTotalAmount) {
 		this.dueFromBorrowerAtClosingTotalAmount = dueFromBorrowerAtClosingTotalAmount;
 	}
+	
 	
 	
 }

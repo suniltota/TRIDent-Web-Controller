@@ -12,6 +12,7 @@ import com.actualize.mortgage.domainmodels.ClosingCostDetailsLoanCosts;
 import com.actualize.mortgage.domainmodels.ClosingCostDetailsOtherCosts;
 import com.actualize.mortgage.domainmodels.ClosingCostsTotal;
 import com.actualize.mortgage.domainmodels.ClosingInformationModel;
+import com.actualize.mortgage.domainmodels.ContactInformationModel;
 import com.actualize.mortgage.domainmodels.CostsAtClosing;
 import com.actualize.mortgage.domainmodels.ETIASection;
 import com.actualize.mortgage.domainmodels.LoanInformation;
@@ -19,7 +20,6 @@ import com.actualize.mortgage.domainmodels.LoanTerms;
 import com.actualize.mortgage.domainmodels.ProjectedPaymentsDetails;
 import com.actualize.mortgage.domainmodels.SummariesofTransactions;
 import com.actualize.mortgage.domainmodels.TransactionInformation;
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * This class represents the all the pages present in Closing Disclosure
@@ -44,6 +44,7 @@ public class ClosingDisclosure implements Serializable {
     private ClosingCostsTotal closingCostsTotal;
     private CashToClose cashToCloses;
     private SummariesofTransactions summariesofTransactions;
+    private ContactInformationModel contactInformation;
     
 	/**
 	 * @return the closingDisclosureDocType
@@ -200,6 +201,18 @@ public class ClosingDisclosure implements Serializable {
 	 */
 	public void setSummariesofTransactions(SummariesofTransactions summariesofTransactions) {
 		this.summariesofTransactions = summariesofTransactions;
+	}
+	/**
+	 * @return the contactInformation
+	 */
+	public ContactInformationModel getContactInformation() {
+		return contactInformation;
+	}
+	/**
+	 * @param contactInformation the contactInformation to set
+	 */
+	public void setContactInformation(ContactInformationModel contactInformation) {
+		this.contactInformation = contactInformation;
 	}
     
 	

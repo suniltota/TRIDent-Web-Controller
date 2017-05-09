@@ -1,24 +1,37 @@
 package com.actualize.mortgage.ledatamodels;
 
 import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 
 import com.actualize.mortgage.domainmodels.MISMODataAccessObject;
-
+/**
+ * this class defines LicenseDetail in MISMO XML
+ * @author sboragala
+ *
+ */
 public class LicenseDetail extends MISMODataAccessObject {
-	public final String LicenseAuthorityLevelType;
-	public final String LicenseIdentifier;
-	public final String IdentifierOwnerURI;
-	public final String LicenseIssueDate;
-	public final String LicenseIssuingAuthorityName;
-	public final String LicenseIssuingAuthorityStateCode;
+	public final String licenseAuthorityLevelType;
+	public final String licenseIdentifier;
+	public String identifierOwnerURI;
+	public final String licenseIssueDate;
+	public final String licenseIssuingAuthorityName;
+	public final String licenseIssuingAuthorityStateCode;
 	
 	public LicenseDetail(Element element) {
 		super(element);
-		LicenseAuthorityLevelType = getValueAddNS("LicenseAuthorityLevelType");
-		LicenseIdentifier = getValueAddNS("LicenseIdentifier");
-		IdentifierOwnerURI = getValueAddNS("IdentifierOwnerURI"); // TODO an attribute
-		LicenseIssueDate = getValueAddNS("LicenseIssueDate");
-		LicenseIssuingAuthorityName = getValueAddNS("LicenseIssuingAuthorityName");
-		LicenseIssuingAuthorityStateCode = getValueAddNS("LicenseIssuingAuthorityStateCode");
+		licenseAuthorityLevelType = getValueAddNS("LicenseAuthorityLevelType");
+		licenseIdentifier = getValueAddNS("LicenseIdentifier");
+		NodeList node = getElementsAddNS("LicenseIdentifier");
+		if(null != node)
+		{	
+			Element ele =(Element)node.item(0);
+			if(null != ele)
+			{
+				identifierOwnerURI = ele.getAttribute("IdentifierOwnerURI");
+			}
+		}
+		licenseIssueDate = getValueAddNS("LicenseIssueDate");
+		licenseIssuingAuthorityName = getValueAddNS("LicenseIssuingAuthorityName");
+		licenseIssuingAuthorityStateCode = getValueAddNS("LicenseIssuingAuthorityStateCode");
 	}
 }

@@ -26,10 +26,11 @@ import com.actualize.mortgage.domainmodels.ClosingAdjustmentItemModel;
 import com.actualize.mortgage.domainmodels.ClosingCostDetailsLoanCosts;
 import com.actualize.mortgage.domainmodels.ClosingCostDetailsOtherCosts;
 import com.actualize.mortgage.domainmodels.ClosingCostFundModel;
-import com.actualize.mortgage.domainmodels.ClosingCostFundsModel;
 import com.actualize.mortgage.domainmodels.ClosingCostProperties;
 import com.actualize.mortgage.domainmodels.ClosingCostsTotal;
 import com.actualize.mortgage.domainmodels.ClosingInformationModel;
+import com.actualize.mortgage.domainmodels.ContactInformationDetail;
+import com.actualize.mortgage.domainmodels.ContactInformationModel;
 import com.actualize.mortgage.domainmodels.CostsAtClosing;
 import com.actualize.mortgage.domainmodels.CostsAtClosingCashToClose;
 import com.actualize.mortgage.domainmodels.CostsAtClosingClosingCosts;
@@ -72,7 +73,6 @@ import com.actualize.mortgage.domainmodels.TransactionInformation;
 import com.actualize.mortgage.ledatamodels.AboutVersion;
 import com.actualize.mortgage.ledatamodels.AboutVersions;
 import com.actualize.mortgage.ledatamodels.Address;
-import com.actualize.mortgage.ledatamodels.Adjustment;
 import com.actualize.mortgage.ledatamodels.AmortizationRule;
 import com.actualize.mortgage.ledatamodels.BuydownOccurence;
 import com.actualize.mortgage.ledatamodels.BuydownRule;
@@ -107,6 +107,7 @@ import com.actualize.mortgage.ledatamodels.InterestRatePerChangeAdjustmentRules;
 import com.actualize.mortgage.ledatamodels.LegalEntityDetail;
 import com.actualize.mortgage.ledatamodels.Liabilities;
 import com.actualize.mortgage.ledatamodels.Liability;
+import com.actualize.mortgage.ledatamodels.LicenseDetail;
 import com.actualize.mortgage.ledatamodels.LoanDetail;
 import com.actualize.mortgage.ledatamodels.LoanIdentifiers;
 import com.actualize.mortgage.ledatamodels.MIDataDetail;
@@ -117,6 +118,7 @@ import com.actualize.mortgage.ledatamodels.NegativeAmortization;
 import com.actualize.mortgage.ledatamodels.NegativeAmortizationRule;
 import com.actualize.mortgage.ledatamodels.Other;
 import com.actualize.mortgage.ledatamodels.Parties;
+import com.actualize.mortgage.ledatamodels.Party;
 import com.actualize.mortgage.ledatamodels.PaymentRule;
 import com.actualize.mortgage.ledatamodels.PrepaidItem;
 import com.actualize.mortgage.ledatamodels.PrepaidItems;
@@ -163,6 +165,7 @@ public class ClosingDisclosureConverter {
 	     	closingDisclosure.setClosingCostsTotal(createClosingCostsTotal(deal));
 	     	closingDisclosure.setCashToCloses(createCalculatingCashtoClose(deal));
 	     	closingDisclosure.setSummariesofTransactions(createSummariesofTransactions(deal));
+	     	closingDisclosure.setContactInformation(createContactInformation(deal));
 	     	
         //PAGE THREE OF CD
         /*ClosingDisclosurePageThree closingDisclosurePageThree = new ClosingDisclosurePageThree();
@@ -1084,11 +1087,19 @@ public class ClosingDisclosureConverter {
 		if(true)//not seller only
 		{
 			for(int i=0;i<integratedDisclosureSectionSummaryList.integratedDisclosureSectionSummaries.length;i++)
+			{
 				if("DueFromBorrowerAtClosing".equalsIgnoreCase(integratedDisclosureSectionSummaryList.integratedDisclosureSectionSummaries[i].integratedDisclosureSectionSummaryDetail.integratedDisclosureSectionType))
 					duefromBorroweratClosing.setDueFromBorrowerAtClosingTotalAmount(toIntegratedDisclosureSectionSummaryModel(integratedDisclosureSectionSummaryList.integratedDisclosureSectionSummaries[i]));
 				else if("PaidAlreadyByOrOnBehalfOfBorrowerAtClosing".equalsIgnoreCase(integratedDisclosureSectionSummaryList.integratedDisclosureSectionSummaries[i].integratedDisclosureSectionSummaryDetail.integratedDisclosureSectionType))
 					paidByAlready.setPaidByAlreadyTotalAmount(toIntegratedDisclosureSectionSummaryModel(integratedDisclosureSectionSummaryList.integratedDisclosureSectionSummaries[i]));
-		
+				
+				if("LenderCredits".equalsIgnoreCase(integratedDisclosureSectionSummaryList.integratedDisclosureSectionSummaries[i].integratedDisclosureSectionSummaryDetail.integratedDisclosureSectionType))
+					duefromBorroweratClosing.setClosingCostsPaidAtClosing(toIntegratedDisclosureSectionSummaryModel(integratedDisclosureSectionSummaryList.integratedDisclosureSectionSummaries[i]));
+				else if("TotalClosingCosts".equalsIgnoreCase(integratedDisclosureSectionSummaryList.integratedDisclosureSectionSummaries[i].integratedDisclosureSectionSummaryDetail.integratedDisclosureSectionType) 
+								&& "ClosingCostsSubtotal".equalsIgnoreCase(integratedDisclosureSectionSummaryList.integratedDisclosureSectionSummaries[i].integratedDisclosureSectionSummaryDetail.integratedDisclosureSubsectionType))
+					duefromBorroweratClosing.setClosingCostsPaidAtClosing(toIntegratedDisclosureSectionSummaryModel(integratedDisclosureSectionSummaryList.integratedDisclosureSectionSummaries[i]));
+
+			}
 			if(!liabilityModels.isEmpty())	
 				liabilityModels.stream()
 					.filter(liability -> "DueFromBorrowerAtClosing".equalsIgnoreCase(liability.getIntegratedDisclosureSectionType()))
@@ -1344,7 +1355,138 @@ public class ClosingDisclosureConverter {
 			
 		return summariesofTransactions;
     }
+    /**
+     * create contact information
+     * @param deal
+     * @return ContactInformationModel
+     */
+     private ContactInformationModel createContactInformation(Deal deal)
+    {
     
+		ContactInformationModel contactInformationModel = new ContactInformationModel();
+		Parties parties = new Parties((Element)deal.getElementAddNS("PARTIES"));
+		List<Party> closingAgent = new LinkedList<>();
+		List<Party> lender = new LinkedList<>();
+		List<Party> realEstateAgentB = new LinkedList<>();
+		List<Party> realEstateAgentS = new LinkedList<>();
+		List<Party> mortgageBroker = new LinkedList<>();
+       	
+		for(int i=0;i<parties.parties.length; i++)
+		{	
+			switch(parties.parties[i].roles.roles[0].roleDetail.PartyRoleType)
+			{
+				case "ClosingAgent":
+					closingAgent.add(parties.parties[i]);
+				break;
+				case "NotePayTo":
+					lender.add(parties.parties[i]);
+				break;
+				case "RealEstateAgent":
+					if ("Selling".equalsIgnoreCase(parties.parties[i].roles.roles[0].realEstateAgent.realEstateAgentType))
+						realEstateAgentB.add(parties.parties[i]);
+					else if("Listing".equalsIgnoreCase(parties.parties[i].roles.roles[0].realEstateAgent.realEstateAgentType))
+						realEstateAgentS.add(parties.parties[i]);
+				break;
+				case "MortgageBroker":
+					mortgageBroker.add(parties.parties[i]);
+				break;
+			}  		
+		}
+        	
+       	contactInformationModel.setLender(getContactInformationDetail(lender, "NotePayTo"));
+        	contactInformationModel.setMortagageBroker(getContactInformationDetail(mortgageBroker, "MortgageBroker"));
+        	contactInformationModel.setRealEstateBrokerB(getContactInformationDetail(realEstateAgentB, "RealEstateAgent"));
+        	contactInformationModel.setRealEstateBrokerS(getContactInformationDetail(realEstateAgentS, "RealEstateAgent"));
+        	contactInformationModel.setSettlementAgent(getContactInformationDetail(closingAgent, "ClosingAgent"));
+        	
+    		return contactInformationModel;
+        	
+        }
+        
+   /**
+    * get all the details from party and assigns to contactinformationDetail
+    * @param party
+    * @return ContactInformationDetail
+    */
+    private ContactInformationDetail getContactInformationDetail(List<Party> parties, String partyType)
+    {
+    	ContactInformationDetail contactInformationDetail = new ContactInformationDetail();
+    	String stateLicense = "ClosingAgent,RealEstateAgent"; 
+    	parties.forEach(party ->{
+    		
+    		for(int i=0;i<party.addresses.addresses.length; i++)
+	    	{
+    			if(null != party.addresses.addresses[i].element)
+    			{
+    				Address address = party.addresses.addresses[i];
+    				contactInformationDetail.setOrganizationStreetAddr(address.AddressLineText);
+    				contactInformationDetail.setOrganizationAddressType(address.AddressType);
+    				contactInformationDetail.setOrganizationCity(address.CityName);
+    				contactInformationDetail.setOrganizationStateCode(address.StateCode);
+    				contactInformationDetail.setOrganizationPostalCode(address.PostalCode);
+    			}
+	    	}
+    	
+	    	contactInformationDetail.setPartyRoleType(partyType);
+	    	
+    	if(null != party.legalEntity.legalEntityDetail.element)
+	    	{
+	    		contactInformationDetail.setOrganizationName(party.legalEntity.legalEntityDetail.fullName);
+	    		
+	    		if(null != party.roles.roles[0].licenses.licenses[0].licenseDetail.element)
+				{
+					LicenseDetail licenseDetail = party.roles.roles[0].licenses.licenses[0].licenseDetail;
+					if(!stateLicense.contains(partyType))
+						contactInformationDetail.setOrganizationNMLSID(licenseDetail.licenseIdentifier);
+					else
+						contactInformationDetail.setOrganizationStateLicenseID(licenseDetail.licenseIdentifier);
+					contactInformationDetail.setOrganizationLicenseAuthorityLevelType(licenseDetail.licenseAuthorityLevelType);
+					contactInformationDetail.setOrganizationLicenseIssuingAuthorityName(licenseDetail.licenseIssuingAuthorityName);
+					contactInformationDetail.setOrganizationLicenseIssueDate(licenseDetail.licenseIssueDate);
+				contactInformationDetail.setOrganizationIssuingAgencyURL(licenseDetail.identifierOwnerURI);
+				}
+	    	}
+	    	if(null != party.individual.name.element)
+	    	{	
+	    		Name name = party.individual.name;
+			contactInformationDetail.setIndividualFirstName(name.FirstName);
+				contactInformationDetail.setIndividualMiddleName(name.MiddleName);
+				contactInformationDetail.setIndividualLastName(name.LastName);
+				contactInformationDetail.setIndividualSuffix(name.SuffixName);
+				
+				if(null != party.roles.roles[0].licenses.licenses[0].licenseDetail.element)
+				{
+					LicenseDetail licenseDetail = party.roles.roles[0].licenses.licenses[0].licenseDetail;
+					if(!stateLicense.contains(partyType))
+						contactInformationDetail.setIndividualNmlsID(licenseDetail.licenseIdentifier);
+					else
+						contactInformationDetail.setIndividualStateLicenseID(licenseDetail.licenseIdentifier);
+					contactInformationDetail.setIndividualLicenseAuthorityLevelType(licenseDetail.licenseAuthorityLevelType);
+					contactInformationDetail.setIndividualLicenseIssuingAuthorityName(licenseDetail.licenseIssuingAuthorityName);
+					contactInformationDetail.setIndividualLicenseIssueDate(licenseDetail.licenseIssueDate);
+					contactInformationDetail.setIndividualIssuingAgencyURL(licenseDetail.identifierOwnerURI);
+				}
+	    	
+    	}
+	    	if(null != party.individual.contactPoints.element)
+	    	{	
+	    		for(int i=0; i<party.individual.contactPoints.contactPoints.length; i++)
+	    		{
+	    			if(null != party.individual.contactPoints.contactPoints[i].contactPointEmail.element)
+	    				contactInformationDetail.setIndividualEmail(party.individual.contactPoints.contactPoints[i].contactPointEmail.ContactPointEmailValue);
+	    			if(null != party.individual.contactPoints.contactPoints[i].contactPointTelephone.element)
+	    				contactInformationDetail.setIndividualPhone(party.individual.contactPoints.contactPoints[i].contactPointTelephone.ContactPointTelephoneValue);
+	    		}
+	    	}
+    	});
+		return contactInformationDetail;
+    }
+    
+   /**
+    * converts integratedDisclosureSectionSummary to IntegratedDisclosureSectionSummaryModel
+    * @param integratedDisclosureSectionSummary
+    * @return IntegratedDisclosureSectionSummaryModel
+    */
     private IntegratedDisclosureSectionSummaryModel toIntegratedDisclosureSectionSummaryModel(IntegratedDisclosureSectionSummary integratedDisclosureSectionSummary)
     {
     	IntegratedDisclosureSectionSummaryModel integratedDisclosureSectionSummaryModel = new IntegratedDisclosureSectionSummaryModel();
