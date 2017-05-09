@@ -1,7 +1,11 @@
 package com.actualize.mortgage.domainmodels;
 
 import java.io.Serializable;
-
+/**
+ * this class defines Address in JSON response
+ * @author sboragala
+ *
+ */
 public class Address implements Serializable {
 
 	/**

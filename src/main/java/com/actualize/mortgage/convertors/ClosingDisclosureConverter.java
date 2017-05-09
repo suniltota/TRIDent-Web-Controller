@@ -41,6 +41,8 @@ import com.actualize.mortgage.domainmodels.IntegratedDisclosureSectionSummaryDet
 import com.actualize.mortgage.domainmodels.IntegratedDisclosureSectionSummaryModel;
 import com.actualize.mortgage.domainmodels.IntegratedDisclosureSubsectionPaymentModel;
 import com.actualize.mortgage.domainmodels.LiabilityModel;
+import com.actualize.mortgage.domainmodels.LoanCalculationModel;
+import com.actualize.mortgage.domainmodels.LoanCalculationsQualifiedMortgage;
 import com.actualize.mortgage.domainmodels.LoanInformation;
 import com.actualize.mortgage.domainmodels.LoanInformationLoanIdentifier;
 import com.actualize.mortgage.domainmodels.LoanTerms;
@@ -61,6 +63,7 @@ import com.actualize.mortgage.domainmodels.ProjectedPaymentsPC;
 import com.actualize.mortgage.domainmodels.ProjectedPaymentsPI;
 import com.actualize.mortgage.domainmodels.PropertyValuationDetailModel;
 import com.actualize.mortgage.domainmodels.ProrationModel;
+import com.actualize.mortgage.domainmodels.QualifiedMortgageModel;
 import com.actualize.mortgage.domainmodels.SalesContractDetailModel;
 import com.actualize.mortgage.domainmodels.SummariesofTransactions;
 import com.actualize.mortgage.domainmodels.SummariesofTransactionsDetailsBorrowerTransaction;
@@ -165,7 +168,9 @@ public class ClosingDisclosureConverter {
 	     	closingDisclosure.setClosingCostsTotal(createClosingCostsTotal(deal));
 	     	closingDisclosure.setCashToCloses(createCalculatingCashtoClose(deal));
 	     	closingDisclosure.setSummariesofTransactions(createSummariesofTransactions(deal));
+	     	closingDisclosure.setLoanCalculationsQualifiedMortgage(createLoanCalculationsQualifiedMortgage(deal));
 	     	closingDisclosure.setContactInformation(createContactInformation(deal));
+	     	
 	     	
         //PAGE THREE OF CD
         /*ClosingDisclosurePageThree closingDisclosurePageThree = new ClosingDisclosurePageThree();
@@ -303,9 +308,9 @@ public class ClosingDisclosureConverter {
  	  	}
  	  	
  	    //Loan Term
- 	  	if(!"".equals(loanDetail.constructionLoanIndicator) && "ConstructionToPermanent".equalsIgnoreCase(construction.ConstructionLoanType))
+ 	  	if(!"".equals(loanDetail.constructionLoanIndicator) && "ConstructionToPermanent".equalsIgnoreCase(construction.constructionLoanType))
 		{
-			loanTotalTerm = construction.ConstructionLoanTotalTermMonthsCount;
+			loanTotalTerm = construction.constructionLoanTotalTermMonthsCount;
 		}
 		else if(!"".equals(maturityRule.LoanMaturityPeriodType) && "Year".equalsIgnoreCase(maturityRule.LoanMaturityPeriodType))
 		{
@@ -346,9 +351,9 @@ public class ClosingDisclosureConverter {
 		
  	    loanInformationSection.setPurpose(loanPurpose); 
  	    loanInformationSection.setConstructionLoan(Convertor.stringToBoolean(loanDetail.constructionLoanIndicator));
- 	    loanInformationSection.setConstructionLoanType(construction.ConstructionLoanType);
- 	    loanInformationSection.setConstructionPeriodNumberOfMonthsCount(construction.ConstructionPeriodNumberOfMonthsCount);
- 	    loanInformationSection.setConstructionLoanTotalTermMonthsCount(construction.ConstructionLoanTotalTermMonthsCount); 
+ 	    loanInformationSection.setConstructionLoanType(construction.constructionLoanType);
+ 	    loanInformationSection.setConstructionPeriodNumberOfMonthsCount(construction.constructionPeriodNumberOfMonthsCount);
+ 	    loanInformationSection.setConstructionLoanTotalTermMonthsCount(construction.constructionLoanTotalTermMonthsCount); 
  	    loanInformationSection.setLoanMaturityPeriodType(maturityRule.LoanMaturityPeriodType);
  	    loanInformationSection.setLoanMaturityPeriodCount(maturityRule.LoanMaturityPeriodCount);
  	    loanInformationSection.setIntegratedDisclosureHomeEquityLoanIndicator(Convertor.stringToBoolean(idDetail.IntegratedDisclosureHomeEquityLoanIndicator));
@@ -1035,6 +1040,11 @@ public class ClosingDisclosureConverter {
 		return cashToClose;
 	}
     
+    /**
+     * this methods creates SummariesofTransactions response
+     * @param deal
+     * @return SummariesofTransactions
+     */
     private SummariesofTransactions createSummariesofTransactions(Deal deal)
     {
     	String adjustmentTypes ="FuelCosts,RelocationFunds,Repairs,SellersEscrowAssumption,SellersMortgageInsuranceAssumption,SweatEquity.TenantSecurityDeposit,TradeEquity,Other";
@@ -1349,14 +1359,32 @@ public class ClosingDisclosureConverter {
 		
 		}
 		
-		
 		summariesofTransactions.setDueFromBorroweratClosing(duefromBorroweratClosing);
 		summariesofTransactions.setPaidByAlready(paidByAlready);
 			
 		return summariesofTransactions;
     }
+    
     /**
-     * create contact information
+     * creates LoanCalculations QualifiedMortgage for JSON Response 
+     * @param deal
+     * @return LoanCalculationsQualifiedMortgage
+     */
+    private LoanCalculationsQualifiedMortgage createLoanCalculationsQualifiedMortgage(Deal deal)
+    {
+    	LoanCalculationsQualifiedMortgage loanCalculationsQualifiedMortgage = new LoanCalculationsQualifiedMortgage();
+    	LoanCalculationModel loanCalculationModel = new LoanCalculationModel();
+    	QualifiedMortgageModel qualifiedMortgageModel = new QualifiedMortgageModel();
+    	
+    	
+    	
+    	loanCalculationsQualifiedMortgage.setLoanCalculationModel(loanCalculationModel);
+    	loanCalculationsQualifiedMortgage.setQualifiedMortgage(qualifiedMortgageModel);
+		return loanCalculationsQualifiedMortgage;
+    }
+    
+    /**
+     * create contact information for JSON response
      * @param deal
      * @return ContactInformationModel
      */
@@ -1402,7 +1430,7 @@ public class ClosingDisclosureConverter {
     		return contactInformationModel;
         	
         }
-        
+     
    /**
     * get all the details from party and assigns to contactinformationDetail
     * @param party
@@ -1419,11 +1447,11 @@ public class ClosingDisclosureConverter {
     			if(null != party.addresses.addresses[i].element)
     			{
     				Address address = party.addresses.addresses[i];
-    				contactInformationDetail.setOrganizationStreetAddr(address.AddressLineText);
-    				contactInformationDetail.setOrganizationAddressType(address.AddressType);
-    				contactInformationDetail.setOrganizationCity(address.CityName);
-    				contactInformationDetail.setOrganizationStateCode(address.StateCode);
-    				contactInformationDetail.setOrganizationPostalCode(address.PostalCode);
+    				contactInformationDetail.setOrganizationStreetAddr(address.addressLineText);
+    				contactInformationDetail.setOrganizationAddressType(address.addressType);
+    				contactInformationDetail.setOrganizationCity(address.cityName);
+    				contactInformationDetail.setOrganizationStateCode(address.stateCode);
+    				contactInformationDetail.setOrganizationPostalCode(address.postalCode);
     			}
 	    	}
     	
@@ -1449,10 +1477,10 @@ public class ClosingDisclosureConverter {
 	    	if(null != party.individual.name.element)
 	    	{	
 	    		Name name = party.individual.name;
-			contactInformationDetail.setIndividualFirstName(name.FirstName);
-				contactInformationDetail.setIndividualMiddleName(name.MiddleName);
-				contactInformationDetail.setIndividualLastName(name.LastName);
-				contactInformationDetail.setIndividualSuffix(name.SuffixName);
+			contactInformationDetail.setIndividualFirstName(name.firstName);
+				contactInformationDetail.setIndividualMiddleName(name.middleName);
+				contactInformationDetail.setIndividualLastName(name.lastName);
+				contactInformationDetail.setIndividualSuffix(name.suffixName);
 				
 				if(null != party.roles.roles[0].licenses.licenses[0].licenseDetail.element)
 				{
@@ -1517,9 +1545,9 @@ public class ClosingDisclosureConverter {
     }
     
     /**
-     * 
+     * converts closingCostFundList to ClosingCostFundModel list
      * @param closingCostFundList
-     * @return
+     * @return ClosingCostFundModel List
      */
     private List<ClosingCostFundModel> createClosingCostFundModels(ClosingCostFund[] closingCostFundList) {
     	List<ClosingCostFundModel> closingCostFundModels = new LinkedList<>();
@@ -1535,9 +1563,9 @@ public class ClosingDisclosureConverter {
 	}
 
     /**
-     * 
+     * converts closingAdjustmentItemList to ClosingAdjustmentItemModel list
      * @param closingAdjustmentItemList
-     * @return
+     * @return list of ClosingAdjustmentItemModel
      */
 	private List<ClosingAdjustmentItemModel> createClosingAdjustmentModels(
 			ClosingAdjustmentItem[] closingAdjustmentItemList) {
@@ -1553,7 +1581,7 @@ public class ClosingDisclosureConverter {
     			closingAdjustmentItemModel.setIntegratedDisclosureSectionType(closingAdjustmentItemList[i].closingAdjustmentItemDetail.integratedDisclosureSectionType);
     			closingAdjustmentItemModel.setIntegratedDisclosureSubsectionType(closingAdjustmentItemList[i].closingAdjustmentItemDetail.integratedDisclosureSubsectionType);
     			closingAdjustmentItemModel.setPaidByEntityFullName(closingAdjustmentItemList[i].paidBy.legalEntity.legalEntityDetail.fullName);
-    			closingAdjustmentItemModel.setPaidByIndividualFullName(closingAdjustmentItemList[i].paidBy.individual.name.FullName);
+    			closingAdjustmentItemModel.setPaidByIndividualFullName(closingAdjustmentItemList[i].paidBy.individual.name.fullName);
     			closingAdjustmentItemModel.setPaidToEntityFullName(closingAdjustmentItemList[i].paidToEntityFullName);
     		closingAdjustmentItemModels.add(closingAdjustmentItemModel);
     		
@@ -1576,7 +1604,7 @@ public class ClosingDisclosureConverter {
     			liabilityModel.setDisplayLabel(liability[i].liabilityDetail.displayLabelText);
 	    		liabilityModel.setIntegratedDisclosureSectionType(liability[i].liabilityDetail.other.integratedDisclosureSectionType);
 	    		liabilityModel.setLiabilityDescription(liability[i].liabilityDetail.liabilityDescription);
-	    		liabilityModel.setLiabilityHolderFullName(liability[i].liabilityholderName.FullName);
+	    		liabilityModel.setLiabilityHolderFullName(liability[i].liabilityholderName.fullName);
 	    		liabilityModel.setLiabilitySecuredBySubjectPropertyIndicator(Boolean.parseBoolean(liability[i].liabilityDetail.other.liabilitySecuredBySubjectPropertyIndicator));
 	    		liabilityModel.setLiabilityType(liability[i].liabilityDetail.liabilityType);
 	    		liabilityModel.setLiabilityTypeOtherDescription(liability[i].liabilityDetail.liabilityTypeOtherDescription);
@@ -1684,14 +1712,14 @@ public class ClosingDisclosureConverter {
 	private static NameModel toNameModel(Name name) {
 		NameModel nameModel = new NameModel();
 		
-		if (!name.FullName.equals(""))
-			nameModel.setFullName(name.FullName);
-		if (!name.MiddleName.equals("")) 
-			nameModel.setMiddleName(name.MiddleName);
-		if (!name.LastName.equals("")) 
-			nameModel.setLastName(name.LastName);
-		if (!name.SuffixName.equals("")) 
-			nameModel.setSuffixName(name.SuffixName);
+		if (!name.fullName.equals(""))
+			nameModel.setFullName(name.fullName);
+		if (!name.middleName.equals("")) 
+			nameModel.setMiddleName(name.middleName);
+		if (!name.lastName.equals("")) 
+			nameModel.setLastName(name.lastName);
+		if (!name.suffixName.equals("")) 
+			nameModel.setSuffixName(name.suffixName);
 		
 		return nameModel;
 	}
@@ -1704,16 +1732,16 @@ public class ClosingDisclosureConverter {
 	private static com.actualize.mortgage.domainmodels.Address toAddressModel(Address address) {
 	com.actualize.mortgage.domainmodels.Address addressModel = new com.actualize.mortgage.domainmodels.Address();
 		
-		if (!"".equals(address.AddressType))
-			addressModel.setAddressType(address.AddressType);
-		if (!"".equals(address.CityName))
-			addressModel.setCityName(address.CityName);
-		if (!"".equals(address.AddressLineText))
-			addressModel.setAddressLineText(address.AddressLineText);
-		if (!"".equals(address.StateCode))
-			addressModel.setStateCode(address.StateCode);
-		if (!"".equals(address.PostalCode)) 
-			addressModel.setPostalCode(address.PostalCode);
+		if (!"".equals(address.addressType))
+			addressModel.setAddressType(address.addressType);
+		if (!"".equals(address.cityName))
+			addressModel.setCityName(address.cityName);
+		if (!"".equals(address.addressLineText))
+			addressModel.setAddressLineText(address.addressLineText);
+		if (!"".equals(address.stateCode))
+			addressModel.setStateCode(address.stateCode);
+		if (!"".equals(address.postalCode)) 
+			addressModel.setPostalCode(address.postalCode);
 		if (!"".equals(address.countryCode)) 
 			addressModel.setCountryCode(address.countryCode);
 		return addressModel;
@@ -1728,9 +1756,9 @@ public class ClosingDisclosureConverter {
 	 */
 	private static String loanTerm(LoanDetail loanDetail, MaturityRule maturityRule, Construction construction) {
 		if (loanDetail.constructionLoanIndicator.equalsIgnoreCase("true")) {
-			if (construction.ConstructionLoanType.equalsIgnoreCase("ConstructionOnly"))
-				return construction.ConstructionPeriodNumberOfMonthsCount;
-			return construction.ConstructionLoanTotalTermMonthsCount;
+			if (construction.constructionLoanType.equalsIgnoreCase("ConstructionOnly"))
+				return construction.constructionPeriodNumberOfMonthsCount;
+			return construction.constructionLoanTotalTermMonthsCount;
 		}
 		return maturityRule.LoanMaturityPeriodCount;
 	}
@@ -2051,6 +2079,7 @@ public class ClosingDisclosureConverter {
 			if ("Lender".equalsIgnoreCase(paidBy))
 				iePatClosing.setLenderStatus(true);
 			else
+				
 				iePatClosing.setLenderStatus(false);
 		}
 		return iePatClosing;

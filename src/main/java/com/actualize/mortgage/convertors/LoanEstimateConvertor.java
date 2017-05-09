@@ -134,14 +134,14 @@ public class LoanEstimateConvertor {
 	private static NameModel toNameModel(Name name) {
 		NameModel nameModel = new NameModel();
 		
-		if (!name.FullName.equals(""))
-			nameModel.setFullName(name.FullName);
-		if (!name.MiddleName.equals("")) 
-			nameModel.setMiddleName(name.MiddleName);
-		if (!name.LastName.equals("")) 
-			nameModel.setLastName(name.LastName);
-		if (!name.SuffixName.equals("")) 
-			nameModel.setSuffixName(name.SuffixName);
+		if (!name.fullName.equals(""))
+			nameModel.setFullName(name.fullName);
+		if (!name.middleName.equals("")) 
+			nameModel.setMiddleName(name.middleName);
+		if (!name.lastName.equals("")) 
+			nameModel.setLastName(name.lastName);
+		if (!name.suffixName.equals("")) 
+			nameModel.setSuffixName(name.suffixName);
 		
 		return nameModel;
 	}
@@ -154,14 +154,14 @@ public class LoanEstimateConvertor {
 	private static com.actualize.mortgage.domainmodels.Address toAddressModel(Address address) {
 	com.actualize.mortgage.domainmodels.Address addressModel = new com.actualize.mortgage.domainmodels.Address();
 		
-		if (!address.CityName.equals(""))
-			addressModel.setCityName(address.CityName);
-		if (!address.AddressLineText.equals(""))
-			addressModel.setAddressLineText(address.AddressLineText);
-		if (!address.StateCode.equals(""))
-			addressModel.setStateCode(address.StateCode);
-		if (!address.PostalCode.equals("")) 
-			addressModel.setPostalCode(address.PostalCode);
+		if (!address.cityName.equals(""))
+			addressModel.setCityName(address.cityName);
+		if (!address.addressLineText.equals(""))
+			addressModel.setAddressLineText(address.addressLineText);
+		if (!address.stateCode.equals(""))
+			addressModel.setStateCode(address.stateCode);
+		if (!address.postalCode.equals("")) 
+			addressModel.setPostalCode(address.postalCode);
 		
 		return addressModel;
 	}
@@ -175,9 +175,9 @@ public class LoanEstimateConvertor {
 	 */
 	private static String loanTerm(LoanDetail loanDetail, MaturityRule maturityRule, Construction construction) {
 		if (loanDetail.constructionLoanIndicator.equalsIgnoreCase("true")) {
-			if (construction.ConstructionLoanType.equalsIgnoreCase("ConstructionOnly"))
-				return construction.ConstructionPeriodNumberOfMonthsCount;
-			return construction.ConstructionLoanTotalTermMonthsCount;
+			if (construction.constructionLoanType.equalsIgnoreCase("ConstructionOnly"))
+				return construction.constructionPeriodNumberOfMonthsCount;
+			return construction.constructionLoanTotalTermMonthsCount;
 		}
 		return maturityRule.LoanMaturityPeriodCount;
 	}

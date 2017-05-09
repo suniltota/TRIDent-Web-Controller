@@ -19,6 +19,7 @@ public class ContactInformationModel implements Serializable {
 	private ContactInformationDetail realEstateBrokerB;
 	private ContactInformationDetail realEstateBrokerS;
 	private ContactInformationDetail settlementAgent;
+	
 	/**
 	 * @return the lender
 	 */

@@ -15,6 +15,7 @@ import com.actualize.mortgage.domainmodels.ClosingInformationModel;
 import com.actualize.mortgage.domainmodels.ContactInformationModel;
 import com.actualize.mortgage.domainmodels.CostsAtClosing;
 import com.actualize.mortgage.domainmodels.ETIASection;
+import com.actualize.mortgage.domainmodels.LoanCalculationsQualifiedMortgage;
 import com.actualize.mortgage.domainmodels.LoanInformation;
 import com.actualize.mortgage.domainmodels.LoanTerms;
 import com.actualize.mortgage.domainmodels.ProjectedPaymentsDetails;
@@ -32,7 +33,7 @@ public class ClosingDisclosure implements Serializable {
 
     private static final long serialVersionUID = 3808831045060865597L;
     private ClosingDisclosureDocumentType closingDisclosureDocType;
-    private ClosingInformationModel closingInformationModel;
+    private ClosingInformationModel closingInformation;
     private TransactionInformation transactionInformation;
     private LoanInformation loanInformation;
     private LoanTerms loanTerms;
@@ -44,6 +45,7 @@ public class ClosingDisclosure implements Serializable {
     private ClosingCostsTotal closingCostsTotal;
     private CashToClose cashToCloses;
     private SummariesofTransactions summariesofTransactions;
+    private LoanCalculationsQualifiedMortgage loanCalculationsQualifiedMortgage;
     private ContactInformationModel contactInformation;
     
 	/**
@@ -62,13 +64,13 @@ public class ClosingDisclosure implements Serializable {
 	 * @return the closingInformation
 	 */
 	public ClosingInformationModel getClosingInformation() {
-		return closingInformationModel;
+		return closingInformation;
 	}
 	/**
-	 * @param closingInformationModel the closingInformation to set
+	 * @param closingInformation the closingInformation to set
 	 */
-	public void setClosingInformation(ClosingInformationModel closingInformationModel) {
-		this.closingInformationModel = closingInformationModel;
+	public void setClosingInformation(ClosingInformationModel closingInformation) {
+		this.closingInformation = closingInformation;
 	}
 	/**
 	 * @return the transactionInformation
@@ -201,6 +203,18 @@ public class ClosingDisclosure implements Serializable {
 	 */
 	public void setSummariesofTransactions(SummariesofTransactions summariesofTransactions) {
 		this.summariesofTransactions = summariesofTransactions;
+	}
+	/**
+	 * @return the loanCalculationsQualifiedMortgage
+	 */
+	public LoanCalculationsQualifiedMortgage getLoanCalculationsQualifiedMortgage() {
+		return loanCalculationsQualifiedMortgage;
+	}
+	/**
+	 * @param loanCalculationsQualifiedMortgage the loanCalculationsQualifiedMortgage to set
+	 */
+	public void setLoanCalculationsQualifiedMortgage(LoanCalculationsQualifiedMortgage loanCalculationsQualifiedMortgage) {
+		this.loanCalculationsQualifiedMortgage = loanCalculationsQualifiedMortgage;
 	}
 	/**
 	 * @return the contactInformation

@@ -8,10 +8,6 @@ import java.io.Serializable;
  */
 public class SummariesofTransactions implements Serializable {
 	
-	
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1672551641387366652L;
 	
 	private SummariesofTransactionsDetailsDueFromBorrowerAtClosing dueFromBorroweratClosing;

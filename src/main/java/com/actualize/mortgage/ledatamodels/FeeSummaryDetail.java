@@ -3,20 +3,24 @@ package com.actualize.mortgage.ledatamodels;
 import org.w3c.dom.Element;
 
 import com.actualize.mortgage.domainmodels.MISMODataAccessObject;
-
+/**
+ * defines FeeSummaryDetail in MISMO XML
+ * @author sboragala
+ *
+ */
 public class FeeSummaryDetail extends MISMODataAccessObject {
-	public final String APRPercent;
-	public final String FeeSummaryTotalAmountFinancedAmount;
-	public final String FeeSummaryTotalFinanceChargeAmount;
-	public final String FeeSummaryTotalInterestPercent;
-	public final String FeeSummaryTotalOfAllPaymentsAmount;
+	public final String aprPercent;
+	public final String feeSummaryTotalAmountFinancedAmount;
+	public final String feeSummaryTotalFinanceChargeAmount;
+	public final String feeSummaryTotalInterestPercent;
+	public final String feeSummaryTotalOfAllPaymentsAmount;
 	
 	public FeeSummaryDetail(Element element) {
 		super(element);
-		APRPercent = getValueAddNS("APRPercent");
-		FeeSummaryTotalAmountFinancedAmount = getValueAddNS("FeeSummaryTotalAmountFinancedAmount");
-		FeeSummaryTotalFinanceChargeAmount = getValueAddNS("FeeSummaryTotalFinanceChargeAmount");
-		FeeSummaryTotalInterestPercent = getValueAddNS("FeeSummaryTotalInterestPercent");
-		FeeSummaryTotalOfAllPaymentsAmount = getValueAddNS("FeeSummaryTotalOfAllPaymentsAmount");
+		aprPercent = getValueAddNS("APRPercent");
+		feeSummaryTotalAmountFinancedAmount = getValueAddNS("FeeSummaryTotalAmountFinancedAmount");
+		feeSummaryTotalFinanceChargeAmount = getValueAddNS("FeeSummaryTotalFinanceChargeAmount");
+		feeSummaryTotalInterestPercent = getValueAddNS("FeeSummaryTotalInterestPercent");
+		feeSummaryTotalOfAllPaymentsAmount = getValueAddNS("FeeSummaryTotalOfAllPaymentsAmount");
 	}
 }
