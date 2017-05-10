@@ -20,6 +20,8 @@ public class QualifiedMortgageModel implements Serializable {
 	private String regulationZTotalLoanAmount;
 	private String regulationZTotalPointsAndFeesAmount;
 	private String averagePrimeOfferRatePercent;
+	private String abilityToRepayExemptionReasonType;
+	private String abilityToRepayMethodType;
 	
 	/**
 	 * @return the regulationZExcludedBonaFideDiscountPointsIndicator
@@ -94,6 +96,30 @@ public class QualifiedMortgageModel implements Serializable {
 	 */
 	public void setAveragePrimeOfferRatePercent(String averagePrimeOfferRatePercent) {
 		this.averagePrimeOfferRatePercent = averagePrimeOfferRatePercent;
+	}
+	/**
+	 * @return the abilityToRepayExemptionReasonType
+	 */
+	public String getAbilityToRepayExemptionReasonType() {
+		return abilityToRepayExemptionReasonType;
+	}
+	/**
+	 * @param abilityToRepayExemptionReasonType the abilityToRepayExemptionReasonType to set
+	 */
+	public void setAbilityToRepayExemptionReasonType(String abilityToRepayExemptionReasonType) {
+		this.abilityToRepayExemptionReasonType = abilityToRepayExemptionReasonType;
+	}
+	/**
+	 * @return the abilityToRepayMethodType
+	 */
+	public String getAbilityToRepayMethodType() {
+		return abilityToRepayMethodType;
+	}
+	/**
+	 * @param abilityToRepayMethodType the abilityToRepayMethodType to set
+	 */
+	public void setAbilityToRepayMethodType(String abilityToRepayMethodType) {
+		this.abilityToRepayMethodType = abilityToRepayMethodType;
 	}
 	
 	

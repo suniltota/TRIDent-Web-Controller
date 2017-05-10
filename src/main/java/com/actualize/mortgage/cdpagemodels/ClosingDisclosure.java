@@ -32,7 +32,7 @@ import com.actualize.mortgage.domainmodels.TransactionInformation;
 public class ClosingDisclosure implements Serializable {
 
     private static final long serialVersionUID = 3808831045060865597L;
-    private ClosingDisclosureDocumentType closingDisclosureDocType;
+    private ClosingDisclosureDocumentDetails closingDisclosureDocType;
     private ClosingInformationModel closingInformation;
     private TransactionInformation transactionInformation;
     private LoanInformation loanInformation;
@@ -51,13 +51,13 @@ public class ClosingDisclosure implements Serializable {
 	/**
 	 * @return the closingDisclosureDocType
 	 */
-	public ClosingDisclosureDocumentType getClosingDisclosureDocType() {
+	public ClosingDisclosureDocumentDetails getClosingDisclosureDocType() {
 		return closingDisclosureDocType;
 	}
 	/**
 	 * @param closingDisclosureDocType the closingDisclosureDocType to set
 	 */
-	public void setClosingDisclosureDocType(ClosingDisclosureDocumentType closingDisclosureDocType) {
+	public void setClosingDisclosureDocType(ClosingDisclosureDocumentDetails closingDisclosureDocType) {
 		this.closingDisclosureDocType = closingDisclosureDocType;
 	}
 	/**

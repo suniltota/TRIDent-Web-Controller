@@ -18,6 +18,7 @@ public class LoanCalculationModel implements Serializable {
     private String feeSummaryTotalFinanceChargeAmount;
     private String feeSummaryTotalInterestPercent;
     private String feeSummaryTotalOfAllPaymentsAmount;
+    private boolean deficiencyRightsPreservedIndicator;
     
 	/**
 	 * @return the aprPercent
@@ -79,7 +80,17 @@ public class LoanCalculationModel implements Serializable {
 	public void setFeeSummaryTotalOfAllPaymentsAmount(String feeSummaryTotalOfAllPaymentsAmount) {
 		this.feeSummaryTotalOfAllPaymentsAmount = feeSummaryTotalOfAllPaymentsAmount;
 	}
-    
-    
+	/**
+	 * @return the deficiencyRightsPreservedIndicator
+	 */
+	public boolean isDeficiencyRightsPreservedIndicator() {
+		return deficiencyRightsPreservedIndicator;
+	}
+	/**
+	 * @param deficiencyRightsPreservedIndicator the deficiencyRightsPreservedIndicator to set
+	 */
+	public void setDeficiencyRightsPreservedIndicator(boolean deficiencyRightsPreservedIndicator) {
+		this.deficiencyRightsPreservedIndicator = deficiencyRightsPreservedIndicator;
+	}
 	
 }

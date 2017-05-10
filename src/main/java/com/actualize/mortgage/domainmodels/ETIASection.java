@@ -12,9 +12,22 @@ public class ETIASection implements Serializable {
 
 	private static final long serialVersionUID = 1185489693159686185L;
 
+	private List<String> escrowTypes;
 	private String projectedPaymentEstimatedTaxesInsuranceAssessmentTotalAmount;
 	private List<ETIA> etiaValues;
 	
+	/**
+	 * @return the escrowTypes
+	 */
+	public List<String> getEscrowTypes() {
+		return escrowTypes;
+	}
+	/**
+	 * @param escrowTypes the escrowTypes to set
+	 */
+	public void setEscrowTypes(List<String> escrowTypes) {
+		this.escrowTypes = escrowTypes;
+	}
 	/**
 	 * @return the projectedPaymentEstimatedTaxesInsuranceAssessmentTotalAmount
 	 */
