@@ -1393,39 +1393,47 @@ public class ClosingDisclosureConverter {
     
 		ContactInformationModel contactInformationModel = new ContactInformationModel();
 		Parties parties = new Parties((Element)deal.getElementAddNS("PARTIES"));
+		
 		List<Party> closingAgent = new LinkedList<>();
 		List<Party> lender = new LinkedList<>();
 		List<Party> realEstateAgentB = new LinkedList<>();
 		List<Party> realEstateAgentS = new LinkedList<>();
 		List<Party> mortgageBroker = new LinkedList<>();
-       	
+		
+       	if(parties.parties.length >0)
 		for(int i=0;i<parties.parties.length; i++)
 		{	
-			switch(parties.parties[i].roles.roles[0].roleDetail.PartyRoleType)
-			{
-				case "ClosingAgent":
-					closingAgent.add(parties.parties[i]);
-				break;
-				case "NotePayTo":
-					lender.add(parties.parties[i]);
-				break;
-				case "RealEstateAgent":
-					if ("Selling".equalsIgnoreCase(parties.parties[i].roles.roles[0].realEstateAgent.realEstateAgentType))
-						realEstateAgentB.add(parties.parties[i]);
-					else if("Listing".equalsIgnoreCase(parties.parties[i].roles.roles[0].realEstateAgent.realEstateAgentType))
-						realEstateAgentS.add(parties.parties[i]);
-				break;
-				case "MortgageBroker":
-					mortgageBroker.add(parties.parties[i]);
-				break;
-			}  		
+			if(null != parties.parties[i].roles.element)
+				switch(parties.parties[i].roles.roles[0].roleDetail.PartyRoleType)
+				{
+					case "ClosingAgent":
+						closingAgent.add(parties.parties[i]);
+					break;
+					case "NotePayTo":
+						lender.add(parties.parties[i]);
+					break;
+					case "RealEstateAgent":
+						if ("Selling".equalsIgnoreCase(parties.parties[i].roles.roles[0].realEstateAgent.realEstateAgentType))
+							realEstateAgentB.add(parties.parties[i]);
+						else if("Listing".equalsIgnoreCase(parties.parties[i].roles.roles[0].realEstateAgent.realEstateAgentType))
+							realEstateAgentS.add(parties.parties[i]);
+					break;
+					case "MortgageBroker":
+						mortgageBroker.add(parties.parties[i]);
+					break;
+				}  		
 		}
-        	
-       	contactInformationModel.setLender(getContactInformationDetail(lender, "NotePayTo"));
-        	contactInformationModel.setMortagageBroker(getContactInformationDetail(mortgageBroker, "MortgageBroker"));
-        	contactInformationModel.setRealEstateBrokerB(getContactInformationDetail(realEstateAgentB, "RealEstateAgent"));
-        	contactInformationModel.setRealEstateBrokerS(getContactInformationDetail(realEstateAgentS, "RealEstateAgent"));
-        	contactInformationModel.setSettlementAgent(getContactInformationDetail(closingAgent, "ClosingAgent"));
+       	
+   		if(lender.size()>0)
+   			contactInformationModel.setLender(getContactInformationDetail(lender, "NotePayTo"));
+   		if(mortgageBroker.size()>0)
+   			contactInformationModel.setMortagageBroker(getContactInformationDetail(mortgageBroker, "MortgageBroker"));
+   		if(realEstateAgentB.size()>0)
+   			contactInformationModel.setRealEstateBrokerB(getContactInformationDetail(realEstateAgentB, "RealEstateAgent"));
+   		if(realEstateAgentS.size()>0)
+   			contactInformationModel.setRealEstateBrokerS(getContactInformationDetail(realEstateAgentS, "RealEstateAgent"));
+   		if(closingAgent.size()>0)
+   			contactInformationModel.setSettlementAgent(getContactInformationDetail(closingAgent, "ClosingAgent"));
         	
     		return contactInformationModel;
         	
@@ -1444,7 +1452,7 @@ public class ClosingDisclosureConverter {
     		
     		for(int i=0;i<party.addresses.addresses.length; i++)
 	    	{
-    			if(null != party.addresses.addresses[i].element)
+    			if(null != party.addresses.element && null != party.addresses.addresses[i].element)
     			{
     				Address address = party.addresses.addresses[i];
     				contactInformationDetail.setOrganizationStreetAddr(address.addressLineText);
@@ -1461,7 +1469,7 @@ public class ClosingDisclosureConverter {
 	    	{
 	    		contactInformationDetail.setOrganizationName(party.legalEntity.legalEntityDetail.fullName);
 	    		
-	    		if(null != party.roles.roles[0].licenses.licenses[0].licenseDetail.element)
+	    		if(null != party.roles.element && null != party.roles.roles[0].licenses.element && null != party.roles.roles[0].licenses.licenses[0].licenseDetail.element)
 				{
 					LicenseDetail licenseDetail = party.roles.roles[0].licenses.licenses[0].licenseDetail;
 					if(!stateLicense.contains(partyType))
@@ -1474,7 +1482,7 @@ public class ClosingDisclosureConverter {
 				contactInformationDetail.setOrganizationIssuingAgencyURL(licenseDetail.identifierOwnerURI);
 				}
 	    	}
-	    	if(null != party.individual.name.element)
+	    	if(null != party.individual.element && null != party.individual.name.element)
 	    	{	
 	    		Name name = party.individual.name;
 			contactInformationDetail.setIndividualFirstName(name.firstName);
@@ -1482,7 +1490,7 @@ public class ClosingDisclosureConverter {
 				contactInformationDetail.setIndividualLastName(name.lastName);
 				contactInformationDetail.setIndividualSuffix(name.suffixName);
 				
-				if(null != party.roles.roles[0].licenses.licenses[0].licenseDetail.element)
+				if(null != party.roles.element &&  null != party.roles.roles[0].licenses.element && null != party.roles.roles[0].licenses.licenses[0].licenseDetail.element)
 				{
 					LicenseDetail licenseDetail = party.roles.roles[0].licenses.licenses[0].licenseDetail;
 					if(!stateLicense.contains(partyType))
@@ -1496,7 +1504,7 @@ public class ClosingDisclosureConverter {
 				}
 	    	
     	}
-	    	if(null != party.individual.contactPoints.element)
+	    	if(null != party.individual.element && null != party.individual.contactPoints.element)
 	    	{	
 	    		for(int i=0; i<party.individual.contactPoints.contactPoints.length; i++)
 	    		{
