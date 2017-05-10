@@ -33,4 +33,5 @@
     <bean id="mortgageServices" class="com.actualize.mortgage.services.impl.MortgageServicesImpl"/> 
    	<bean id="loanEstimateServices" class="com.actualize.mortgage.leservices.impl.LoanEstimateServicesImpl"/>
    	<bean id="closingDisclosureService" class="com.actualize.mortgage.cdservices.impl.ClosingDisclosureServiceImpl"/>
+   	<bean id="exceptionAdvisor" class="com.actualize.mortgage.exceptions.ExceptionAdvisor"/>
 </beans>
