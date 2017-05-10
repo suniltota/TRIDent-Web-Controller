@@ -96,7 +96,9 @@ import com.actualize.mortgage.ledatamodels.EscrowItems;
 import com.actualize.mortgage.ledatamodels.EstimatedPropertyCostComponents;
 import com.actualize.mortgage.ledatamodels.Fee;
 import com.actualize.mortgage.ledatamodels.FeePayment;
+import com.actualize.mortgage.ledatamodels.FeeSummaryDetail;
 import com.actualize.mortgage.ledatamodels.Fees;
+import com.actualize.mortgage.ledatamodels.HighCostMortgages;
 import com.actualize.mortgage.ledatamodels.IntegratedDisclosureDetail;
 import com.actualize.mortgage.ledatamodels.IntegratedDisclosureSectionSummaries;
 import com.actualize.mortgage.ledatamodels.IntegratedDisclosureSectionSummary;
@@ -1376,11 +1378,26 @@ public class ClosingDisclosureConverter {
     	LoanCalculationModel loanCalculationModel = new LoanCalculationModel();
     	QualifiedMortgageModel qualifiedMortgageModel = new QualifiedMortgageModel();
     	
+    	FeeSummaryDetail feeSummaryDetail = new FeeSummaryDetail((Element)deal.getElementAddNS("LOANS/LOAN/FEE_INFORMATION/FEES_SUMMARY/FEE_SUMMARY_DETAIL"));
+    	HighCostMortgages highCostMortgages = new HighCostMortgages(null, (Element)deal.getElementAddNS("LOANS/LOAN/HIGH_COST_MORTGAGES/HIGH_COST_MORTGAGE"));
     	
+    	loanCalculationModel.setAprPercent(feeSummaryDetail.aprPercent);
+    	loanCalculationModel.setFeeSummaryTotalFinanceChargeAmount(feeSummaryDetail.feeSummaryTotalFinanceChargeAmount);
+    	loanCalculationModel.setFeeSummaryTotalAmountFinancedAmount(feeSummaryDetail.feeSummaryTotalAmountFinancedAmount);
+    	loanCalculationModel.setFeeSummaryTotalInterestPercent(feeSummaryDetail.feeSummaryTotalInterestPercent);
+    	loanCalculationModel.setFeeSummaryTotalOfAllPaymentsAmount(feeSummaryDetail.feeSummaryTotalOfAllPaymentsAmount);
+    	
+    	qualifiedMortgageModel.setAveragePrimeOfferRatePercent(highCostMortgages.averagePrimeOfferRatePercent);
+    	qualifiedMortgageModel.setRegulationZExcludedBonaFideDiscountPointsIndicator(Boolean.parseBoolean(highCostMortgages.regulationZExcludedBonaFideDiscountPointsIndicator));
+    	qualifiedMortgageModel.setRegulationZExcludedBonaFideDiscountPointsPercent(highCostMortgages.regulationZExcludedBonaFideDiscountPointsPercent);
+    	qualifiedMortgageModel.setRegulationZTotalAffiliateFeesAmount(highCostMortgages.regulationZTotalAffiliateFeesAmount);
+    	qualifiedMortgageModel.setRegulationZTotalLoanAmount(highCostMortgages.regulationZTotalLoanAmount);
+    	qualifiedMortgageModel.setRegulationZTotalPointsAndFeesAmount(highCostMortgages.regulationZTotalPointsAndFeesAmount);
     	
     	loanCalculationsQualifiedMortgage.setLoanCalculationModel(loanCalculationModel);
     	loanCalculationsQualifiedMortgage.setQualifiedMortgage(qualifiedMortgageModel);
-		return loanCalculationsQualifiedMortgage;
+		
+    	return loanCalculationsQualifiedMortgage;
     }
     
     /**
