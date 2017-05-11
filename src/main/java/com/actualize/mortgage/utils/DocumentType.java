@@ -1,15 +1,5 @@
 package com.actualize.mortgage.utils;
 
-import java.util.List;
-
-import org.mismo.residential._2009.schemas.DEAL;
-import org.mismo.residential._2009.schemas.DOCUMENT;
-import org.mismo.residential._2009.schemas.LOANIDENTIFIER;
-import org.mismo.residential._2009.schemas.MESSAGE;
-
-import com.actualize.mortgage.domainmodels.CashToCloseModel;
-import com.actualize.mortgage.domainmodels.LiabilitiesModel;
-
 public class DocumentType {
 	
 	private String loanType;

@@ -1,33 +1,5 @@
 package com.actualize.mortgage.utils;
 
-import java.util.List;
-import java.util.logging.Logger;
-
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-
-import com.actualize.mortgage.domainmodels.Address;
-import com.actualize.mortgage.domainmodels.Borrower;
-import com.actualize.mortgage.domainmodels.ClosingDisclosureDocument;
-import com.actualize.mortgage.domainmodels.ClosingInformationModel;
-import com.actualize.mortgage.domainmodels.CostsAtClosing;
-import com.actualize.mortgage.domainmodels.CostsAtClosingCashToClose;
-import com.actualize.mortgage.domainmodels.LoanInformation;
-import com.actualize.mortgage.domainmodels.LoanInformationLoanIdentifier;
-import com.actualize.mortgage.domainmodels.LoanTerms;
-import com.actualize.mortgage.domainmodels.LoanTermsBalloonPayment;
-import com.actualize.mortgage.domainmodels.ETIA;
-import com.actualize.mortgage.domainmodels.LoanTermsEscrowAccount;
-import com.actualize.mortgage.domainmodels.LoanTermsInterestRate;
-import com.actualize.mortgage.domainmodels.LoanTermsIntialEscrow;
-import com.actualize.mortgage.domainmodels.LoanTermsLoanAmount;
-import com.actualize.mortgage.domainmodels.LoanTermsPI;
-import com.actualize.mortgage.domainmodels.LoanTermsPrepaymentPenalty;
-import com.actualize.mortgage.domainmodels.SalesContractDetailModel;
-
 public class JsonToUcd {
 	/*private static final String GSE_ALIAS = "gse";
 	private static final String MISMO_ALIAS = "mismo";
