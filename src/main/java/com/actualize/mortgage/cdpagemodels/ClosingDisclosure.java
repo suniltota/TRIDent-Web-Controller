@@ -21,6 +21,7 @@ import com.actualize.mortgage.domainmodels.LoanTerms;
 import com.actualize.mortgage.domainmodels.ProjectedPaymentsDetails;
 import com.actualize.mortgage.domainmodels.SummariesofTransactions;
 import com.actualize.mortgage.domainmodels.TransactionInformation;
+import com.actualize.mortgage.ledatamodels.PayoffsAndPayments;
 
 /**
  * This class represents the all the pages present in Closing Disclosure
@@ -45,6 +46,7 @@ public class ClosingDisclosure implements Serializable {
     private ClosingCostsTotal closingCostsTotal;
     private CashToClose cashToCloses;
     private SummariesofTransactions summariesofTransactions;
+    private PayoffsAndPayments payoffsAndPayments;
     private LoanCalculationsQualifiedMortgage loanCalculationsQualifiedMortgage;
     private ContactInformationModel contactInformation;
     
@@ -203,6 +205,18 @@ public class ClosingDisclosure implements Serializable {
 	 */
 	public void setSummariesofTransactions(SummariesofTransactions summariesofTransactions) {
 		this.summariesofTransactions = summariesofTransactions;
+	}
+	/**
+	 * @return the payoffsAndPayments
+	 */
+	public PayoffsAndPayments getPayoffsAndPayments() {
+		return payoffsAndPayments;
+	}
+	/**
+	 * @param payoffsAndPayments the payoffsAndPayments to set
+	 */
+	public void setPayoffsAndPayments(PayoffsAndPayments payoffsAndPayments) {
+		this.payoffsAndPayments = payoffsAndPayments;
 	}
 	/**
 	 * @return the loanCalculationsQualifiedMortgage

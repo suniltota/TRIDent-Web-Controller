@@ -112,7 +112,6 @@ import com.actualize.mortgage.ledatamodels.IntegratedDisclosureSubsectionPayment
 import com.actualize.mortgage.ledatamodels.InterestOnly;
 import com.actualize.mortgage.ledatamodels.InterestRateLifetimeAdjustmentRule;
 import com.actualize.mortgage.ledatamodels.InterestRatePerChangeAdjustmentRule;
-import com.actualize.mortgage.ledatamodels.InterestRatePerChangeAdjustmentRules;
 import com.actualize.mortgage.ledatamodels.LegalEntityDetail;
 import com.actualize.mortgage.ledatamodels.Liabilities;
 import com.actualize.mortgage.ledatamodels.Liability;
@@ -181,6 +180,8 @@ public class ClosingDisclosureConverter {
 	     	closingDisclosure.setClosingCostsTotal(createClosingCostsTotal(deal));
 	     	closingDisclosure.setCashToCloses(createCalculatingCashtoClose(deal));
 	     	closingDisclosure.setSummariesofTransactions(createSummariesofTransactions(deal));
+	     	if(false)
+	     		closingDisclosure.setPayoffsAndPayments(createPayoffsAndPayments(deal));
 	     	closingDisclosure.setLoanCalculationsQualifiedMortgage(createLoanCalculationsQualifiedMortgage(deal));
 	     	closingDisclosure.setContactInformation(createContactInformation(deal));
 	     	
@@ -1427,8 +1428,8 @@ public class ClosingDisclosureConverter {
 		List<ClosingAdjustmentItemModel> closingAdjustmentItemModels = createClosingAdjustmentModels(closingInformation.closingAdjustmentItems.closingAdjustmentItemList);
 		
 		payoffsAndPayments.setLiabilitiesList(liabilityModels);
+		payoffsAndPayments.setClosingAdjustmentItemList(closingAdjustmentItemModels);
 		
-    		
 		return payoffsAndPayments;
     } 
     /**
