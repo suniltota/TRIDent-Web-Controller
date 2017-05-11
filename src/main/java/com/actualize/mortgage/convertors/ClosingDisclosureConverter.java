@@ -129,6 +129,7 @@ import com.actualize.mortgage.ledatamodels.Other;
 import com.actualize.mortgage.ledatamodels.Parties;
 import com.actualize.mortgage.ledatamodels.Party;
 import com.actualize.mortgage.ledatamodels.PaymentRule;
+import com.actualize.mortgage.ledatamodels.PayoffsAndPayments;
 import com.actualize.mortgage.ledatamodels.PrepaidItem;
 import com.actualize.mortgage.ledatamodels.PrepaidItems;
 import com.actualize.mortgage.ledatamodels.PrepaymentPenaltyLifetimeRule;
@@ -1119,6 +1120,11 @@ public class ClosingDisclosureConverter {
 		List<ClosingAdjustmentItemModel> closingAdjustmentItemModels = createClosingAdjustmentModels(closingInformation.closingAdjustmentItems.closingAdjustmentItemList);
 		List<ClosingCostFundModel> closingCostFundModels = createClosingCostFundModels(closingInformation.closingCostFunds.closingCostFundList);
 		
+		summariesofTransactions.setLiabilityList(liabilityModels);
+		summariesofTransactions.setProrationList(prorationsModels);
+		summariesofTransactions.setClosingAdjustmentItemList(closingAdjustmentItemModels);
+		summariesofTransactions.setClosingCostFundList(closingCostFundModels);
+		
 		//Due From Borrower AtClosing
 		SummariesofTransactionsDetailsDueFromBorrowerAtClosing duefromBorroweratClosing = new SummariesofTransactionsDetailsDueFromBorrowerAtClosing();
 		List<LiabilityModel> duefromBorroweratClosingList = new LinkedList<>();
@@ -1408,6 +1414,23 @@ public class ClosingDisclosureConverter {
 		return summariesofTransactions;
     }
     
+    
+    
+    private PayoffsAndPayments createPayoffsAndPayments(Deal deal)
+    {
+    	PayoffsAndPayments payoffsAndPayments = new PayoffsAndPayments();
+    	
+    	Liabilities liabilities = new Liabilities(null, (Element)deal.getElementAddNS("LIABILITIES/")); 
+    	ClosingInformation closingInformation =  new ClosingInformation(null, (Element)deal.getElementAddNS("LOANS/LOAN/CLOSING_INFORMATION"));
+    	
+		List<LiabilityModel> liabilityModels = createLiabilityModels(liabilities.liabilityList);
+		List<ClosingAdjustmentItemModel> closingAdjustmentItemModels = createClosingAdjustmentModels(closingInformation.closingAdjustmentItems.closingAdjustmentItemList);
+		
+		payoffsAndPayments.setLiabilitiesList(liabilityModels);
+		
+    		
+		return payoffsAndPayments;
+    } 
     /**
      * creates LoanCalculations QualifiedMortgage for JSON Response 
      * @param deal
