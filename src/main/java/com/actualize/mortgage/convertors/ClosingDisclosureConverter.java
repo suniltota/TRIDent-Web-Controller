@@ -35,12 +35,14 @@ import com.actualize.mortgage.domainmodels.ContactInformationModel;
 import com.actualize.mortgage.domainmodels.CostsAtClosing;
 import com.actualize.mortgage.domainmodels.CostsAtClosingCashToClose;
 import com.actualize.mortgage.domainmodels.CostsAtClosingClosingCosts;
+import com.actualize.mortgage.domainmodels.DocumentClassificationModel;
 import com.actualize.mortgage.domainmodels.ETIA;
 import com.actualize.mortgage.domainmodels.ETIASection;
 import com.actualize.mortgage.domainmodels.IEPatClosing;
 import com.actualize.mortgage.domainmodels.IntegratedDisclosureSectionSummaryDetailModel;
 import com.actualize.mortgage.domainmodels.IntegratedDisclosureSectionSummaryModel;
 import com.actualize.mortgage.domainmodels.IntegratedDisclosureSubsectionPaymentModel;
+import com.actualize.mortgage.domainmodels.InterestRateAdjustmentModel;
 import com.actualize.mortgage.domainmodels.LiabilityModel;
 import com.actualize.mortgage.domainmodels.LoanCalculationModel;
 import com.actualize.mortgage.domainmodels.LoanCalculationsQualifiedMortgage;
@@ -92,6 +94,7 @@ import com.actualize.mortgage.ledatamodels.Construction;
 import com.actualize.mortgage.ledatamodels.Deal;
 import com.actualize.mortgage.ledatamodels.Document;
 import com.actualize.mortgage.ledatamodels.DocumentClass;
+import com.actualize.mortgage.ledatamodels.DocumentClassification;
 import com.actualize.mortgage.ledatamodels.EscrowItem;
 import com.actualize.mortgage.ledatamodels.EscrowItemDetail;
 import com.actualize.mortgage.ledatamodels.EscrowItemPayment;
@@ -110,6 +113,7 @@ import com.actualize.mortgage.ledatamodels.IntegratedDisclosureSectionSummaryDet
 import com.actualize.mortgage.ledatamodels.IntegratedDisclosureSubsectionPayment;
 import com.actualize.mortgage.ledatamodels.IntegratedDisclosureSubsectionPayments;
 import com.actualize.mortgage.ledatamodels.InterestOnly;
+import com.actualize.mortgage.ledatamodels.InterestRateAdjustment;
 import com.actualize.mortgage.ledatamodels.InterestRateLifetimeAdjustmentRule;
 import com.actualize.mortgage.ledatamodels.InterestRatePerChangeAdjustmentRule;
 import com.actualize.mortgage.ledatamodels.LegalEntityDetail;
@@ -165,9 +169,10 @@ public class ClosingDisclosureConverter {
         NodeList nodes = mismodoc.getElementsAddNS("//DOCUMENT");
         if (nodes.getLength() > 0)
             document = new Document(Document.NS, (Element)nodes.item(0));
+        
         Deal deal = new Deal(Deal.NS, (Element)document.getElementAddNS("DEAL_SETS/DEAL_SET/DEALS/DEAL"));
 
-	        closingDisclosure.setClosingDisclosureDocType(createClosingDisclosureDocumentDetails(mismodoc));
+	        closingDisclosure.setClosingDisclosureDocType(createClosingDisclosureDocumentDetails(document));
         	closingDisclosure.setClosingInformation(createClosingInformation(deal));
 	        closingDisclosure.setTransactionInformation(createTransactionInformation(deal));
 	        closingDisclosure.setLoanInformation(createLoanInformation(deal));
@@ -179,11 +184,11 @@ public class ClosingDisclosureConverter {
 	     	closingDisclosure.setClosingCostDetailsOtherCosts(createClosingCostOtherCosts(deal)); 
 	     	closingDisclosure.setClosingCostsTotal(createClosingCostsTotal(deal));
 	     	closingDisclosure.setCashToCloses(createCalculatingCashtoClose(deal));
+	     	closingDisclosure.setPayoffsAndPayments(createPayoffsAndPayments(deal));
 	     	closingDisclosure.setSummariesofTransactions(createSummariesofTransactions(deal));
-	     	if(false)
-	     		closingDisclosure.setPayoffsAndPayments(createPayoffsAndPayments(deal));
 	     	closingDisclosure.setLoanCalculationsQualifiedMortgage(createLoanCalculationsQualifiedMortgage(deal));
 	     	closingDisclosure.setContactInformation(createContactInformation(deal));
+	     	closingDisclosure.setInterestRateAdjustment(createInterestRateAdjustmentModel(deal)); //AIR Table
 	     	
 	     	
         //PAGE THREE OF CD
@@ -199,21 +204,26 @@ public class ClosingDisclosureConverter {
      * @param mismodoc
      * @return ClosingDisclosureDocumentDetails
      */
-    private ClosingDisclosureDocumentDetails createClosingDisclosureDocumentDetails(MISMODocument mismodoc) 
+    private ClosingDisclosureDocumentDetails createClosingDisclosureDocumentDetails(Document document) 
     {
     	ClosingDisclosureDocumentDetails closingDisclosureDocumentDetails = new ClosingDisclosureDocumentDetails();
-    	Document document = null;
-    	 
-    	NodeList nodes = mismodoc.getElementsAddNS("//DOCUMENT");
-        if (nodes.getLength() > 0)
-            document = new Document(Document.NS, (Element)nodes.item(0));
-        
+    	DocumentClassificationModel documentClassification = new DocumentClassificationModel();
+    	
         Deal deal = new Deal(Deal.NS, (Element)document.getElementAddNS("DEAL_SETS/DEAL_SET/DEALS/DEAL"));
 	    TermsOfLoan loanTerms = new TermsOfLoan((Element)deal.getElementAddNS("LOANS/LOAN/TERMS_OF_LOAN"));
 	    LoanDetail loanDetail = new LoanDetail((Element)deal.getElementAddNS("LOANS/LOAN/LOAN_DETAIL"));	
-	    	
-    	closingDisclosureDocumentDetails.setTermsOfLoanModel(toTermsOfLoanModel(loanTerms));
+	    DocumentClassification docClassification = new DocumentClassification(Document.NS, (Element)document.getElementAddNS("DOCUMENT_CLASSIFICATION"));
+	    
+	    //documentClassification.setDocumentFormIssuingEntityNameType(documentFormIssuingEntityNameType);
+	    //documentClassification.setDocumentFormIssuingEntityVersionIdentifier(documentFormIssuingEntityVersionIdentifier);
+	   // documentClassification.setDocumentSignatureRequiredIndicator(documentSignatureRequiredIndicator);
+	    documentClassification.setDocumentType(docClassification.documentClasses.documentClass.documentType);
+	    documentClassification.setDocumentTypeOtherDescription(docClassification.documentClasses.documentClass.documentTypeOtherDescription);
+	    
+	    
+	    closingDisclosureDocumentDetails.setTermsOfLoanModel(toTermsOfLoanModel(loanTerms));
     	closingDisclosureDocumentDetails.setLoanDetailModel(toLoanDetailModel(loanDetail));
+    	closingDisclosureDocumentDetails.setDocumentClassification(documentClassification);
     	
 		return closingDisclosureDocumentDetails;
     }
@@ -477,10 +487,10 @@ public class ClosingDisclosureConverter {
  	    loanTermsInterestRate.setDisclosedFullyIndexedRatePercent(termsOfLoan.disclosedFullyIndexedRatePercent);
  	    loanTermsInterestRate.setInterestRateIncreaseIndicator(Convertor.stringToBoolean(loanDetail.interestRateIncreaseIndicator));
  	    loanTermsInterestRate.setAdjustmentRuleTypeFirst("First");
- 	    loanTermsInterestRate.setPerChangeRateAdjustmentFrequencyMonthsCount(interestRatePerChangeAdjustmentRule.PerChangeRateAdjustmentFrequencyMonthsCount);
- 	    loanTermsInterestRate.setFirstRateChangeMonthsCount(interestRateLifetimeAdjustmentRule.FirstRateChangeMonthsCount);
- 	    loanTermsInterestRate.setCeilingRatePercentEarliestEffectiveMonthsCount(interestRateLifetimeAdjustmentRule.CeilingRatePercentEarliestEffectiveMonthsCount);
- 	    loanTermsInterestRate.setCeilingRatePercent(interestRateLifetimeAdjustmentRule.CeilingRatePercent);
+ 	    loanTermsInterestRate.setPerChangeRateAdjustmentFrequencyMonthsCount(interestRatePerChangeAdjustmentRule.perChangeRateAdjustmentFrequencyMonthsCount);
+ 	    loanTermsInterestRate.setFirstRateChangeMonthsCount(interestRateLifetimeAdjustmentRule.firstRateChangeMonthsCount);
+ 	    loanTermsInterestRate.setCeilingRatePercentEarliestEffectiveMonthsCount(interestRateLifetimeAdjustmentRule.ceilingRatePercentEarliestEffectiveMonthsCount);
+ 	    loanTermsInterestRate.setCeilingRatePercent(interestRateLifetimeAdjustmentRule.ceilingRatePercent);
  	    loanTermsInterestRate.setDisclosedFullyIndexedRatePercent(termsOfLoan.disclosedFullyIndexedRatePercent);
 		
 		if(!"".equals(paymentRule.InitialPrincipalAndInterestPaymentAmount))
@@ -973,7 +983,11 @@ public class ClosingDisclosureConverter {
     	
     }
     
-    
+    /**
+     * creates closing costs total
+     * @param deal
+     * @return ClosingCostsTotal
+     */
     private ClosingCostsTotal createClosingCostsTotal(Deal deal)
     {
     	String loan = "LOANS/LOAN";
@@ -1265,6 +1279,7 @@ public class ClosingDisclosureConverter {
 			paidByAlready.setLoanAmount(loanTerms.noteAmount);
 			paidByAlready.setOtherCredits(paidByAlreadyOtherCredits);
 			
+			
 			borrowerTransaction.setCashFromBorrowerAtClosingAmount(closingInformationDetail.cashFromBorrowerAtClosingAmount);
 			borrowerTransaction.setCashToBorrowerAtClosingAmount(closingInformationDetail.cashToBorrowerAtClosingAmount);
 			summariesofTransactions.setBorrowerTransaction(borrowerTransaction);
@@ -1415,8 +1430,11 @@ public class ClosingDisclosureConverter {
 		return summariesofTransactions;
     }
     
-    
-    
+    /**
+     * 
+     * @param deal
+     * @return
+     */
     private PayoffsAndPayments createPayoffsAndPayments(Deal deal)
     {
     	PayoffsAndPayments payoffsAndPayments = new PayoffsAndPayments();
@@ -1431,7 +1449,46 @@ public class ClosingDisclosureConverter {
 		payoffsAndPayments.setClosingAdjustmentItemList(closingAdjustmentItemModels);
 		
 		return payoffsAndPayments;
-    } 
+    }
+    
+    /**
+     * 
+     * @param deal
+     * @return
+     */
+    private InterestRateAdjustmentModel createInterestRateAdjustmentModel(Deal deal)
+    {
+    	InterestRateAdjustmentModel interestRateAdjustmentModel = new InterestRateAdjustmentModel();
+		
+		InterestRateAdjustment interestRateAdjustment = new InterestRateAdjustment((Element)deal.getElementAddNS("LOANS/LOAN/ADJUSTMENT/INTEREST_RATE_ADJUSTMENT"));
+		
+		interestRateAdjustmentModel.setCeilingRatePercent(interestRateAdjustment.interestRateLifetimeAdjustmentRule.ceilingRatePercent);
+		interestRateAdjustmentModel.setCeilingRatePercentEarliestEffectiveMonthsCount(interestRateAdjustment.interestRateLifetimeAdjustmentRule.ceilingRatePercentEarliestEffectiveMonthsCount);
+		interestRateAdjustmentModel.setFirstRateChangeMonthsCount(interestRateAdjustment.interestRateLifetimeAdjustmentRule.firstRateChangeMonthsCount);
+		interestRateAdjustmentModel.setFloorRatePercent(interestRateAdjustment.interestRateLifetimeAdjustmentRule.floorRatePercent);
+		interestRateAdjustmentModel.setIndexType(interestRateAdjustment.indexRule.indexType);
+		interestRateAdjustmentModel.setIndexTypeOtherDescription(interestRateAdjustment.indexRule.indexTypeOtherDescription);
+		interestRateAdjustmentModel.setMarginRatePercent(interestRateAdjustment.interestRateLifetimeAdjustmentRule.marginRatePercent);
+		interestRateAdjustmentModel.setTotalStepCount(interestRateAdjustment.interestRateLifetimeAdjustmentRule.other.totalStepCount);
+		
+		for(int i=0; i<interestRateAdjustment.interestRatePerChangeAdjustmentRulesList.interestRatePerChangeAdjustmentRules.length; i++)
+		{
+			InterestRatePerChangeAdjustmentRule interestRatePerChangeAdjustmentRule = interestRateAdjustment.interestRatePerChangeAdjustmentRulesList.interestRatePerChangeAdjustmentRules[i];
+			if("First".equalsIgnoreCase(interestRatePerChangeAdjustmentRule.adjustmentRuleType))
+			{
+				interestRateAdjustmentModel.setFirstAdjustmentRule(interestRatePerChangeAdjustmentRule.adjustmentRuleType);
+				interestRateAdjustmentModel.setFirstPerChangeMaximumIncreaseRatePercent(interestRatePerChangeAdjustmentRule.perChangeMaximumIncreaseRatePercent);
+				interestRateAdjustmentModel.setFirstPerChangeRateAdjustmentFrequencyMonthsCount(interestRatePerChangeAdjustmentRule.perChangeRateAdjustmentFrequencyMonthsCount);
+			}
+			else if("Subsequent".equalsIgnoreCase(interestRatePerChangeAdjustmentRule.adjustmentRuleType))
+			{
+				interestRateAdjustmentModel.setSubsequentAdjustmentRule(interestRatePerChangeAdjustmentRule.adjustmentRuleType);
+				interestRateAdjustmentModel.setSubsequentPerChangeMaximumIncreaseRatePercent(interestRatePerChangeAdjustmentRule.perChangeMaximumIncreaseRatePercent);
+				interestRateAdjustmentModel.setSubsequentPerChangeRateAdjustmentFrequencyMonthsCount(interestRatePerChangeAdjustmentRule.perChangeRateAdjustmentFrequencyMonthsCount);
+			}
+		}
+		return interestRateAdjustmentModel;
+    }
     /**
      * creates LoanCalculations QualifiedMortgage for JSON Response 
      * @param deal

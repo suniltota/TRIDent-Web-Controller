@@ -4,8 +4,14 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
 import com.actualize.mortgage.domainmodels.MISMODataAccessObject;
-
+/**
+ * defines InterestRatePerChangeAdjustmentRules in MISMO XML
+ * @author sboragala
+ *
+ */
 public class InterestRatePerChangeAdjustmentRules extends MISMODataAccessObject {
+
+	private static final long serialVersionUID = 7996361564681952053L;
 	public final InterestRatePerChangeAdjustmentRule[] interestRatePerChangeAdjustmentRules;
 
 	public InterestRatePerChangeAdjustmentRules(Element element) {

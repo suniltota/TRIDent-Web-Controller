@@ -1,5 +1,6 @@
 package com.actualize.mortgage.domainmodels;
 
+import java.io.Serializable;
 import java.util.Iterator;
 
 import javax.xml.namespace.NamespaceContext;
@@ -11,9 +12,15 @@ import javax.xml.xpath.XPathFactory;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+/**
+ * this class defines the extraction of elements,values and attributes from MISMO XML
+ * @author sboragala
+ *
+ */
+public abstract class MISMODataAccessObject implements Serializable{
 
-public abstract class MISMODataAccessObject {
-
+	private static final long serialVersionUID = 2940778612751698372L;
+	
 	// Public visibility: Document query helpers
 	public static String NS = "mismo:";
 

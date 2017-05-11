@@ -15,6 +15,7 @@ import com.actualize.mortgage.domainmodels.ClosingInformationModel;
 import com.actualize.mortgage.domainmodels.ContactInformationModel;
 import com.actualize.mortgage.domainmodels.CostsAtClosing;
 import com.actualize.mortgage.domainmodels.ETIASection;
+import com.actualize.mortgage.domainmodels.InterestRateAdjustmentModel;
 import com.actualize.mortgage.domainmodels.LoanCalculationsQualifiedMortgage;
 import com.actualize.mortgage.domainmodels.LoanInformation;
 import com.actualize.mortgage.domainmodels.LoanTerms;
@@ -47,8 +48,10 @@ public class ClosingDisclosure implements Serializable {
     private CashToClose cashToCloses;
     private SummariesofTransactions summariesofTransactions;
     private PayoffsAndPayments payoffsAndPayments;
+    private InterestRateAdjustmentModel interestRateAdjustment;
     private LoanCalculationsQualifiedMortgage loanCalculationsQualifiedMortgage;
     private ContactInformationModel contactInformation;
+     
     
 	/**
 	 * @return the closingDisclosureDocType
@@ -217,6 +220,18 @@ public class ClosingDisclosure implements Serializable {
 	 */
 	public void setPayoffsAndPayments(PayoffsAndPayments payoffsAndPayments) {
 		this.payoffsAndPayments = payoffsAndPayments;
+	}
+	/**
+	 * @return the interestRateAdjustment
+	 */
+	public InterestRateAdjustmentModel getInterestRateAdjustment() {
+		return interestRateAdjustment;
+	}
+	/**
+	 * @param interestRateAdjustment the interestRateAdjustment to set
+	 */
+	public void setInterestRateAdjustment(InterestRateAdjustmentModel interestRateAdjustment) {
+		this.interestRateAdjustment = interestRateAdjustment;
 	}
 	/**
 	 * @return the loanCalculationsQualifiedMortgage

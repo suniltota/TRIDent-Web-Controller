@@ -5,6 +5,7 @@ package com.actualize.mortgage.cdpagemodels;
 
 import java.io.Serializable;
 
+import com.actualize.mortgage.domainmodels.DocumentClassificationModel;
 import com.actualize.mortgage.domainmodels.LoanDetailModel;
 import com.actualize.mortgage.domainmodels.TermsOfLoanModel;
 
@@ -28,6 +29,7 @@ public class ClosingDisclosureDocumentDetails implements Serializable {
     private boolean isHomeEquityLoanIndicator;
     private LoanDetailModel loanDetailModel;
     private TermsOfLoanModel termsOfLoanModel;
+    private DocumentClassificationModel documentClassification;
     
 	/**
 	 * @return the loanId
@@ -148,6 +150,18 @@ public class ClosingDisclosureDocumentDetails implements Serializable {
 	 */
 	public void setTermsOfLoanModel(TermsOfLoanModel termsOfLoanModel) {
 		this.termsOfLoanModel = termsOfLoanModel;
+	}
+	/**
+	 * @return the documentClassification
+	 */
+	public DocumentClassificationModel getDocumentClassification() {
+		return documentClassification;
+	}
+	/**
+	 * @param documentClassification the documentClassification to set
+	 */
+	public void setDocumentClassification(DocumentClassificationModel documentClassification) {
+		this.documentClassification = documentClassification;
 	}
 
     

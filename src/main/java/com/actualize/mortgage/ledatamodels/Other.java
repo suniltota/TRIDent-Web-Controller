@@ -3,8 +3,15 @@ package com.actualize.mortgage.ledatamodels;
 import org.w3c.dom.Element;
 
 import com.actualize.mortgage.domainmodels.MISMODataAccessObject;
-
+/**
+ * this class defines gse datapoints and other under Other Container in MISMO XML
+ * @author sboragala
+ *
+ */
 public class Other extends MISMODataAccessObject {
+	
+	private static final long serialVersionUID = 5349881057802484851L;
+	
 	public final String integratedDisclosureEstimatedClosingCostsExpirationTimezoneType;
 	public final String lockExpirationTimezoneType;
 	public final String buydownReflectedInNoteIndicator;                                 
@@ -16,8 +23,6 @@ public class Other extends MISMODataAccessObject {
 	public final String totalStepCount;                                                  
 	public final String totalStepPaymentCount;                                           
 	public final String subordinateFinancingIsNewIndicator;                              
-	
-	
 	
 	public Other(Element element) {
 		super(element);
