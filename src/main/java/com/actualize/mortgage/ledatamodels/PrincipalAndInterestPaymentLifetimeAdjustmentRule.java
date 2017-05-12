@@ -9,6 +9,7 @@ import com.actualize.mortgage.domainmodels.MISMODataAccessObject;
  *
  */
 public class PrincipalAndInterestPaymentLifetimeAdjustmentRule extends MISMODataAccessObject {
+	private static final long serialVersionUID = 5899985625332099410L;
 	public final String firstPrincipalAndInterestPaymentChangeMonthsCount;
 	public final String principalAndInterestPaymentMaximumAmount;
 	public final String principalAndInterestPaymentMaximumAmountEarliestEffectiveMonthsCount;

@@ -19,6 +19,8 @@ import com.actualize.mortgage.domainmodels.InterestRateAdjustmentModel;
 import com.actualize.mortgage.domainmodels.LoanCalculationsQualifiedMortgage;
 import com.actualize.mortgage.domainmodels.LoanInformation;
 import com.actualize.mortgage.domainmodels.LoanTerms;
+import com.actualize.mortgage.domainmodels.PaymentRuleModel;
+import com.actualize.mortgage.domainmodels.PrincipalAndInterestPaymentAdjustmentModel;
 import com.actualize.mortgage.domainmodels.ProjectedPaymentsDetails;
 import com.actualize.mortgage.domainmodels.SummariesofTransactions;
 import com.actualize.mortgage.domainmodels.TransactionInformation;
@@ -48,7 +50,9 @@ public class ClosingDisclosure implements Serializable {
     private CashToClose cashToCloses;
     private SummariesofTransactions summariesofTransactions;
     private PayoffsAndPayments payoffsAndPayments;
-    private InterestRateAdjustmentModel interestRateAdjustment;
+    private InterestRateAdjustmentModel interestRateAdjustment; //AIR TABLE
+    private PrincipalAndInterestPaymentAdjustmentModel principalAndInterestPaymentAdjustment;
+    private PaymentRuleModel paymentRule;
     private LoanCalculationsQualifiedMortgage loanCalculationsQualifiedMortgage;
     private ContactInformationModel contactInformation;
      

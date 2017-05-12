@@ -3,8 +3,15 @@ package com.actualize.mortgage.ledatamodels;
 import org.w3c.dom.Element;
 
 import com.actualize.mortgage.domainmodels.MISMODataAccessObject;
-
+/**
+ * this class defines ClosingInformationDetail in MISMO XML
+ * @author sboragala
+ *
+ */
 public class ClosingInformationDetail extends MISMODataAccessObject {
+	
+	private static final long serialVersionUID = 5653133703342678820L;
+	
 	public final String cashFromBorrowerAtClosingAmount;
 	public final String cashFromSellerAtClosingAmount;
 	public final String cashToBorrowerAtClosingAmount;

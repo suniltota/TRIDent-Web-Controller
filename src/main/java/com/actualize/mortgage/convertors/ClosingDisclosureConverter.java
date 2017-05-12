@@ -59,6 +59,7 @@ import com.actualize.mortgage.domainmodels.LoanTermsTemporaryBuydown;
 import com.actualize.mortgage.domainmodels.NameModel;
 import com.actualize.mortgage.domainmodels.PaymentsModel;
 import com.actualize.mortgage.domainmodels.Prepaids;
+import com.actualize.mortgage.domainmodels.PrincipalAndInterestPaymentAdjustmentModel;
 import com.actualize.mortgage.domainmodels.ProjectedPaymentsDetails;
 import com.actualize.mortgage.domainmodels.ProjectedPaymentsEE;
 import com.actualize.mortgage.domainmodels.ProjectedPaymentsET;
@@ -188,7 +189,7 @@ public class ClosingDisclosureConverter {
 	     	closingDisclosure.setSummariesofTransactions(createSummariesofTransactions(deal));
 	     	closingDisclosure.setLoanCalculationsQualifiedMortgage(createLoanCalculationsQualifiedMortgage(deal));
 	     	closingDisclosure.setContactInformation(createContactInformation(deal));
-	     	closingDisclosure.setInterestRateAdjustment(createInterestRateAdjustmentModel(deal)); //AIR Table
+	     	closingDisclosure.setInterestRateAdjustment(createAirTableResponse(deal)); //AIR Table
 	     	
 	     	
         //PAGE THREE OF CD
@@ -214,9 +215,9 @@ public class ClosingDisclosureConverter {
 	    LoanDetail loanDetail = new LoanDetail((Element)deal.getElementAddNS("LOANS/LOAN/LOAN_DETAIL"));	
 	    DocumentClassification docClassification = new DocumentClassification(Document.NS, (Element)document.getElementAddNS("DOCUMENT_CLASSIFICATION"));
 	    
-	    //documentClassification.setDocumentFormIssuingEntityNameType(documentFormIssuingEntityNameType);
-	    //documentClassification.setDocumentFormIssuingEntityVersionIdentifier(documentFormIssuingEntityVersionIdentifier);
-	   // documentClassification.setDocumentSignatureRequiredIndicator(documentSignatureRequiredIndicator);
+	    documentClassification.setDocumentFormIssuingEntityNameType(docClassification.documentClassificationDetail.documentFormIssuingEntityNameType);
+	    documentClassification.setDocumentFormIssuingEntityVersionIdentifier(docClassification.documentClassificationDetail.documentFormIssuingEntityVersionIdentifier);
+	    documentClassification.setDocumentSignatureRequiredIndicator(Boolean.parseBoolean(docClassification.documentClassificationDetail.other.documentSignatureRequiredIndicator));
 	    documentClassification.setDocumentType(docClassification.documentClasses.documentClass.documentType);
 	    documentClassification.setDocumentTypeOtherDescription(docClassification.documentClasses.documentClass.documentTypeOtherDescription);
 	    
@@ -463,9 +464,10 @@ public class ClosingDisclosureConverter {
         PrincipalAndInterestPaymentLifetimeAdjustmentRule principalAndInterestPaymentLifetimeAdjustmentRule = new PrincipalAndInterestPaymentLifetimeAdjustmentRule((Element)deal.getElementAddNS(loan + "/ADJUSTMENT/PRINCIPAL_AND_INTEREST_PAYMENT_ADJUSTMENT/PRINCIPAL_AND_INTEREST_PAYMENT_LIFETIME_ADJUSTMENT_RULE"));
         //InterestRatePerChangeAdjustmentRules interestRatePerChangeAdjustmentRules = new InterestRatePerChangeAdjustmentRules((Element)deal.getElementAddNS(loan + "/ADJUSTMENT/INTEREST_RATE_ADJUSTMENT/INTEREST_RATE_PER_CHANGE_ADJUSTMENT_RULES"));
         PrepaymentPenaltyLifetimeRule prepaymentPenaltyLifetimeRule = new PrepaymentPenaltyLifetimeRule((Element)deal.getElementAddNS(loan + "/PREPAYMENT_PENALTY/PREPAYMENT_PENALTY_LIFETIME_RULE"));
-        AboutVersions aboutVersions = document.aboutVersions;
+       // AboutVersions aboutVersions = document.aboutVersions;
+        ClosingInformationDetail closingDetail = new ClosingInformationDetail((Element)deal.getElementAddNS("LOANS/LOAN/CLOSING_INFORMATION/CLOSING_INFORMATION_DETAIL"));
         PrincipalAndInterestPaymentPerChangeAdjustmentRules principalAndInterestPaymentPerChangeAdjustmentRules = new PrincipalAndInterestPaymentPerChangeAdjustmentRules((Element)deal.getElementAddNS(loan + "/ADJUSTMENT/PRINCIPAL_AND_INTEREST_PAYMENT_ADJUSTMENT/PRINCIPAL_AND_INTEREST_PAYMENT_PER_CHANGE_ADJUSTMENT_RULES"));
-        List<AboutVersion> aboutVersionList = new LinkedList<>();
+      //  List<AboutVersion> aboutVersionList = new LinkedList<>();
       
         
         loanTermsLoanAmount.setNoteAmount(termsOfLoan.noteAmount);
@@ -481,7 +483,6 @@ public class ClosingDisclosureConverter {
 			interest = termsOfLoan.weightedAverageInterestRatePercent;
 		else
 			interest = termsOfLoan.noteRatePercent;
-        
        
  	    loanTermsInterestRate.setNoteRatePercent(termsOfLoan.noteRatePercent);
  	    loanTermsInterestRate.setDisclosedFullyIndexedRatePercent(termsOfLoan.disclosedFullyIndexedRatePercent);
@@ -492,28 +493,28 @@ public class ClosingDisclosureConverter {
  	    loanTermsInterestRate.setCeilingRatePercentEarliestEffectiveMonthsCount(interestRateLifetimeAdjustmentRule.ceilingRatePercentEarliestEffectiveMonthsCount);
  	    loanTermsInterestRate.setCeilingRatePercent(interestRateLifetimeAdjustmentRule.ceilingRatePercent);
  	    loanTermsInterestRate.setDisclosedFullyIndexedRatePercent(termsOfLoan.disclosedFullyIndexedRatePercent);
-		
-		if(!"".equals(paymentRule.InitialPrincipalAndInterestPaymentAmount))
-			principalAmount = paymentRule.InitialPrincipalAndInterestPaymentAmount;
+ 	    loanTermsInterestRate.setCurrentRateSetDate(closingDetail.currentRateSetDate);
+ 	   if(!"".equals(paymentRule.initialPrincipalAndInterestPaymentAmount))
+			principalAmount = paymentRule.initialPrincipalAndInterestPaymentAmount;
 		if("".equalsIgnoreCase(principalAmount))
-			principalAmount = paymentRule.FullyIndexedInitialPrincipalAndInterestPaymentAmount;
+			principalAmount = paymentRule.fullyIndexedInitialPrincipalAndInterestPaymentAmount;
         
 		//AboutVersionIdentifier
-		if(null != aboutVersions.aboutVersions)
+		/*if(null != aboutVersions.aboutVersions)
 		for(int i=0; i<aboutVersions.aboutVersions.length; i++){
 			aboutVersionList.add(aboutVersions.aboutVersions[i]);
-	    }
+	    }*/
 		   
 		if(principalAndInterestPaymentPerChangeAdjustmentRules.principalAndInterestPaymentPerChangeAdjustmentRules.length>0)
 	        for(int i=0; i<principalAndInterestPaymentPerChangeAdjustmentRules.principalAndInterestPaymentPerChangeAdjustmentRules.length;i++)
 	 	    {
-	        	if("First".equalsIgnoreCase(principalAndInterestPaymentPerChangeAdjustmentRules.principalAndInterestPaymentPerChangeAdjustmentRules[i].AdjustmentRuleType))
-					loanTermsPI.setPerChangePrincipalAndInterestPaymentAdjustmentFrequencyMonthsCount(principalAndInterestPaymentPerChangeAdjustmentRules.principalAndInterestPaymentPerChangeAdjustmentRules[i].PerChangePrincipalAndInterestPaymentAdjustmentFrequencyMonthsCount);
+	        	if("First".equalsIgnoreCase(principalAndInterestPaymentPerChangeAdjustmentRules.principalAndInterestPaymentPerChangeAdjustmentRules[i].adjustmentRuleType))
+					loanTermsPI.setPerChangePrincipalAndInterestPaymentAdjustmentFrequencyMonthsCount(principalAndInterestPaymentPerChangeAdjustmentRules.principalAndInterestPaymentPerChangeAdjustmentRules[i].perChangePrincipalAndInterestPaymentAdjustmentFrequencyMonthsCount);
 	        }
- 	    loanTermsPI.setPaymentFrequencyType(paymentRule.PaymentFrequencyType);
+ 	    loanTermsPI.setPaymentFrequencyType(paymentRule.paymentFrequencyType);
 		loanTermsPI.setAmount(principalAmount);
- 	    loanTermsPI.setInitialPrincipalAndInterestPaymentAmount(paymentRule.InitialPrincipalAndInterestPaymentAmount);
-		loanTermsPI.setFullyIndexedInitialPrincipalAndInterestPaymentAmount(paymentRule.FullyIndexedInitialPrincipalAndInterestPaymentAmount);
+ 	    loanTermsPI.setInitialPrincipalAndInterestPaymentAmount(paymentRule.initialPrincipalAndInterestPaymentAmount);
+		loanTermsPI.setFullyIndexedInitialPrincipalAndInterestPaymentAmount(paymentRule.fullyIndexedInitialPrincipalAndInterestPaymentAmount);
 		loanTermsPI.setAdjustmentRuleType("First");
 		loanTermsPI.setFirstPrincipalAndInterestPaymentChangeMonthsCount(principalAndInterestPaymentLifetimeAdjustmentRule.firstPrincipalAndInterestPaymentChangeMonthsCount);
 		loanTermsPI.setPrincipalAndInterestPaymentMaximumAmountEarliestEffectiveMonthsCount(principalAndInterestPaymentLifetimeAdjustmentRule.principalAndInterestPaymentMaximumAmountEarliestEffectiveMonthsCount);
@@ -1431,9 +1432,9 @@ public class ClosingDisclosureConverter {
     }
     
     /**
-     * 
+     * creates response for PayoffsAndPayments 
      * @param deal
-     * @return
+     * @return PayoffsAndPayments
      */
     private PayoffsAndPayments createPayoffsAndPayments(Deal deal)
     {
@@ -1452,11 +1453,11 @@ public class ClosingDisclosureConverter {
     }
     
     /**
-     * 
+     * creates response for air table
      * @param deal
-     * @return
+     * @return InterestRateAdjustmentModel
      */
-    private InterestRateAdjustmentModel createInterestRateAdjustmentModel(Deal deal)
+    private InterestRateAdjustmentModel createAirTableResponse(Deal deal)
     {
     	InterestRateAdjustmentModel interestRateAdjustmentModel = new InterestRateAdjustmentModel();
 		
@@ -1488,6 +1489,18 @@ public class ClosingDisclosureConverter {
 			}
 		}
 		return interestRateAdjustmentModel;
+    }
+    
+    private PrincipalAndInterestPaymentAdjustmentModel createInterestRateAdjustment(Deal deal)
+    {
+    	PrincipalAndInterestPaymentAdjustmentModel principalAndInterestPaymentAdjustment = new PrincipalAndInterestPaymentAdjustmentModel();
+    /*	principalAndInterestPaymentAdjustment.setFirstAdjustmentRuleType(firstAdjustmentRuleType);
+    	principalAndInterestPaymentAdjustment.setFirstPerChangeMaximumPrincipalAndInterestPaymentAmount(firstPerChangeMaximumPrincipalAndInterestPaymentAmount);
+    	principalAndInterestPaymentAdjustment.setFirstPerChangeMinimumPrincipalAndInterestPaymentAmount(firstPerChangeMinimumPrincipalAndInterestPaymentAmount);
+    	principalAndInterestPaymentAdjustment.setFirstPerChangePrincipalAndInterestPaymentAdjustmentFrequencyMonthsCount(firstPerChangePrincipalAndInterestPaymentAdjustmentFrequencyMonthsCount);
+    	*/
+    	return principalAndInterestPaymentAdjustment;
+    	
     }
     /**
      * creates LoanCalculations QualifiedMortgage for JSON Response 

@@ -22,7 +22,7 @@ public class Other extends MISMODataAccessObject {
 	public final String totalOptionalPaymentCount;                                       
 	public final String totalStepCount;                                                  
 	public final String totalStepPaymentCount;                                           
-	public final String subordinateFinancingIsNewIndicator;                              
+	public final String subordinateFinancingIsNewIndicator;
 	
 	public Other(Element element) {
 		super(element);

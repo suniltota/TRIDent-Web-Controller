@@ -19,7 +19,7 @@ public class LoanTermsInterestRate implements Serializable {
 	private String firstRateChangeMonthsCount;
 	private String ceilingRatePercentEarliestEffectiveMonthsCount;
 	private String ceilingRatePercent;
-	private String currentRateSetDate ="TBD";
+	private String currentRateSetDate;
 	private String loanPriceQuote = "TBD";
 	private String apor = "TBD";
 	

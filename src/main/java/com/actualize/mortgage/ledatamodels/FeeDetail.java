@@ -10,6 +10,7 @@ import com.actualize.mortgage.domainmodels.MISMODataAccessObject;
  *
  */
 public class FeeDetail extends MISMODataAccessObject {
+	private static final long serialVersionUID = -6582226402677344451L;
 	public String displayLabelText = "";
 	public final String feeActualTotalAmount;
 	public final String feeEstimatedTotalAmount;

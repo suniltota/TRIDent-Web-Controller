@@ -3,18 +3,24 @@ package com.actualize.mortgage.ledatamodels;
 import org.w3c.dom.Element;
 
 import com.actualize.mortgage.domainmodels.MISMODataAccessObject;
-
+/**
+ * this class defines PrincipalAndInterestPaymentPerChangeAdjustmentRule in MISMO XML
+ * @author sboragala
+ *
+ */
 public class PrincipalAndInterestPaymentPerChangeAdjustmentRule extends MISMODataAccessObject {
-	public final String AdjustmentRuleType;
-	public final String PerChangeMaximumPrincipalAndInterestPaymentAmount;
-	public final String PerChangeMinimumPrincipalAndInterestPaymentAmount;
-	public final String PerChangePrincipalAndInterestPaymentAdjustmentFrequencyMonthsCount;
+	
+	private static final long serialVersionUID = -869334314692463742L;
+	public final String adjustmentRuleType;
+	public final String perChangeMaximumPrincipalAndInterestPaymentAmount;
+	public final String perChangeMinimumPrincipalAndInterestPaymentAmount;
+	public final String perChangePrincipalAndInterestPaymentAdjustmentFrequencyMonthsCount;
 	
 	public PrincipalAndInterestPaymentPerChangeAdjustmentRule(Element element) {
 		super(element);
-		AdjustmentRuleType = getValueAddNS("AdjustmentRuleType");
-		PerChangeMaximumPrincipalAndInterestPaymentAmount = getValueAddNS("PerChangeMaximumPrincipalAndInterestPaymentAmount");
-		PerChangeMinimumPrincipalAndInterestPaymentAmount = getValueAddNS("PerChangeMinimumPrincipalAndInterestPaymentAmount");
-		PerChangePrincipalAndInterestPaymentAdjustmentFrequencyMonthsCount = getValueAddNS("PerChangePrincipalAndInterestPaymentAdjustmentFrequencyMonthsCount");
+		adjustmentRuleType = getValueAddNS("AdjustmentRuleType");
+		perChangeMaximumPrincipalAndInterestPaymentAmount = getValueAddNS("PerChangeMaximumPrincipalAndInterestPaymentAmount");
+		perChangeMinimumPrincipalAndInterestPaymentAmount = getValueAddNS("PerChangeMinimumPrincipalAndInterestPaymentAmount");
+		perChangePrincipalAndInterestPaymentAdjustmentFrequencyMonthsCount = getValueAddNS("PerChangePrincipalAndInterestPaymentAdjustmentFrequencyMonthsCount");
 	}
 }
