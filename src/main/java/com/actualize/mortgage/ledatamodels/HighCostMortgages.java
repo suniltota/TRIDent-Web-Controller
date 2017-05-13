@@ -10,6 +10,7 @@ import com.actualize.mortgage.domainmodels.MISMODataAccessObject;
  */
 public class HighCostMortgages extends MISMODataAccessObject {
 	
+	private static final long serialVersionUID = -8253248199878589348L;
 	public final String regulationZExcludedBonaFideDiscountPointsIndicator;
 	public final String regulationZExcludedBonaFideDiscountPointsPercent;
 	public final String regulationZTotalAffiliateFeesAmount;

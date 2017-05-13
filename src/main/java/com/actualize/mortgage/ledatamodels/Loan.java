@@ -3,8 +3,13 @@ package com.actualize.mortgage.ledatamodels;
 import org.w3c.dom.Element;
 
 import com.actualize.mortgage.domainmodels.MISMODataAccessObject;
-
+/**
+ * defines loan in MISMO XML
+ * @author sboragala
+ *
+ */
 public class Loan extends MISMODataAccessObject {
+	private static final long serialVersionUID = 1359093742138850408L;
 	public final Adjustment adjustment;
 	public final Amortization amortization;
 	public final Buydown buydown;

@@ -93,12 +93,12 @@ public class LoanEstimateConvertor {
 		
 		loanEstimateSection.setLenderFullName(StringFormatter.STRINGCLEAN.formatString(lenderDetail.fullName));
 		loanEstimateSection.setLenderAddress(toAddressModel(lenderAddress));
-		loanEstimateSection.setDateIssued(idDetail.IntegratedDisclosureIssuedDate);
+		loanEstimateSection.setDateIssued(idDetail.integratedDisclosureIssuedDate);
 		loanEstimateSection.setApplicants(applicants(borrowerParties));
 		loanEstimateSection.setEstimatedPropValue(salePrice(loanTerms, salesContractDetail, propertyValuationDetail, propertyDetail));
 		loanEstimateSection.setLoanTerm(loanTerm(loanDetail, maturityRule, construction));
 		loanEstimateSection.setPurpose(loanTerms.loanPurposeType);
-		loanEstimateSection.setProduct(idDetail.IntegratedDisclosureLoanProductDescription);
+		loanEstimateSection.setProduct(idDetail.integratedDisclosureLoanProductDescription);
 		loanEstimateSection.setLoanType("Other".equalsIgnoreCase(loanType) ? loanTerms.mortgageTypeOtherDescription :loanType);
 		loanEstimateSection.setLoanId(loanIdentifier.LoanIdentifier);
 		loanEstimateSection.setProperty(toAddressModel(propertyAddress));
@@ -235,8 +235,8 @@ public class LoanEstimateConvertor {
 		// Append subsequent lines
 		timezone = idDetail.extension.other.integratedDisclosureEstimatedClosingCostsExpirationTimezoneType;
 		String formattedTimezone = timezone.equals("") ? "" : (" " + timezone);
-			loanEstimateSectionRateLock.setExpireDate(idDetail.IntegratedDisclosureEstimatedClosingCostsExpirationDatetime);
-			loanEstimateSectionRateLock.setExpireTime(idDetail.IntegratedDisclosureEstimatedClosingCostsExpirationDatetime);
+			loanEstimateSectionRateLock.setExpireDate(idDetail.integratedDisclosureEstimatedClosingCostsExpirationDatetime);
+			loanEstimateSectionRateLock.setExpireTime(idDetail.integratedDisclosureEstimatedClosingCostsExpirationDatetime);
 			loanEstimateSectionRateLock.setExpireTimeZone(formattedTimezone);
 	
 		return loanEstimateSectionRateLock;

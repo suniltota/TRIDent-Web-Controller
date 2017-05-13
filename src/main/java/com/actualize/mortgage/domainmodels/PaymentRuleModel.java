@@ -10,13 +10,17 @@ import java.io.Serializable;
  * @author sboragala
  *
  */
+/**
+ * @author sboragala
+ *
+ */
 public class PaymentRuleModel implements Serializable {
 
 	private static final long serialVersionUID = 1763498376101154213L;
 
 	private String fullyIndexedInitialPrincipalAndInterestPaymentAmount;
 	private String initialPrincipalAndInterestPaymentAmount;
-	private String partialPaymentAllowedIndicator;
+	private boolean partialPaymentAllowedIndicator;
 	private String paymentFrequencyType;
 	private boolean paymentOptionIndicator;
 	private String seasonalPaymentPeriodEndMonth;
@@ -52,13 +56,13 @@ public class PaymentRuleModel implements Serializable {
 	/**
 	 * @return the partialPaymentAllowedIndicator
 	 */
-	public String getPartialPaymentAllowedIndicator() {
+	public boolean isPartialPaymentAllowedIndicator() {
 		return partialPaymentAllowedIndicator;
 	}
 	/**
 	 * @param partialPaymentAllowedIndicator the partialPaymentAllowedIndicator to set
 	 */
-	public void setPartialPaymentAllowedIndicator(String partialPaymentAllowedIndicator) {
+	public void setPartialPaymentAllowedIndicator(boolean partialPaymentAllowedIndicator) {
 		this.partialPaymentAllowedIndicator = partialPaymentAllowedIndicator;
 	}
 	/**
@@ -133,5 +137,7 @@ public class PaymentRuleModel implements Serializable {
 	public void setTotalStepPaymentCount(String totalStepPaymentCount) {
 		this.totalStepPaymentCount = totalStepPaymentCount;
 	}
+	
+	
 	    
 }

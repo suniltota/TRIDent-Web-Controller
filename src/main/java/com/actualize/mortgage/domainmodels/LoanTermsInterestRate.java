@@ -1,15 +1,14 @@
 package com.actualize.mortgage.domainmodels;
 
 import java.io.Serializable;
-
+/**
+ * this class defines InterestRate for loan terms in JSON response 
+ * @author sboragala
+ *
+ */
 public class LoanTermsInterestRate implements Serializable {
 	
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 7964998098675066631L;
-	
-	
 	
 	private String noteRatePercent;
 	private String disclosedFullyIndexedRatePercent;
@@ -20,8 +19,8 @@ public class LoanTermsInterestRate implements Serializable {
 	private String ceilingRatePercentEarliestEffectiveMonthsCount;
 	private String ceilingRatePercent;
 	private String currentRateSetDate;
-	private String loanPriceQuote = "TBD";
-	private String apor = "TBD";
+	private String loanPriceQuote;
+	private String apor;
 	
 	/**
 	 * @return the noteRatePercent

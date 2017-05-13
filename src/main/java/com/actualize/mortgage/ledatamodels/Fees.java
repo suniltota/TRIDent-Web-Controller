@@ -4,8 +4,14 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
 import com.actualize.mortgage.domainmodels.MISMODataAccessObject;
-
+/**
+ * this defines Fees in MISMO XML
+ * @author sboragala
+ *
+ */
 public class Fees extends MISMODataAccessObject {
+	
+	private static final long serialVersionUID = -6457846149654564046L;
 	public final Fee[] fees;
 
 	public Fees(Element element) {

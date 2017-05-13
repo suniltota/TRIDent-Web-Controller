@@ -9,15 +9,14 @@ public class SummariesofTransactionsDetailsPaidByAlready implements Serializable
 	private static final long serialVersionUID = -5690104701135903828L;
 	
 	private ClosingCostFundModel deposit;
-	private String loanAmount;
 	private String existingLoan;
 	private ClosingAdjustmentItemModel sellerCredit;
 	private String disclosureDescription;
 	private ClosingAdjustmentItemModel subordinateLien; 
 	private String totalSubordinateFinancingAmount;
 	private List<ClosingAdjustmentItemModel> otherCredits;
-	private List<ClosingAdjustmentItemModel> adjustments;
-	private List<ProrationModel> adjustmentsUnpaidBySeller;
+	//private List<ClosingAdjustmentItemModel> adjustments;
+	//private List<ProrationModel> adjustmentsUnpaidBySeller;
 	private IntegratedDisclosureSectionSummaryModel paidByAlreadyTotalAmount;
 	
 	/**
@@ -31,18 +30,6 @@ public class SummariesofTransactionsDetailsPaidByAlready implements Serializable
 	 */
 	public void setDeposit(ClosingCostFundModel deposit) {
 		this.deposit = deposit;
-	}
-	/**
-	 * @return the loanAmount
-	 */
-	public String getLoanAmount() {
-		return loanAmount;
-	}
-	/**
-	 * @param loanAmount the loanAmount to set
-	 */
-	public void setLoanAmount(String loanAmount) {
-		this.loanAmount = loanAmount;
 	}
 	/**
 	 * @return the existingLoan
@@ -115,30 +102,6 @@ public class SummariesofTransactionsDetailsPaidByAlready implements Serializable
 	 */
 	public void setOtherCredits(List<ClosingAdjustmentItemModel> otherCredits) {
 		this.otherCredits = otherCredits;
-	}
-	/**
-	 * @return the adjustments
-	 */
-	public List<ClosingAdjustmentItemModel> getAdjustments() {
-		return adjustments;
-	}
-	/**
-	 * @param adjustments the adjustments to set
-	 */
-	public void setAdjustments(List<ClosingAdjustmentItemModel> adjustments) {
-		this.adjustments = adjustments;
-	}
-	/**
-	 * @return the adjustmentsUnpaidBySeller
-	 */
-	public List<ProrationModel> getAdjustmentsUnpaidBySeller() {
-		return adjustmentsUnpaidBySeller;
-	}
-	/**
-	 * @param adjustmentsUnpaidBySeller the adjustmentsUnpaidBySeller to set
-	 */
-	public void setAdjustmentsUnpaidBySeller(List<ProrationModel> adjustmentsUnpaidBySeller) {
-		this.adjustmentsUnpaidBySeller = adjustmentsUnpaidBySeller;
 	}
 	/**
 	 * @return the paidByAlreadyTotalAmount

@@ -28,6 +28,7 @@ public class PrincipalAndInterestPaymentAdjustmentModel implements Serializable 
 	private String subsequentPerChangeMaximumPrincipalAndInterestPaymentAmount;
 	private String subsequentPerChangeMinimumPrincipalAndInterestPaymentAmount;
 	private String subsequentPerChangePrincipalAndInterestPaymentAdjustmentFrequencyMonthsCount;
+	
 	/**
 	 * @return the firstPrincipalAndInterestPaymentChangeMonthsCount
 	 */

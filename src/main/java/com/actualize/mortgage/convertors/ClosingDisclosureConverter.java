@@ -5,7 +5,6 @@
 package com.actualize.mortgage.convertors;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -29,6 +28,7 @@ import com.actualize.mortgage.domainmodels.ClosingCostDetailsOtherCosts;
 import com.actualize.mortgage.domainmodels.ClosingCostFundModel;
 import com.actualize.mortgage.domainmodels.ClosingCostProperties;
 import com.actualize.mortgage.domainmodels.ClosingCostsTotal;
+import com.actualize.mortgage.domainmodels.ClosingInformationDetailModel;
 import com.actualize.mortgage.domainmodels.ClosingInformationModel;
 import com.actualize.mortgage.domainmodels.ContactInformationDetail;
 import com.actualize.mortgage.domainmodels.ContactInformationModel;
@@ -39,10 +39,12 @@ import com.actualize.mortgage.domainmodels.DocumentClassificationModel;
 import com.actualize.mortgage.domainmodels.ETIA;
 import com.actualize.mortgage.domainmodels.ETIASection;
 import com.actualize.mortgage.domainmodels.IEPatClosing;
+import com.actualize.mortgage.domainmodels.IntegratedDisclosureDetailModel;
 import com.actualize.mortgage.domainmodels.IntegratedDisclosureSectionSummaryDetailModel;
 import com.actualize.mortgage.domainmodels.IntegratedDisclosureSectionSummaryModel;
 import com.actualize.mortgage.domainmodels.IntegratedDisclosureSubsectionPaymentModel;
 import com.actualize.mortgage.domainmodels.InterestRateAdjustmentModel;
+import com.actualize.mortgage.domainmodels.LateChargeRuleModel;
 import com.actualize.mortgage.domainmodels.LiabilityModel;
 import com.actualize.mortgage.domainmodels.LoanCalculationModel;
 import com.actualize.mortgage.domainmodels.LoanCalculationsQualifiedMortgage;
@@ -57,6 +59,10 @@ import com.actualize.mortgage.domainmodels.LoanTermsPI;
 import com.actualize.mortgage.domainmodels.LoanTermsPrepaymentPenalty;
 import com.actualize.mortgage.domainmodels.LoanTermsTemporaryBuydown;
 import com.actualize.mortgage.domainmodels.NameModel;
+import com.actualize.mortgage.domainmodels.PartialPaymentModel;
+import com.actualize.mortgage.domainmodels.PartialPaymentsModel;
+import com.actualize.mortgage.domainmodels.PaymentModel;
+import com.actualize.mortgage.domainmodels.PaymentRuleModel;
 import com.actualize.mortgage.domainmodels.PaymentsModel;
 import com.actualize.mortgage.domainmodels.Prepaids;
 import com.actualize.mortgage.domainmodels.PrincipalAndInterestPaymentAdjustmentModel;
@@ -79,8 +85,6 @@ import com.actualize.mortgage.domainmodels.SummariesofTransactionsDetailsPaidByA
 import com.actualize.mortgage.domainmodels.SummariesofTransactionsDetailsSellerTransaction;
 import com.actualize.mortgage.domainmodels.TermsOfLoanModel;
 import com.actualize.mortgage.domainmodels.TransactionInformation;
-import com.actualize.mortgage.ledatamodels.AboutVersion;
-import com.actualize.mortgage.ledatamodels.AboutVersions;
 import com.actualize.mortgage.ledatamodels.Address;
 import com.actualize.mortgage.ledatamodels.AmortizationRule;
 import com.actualize.mortgage.ledatamodels.BuydownOccurence;
@@ -117,12 +121,14 @@ import com.actualize.mortgage.ledatamodels.InterestOnly;
 import com.actualize.mortgage.ledatamodels.InterestRateAdjustment;
 import com.actualize.mortgage.ledatamodels.InterestRateLifetimeAdjustmentRule;
 import com.actualize.mortgage.ledatamodels.InterestRatePerChangeAdjustmentRule;
+import com.actualize.mortgage.ledatamodels.LateChargeRule;
 import com.actualize.mortgage.ledatamodels.LegalEntityDetail;
 import com.actualize.mortgage.ledatamodels.Liabilities;
 import com.actualize.mortgage.ledatamodels.Liability;
 import com.actualize.mortgage.ledatamodels.LicenseDetail;
 import com.actualize.mortgage.ledatamodels.LoanDetail;
 import com.actualize.mortgage.ledatamodels.LoanIdentifiers;
+import com.actualize.mortgage.ledatamodels.LoanProduct;
 import com.actualize.mortgage.ledatamodels.MIDataDetail;
 import com.actualize.mortgage.ledatamodels.MISMODocument;
 import com.actualize.mortgage.ledatamodels.MaturityRule;
@@ -130,14 +136,18 @@ import com.actualize.mortgage.ledatamodels.Name;
 import com.actualize.mortgage.ledatamodels.NegativeAmortization;
 import com.actualize.mortgage.ledatamodels.NegativeAmortizationRule;
 import com.actualize.mortgage.ledatamodels.Other;
+import com.actualize.mortgage.ledatamodels.PartialPayment;
 import com.actualize.mortgage.ledatamodels.Parties;
 import com.actualize.mortgage.ledatamodels.Party;
+import com.actualize.mortgage.ledatamodels.Payment;
 import com.actualize.mortgage.ledatamodels.PaymentRule;
 import com.actualize.mortgage.ledatamodels.PayoffsAndPayments;
 import com.actualize.mortgage.ledatamodels.PrepaidItem;
 import com.actualize.mortgage.ledatamodels.PrepaidItems;
 import com.actualize.mortgage.ledatamodels.PrepaymentPenaltyLifetimeRule;
+import com.actualize.mortgage.ledatamodels.PrincipalAndInterestPaymentAdjustment;
 import com.actualize.mortgage.ledatamodels.PrincipalAndInterestPaymentLifetimeAdjustmentRule;
+import com.actualize.mortgage.ledatamodels.PrincipalAndInterestPaymentPerChangeAdjustmentRule;
 import com.actualize.mortgage.ledatamodels.PrincipalAndInterestPaymentPerChangeAdjustmentRules;
 import com.actualize.mortgage.ledatamodels.ProjectedPayment;
 import com.actualize.mortgage.ledatamodels.ProjectedPayments;
@@ -174,22 +184,35 @@ public class ClosingDisclosureConverter {
         Deal deal = new Deal(Deal.NS, (Element)document.getElementAddNS("DEAL_SETS/DEAL_SET/DEALS/DEAL"));
 
 	        closingDisclosure.setClosingDisclosureDocType(createClosingDisclosureDocumentDetails(document));
+	        closingDisclosure.setTermsOfLoan(createTermsOfLoanModel(deal));
+	    	closingDisclosure.setLoanDetail(createLoanDetailModel(deal));
+	    	closingDisclosure.setDocumentClassification(createDocumentClassificationModel(document));
         	closingDisclosure.setClosingInformation(createClosingInformation(deal));
+        	closingDisclosure.setClosingInformationDetail(createClosingInformationDetail(deal));
 	        closingDisclosure.setTransactionInformation(createTransactionInformation(deal));
+	        closingDisclosure.setIntegratedDisclosureDetail(createIntegratedDisclosureDetail(deal));
 	        closingDisclosure.setLoanInformation(createLoanInformation(deal));
+	        closingDisclosure.setSalesContractDetail(createSalesContractDetailModel(deal));
 	        closingDisclosure.setLoanTerms(createLoanTerms(mismodoc));
 	        closingDisclosure.setProjectedPayments(createProjectedPayments(deal));
 	        closingDisclosure.setEtiaSection(createETIASection(deal));
-	        closingDisclosure.setCostsAtClosing(createCostsAtClosing(deal));
+	        //closingDisclosure.setCostsAtClosing(createCostsAtClosing(deal));
 	        closingDisclosure.setClosingCostDetailsLoanCosts(ClosingCostDetailsLoanCosts(deal));
 	     	closingDisclosure.setClosingCostDetailsOtherCosts(createClosingCostOtherCosts(deal)); 
 	     	closingDisclosure.setClosingCostsTotal(createClosingCostsTotal(deal));
 	     	closingDisclosure.setCashToCloses(createCalculatingCashtoClose(deal));
 	     	closingDisclosure.setPayoffsAndPayments(createPayoffsAndPayments(deal));
+	     	closingDisclosure.setProrationsList(createProrationsModels(deal));
+	     	closingDisclosure.setClosingAdjustmentItemList(createClosingAdjustmentModels(deal));
+	     	closingDisclosure.setLiabilityList(createLiabilityModels(deal));
+	     	closingDisclosure.setClosingCostFundList(createClosingCostFundModels(deal));
 	     	closingDisclosure.setSummariesofTransactions(createSummariesofTransactions(deal));
+	     	closingDisclosure.setInterestRateAdjustment(createInterestRateAdjustmentModel(deal)); //AIR Table
+	     	closingDisclosure.setPrincipalAndInterestPaymentAdjustment(createPrincipalAndInterestPaymentAdjustmentModel(deal));
+	     	closingDisclosure.setPayment(createPaymentModel(deal));
+	     	closingDisclosure.setLateChargeRule(createLateChargeRuleModel(deal));
 	     	closingDisclosure.setLoanCalculationsQualifiedMortgage(createLoanCalculationsQualifiedMortgage(deal));
 	     	closingDisclosure.setContactInformation(createContactInformation(deal));
-	     	closingDisclosure.setInterestRateAdjustment(createAirTableResponse(deal)); //AIR Table
 	     	
 	     	
         //PAGE THREE OF CD
@@ -200,7 +223,7 @@ public class ClosingDisclosureConverter {
         return closingDisclosure;
     }
     
-    /**
+	/**
      * get all the details regarding the current document
      * @param mismodoc
      * @return ClosingDisclosureDocumentDetails
@@ -208,23 +231,9 @@ public class ClosingDisclosureConverter {
     private ClosingDisclosureDocumentDetails createClosingDisclosureDocumentDetails(Document document) 
     {
     	ClosingDisclosureDocumentDetails closingDisclosureDocumentDetails = new ClosingDisclosureDocumentDetails();
-    	DocumentClassificationModel documentClassification = new DocumentClassificationModel();
     	
         Deal deal = new Deal(Deal.NS, (Element)document.getElementAddNS("DEAL_SETS/DEAL_SET/DEALS/DEAL"));
-	    TermsOfLoan loanTerms = new TermsOfLoan((Element)deal.getElementAddNS("LOANS/LOAN/TERMS_OF_LOAN"));
-	    LoanDetail loanDetail = new LoanDetail((Element)deal.getElementAddNS("LOANS/LOAN/LOAN_DETAIL"));	
-	    DocumentClassification docClassification = new DocumentClassification(Document.NS, (Element)document.getElementAddNS("DOCUMENT_CLASSIFICATION"));
 	    
-	    documentClassification.setDocumentFormIssuingEntityNameType(docClassification.documentClassificationDetail.documentFormIssuingEntityNameType);
-	    documentClassification.setDocumentFormIssuingEntityVersionIdentifier(docClassification.documentClassificationDetail.documentFormIssuingEntityVersionIdentifier);
-	    documentClassification.setDocumentSignatureRequiredIndicator(Boolean.parseBoolean(docClassification.documentClassificationDetail.other.documentSignatureRequiredIndicator));
-	    documentClassification.setDocumentType(docClassification.documentClasses.documentClass.documentType);
-	    documentClassification.setDocumentTypeOtherDescription(docClassification.documentClasses.documentClass.documentTypeOtherDescription);
-	    
-	    
-	    closingDisclosureDocumentDetails.setTermsOfLoanModel(toTermsOfLoanModel(loanTerms));
-    	closingDisclosureDocumentDetails.setLoanDetailModel(toLoanDetailModel(loanDetail));
-    	closingDisclosureDocumentDetails.setDocumentClassification(documentClassification);
     	
 		return closingDisclosureDocumentDetails;
     }
@@ -242,7 +251,7 @@ public class ClosingDisclosureConverter {
           String salesContract = subjectProperty + "/SALES_CONTRACTS/SALES_CONTRACT";
           String loan = "LOANS/LOAN";
           String propertyValuation = subjectProperty + "/PROPERTY_VALUATIONS/PROPERTY_VALUATION";
-          SalesContractDetailModel salesContractDetailModel = new SalesContractDetailModel();
+         
           PropertyValuationDetailModel propertyValuationDetailModel = new PropertyValuationDetailModel();
           ClosingInformationModel closingInformationSection = new ClosingInformationModel();
           IntegratedDisclosureDetail idDetail = new IntegratedDisclosureDetail((Element)deal.getElementAddNS("LOANS/LOAN/DOCUMENT_SPECIFIC_DATA_SETS/DOCUMENT_SPECIFIC_DATA_SET/INTEGRATED_DISCLOSURE/INTEGRATED_DISCLOSURE_DETAIL"));
@@ -260,16 +269,11 @@ public class ClosingDisclosureConverter {
   				  legalEntityDetail = new LegalEntityDetail((Element)closingAgent.parties[i].getElementAddNS("LEGAL_ENTITY/LEGAL_ENTITY_DETAIL"));
   		  } 
           closingInformationSection.setClosingDate(closingInformationDetail.closingDate);
-          closingInformationSection.setDateIssued(idDetail.IntegratedDisclosureIssuedDate);
+          closingInformationSection.setDateIssued(idDetail.integratedDisclosureIssuedDate);
           closingInformationSection.setDisbursementDate(closingInformationDetail.disbursementDate);
           closingInformationSection.setFileNo(closingInformationDetail.closingAgentOrderNumberIdentifier);
           closingInformationSection.setProperty(toAddressModel(propertyAddress));
           closingInformationSection.setSalePrice(StringFormatter.ZEROTRUNCDOLLARS.formatString(salePrice(loanTerms, salesContractDetail, propertyValuationDetail, propertyDetail)));
-          	salesContractDetailModel.setPersonalPropertyAmount(salesContractDetail.personalPropertyAmount);
-          	salesContractDetailModel.setPersonalPropertyIndicator(Convertor.stringToBoolean(salesContractDetail.personalPropertyIncludedIndicator));
-          	salesContractDetailModel.setRealPropertyAmount(salesContractDetail.realPropertyAmount);
-          	salesContractDetailModel.setSaleContractAmount(salesContractDetail.salesContractAmount);
-          closingInformationSection.setSalesContractDetail(salesContractDetailModel);
           closingInformationSection.setSettlementAgent(legalEntityDetail.fullName);
           	propertyValuationDetailModel.setPropertyEstimatedValueAmount(propertyDetail.propertyEstimatedValueAmount);
           	propertyValuationDetailModel.setPropertyValuationAmount(propertyValuationDetail.propertyValuationAmount);
@@ -281,6 +285,48 @@ public class ClosingDisclosureConverter {
         return closingInformationSection;
     }
     
+    /**
+     * converts SalesContractDetail to SalesContractDetailModel
+     * @param deal
+     * @return SalesContractDetailModel
+     */
+    private SalesContractDetailModel createSalesContractDetailModel(Deal deal)
+    {
+    	SalesContractDetailModel salesContractDetailModel = new SalesContractDetailModel();
+    	
+    	SalesContractDetail salesContractDetail = new SalesContractDetail((Element)deal.getElementAddNS("COLLATERALS/COLLATERAL/SUBJECT_PROPERTY/SALES_CONTRACTS/SALES_CONTRACT/SALES_CONTRACT_DETAIL"));
+    	
+    	salesContractDetailModel.setPersonalPropertyAmount(salesContractDetail.personalPropertyAmount);
+      	salesContractDetailModel.setPersonalPropertyIndicator(Convertor.stringToBoolean(salesContractDetail.personalPropertyIncludedIndicator));
+      	salesContractDetailModel.setRealPropertyAmount(salesContractDetail.realPropertyAmount);
+      	salesContractDetailModel.setSaleContractAmount(salesContractDetail.salesContractAmount);
+		return salesContractDetailModel;
+    }
+    
+    /**
+     * converts ClosingInformationDetail to ClosingInformationDetailModel
+     * @param deal
+     * @return ClosingInformationDetailModel
+     */
+    private ClosingInformationDetailModel createClosingInformationDetail(Deal deal) {
+    	ClosingInformationDetailModel closingInformationDetailModel = new ClosingInformationDetailModel();
+    	
+    	ClosingInformationDetail closingInformationDetail = new ClosingInformationDetail((Element)deal.getElementAddNS("LOANS/LOAN/CLOSING_INFORMATION/CLOSING_INFORMATION_DETAIL"));
+    	
+    	closingInformationDetailModel.setCashFromBorrowerAtClosingAmount(closingInformationDetail.cashFromBorrowerAtClosingAmount);
+    	closingInformationDetailModel.setCashFromSellerAtClosingAmount(closingInformationDetail.cashFromSellerAtClosingAmount);
+    	closingInformationDetailModel.setCashToBorrowerAtClosingAmount(closingInformationDetail.cashToBorrowerAtClosingAmount);
+    	closingInformationDetailModel.setCashToSellerAtClosingAmount(closingInformationDetail.cashToSellerAtClosingAmount);
+    	closingInformationDetailModel.setClosingAgentOrderNumberIdentifier(closingInformationDetail.closingAgentOrderNumberIdentifier);
+    	closingInformationDetailModel.setClosingDate(closingInformationDetail.closingDate);
+    	closingInformationDetailModel.setClosingRateSetDate(closingInformationDetail.closingRateSetDate);
+    	closingInformationDetailModel.setCurrentRateSetDate(closingInformationDetail.currentRateSetDate);
+    	closingInformationDetailModel.setDisbursementDate(closingInformationDetail.disbursementDate);
+    	closingInformationDetailModel.setDocumentOrderClassificationType(closingInformationDetail.documentOrderClassificationType);
+    	
+		return closingInformationDetailModel;
+    	
+	}
     /**
      * Creates Transaction Information from MISMODocument
      * @param deal
@@ -375,14 +421,14 @@ public class ClosingDisclosureConverter {
 			loanPurpose = "Purchase";
 		else if("true".equalsIgnoreCase(loanDetail.constructionLoanIndicator))
 			loanPurpose = "Construction";
-		else if("true".equalsIgnoreCase(idDetail.IntegratedDisclosureHomeEquityLoanIndicator))
+		else if("true".equalsIgnoreCase(idDetail.integratedDisclosureHomeEquityLoanIndicator))
 			loanPurpose = "Home Equity Loan";
 		else
 			loanPurpose = "Refinance"; 	  	
 		//Loan Type
 		loanType = loanTerms.mortgageType;
 		//Loan Product
-		loanProduct = idDetail.IntegratedDisclosureLoanProductDescription;
+		loanProduct = idDetail.integratedDisclosureLoanProductDescription;
 		//Loan Mic && Loan Id
 		if("true".equalsIgnoreCase(loanDetail.miRequiredIndicator)){
 			if("Conventional".equalsIgnoreCase(loanTerms.mortgageType))
@@ -406,9 +452,9 @@ public class ClosingDisclosureConverter {
  	    loanInformationSection.setConstructionLoanTotalTermMonthsCount(construction.constructionLoanTotalTermMonthsCount); 
  	    loanInformationSection.setLoanMaturityPeriodType(maturityRule.LoanMaturityPeriodType);
  	    loanInformationSection.setLoanMaturityPeriodCount(maturityRule.LoanMaturityPeriodCount);
- 	    loanInformationSection.setIntegratedDisclosureHomeEquityLoanIndicator(Convertor.stringToBoolean(idDetail.IntegratedDisclosureHomeEquityLoanIndicator));
+ 	    loanInformationSection.setIntegratedDisclosureHomeEquityLoanIndicator(Convertor.stringToBoolean(idDetail.integratedDisclosureHomeEquityLoanIndicator));
  	    loanInformationSection.setLienPriorityType(loanTerms.lienPriorityType);
- 	    loanInformationSection.setIntegratedDisclosureLoanProductDescription(idDetail.IntegratedDisclosureLoanProductDescription);
+ 	    loanInformationSection.setIntegratedDisclosureLoanProductDescription(idDetail.integratedDisclosureLoanProductDescription);
  	    loanInformationSection.setMortgageType(loanTerms.mortgageType);
  	    loanInformationSection.setMortgageTypeOtherDescription(loanTerms.mortgageTypeOtherDescription);
  	    loanInformationSection.setMiRequiredIndicator(Convertor.stringToBoolean(loanDetail.miRequiredIndicator));
@@ -468,7 +514,7 @@ public class ClosingDisclosureConverter {
         ClosingInformationDetail closingDetail = new ClosingInformationDetail((Element)deal.getElementAddNS("LOANS/LOAN/CLOSING_INFORMATION/CLOSING_INFORMATION_DETAIL"));
         PrincipalAndInterestPaymentPerChangeAdjustmentRules principalAndInterestPaymentPerChangeAdjustmentRules = new PrincipalAndInterestPaymentPerChangeAdjustmentRules((Element)deal.getElementAddNS(loan + "/ADJUSTMENT/PRINCIPAL_AND_INTEREST_PAYMENT_ADJUSTMENT/PRINCIPAL_AND_INTEREST_PAYMENT_PER_CHANGE_ADJUSTMENT_RULES"));
       //  List<AboutVersion> aboutVersionList = new LinkedList<>();
-      
+        LoanProduct loanProduct = new LoanProduct(null, (Element)deal.getElementAddNS("LOANS/LOAN/LOAN_PRODUCT"));
         
         loanTermsLoanAmount.setNoteAmount(termsOfLoan.noteAmount);
         loanTermsLoanAmount.setNegativeAmoritzationIndicator(Convertor.stringToBoolean(loanDetail.negativeAmortizationIndicator));
@@ -494,7 +540,10 @@ public class ClosingDisclosureConverter {
  	    loanTermsInterestRate.setCeilingRatePercent(interestRateLifetimeAdjustmentRule.ceilingRatePercent);
  	    loanTermsInterestRate.setDisclosedFullyIndexedRatePercent(termsOfLoan.disclosedFullyIndexedRatePercent);
  	    loanTermsInterestRate.setCurrentRateSetDate(closingDetail.currentRateSetDate);
- 	   if(!"".equals(paymentRule.initialPrincipalAndInterestPaymentAmount))
+ 	    loanTermsInterestRate.setLoanPriceQuote(loanProduct.loanPriceQuoteInterestRatePercent);
+ 	    loanTermsInterestRate.setApor("map this from loan Calcs");
+ 	    
+ 	    if(!"".equals(paymentRule.initialPrincipalAndInterestPaymentAmount))
 			principalAmount = paymentRule.initialPrincipalAndInterestPaymentAmount;
 		if("".equalsIgnoreCase(principalAmount))
 			principalAmount = paymentRule.fullyIndexedInitialPrincipalAndInterestPaymentAmount;
@@ -589,6 +638,11 @@ public class ClosingDisclosureConverter {
     	return loanTerms;
     }
     
+    /**
+     * creates ETIA section in response
+     * @param deal
+     * @return ETIASection
+     */
   	private ETIASection createETIASection(Deal deal)
   	{
   		ETIASection etiaSection = new ETIASection();
@@ -658,7 +712,6 @@ public class ClosingDisclosureConverter {
 			ProjectedPaymentsEE estimatedEscrow = new ProjectedPaymentsEE();
 			ProjectedPaymentsET estimatedTotal = new ProjectedPaymentsET();
 			
-			
 			paymentCalculation.setProjectedPaymentCalculationPeriodEndNumber(payment.projectedPaymentCalculationPeriodEndNumber);
 			paymentCalculation.setProjectedPaymentCalculationPeriodStartNumber(payment.projectedPaymentCalculationPeriodStartNumber);
 			paymentCalculation.setProjectedPaymentCalculationPeriodTermType(payment.projectedPaymentCalculationPeriodTermType);
@@ -679,7 +732,6 @@ public class ClosingDisclosureConverter {
 			
 			estimatedTotal.setProjectedPaymentEstimatedTotalMaximumPaymentAmount(payment.projectedPaymentEstimatedTotalMaximumPaymentAmount);
 			estimatedTotal.setProjectedPaymentEstimatedTotalMinimumPaymentAmount(payment.projectedPaymentEstimatedTotalMinimumPaymentAmount);
-			
 			
 			paymentCalculationList.add(paymentCalculation);
 			principalInterestList.add(principalInterest);
@@ -787,7 +839,6 @@ public class ClosingDisclosureConverter {
 			tlCosts = calculateTLCosts(totalLoanCosts, integratedDisclosureSectionSummaries);
 		 }
 		
-		 
 		if(null != fees.fees && fees.fees.length>0)
 		for(Fee fee : fees.fees)
 		{
@@ -1123,23 +1174,23 @@ public class ClosingDisclosureConverter {
         
     	SummariesofTransactions summariesofTransactions = new SummariesofTransactions();
     	
-    	Liabilities liabilities = new Liabilities(null, (Element)deal.getElementAddNS("LIABILITIES/")); 
+    	
     	SalesContractDetail salesContractDetail = new SalesContractDetail((Element)deal.getElementAddNS(salesContract + "/SALES_CONTRACT_DETAIL"));
     	LoanDetail loanDetail = new LoanDetail((Element)deal.getElementAddNS("LOANS/LOAN/LOAN_DETAIL"));
     	TermsOfLoan loanTerms = new TermsOfLoan((Element)deal.getElementAddNS("LOANS/LOAN/TERMS_OF_LOAN"));
     	IntegratedDisclosureSectionSummaries integratedDisclosureSectionSummaryList = new IntegratedDisclosureSectionSummaries((Element)deal.getElementAddNS(idSummary));
     	ClosingInformation closingInformation =  new ClosingInformation(null, (Element)deal.getElementAddNS("LOANS/LOAN/CLOSING_INFORMATION"));
     	ClosingInformationDetail closingInformationDetail = new ClosingInformationDetail((Element)deal.getElementAddNS("LOANS/LOAN/CLOSING_INFORMATION/CLOSING_INFORMATION_DETAIL"));
-
-    	List<ProrationModel> prorationsModels = createProrationsModels(closingInformation.prorationItems.prorationItemList);
-		List<LiabilityModel> liabilityModels = createLiabilityModels(liabilities.liabilityList);
-		List<ClosingAdjustmentItemModel> closingAdjustmentItemModels = createClosingAdjustmentModels(closingInformation.closingAdjustmentItems.closingAdjustmentItemList);
-		List<ClosingCostFundModel> closingCostFundModels = createClosingCostFundModels(closingInformation.closingCostFunds.closingCostFundList);
-		
+/*
+    	List<ProrationModel> prorationsModels = createProrationsModels(deal);
+		List<LiabilityModel> liabilityModels = createLiabilityModels(deal);
+		List<ClosingAdjustmentItemModel> closingAdjustmentItemModels = createClosingAdjustmentModels(deal);*/
+		List<ClosingCostFundModel> closingCostFundModels = createClosingCostFundModels(deal);
+		/*
 		summariesofTransactions.setLiabilityList(liabilityModels);
 		summariesofTransactions.setProrationList(prorationsModels);
 		summariesofTransactions.setClosingAdjustmentItemList(closingAdjustmentItemModels);
-		summariesofTransactions.setClosingCostFundList(closingCostFundModels);
+		summariesofTransactions.setClosingCostFundList(closingCostFundModels);*/
 		
 		//Due From Borrower AtClosing
 		SummariesofTransactionsDetailsDueFromBorrowerAtClosing duefromBorroweratClosing = new SummariesofTransactionsDetailsDueFromBorrowerAtClosing();
@@ -1168,97 +1219,13 @@ public class ClosingDisclosureConverter {
 				else if("PaidAlreadyByOrOnBehalfOfBorrowerAtClosing".equalsIgnoreCase(integratedDisclosureSectionSummaryList.integratedDisclosureSectionSummaries[i].integratedDisclosureSectionSummaryDetail.integratedDisclosureSectionType))
 					paidByAlready.setPaidByAlreadyTotalAmount(toIntegratedDisclosureSectionSummaryModel(integratedDisclosureSectionSummaryList.integratedDisclosureSectionSummaries[i]));
 				
-				if("LenderCredits".equalsIgnoreCase(integratedDisclosureSectionSummaryList.integratedDisclosureSectionSummaries[i].integratedDisclosureSectionSummaryDetail.integratedDisclosureSectionType))
+			/*	if("LenderCredits".equalsIgnoreCase(integratedDisclosureSectionSummaryList.integratedDisclosureSectionSummaries[i].integratedDisclosureSectionSummaryDetail.integratedDisclosureSectionType))
 					duefromBorroweratClosing.setClosingCostsPaidAtClosing(toIntegratedDisclosureSectionSummaryModel(integratedDisclosureSectionSummaryList.integratedDisclosureSectionSummaries[i]));
 				else if("TotalClosingCosts".equalsIgnoreCase(integratedDisclosureSectionSummaryList.integratedDisclosureSectionSummaries[i].integratedDisclosureSectionSummaryDetail.integratedDisclosureSectionType) 
 								&& "ClosingCostsSubtotal".equalsIgnoreCase(integratedDisclosureSectionSummaryList.integratedDisclosureSectionSummaries[i].integratedDisclosureSectionSummaryDetail.integratedDisclosureSubsectionType))
 					duefromBorroweratClosing.setClosingCostsPaidAtClosing(toIntegratedDisclosureSectionSummaryModel(integratedDisclosureSectionSummaryList.integratedDisclosureSectionSummaries[i]));
-
+*/
 			}
-			if(!liabilityModels.isEmpty())	
-				liabilityModels.stream()
-					.filter(liability -> "DueFromBorrowerAtClosing".equalsIgnoreCase(liability.getIntegratedDisclosureSectionType()))
-						.forEach(liability -> duefromBorroweratClosingList.add(liability));
-			
-			if(!closingAdjustmentItemModels.isEmpty())
-				closingAdjustmentItemModels.stream()
-						.forEach(adjustmentItem ->{
-						if("DueFromBorrowerAtClosing".equalsIgnoreCase(adjustmentItem.getIntegratedDisclosureSectionType())
-								&& "Adjustments".equalsIgnoreCase(adjustmentItem.getIntegratedDisclosureSubsectionType())
-								&& adjustmentTypes.contains(adjustmentItem.getClosingAdjustmentItemType()))
-							duefromBorroweratClosingAdjustmentsList.add(adjustmentItem);
-						
-						if ("PaidAlreadyByOrOnBehalfOfBorrowerAtClosing".equalsIgnoreCase(adjustmentItem.getIntegratedDisclosureSectionType())
-								&& !"SellerCredit".equalsIgnoreCase(adjustmentItem.getClosingAdjustmentItemType())
-								&& !"OtherCredits".equalsIgnoreCase(adjustmentItem.getIntegratedDisclosureSubsectionType())
-								&& !"Adjustments".equalsIgnoreCase(adjustmentItem.getIntegratedDisclosureSubsectionType())) {
-									if (paidAlready.contains(adjustmentItem.getClosingAdjustmentItemType()) && paidAlready.contains(adjustmentItem.getClosingAdjustmentItemTypeOtherDescription()))
-										paidByAlready.setTotalSubordinateFinancingAmount(loanDetail.totalSubordinateFinancingAmount);
-									else
-										paidByAlready.setSubordinateLien(adjustmentItem);	
-								}
-						
-						if ("PaidAlreadyByOrOnBehalfOfBorrowerAtClosing".equalsIgnoreCase(adjustmentItem.getIntegratedDisclosureSectionType())
-								&& "SellerCredit".equalsIgnoreCase(adjustmentItem.getClosingAdjustmentItemType()))
-							paidByAlready.setSellerCredit(adjustmentItem);
-						
-						if ("OtherCredits".equalsIgnoreCase(adjustmentItem.getIntegratedDisclosureSubsectionType()))
-							paidByAlreadyOtherCredits.add(adjustmentItem);
-						
-						if (adjustmentItem.getIntegratedDisclosureSectionType().equals("PaidAlreadyByOrOnBehalfOfBorrowerAtClosing")
-								&& adjustmentItem.getIntegratedDisclosureSubsectionType().equals("Adjustments")
-								&& adjustmentTypes.contains(adjustmentItem.getClosingAdjustmentItemType()))
-							paidByAlreadyAdjustments.add(adjustmentItem);
-						
-						});
-			
-			if(!prorationsModels.isEmpty())
-				prorationsModels.forEach(prorationItemModel -> {
-					
-					if ("DueFromBorrowerAtClosing".equalsIgnoreCase(prorationItemModel.getIntegratedDisclosureSectionType())
-							&& "AdjustmentsForItemsPaidBySellerInAdvance".equalsIgnoreCase(prorationItemModel.getIntegratedDisclosureSubsectionType()))
-					{
-						if (cityTaxFees.contains(prorationItemModel.getProrationItemType()))
-						{
-							prorationItemModel.setDisplayLabel("City/Town Taxes");
-							paidBySellerInAdvance.add(prorationItemModel);
-						}
-						else if(countyTaxFees.contains(prorationItemModel.getProrationItemType()))
-						{
-							prorationItemModel.setDisplayLabel("County Taxes");
-							paidBySellerInAdvance.add(prorationItemModel);
-						}
-						else if(assesmentFees.contains(prorationItemModel.getProrationItemType()))
-						{
-							prorationItemModel.setDisplayLabel("Assessments");
-							paidBySellerInAdvance.add(prorationItemModel);
-						}
-						else
-							paidBySellerInAdvance.add(prorationItemModel);
-					}
-					else if ("PaidAlreadyByOrOnBehalfOfBorrowerAtClosing".equalsIgnoreCase(prorationItemModel.getIntegratedDisclosureSectionType())
-							&& "AdjustmentsForItemsUnpaidBySeller".equalsIgnoreCase(prorationItemModel.getIntegratedDisclosureSubsectionType()))
-					{
-						if (cityTaxFees.contains(prorationItemModel.getProrationItemType()))
-						{
-							prorationItemModel.setDisplayLabel("City/Town Taxes");
-							paidByAlreadyAdjustmentsUnpaidBySeller.add(prorationItemModel);
-						}
-						else if(countyTaxFees.contains(prorationItemModel.getProrationItemType()))
-						{
-							prorationItemModel.setDisplayLabel("County Taxes");
-							paidByAlreadyAdjustmentsUnpaidBySeller.add(prorationItemModel);
-						}
-						else if(assesmentFees.contains(prorationItemModel.getProrationItemType()))
-						{
-							prorationItemModel.setDisplayLabel("Assessments");
-							paidByAlreadyAdjustmentsUnpaidBySeller.add(prorationItemModel);
-						}
-						else if(Arrays.asList(adjustmentFees).contains(prorationItemModel.getProrationItemType()))
-							paidByAlreadyAdjustmentsUnpaidBySeller.add(prorationItemModel);
-					}
-					
-				});
 			
 		//PAID ALREADY BY
 			if(!closingCostFundModels.isEmpty())
@@ -1273,28 +1240,25 @@ public class ClosingDisclosureConverter {
 				else if("PaidAlreadyByOrOnBehalfOfBorrowerAtClosing".equalsIgnoreCase(integratedDisclosureSectionSummaryList.integratedDisclosureSectionSummaries[i].integratedDisclosureSectionSummaryDetail.integratedDisclosureSectionType))
 					borrowerTransaction.setPaidAlreadyByOrOnBehalfOfBorrowerAtClosing(toIntegratedDisclosureSectionSummaryModel(integratedDisclosureSectionSummaryList.integratedDisclosureSectionSummaries[i]));
 			
-			paidByAlready.setAdjustments(paidByAlreadyAdjustments);
-			paidByAlready.setAdjustmentsUnpaidBySeller(paidByAlreadyAdjustmentsUnpaidBySeller);
+			//paidByAlready.setAdjustments(paidByAlreadyAdjustments);
+			//paidByAlready.setAdjustmentsUnpaidBySeller(paidByAlreadyAdjustmentsUnpaidBySeller);
 			paidByAlready.setDisclosureDescription("todo");
-			paidByAlready.setExistingLoan(loanTerms.assumedLoanAmount);
-			paidByAlready.setLoanAmount(loanTerms.noteAmount);
+			paidByAlready.setExistingLoan("loanTerms.assumedLoanAmount");
 			paidByAlready.setOtherCredits(paidByAlreadyOtherCredits);
 			
 			
-			borrowerTransaction.setCashFromBorrowerAtClosingAmount(closingInformationDetail.cashFromBorrowerAtClosingAmount);
-			borrowerTransaction.setCashToBorrowerAtClosingAmount(closingInformationDetail.cashToBorrowerAtClosingAmount);
+			borrowerTransaction.setCashFromBorrowerAtClosingAmount("closingInformationDetail.cashFromBorrowerAtClosingAmount");
+			borrowerTransaction.setCashToBorrowerAtClosingAmount("closingInformationDetail.cashToBorrowerAtClosingAmount");
 			summariesofTransactions.setBorrowerTransaction(borrowerTransaction);
 			
-			duefromBorroweratClosing.setDueFromBorrowerAtClosing(duefromBorroweratClosingList);
-			duefromBorroweratClosing.setAdjustments(duefromBorroweratClosingAdjustmentsList);
-			duefromBorroweratClosing.setAdjustmentsPaidBySellerInAdvance(paidBySellerInAdvance);
-			duefromBorroweratClosing.setSalePriceOfPersonalProperty(salesContractDetail.personalPropertyAmount);
-			duefromBorroweratClosing.setSalePriceOfProperty(!"".equals(salesContractDetail.realPropertyAmount) ? salesContractDetail.realPropertyAmount : salesContractDetail.salesContractAmount);
+			//duefromBorroweratClosing.setDueFromBorrowerAtClosing(duefromBorroweratClosingList);
+			//duefromBorroweratClosing.setAdjustments(duefromBorroweratClosingAdjustmentsList);
+			////duefromBorroweratClosing.setAdjustmentsPaidBySellerInAdvance(paidBySellerInAdvance);
+			duefromBorroweratClosing.setSalePriceOfPersonalProperty("salesContractDetail.personalPropertyAmount");
+		//	duefromBorroweratClosing.setSalePriceOfProperty("!''.equals(salesContractDetail.realPropertyAmount) ? salesContractDetail.realPropertyAmount : salesContractDetail.salesContractAmount");
 		
 		}
 		
-		if(true)//!data.isBorrowerOnly() && !closingMap.getClosingMapValue("TERMS_OF_LOAN.LoanPurposeType").equalsIgnoreCase("Refinance")
-		{
 			//DueToSeller
 			SummariesofTransactionsDetailsDueToSellerAtClosing dueToSellerAtClosing = new SummariesofTransactionsDetailsDueToSellerAtClosing();
 			List<ClosingAdjustmentItemModel> dueToSellerAdjustments = new LinkedList<>();
@@ -1314,7 +1278,7 @@ public class ClosingDisclosureConverter {
 				 else if("DueFromSellerAtClosing".equalsIgnoreCase(integratedDisclosureSectionSummaryList.integratedDisclosureSectionSummaries[i].integratedDisclosureSectionSummaryDetail.integratedDisclosureSectionType))
 						dueFromSellerAtClosing.setDueFromSellerTotalAmount(toIntegratedDisclosureSectionSummaryModel(integratedDisclosureSectionSummaryList.integratedDisclosureSectionSummaries[i]));
 			//Closing Costs Paid at Closing 	
-				if(false)//seller only
+			/*	if(false)//seller only
 				{
 					if ("TotalClosingCostsSellerOnly".equalsIgnoreCase(integratedDisclosureSectionSummaryList.integratedDisclosureSectionSummaries[i].integratedDisclosureSectionSummaryDetail.integratedDisclosureSubsectionType))
 						dueToSellerAtClosing.setClosingCostsPaidAtClosing(toIntegratedDisclosureSectionSummaryModel(integratedDisclosureSectionSummaryList.integratedDisclosureSectionSummaries[i]));
@@ -1322,10 +1286,10 @@ public class ClosingDisclosureConverter {
 					if("TotalClosingCosts".equalsIgnoreCase(integratedDisclosureSectionSummaryList.integratedDisclosureSectionSummaries[i].integratedDisclosureSectionSummaryDetail.integratedDisclosureSectionType)
 						&& "ClosingCostsSubtotal".equalsIgnoreCase(integratedDisclosureSectionSummaryList.integratedDisclosureSectionSummaries[i].integratedDisclosureSectionSummaryDetail.integratedDisclosureSubsectionType))
 							dueToSellerAtClosing.setClosingCostsPaidAtClosing(toIntegratedDisclosureSectionSummaryModel(integratedDisclosureSectionSummaryList.integratedDisclosureSectionSummaries[i]));
-				}
+				}*/
 			}
-
-			if(!closingCostFundModels.isEmpty())
+	
+			/*if(!closingCostFundModels.isEmpty())
 				closingCostFundModels.stream()
 					.filter(costFund -> "DueFromSellerAtClosing".equalsIgnoreCase(costFund.getIntegratedDisclosureSectionType()) && "ExcessDeposit".equals(costFund.getFundsType()))
 					.forEach(costFund -> dueFromSellerAtClosing.setExcessDeposit(costFund));
@@ -1393,13 +1357,14 @@ public class ClosingDisclosureConverter {
 					else if("DueFromSellerAtClosing".equalsIgnoreCase(liabilityModel.getIntegratedDisclosureSectionType())
 							&& liabilityFromSeller.contains(liabilityModel.getLiabilityType()))
 						dueFromSellerLiabilities.add(liabilityModel);
-			});
+						
+			});*/
 			
-			dueToSellerAtClosing.setDueToSellerAdjustments(dueToSellerAdjustments);
-			dueToSellerAtClosing.setDueToSellerAdjustmentsPaidBySeller(dueToSellerAdjustmentsPaidBySeller);
-			dueToSellerAtClosing.setSalePriceOfPersonalProperty(salesContractDetail.personalPropertyAmount);
-			if(firstLien)
-				dueToSellerAtClosing.setSalePriceOfProperty(!"".equals(salesContractDetail.realPropertyAmount) ? salesContractDetail.realPropertyAmount : salesContractDetail.salesContractAmount);
+			//dueToSellerAtClosing.setDueToSellerAdjustments(dueToSellerAdjustments);
+			//dueToSellerAtClosing.setDueToSellerAdjustmentsPaidBySeller(dueToSellerAdjustmentsPaidBySeller);
+			//dueToSellerAtClosing.setSalePriceOfPersonalProperty("salesContractDetail.personalPropertyAmount");
+			//if(firstLien)
+			//dueToSellerAtClosing.setSalePriceOfProperty("if(firstlean) !''.equals(salesContractDetail.realPropertyAmount) ? salesContractDetail.realPropertyAmount : salesContractDetail.salesContractAmount");
 			
 			
 			for(int i=0;i<integratedDisclosureSectionSummaryList.integratedDisclosureSectionSummaries.length;i++)
@@ -1411,19 +1376,18 @@ public class ClosingDisclosureConverter {
 				
 			}
 			
-			dueFromSellerAtClosing.setDueFromSellerAdjustments(dueFromSellerAdjustments);
-			dueFromSellerAtClosing.setDueFromSellerAdjustmentsUnPaidBySeller(dueFromSellerAdjustmentsUnPaidBySeller);
-			dueFromSellerAtClosing.setExistingLoan(loanTerms.assumedLoanAmount);
-			dueFromSellerAtClosing.setDueFromSellerLiabilities(dueFromSellerLiabilities);
+			//dueFromSellerAtClosing.setDueFromSellerAdjustments(dueFromSellerAdjustments);
+			//dueFromSellerAtClosing.setDueFromSellerAdjustmentsUnPaidBySeller(dueFromSellerAdjustmentsUnPaidBySeller);
+			//dueFromSellerAtClosing.setExistingLoan("loanTerms.assumedLoanAmount");
+			//dueFromSellerAtClosing.setDueFromSellerLiabilities(dueFromSellerLiabilities);
 			
-			sellerTransaction.setCashFromSellerAtClosingAmount(closingInformationDetail.cashFromSellerAtClosingAmount);
-			sellerTransaction.setCashToSellerAtClosingAmount(closingInformationDetail.cashToSellerAtClosingAmount);
+			sellerTransaction.setCashFromSellerAtClosingAmount("closingInformationDetail.cashFromSellerAtClosingAmount");
+			sellerTransaction.setCashToSellerAtClosingAmount("closingInformationDetail.cashToSellerAtClosingAmount");
 			
 			summariesofTransactions.setDueToSeller(dueToSellerAtClosing);
 			summariesofTransactions.setDueFromSeller(dueFromSellerAtClosing);
 			summariesofTransactions.setSellerTransaction(sellerTransaction);
 		
-		}
 		
 		summariesofTransactions.setDueFromBorroweratClosing(duefromBorroweratClosing);
 		summariesofTransactions.setPaidByAlready(paidByAlready);
@@ -1440,24 +1404,24 @@ public class ClosingDisclosureConverter {
     {
     	PayoffsAndPayments payoffsAndPayments = new PayoffsAndPayments();
     	
-    	Liabilities liabilities = new Liabilities(null, (Element)deal.getElementAddNS("LIABILITIES/")); 
+    	/*Liabilities liabilities = new Liabilities(null, (Element)deal.getElementAddNS("LIABILITIES/")); 
     	ClosingInformation closingInformation =  new ClosingInformation(null, (Element)deal.getElementAddNS("LOANS/LOAN/CLOSING_INFORMATION"));
     	
 		List<LiabilityModel> liabilityModels = createLiabilityModels(liabilities.liabilityList);
 		List<ClosingAdjustmentItemModel> closingAdjustmentItemModels = createClosingAdjustmentModels(closingInformation.closingAdjustmentItems.closingAdjustmentItemList);
 		
 		payoffsAndPayments.setLiabilitiesList(liabilityModels);
-		payoffsAndPayments.setClosingAdjustmentItemList(closingAdjustmentItemModels);
+		payoffsAndPayments.setClosingAdjustmentItemList(closingAdjustmentItemModels);*/
 		
 		return payoffsAndPayments;
     }
     
     /**
-     * creates response for air table
+     * creates InterestRateAdjustmentModel from InterestRateAdjustment, response for air table
      * @param deal
      * @return InterestRateAdjustmentModel
      */
-    private InterestRateAdjustmentModel createAirTableResponse(Deal deal)
+    private InterestRateAdjustmentModel createInterestRateAdjustmentModel(Deal deal) //AIR Table Response
     {
     	InterestRateAdjustmentModel interestRateAdjustmentModel = new InterestRateAdjustmentModel();
 		
@@ -1491,17 +1455,125 @@ public class ClosingDisclosureConverter {
 		return interestRateAdjustmentModel;
     }
     
-    private PrincipalAndInterestPaymentAdjustmentModel createInterestRateAdjustment(Deal deal)
+    /**
+     * creates PrincipalAndInterestPaymentAdjustmentModel from principalAndInterestPaymentAdjustment, response for AP table
+     * @param deal
+     * @return PrincipalAndInterestPaymentAdjustmentModel
+     */
+    private PrincipalAndInterestPaymentAdjustmentModel createPrincipalAndInterestPaymentAdjustmentModel(Deal deal)
     {
-    	PrincipalAndInterestPaymentAdjustmentModel principalAndInterestPaymentAdjustment = new PrincipalAndInterestPaymentAdjustmentModel();
-    /*	principalAndInterestPaymentAdjustment.setFirstAdjustmentRuleType(firstAdjustmentRuleType);
-    	principalAndInterestPaymentAdjustment.setFirstPerChangeMaximumPrincipalAndInterestPaymentAmount(firstPerChangeMaximumPrincipalAndInterestPaymentAmount);
-    	principalAndInterestPaymentAdjustment.setFirstPerChangeMinimumPrincipalAndInterestPaymentAmount(firstPerChangeMinimumPrincipalAndInterestPaymentAmount);
-    	principalAndInterestPaymentAdjustment.setFirstPerChangePrincipalAndInterestPaymentAdjustmentFrequencyMonthsCount(firstPerChangePrincipalAndInterestPaymentAdjustmentFrequencyMonthsCount);
-    	*/
-    	return principalAndInterestPaymentAdjustment;
+    	PrincipalAndInterestPaymentAdjustmentModel principalAndInterestPaymentAdjustmentModel = new PrincipalAndInterestPaymentAdjustmentModel();
+    	PrincipalAndInterestPaymentAdjustment principalAndInterestPaymentAdjustment = new PrincipalAndInterestPaymentAdjustment((Element)deal.getElementAddNS("LOANS/LOAN/ADJUSTMENT/PRINCIPAL_AND_INTEREST_PAYMENT_ADJUSTMENT"));
+    	
+    	principalAndInterestPaymentAdjustmentModel.setFirstPrincipalAndInterestPaymentChangeMonthsCount(principalAndInterestPaymentAdjustment.principalAndInterestPaymentLifetimeAdjustmentRule.firstPrincipalAndInterestPaymentChangeMonthsCount);
+    	principalAndInterestPaymentAdjustmentModel.setPrincipalAndInterestPaymentMaximumAmount(principalAndInterestPaymentAdjustment.principalAndInterestPaymentLifetimeAdjustmentRule.principalAndInterestPaymentMaximumAmount);
+    	principalAndInterestPaymentAdjustmentModel.setPrincipalAndInterestPaymentMaximumAmountEarliestEffectiveMonthsCount(principalAndInterestPaymentAdjustment.principalAndInterestPaymentLifetimeAdjustmentRule.principalAndInterestPaymentMaximumAmountEarliestEffectiveMonthsCount);
+    	
+    	PrincipalAndInterestPaymentPerChangeAdjustmentRule[] principalAndInterestPaymentPerChangeAdjustmentRule = principalAndInterestPaymentAdjustment.principalAndInterestPaymentPerChangeAdjustmentRules.principalAndInterestPaymentPerChangeAdjustmentRules;
+    	
+    	for(int i=0; i<principalAndInterestPaymentPerChangeAdjustmentRule.length; i++)
+    	{
+    		if("First".equalsIgnoreCase(principalAndInterestPaymentPerChangeAdjustmentRule[i].adjustmentRuleType))
+    		{
+	    		principalAndInterestPaymentAdjustmentModel.setFirstAdjustmentRuleType(principalAndInterestPaymentPerChangeAdjustmentRule[i].adjustmentRuleType);
+	        	principalAndInterestPaymentAdjustmentModel.setFirstPerChangeMaximumPrincipalAndInterestPaymentAmount(principalAndInterestPaymentPerChangeAdjustmentRule[i].perChangeMaximumPrincipalAndInterestPaymentAmount);
+	        	principalAndInterestPaymentAdjustmentModel.setFirstPerChangeMinimumPrincipalAndInterestPaymentAmount(principalAndInterestPaymentPerChangeAdjustmentRule[i].perChangeMinimumPrincipalAndInterestPaymentAmount);
+	        	principalAndInterestPaymentAdjustmentModel.setFirstPerChangePrincipalAndInterestPaymentAdjustmentFrequencyMonthsCount(principalAndInterestPaymentPerChangeAdjustmentRule[i].perChangePrincipalAndInterestPaymentAdjustmentFrequencyMonthsCount);
+    		}
+    		else if("Subsequent".equalsIgnoreCase(principalAndInterestPaymentPerChangeAdjustmentRule[i].adjustmentRuleType))
+    		{
+	        	principalAndInterestPaymentAdjustmentModel.setSubsequentAdjustmentRuleType(principalAndInterestPaymentPerChangeAdjustmentRule[i].adjustmentRuleType);
+	        	principalAndInterestPaymentAdjustmentModel.setSubsequentPerChangeMaximumPrincipalAndInterestPaymentAmount(principalAndInterestPaymentPerChangeAdjustmentRule[i].perChangeMaximumPrincipalAndInterestPaymentAmount);
+	        	principalAndInterestPaymentAdjustmentModel.setSubsequentPerChangeMinimumPrincipalAndInterestPaymentAmount(principalAndInterestPaymentPerChangeAdjustmentRule[i].perChangeMinimumPrincipalAndInterestPaymentAmount);
+	        	principalAndInterestPaymentAdjustmentModel.setSubsequentPerChangePrincipalAndInterestPaymentAdjustmentFrequencyMonthsCount(principalAndInterestPaymentPerChangeAdjustmentRule[i].perChangePrincipalAndInterestPaymentAdjustmentFrequencyMonthsCount);
+    		}
+    	}
+    	
+    	return principalAndInterestPaymentAdjustmentModel;
     	
     }
+    /**
+     * create PaymentModel in JSON response
+     * @param deal
+     * @return PaymentModel
+     */
+    private PaymentModel createPaymentModel(Deal deal)
+    {
+    	PaymentModel paymentModel = new PaymentModel();
+    	PartialPaymentsModel partialPaymentsModel = new PartialPaymentsModel();
+    	PaymentRuleModel paymentRuleModel = new PaymentRuleModel();
+    	
+    	Payment payment = new Payment(null, (Element)deal.getElementAddNS("LOANS/LOAN/PAYMENT"));
+    	
+    	List<PartialPaymentModel> partialPaymentsModels = new LinkedList<>();
+    	
+    	PartialPayment[] partialPayments = payment.partialPayments.partialPayments;
+    	
+    	for(int i=0; i<partialPayments.length; i++)
+    	{
+    		PartialPaymentModel partialPayment = new PartialPaymentModel();
+    			partialPayment.setPartialPaymentApplicationMethodType(partialPayments[i].partialPaymentApplicationMethodType);
+    			partialPayment.setPartialPaymentApplicationMethodTypeOtherDescription(partialPayments[i].partialPaymentApplicationMethodTypeOtherDescription);
+    		 partialPaymentsModels.add(partialPayment);
+    	}
+    	
+	    	paymentRuleModel.setFullyIndexedInitialPrincipalAndInterestPaymentAmount(payment.paymentRule.fullyIndexedInitialPrincipalAndInterestPaymentAmount);
+	    	paymentRuleModel.setInitialPrincipalAndInterestPaymentAmount(payment.paymentRule.initialPrincipalAndInterestPaymentAmount);
+	    	paymentRuleModel.setPartialPaymentAllowedIndicator(Boolean.parseBoolean(payment.paymentRule.partialPaymentAllowedIndicator));
+	    	paymentRuleModel.setPaymentFrequencyType(payment.paymentRule.paymentFrequencyType);
+	    	paymentRuleModel.setPaymentOptionIndicator(Boolean.parseBoolean(payment.paymentRule.paymentOptionIndicator));
+	    	paymentRuleModel.setSeasonalPaymentPeriodEndMonth(payment.paymentRule.seasonalPaymentPeriodEndMonth);
+	    	paymentRuleModel.setSeasonalPaymentPeriodStartMonth(payment.paymentRule.seasonalPaymentPeriodStartMonth);
+	    	paymentRuleModel.setTotalOptionalPaymentCount(payment.paymentRule.other.totalOptionalPaymentCount);
+	    	paymentRuleModel.setTotalStepPaymentCount(payment.paymentRule.other.totalStepPaymentCount);
+    	
+    	partialPaymentsModel.setPartialPaymentModels(partialPaymentsModels);
+    	paymentModel.setPartialPayments(partialPaymentsModel);
+    	paymentModel.setPaymentRule(paymentRuleModel);
+		return paymentModel;
+    	
+    }
+    
+    /**
+     * converts LateChargeRule to LateChargeRuleModel
+     * @param deal
+     * @return LateChargeRuleModel
+     */
+    private LateChargeRuleModel createLateChargeRuleModel(Deal deal)
+    {
+    	LateChargeRuleModel lateChargeRuleModel = new LateChargeRuleModel();
+    	
+    	LateChargeRule lateChargeRule = new LateChargeRule((Element)deal.getElement("mismo:LOANS/mismo:LOAN/mismo:LATE_CHARGE/mismo:EXTENSION/mismo:OTHER/gse:LATE_CHARGE_RULES/mismo:LATE_CHARGE_RULE"));
+		
+    	lateChargeRuleModel.setLateChargeAmount(lateChargeRule.lateChargeAmount);
+    	lateChargeRuleModel.setLateChargeGracePeriodDaysCount(lateChargeRule.lateChargeGracePeriodDaysCount);
+    	lateChargeRuleModel.setLateChargeRatePercent(lateChargeRule.lateChargeRatePercent);
+    	lateChargeRuleModel.setLateChargeType(lateChargeRule.lateChargeType);
+    	
+    	return lateChargeRuleModel;
+    }
+    
+    /**
+     * converts IntegratedDisclosureDetail to IntegratedDisclosureDetailModel
+     * @param deal
+     * @return IntegratedDisclosureDetailModel
+     */
+    private IntegratedDisclosureDetailModel createIntegratedDisclosureDetail(Deal deal)
+    {
+    	IntegratedDisclosureDetailModel integratedDisclosureDetailModel = new IntegratedDisclosureDetailModel();
+    	
+    	IntegratedDisclosureDetail idDetail = new IntegratedDisclosureDetail((Element)deal.getElementAddNS("LOANS/LOAN/DOCUMENT_SPECIFIC_DATA_SETS/DOCUMENT_SPECIFIC_DATA_SET/INTEGRATED_DISCLOSURE/INTEGRATED_DISCLOSURE_DETAIL"));
+    	
+    	integratedDisclosureDetailModel.setFirstYearTotalEscrowPaymentAmount(idDetail.firstYearTotalEscrowPaymentAmount);
+    	integratedDisclosureDetailModel.setFirstYearTotalEscrowPaymentDescription(idDetail.firstYearTotalEscrowPaymentDescription);
+    	integratedDisclosureDetailModel.setFirstYearTotalNonEscrowPaymentAmount(idDetail.firstYearTotalNonEscrowPaymentAmount);
+    	integratedDisclosureDetailModel.setFirstYearTotalNonEscrowPaymentDescription(idDetail.firstYearTotalNonEscrowPaymentDescription);
+    	integratedDisclosureDetailModel.setIntegratedDisclosureHomeEquityLoanIndicator(Boolean.parseBoolean(idDetail.integratedDisclosureHomeEquityLoanIndicator));
+    	integratedDisclosureDetailModel.setIntegratedDisclosureIssuedDate(idDetail.integratedDisclosureIssuedDate);
+    	integratedDisclosureDetailModel.setIntegratedDisclosureLoanProductDescription(idDetail.integratedDisclosureLoanProductDescription);
+		return integratedDisclosureDetailModel;
+    }
+    
     /**
      * creates LoanCalculations QualifiedMortgage for JSON Response 
      * @param deal
@@ -1523,7 +1595,6 @@ public class ClosingDisclosureConverter {
     	loanCalculationModel.setFeeSummaryTotalAmountFinancedAmount(feeSummaryDetail.feeSummaryTotalAmountFinancedAmount);
     	loanCalculationModel.setFeeSummaryTotalInterestPercent(feeSummaryDetail.feeSummaryTotalInterestPercent);
     	loanCalculationModel.setFeeSummaryTotalOfAllPaymentsAmount(feeSummaryDetail.feeSummaryTotalOfAllPaymentsAmount);
-    	
     	loanCalculationModel.setDeficiencyRightsPreservedIndicator(Boolean.parseBoolean(foreclosures.deficiencyRightsPreservedIndicator));
     	
     	qualifiedMortgageModel.setAveragePrimeOfferRatePercent(highCostMortgages.averagePrimeOfferRatePercent);
@@ -1682,8 +1753,10 @@ public class ClosingDisclosureConverter {
      * @param loanDetail
      * @return LoanDetailModel
      */
-    private LoanDetailModel toLoanDetailModel(LoanDetail loanDetail)
+    private LoanDetailModel createLoanDetailModel(Deal deal)
     {
+    	LoanDetail loanDetail = new LoanDetail((Element)deal.getElementAddNS("LOANS/LOAN/LOAN_DETAIL"));	
+  	    
     	LoanDetailModel loanDetailModel = new LoanDetailModel();
 	    	loanDetailModel.setAssumabilityIndicator(Boolean.parseBoolean(loanDetail.assumabilityIndicator));
 	    	loanDetailModel.setBalloonIndicator(Boolean.parseBoolean(loanDetail.balloonIndicator));
@@ -1713,8 +1786,10 @@ public class ClosingDisclosureConverter {
      * @param loanTerms
      * @return TermsOfLoanModel
      */
-    private TermsOfLoanModel toTermsOfLoanModel(TermsOfLoan loanTerms)
+    private TermsOfLoanModel createTermsOfLoanModel(Deal deal)
     {
+    	TermsOfLoan loanTerms = new TermsOfLoan((Element)deal.getElementAddNS("LOANS/LOAN/TERMS_OF_LOAN"));
+ 	   
     	TermsOfLoanModel termsOfLoanModel = new TermsOfLoanModel();
 	    	termsOfLoanModel.setAssumedLoanAmount(loanTerms.assumedLoanAmount);
 	    	termsOfLoanModel.setDisclosedFullyIndexedRatePercent(loanTerms.disclosedFullyIndexedRatePercent);
@@ -1725,9 +1800,28 @@ public class ClosingDisclosureConverter {
 	    	termsOfLoanModel.setNoteAmount(loanTerms.noteAmount);
 	    	termsOfLoanModel.setNoteRatePercent(loanTerms.noteRatePercent);
 	    	termsOfLoanModel.setWeightedAverageInterestRatePercent(loanTerms.weightedAverageInterestRatePercent);
+	    	
 		return termsOfLoanModel;
     }
     
+    /**
+     * converts DocumentClassification to DocumentClassificationModel for JSON response
+     * @param document
+     * @return DocumentClassificationModel
+     */
+    private DocumentClassificationModel createDocumentClassificationModel(Document document)
+    {
+    	DocumentClassification docClassification = new DocumentClassification(Document.NS, (Element)document.getElementAddNS("DOCUMENT_CLASSIFICATION"));
+ 	    DocumentClassificationModel documentClassification = new DocumentClassificationModel();
+
+ 	    documentClassification.setDocumentFormIssuingEntityNameType(docClassification.documentClassificationDetail.documentFormIssuingEntityNameType);
+ 	    documentClassification.setDocumentFormIssuingEntityVersionIdentifier(docClassification.documentClassificationDetail.documentFormIssuingEntityVersionIdentifier);
+ 	    documentClassification.setDocumentSignatureRequiredIndicator(Boolean.parseBoolean(docClassification.documentClassificationDetail.other.documentSignatureRequiredIndicator));
+ 	    documentClassification.setDocumentType(docClassification.documentClasses.documentClass.documentType);
+ 	    documentClassification.setDocumentTypeOtherDescription(docClassification.documentClasses.documentClass.documentTypeOtherDescription);
+ 	    
+		return documentClassification;
+    }
     
    /**
     * converts integratedDisclosureSectionSummary to IntegratedDisclosureSectionSummaryModel
@@ -1768,7 +1862,11 @@ public class ClosingDisclosureConverter {
      * @param closingCostFundList
      * @return ClosingCostFundModel List
      */
-    private List<ClosingCostFundModel> createClosingCostFundModels(ClosingCostFund[] closingCostFundList) {
+    private List<ClosingCostFundModel> createClosingCostFundModels(Deal deal) {
+    	ClosingInformation closingInformation =  new ClosingInformation(null, (Element)deal.getElementAddNS("LOANS/LOAN/CLOSING_INFORMATION"));
+    	
+    	ClosingCostFund[] closingCostFundList = closingInformation.closingCostFunds.closingCostFundList;
+    	
     	List<ClosingCostFundModel> closingCostFundModels = new LinkedList<>();
     	for(int i=0; i<closingCostFundList.length;i++)
     	{
@@ -1786,10 +1884,14 @@ public class ClosingDisclosureConverter {
      * @param closingAdjustmentItemList
      * @return list of ClosingAdjustmentItemModel
      */
-	private List<ClosingAdjustmentItemModel> createClosingAdjustmentModels(
-			ClosingAdjustmentItem[] closingAdjustmentItemList) {
-    	List<ClosingAdjustmentItemModel> closingAdjustmentItemModels = new LinkedList<>();
-    	for(int i=0;i<closingAdjustmentItemList.length;i++)
+	private List<ClosingAdjustmentItemModel> createClosingAdjustmentModels(Deal deal) {
+		ClosingInformation closingInformation =  new ClosingInformation(null, (Element)deal.getElementAddNS("LOANS/LOAN/CLOSING_INFORMATION"));
+		
+		ClosingAdjustmentItem[] closingAdjustmentItemList = closingInformation.closingAdjustmentItems.closingAdjustmentItemList;
+    	
+		List<ClosingAdjustmentItemModel> closingAdjustmentItemModels = new LinkedList<>();
+    	
+		for(int i=0;i<closingAdjustmentItemList.length;i++)
     	{
     		ClosingAdjustmentItemModel closingAdjustmentItemModel = new ClosingAdjustmentItemModel();
     			closingAdjustmentItemModel.setDisplayLabel(closingAdjustmentItemList[i].closingAdjustmentItemDetail.displayLabelText);
@@ -1814,7 +1916,9 @@ public class ClosingDisclosureConverter {
 	 * @param liability
 	 * @return list of liability Model
 	 */
-	private List<LiabilityModel> createLiabilityModels(Liability[] liability) {
+	private List<LiabilityModel> createLiabilityModels(Deal deal) {
+		Liabilities liabilities = new Liabilities(null, (Element)deal.getElementAddNS("LIABILITIES/")); 
+		Liability[] liability = liabilities.liabilityList;
     	List<LiabilityModel> liabilityModels = new LinkedList<>();
     	
     	for(int i=0; i<liability.length; i++)
@@ -1839,9 +1943,13 @@ public class ClosingDisclosureConverter {
 	 * @param prorationItemList
 	 * @return List of ProrationModel
 	 */
-	private List<ProrationModel> createProrationsModels(ProrationItem[] prorationItemList) {
-    	
-    	List<ProrationModel> prorationsModels = new LinkedList<>();
+	private List<ProrationModel> createProrationsModels(Deal deal) {
+		
+		ClosingInformation closingInformation =  new ClosingInformation(null, (Element)deal.getElementAddNS("LOANS/LOAN/CLOSING_INFORMATION"));
+		
+		ProrationItem[] prorationItemList = closingInformation.prorationItems.prorationItemList;
+		
+		List<ProrationModel> prorationsModels = new LinkedList<>();
     	
     	for(int i=0; i<prorationItemList.length;i++)
     	{

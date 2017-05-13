@@ -37,6 +37,5 @@ public class Other extends MISMODataAccessObject {
 		totalStepCount = getValue("gse:TotalStepCount");
 		totalStepPaymentCount = getValue("gse:TotalStepPaymentCount");
 		subordinateFinancingIsNewIndicator = getValue("gse:SubordinateFinancingIsNewIndicator");
-	
 	}
 }

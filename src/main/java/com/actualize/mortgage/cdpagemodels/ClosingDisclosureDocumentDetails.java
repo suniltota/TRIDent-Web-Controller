@@ -5,10 +5,6 @@ package com.actualize.mortgage.cdpagemodels;
 
 import java.io.Serializable;
 
-import com.actualize.mortgage.domainmodels.DocumentClassificationModel;
-import com.actualize.mortgage.domainmodels.LoanDetailModel;
-import com.actualize.mortgage.domainmodels.TermsOfLoanModel;
-
 /**
  * This class is used to represent document level variables to quickly verify across all the pages.
  * @author rsudula
@@ -27,9 +23,7 @@ public class ClosingDisclosureDocumentDetails implements Serializable {
     private boolean isStandardView;
     private boolean isRefinanceTypeLoan;
     private boolean isHomeEquityLoanIndicator;
-    private LoanDetailModel loanDetailModel;
-    private TermsOfLoanModel termsOfLoanModel;
-    private DocumentClassificationModel documentClassification;
+    
     
 	/**
 	 * @return the loanId
@@ -127,42 +121,5 @@ public class ClosingDisclosureDocumentDetails implements Serializable {
 	public void setHomeEquityLoanIndicator(boolean isHomeEquityLoanIndicator) {
 		this.isHomeEquityLoanIndicator = isHomeEquityLoanIndicator;
 	}
-	/**
-	 * @return the loanDetailModel
-	 */
-	public LoanDetailModel getLoanDetailModel() {
-		return loanDetailModel;
-	}
-	/**
-	 * @param loanDetailModel the loanDetailModel to set
-	 */
-	public void setLoanDetailModel(LoanDetailModel loanDetailModel) {
-		this.loanDetailModel = loanDetailModel;
-	}
-	/**
-	 * @return the termsOfLoanModel
-	 */
-	public TermsOfLoanModel getTermsOfLoanModel() {
-		return termsOfLoanModel;
-	}
-	/**
-	 * @param termsOfLoanModel the termsOfLoanModel to set
-	 */
-	public void setTermsOfLoanModel(TermsOfLoanModel termsOfLoanModel) {
-		this.termsOfLoanModel = termsOfLoanModel;
-	}
-	/**
-	 * @return the documentClassification
-	 */
-	public DocumentClassificationModel getDocumentClassification() {
-		return documentClassification;
-	}
-	/**
-	 * @param documentClassification the documentClassification to set
-	 */
-	public void setDocumentClassification(DocumentClassificationModel documentClassification) {
-		this.documentClassification = documentClassification;
-	}
-
     
 }
