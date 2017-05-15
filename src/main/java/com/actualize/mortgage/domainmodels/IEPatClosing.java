@@ -12,7 +12,6 @@ public class IEPatClosing implements Serializable{
 	private static final long serialVersionUID = -5396028708375185601L;
 	
 	private String displayLabel;
-	private String gseDisplayLabel;
 	private String escrowCollectedNumberOfMonthsCount;
 	private String escrowItemType;
 	private String escrowItemTypeOtherDescription;
@@ -40,18 +39,6 @@ public class IEPatClosing implements Serializable{
 	 */
 	public void setDisplayLabel(String displayLabel) {
 		this.displayLabel = displayLabel;
-	}
-	/**
-	 * @return the gseDisplayLabel
-	 */
-	public String getGseDisplayLabel() {
-		return gseDisplayLabel;
-	}
-	/**
-	 * @param gseDisplayLabel the gseDisplayLabel to set
-	 */
-	public void setGseDisplayLabel(String gseDisplayLabel) {
-		this.gseDisplayLabel = gseDisplayLabel;
 	}
 	/**
 	 * @return the escrowCollectedNumberOfMonthsCount

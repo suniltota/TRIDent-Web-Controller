@@ -15,7 +15,7 @@ public class IntegratedDisclosureSectionSummaryModel implements Serializable {
 
 	private static final long serialVersionUID = -7346220652759727534L;
 	
-	private IntegratedDisclosureSectionSummaryDetailModel integratedDisclosureSectionSummaryDetailModel;
+	private IntegratedDisclosureSectionSummaryDetailModel integratedDisclosureSectionSummaryDetailModel = new IntegratedDisclosureSectionSummaryDetailModel();
 	private List<IntegratedDisclosureSubsectionPaymentModel> integratedDisclosureSubsectionPaymentModels = new LinkedList<>();
 	
 	/**

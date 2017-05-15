@@ -3,16 +3,21 @@ package com.actualize.mortgage.ledatamodels;
 import org.w3c.dom.Element;
 
 import com.actualize.mortgage.domainmodels.MISMODataAccessObject;
-
+/**
+ * this class defines MaturityRule in MISMO XML
+ * @author sboragala
+ *
+ */
 public class MaturityRule extends MISMODataAccessObject {
-	public final String LoanMaturityPeriodCount;
-	public final String LoanMaturityPeriodType;
-	public final String LoanTermMaximumMonthsCount;
+	private static final long serialVersionUID = 1L;
+	public final String loanMaturityPeriodCount;
+	public final String loanMaturityPeriodType;
+	public final String loanTermMaximumMonthsCount;
 
 	public MaturityRule(Element element) {
 		super(element);
-		LoanMaturityPeriodCount = getValueAddNS("LoanMaturityPeriodCount");
-		LoanMaturityPeriodType = getValueAddNS("LoanMaturityPeriodType");
-		LoanTermMaximumMonthsCount = getValueAddNS("LoanTermMaximumMonthsCount");
+		loanMaturityPeriodCount = getValueAddNS("LoanMaturityPeriodCount");
+		loanMaturityPeriodType = getValueAddNS("LoanMaturityPeriodType");
+		loanTermMaximumMonthsCount = getValueAddNS("LoanTermMaximumMonthsCount");
 	}
 }

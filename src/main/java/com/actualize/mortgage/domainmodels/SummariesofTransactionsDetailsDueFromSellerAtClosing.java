@@ -15,10 +15,9 @@ public class SummariesofTransactionsDetailsDueFromSellerAtClosing implements Ser
 
 	private static final long serialVersionUID = -3735613389375681749L;
 	
-	private ClosingCostFundModel excessDeposit;
-	private LiabilityModel payoffFirstMortgage;
-	private LiabilityModel payOffSecondMortgage;
-	private IntegratedDisclosureSectionSummaryModel dueFromSellerTotalAmount;
+	private ClosingCostFundModel excessDeposit = new ClosingCostFundModel();
+	private LiabilityModel payoffFirstMortgage = new LiabilityModel();
+	private LiabilityModel payOffSecondMortgage = new LiabilityModel();
 	
 	/**
 	 * @return the excessDeposit
@@ -56,17 +55,5 @@ public class SummariesofTransactionsDetailsDueFromSellerAtClosing implements Ser
 	public void setPayOffSecondMortgage(LiabilityModel payOffSecondMortgage) {
 		this.payOffSecondMortgage = payOffSecondMortgage;
 	}
-	/**
-	 * @return the dueFromSellerTotalAmount
-	 */
-	public IntegratedDisclosureSectionSummaryModel getDueFromSellerTotalAmount() {
-		return dueFromSellerTotalAmount;
-	}
-	/**
-	 * @param dueFromSellerTotalAmount the dueFromSellerTotalAmount to set
-	 */
-	public void setDueFromSellerTotalAmount(IntegratedDisclosureSectionSummaryModel dueFromSellerTotalAmount) {
-		this.dueFromSellerTotalAmount = dueFromSellerTotalAmount;
-	}
-	
+
 }

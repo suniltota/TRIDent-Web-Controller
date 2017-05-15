@@ -16,6 +16,7 @@ import com.actualize.mortgage.domainmodels.ClosingCostFundModel;
 import com.actualize.mortgage.domainmodels.ClosingCostsTotal;
 import com.actualize.mortgage.domainmodels.ClosingInformationDetailModel;
 import com.actualize.mortgage.domainmodels.ClosingInformationModel;
+import com.actualize.mortgage.domainmodels.ConstructionModel;
 import com.actualize.mortgage.domainmodels.ContactInformationModel;
 import com.actualize.mortgage.domainmodels.DocumentClassificationModel;
 import com.actualize.mortgage.domainmodels.ETIASection;
@@ -27,6 +28,7 @@ import com.actualize.mortgage.domainmodels.LoanCalculationsQualifiedMortgage;
 import com.actualize.mortgage.domainmodels.LoanDetailModel;
 import com.actualize.mortgage.domainmodels.LoanInformation;
 import com.actualize.mortgage.domainmodels.LoanTerms;
+import com.actualize.mortgage.domainmodels.MIDataDetailModel;
 import com.actualize.mortgage.domainmodels.PaymentModel;
 import com.actualize.mortgage.domainmodels.PrincipalAndInterestPaymentAdjustmentModel;
 import com.actualize.mortgage.domainmodels.ProjectedPaymentsDetails;
@@ -53,6 +55,8 @@ public class ClosingDisclosure implements Serializable {
     private DocumentClassificationModel documentClassification;
     private ClosingInformationModel closingInformation;
     private ClosingInformationDetailModel closingInformationDetail;
+    private ConstructionModel construction;
+    private MIDataDetailModel miDataDetail;
     private TransactionInformation transactionInformation;
     private LoanInformation loanInformation;
     private SalesContractDetailModel salesContractDetail;
@@ -425,6 +429,30 @@ public class ClosingDisclosure implements Serializable {
 	 */
 	public void setClosingInformationDetail(ClosingInformationDetailModel closingInformationDetail) {
 		this.closingInformationDetail = closingInformationDetail;
+	}
+	/**
+	 * @return the construction
+	 */
+	public ConstructionModel getConstruction() {
+		return construction;
+	}
+	/**
+	 * @param construction the construction to set
+	 */
+	public void setConstruction(ConstructionModel construction) {
+		this.construction = construction;
+	}
+	/**
+	 * @return the miDataDetail
+	 */
+	public MIDataDetailModel getMiDataDetail() {
+		return miDataDetail;
+	}
+	/**
+	 * @param miDataDetail the miDataDetail to set
+	 */
+	public void setMiDataDetail(MIDataDetailModel miDataDetail) {
+		this.miDataDetail = miDataDetail;
 	}
 	
 	

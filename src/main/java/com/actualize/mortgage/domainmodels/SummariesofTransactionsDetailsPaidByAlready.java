@@ -1,23 +1,19 @@
 package com.actualize.mortgage.domainmodels;
 
 import java.io.Serializable;
-import java.util.List;
 
 public class SummariesofTransactionsDetailsPaidByAlready implements Serializable{
 	
 	
 	private static final long serialVersionUID = -5690104701135903828L;
 	
-	private ClosingCostFundModel deposit;
-	private String existingLoan;
-	private ClosingAdjustmentItemModel sellerCredit;
+	//initializing objects to send empty objects if no values found
+	
+	private ClosingCostFundModel deposit =  new ClosingCostFundModel();
+	private ClosingAdjustmentItemModel sellerCredit = new ClosingAdjustmentItemModel();
 	private String disclosureDescription;
-	private ClosingAdjustmentItemModel subordinateLien; 
+	private ClosingAdjustmentItemModel subordinateLien = new ClosingAdjustmentItemModel() ; 
 	private String totalSubordinateFinancingAmount;
-	private List<ClosingAdjustmentItemModel> otherCredits;
-	//private List<ClosingAdjustmentItemModel> adjustments;
-	//private List<ProrationModel> adjustmentsUnpaidBySeller;
-	private IntegratedDisclosureSectionSummaryModel paidByAlreadyTotalAmount;
 	
 	/**
 	 * @return the deposit
@@ -30,18 +26,6 @@ public class SummariesofTransactionsDetailsPaidByAlready implements Serializable
 	 */
 	public void setDeposit(ClosingCostFundModel deposit) {
 		this.deposit = deposit;
-	}
-	/**
-	 * @return the existingLoan
-	 */
-	public String getExistingLoan() {
-		return existingLoan;
-	}
-	/**
-	 * @param existingLoan the existingLoan to set
-	 */
-	public void setExistingLoan(String existingLoan) {
-		this.existingLoan = existingLoan;
 	}
 	/**
 	 * @return the sellerCredit
@@ -91,30 +75,5 @@ public class SummariesofTransactionsDetailsPaidByAlready implements Serializable
 	public void setTotalSubordinateFinancingAmount(String totalSubordinateFinancingAmount) {
 		this.totalSubordinateFinancingAmount = totalSubordinateFinancingAmount;
 	}
-	/**
-	 * @return the otherCredits
-	 */
-	public List<ClosingAdjustmentItemModel> getOtherCredits() {
-		return otherCredits;
-	}
-	/**
-	 * @param otherCredits the otherCredits to set
-	 */
-	public void setOtherCredits(List<ClosingAdjustmentItemModel> otherCredits) {
-		this.otherCredits = otherCredits;
-	}
-	/**
-	 * @return the paidByAlreadyTotalAmount
-	 */
-	public IntegratedDisclosureSectionSummaryModel getPaidByAlreadyTotalAmount() {
-		return paidByAlreadyTotalAmount;
-	}
-	/**
-	 * @param paidByAlreadyTotalAmount the paidByAlreadyTotalAmount to set
-	 */
-	public void setPaidByAlreadyTotalAmount(IntegratedDisclosureSectionSummaryModel paidByAlreadyTotalAmount) {
-		this.paidByAlreadyTotalAmount = paidByAlreadyTotalAmount;
-	}
-	
 	
 }

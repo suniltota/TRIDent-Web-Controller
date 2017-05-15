@@ -179,7 +179,7 @@ public class LoanEstimateConvertor {
 				return construction.constructionPeriodNumberOfMonthsCount;
 			return construction.constructionLoanTotalTermMonthsCount;
 		}
-		return maturityRule.LoanMaturityPeriodCount;
+		return maturityRule.loanMaturityPeriodCount;
 	}
 	
 	/**

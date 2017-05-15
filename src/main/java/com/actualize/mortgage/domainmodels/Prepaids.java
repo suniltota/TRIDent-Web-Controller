@@ -11,8 +11,7 @@ public class Prepaids extends PaymentsModel implements Serializable{
 
 	private static final long serialVersionUID = -3311207376960972497L;
 	
-	private String gseDisplayLabelText;
-	private String displayLabelText;
+	private String displayLabel;
 	private String feePaidToType;
 	private String feePaidToTypeOtherDescription;
 	private String integratedDisclosureSectionType;
@@ -27,30 +26,17 @@ public class Prepaids extends PaymentsModel implements Serializable{
 	private boolean paymentIncludedInAPRIndicator;
 	private String prepaidPaidToFullName;
 	
-	
 	/**
-	 * @return the gseDisplayLabelText
+	 * @return the displayLabel
 	 */
-	public String getGseDisplayLabelText() {
-		return gseDisplayLabelText;
+	public String getDisplayLabel() {
+		return displayLabel;
 	}
 	/**
-	 * @param gseDisplayLabelText the gseDisplayLabelText to set
+	 * @param displayLabel the displayLabel to set
 	 */
-	public void setGseDisplayLabelText(String gseDisplayLabelText) {
-		this.gseDisplayLabelText = gseDisplayLabelText;
-	}
-	/**
-	 * @return the displayLabelText
-	 */
-	public String getDisplayLabelText() {
-		return displayLabelText;
-	}
-	/**
-	 * @param displayLabelText the displayLabelText to set
-	 */
-	public void setDisplayLabelText(String displayLabelText) {
-		this.displayLabelText = displayLabelText;
+	public void setDisplayLabel(String displayLabel) {
+		this.displayLabel = displayLabel;
 	}
 	/**
 	 * @return the feePaidToType

@@ -14,7 +14,9 @@ import com.actualize.mortgage.domainmodels.MISMODataAccessObject;
  *
  */
 public class LiabilityDetail extends MISMODataAccessObject {
-	public String displayLabelText;
+
+	private static final long serialVersionUID = -3136605525922314698L;
+	public String displayLabelText = "";
 	public final String liabilityDescription;
 	public final String liabilityType;
 	public final String liabilityTypeOtherDescription;

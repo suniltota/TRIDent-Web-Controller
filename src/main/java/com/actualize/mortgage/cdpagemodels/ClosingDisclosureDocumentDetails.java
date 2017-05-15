@@ -15,39 +15,34 @@ public class ClosingDisclosureDocumentDetails implements Serializable {
 
     private static final long serialVersionUID = 1957140105029843535L;
 
-    private String loanId;
-    private boolean payoffsAndPayments;
+    private String transactionType;
+    private String documentType;
     private boolean isSellerOnly;
-    private boolean isBorrowerOnly;
+    private boolean isStandard;
     private boolean isAlternativeView;
-    private boolean isStandardView;
-    private boolean isRefinanceTypeLoan;
-    private boolean isHomeEquityLoanIndicator;
-    
-    
 	/**
-	 * @return the loanId
+	 * @return the transactionType
 	 */
-	public String getLoanId() {
-		return loanId;
+	public String getTransactionType() {
+		return transactionType;
 	}
 	/**
-	 * @param loanId the loanId to set
+	 * @param transactionType the transactionType to set
 	 */
-	public void setLoanId(String loanId) {
-		this.loanId = loanId;
+	public void setTransactionType(String transactionType) {
+		this.transactionType = transactionType;
 	}
 	/**
-	 * @return the payoffsAndPayments
+	 * @return the documentType
 	 */
-	public boolean isPayoffsAndPayments() {
-		return payoffsAndPayments;
+	public String getDocumentType() {
+		return documentType;
 	}
 	/**
-	 * @param payoffsAndPayments the payoffsAndPayments to set
+	 * @param documentType the documentType to set
 	 */
-	public void setPayoffsAndPayments(boolean payoffsAndPayments) {
-		this.payoffsAndPayments = payoffsAndPayments;
+	public void setDocumentType(String documentType) {
+		this.documentType = documentType;
 	}
 	/**
 	 * @return the isSellerOnly
@@ -62,16 +57,16 @@ public class ClosingDisclosureDocumentDetails implements Serializable {
 		this.isSellerOnly = isSellerOnly;
 	}
 	/**
-	 * @return the isBorrowerOnly
+	 * @return the isStandard
 	 */
-	public boolean isBorrowerOnly() {
-		return isBorrowerOnly;
+	public boolean isStandard() {
+		return isStandard;
 	}
 	/**
-	 * @param isBorrowerOnly the isBorrowerOnly to set
+	 * @param isStandard the isStandard to set
 	 */
-	public void setBorrowerOnly(boolean isBorrowerOnly) {
-		this.isBorrowerOnly = isBorrowerOnly;
+	public void setStandard(boolean isStandard) {
+		this.isStandard = isStandard;
 	}
 	/**
 	 * @return the isAlternativeView
@@ -85,41 +80,7 @@ public class ClosingDisclosureDocumentDetails implements Serializable {
 	public void setAlternativeView(boolean isAlternativeView) {
 		this.isAlternativeView = isAlternativeView;
 	}
-	/**
-	 * @return the isStandardView
-	 */
-	public boolean isStandardView() {
-		return isStandardView;
-	}
-	/**
-	 * @param isStandardView the isStandardView to set
-	 */
-	public void setStandardView(boolean isStandardView) {
-		this.isStandardView = isStandardView;
-	}
-	/**
-	 * @return the isRefinanceTypeLoan
-	 */
-	public boolean isRefinanceTypeLoan() {
-		return isRefinanceTypeLoan;
-	}
-	/**
-	 * @param isRefinanceTypeLoan the isRefinanceTypeLoan to set
-	 */
-	public void setRefinanceTypeLoan(boolean isRefinanceTypeLoan) {
-		this.isRefinanceTypeLoan = isRefinanceTypeLoan;
-	}
-	/**
-	 * @return the isHomeEquityLoanIndicator
-	 */
-	public boolean isHomeEquityLoanIndicator() {
-		return isHomeEquityLoanIndicator;
-	}
-	/**
-	 * @param isHomeEquityLoanIndicator the isHomeEquityLoanIndicator to set
-	 */
-	public void setHomeEquityLoanIndicator(boolean isHomeEquityLoanIndicator) {
-		this.isHomeEquityLoanIndicator = isHomeEquityLoanIndicator;
-	}
     
+    
+	
 }

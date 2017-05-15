@@ -9,6 +9,8 @@ import com.actualize.mortgage.domainmodels.MISMODataAccessObject;
  *
  */
 public class LoanDetail extends MISMODataAccessObject {
+	private static final long serialVersionUID = -335260455426246023L;
+	
 	public final String assumabilityIndicator;
 	public final String balloonIndicator;
 	public final String balloonPaymentAmount;

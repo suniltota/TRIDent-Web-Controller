@@ -16,8 +16,6 @@ public class SummariesofTransactionsDetailsSellerTransaction implements Serializ
 	
 	private IntegratedDisclosureSectionSummaryModel toSellerAtClosing;
 	private IntegratedDisclosureSectionSummaryModel fromSellerAtClosing;
-	private String cashFromSellerAtClosingAmount;
-	private String cashToSellerAtClosingAmount;
 	/**
 	 * @return the toSellerAtClosing
 	 */
@@ -42,31 +40,5 @@ public class SummariesofTransactionsDetailsSellerTransaction implements Serializ
 	public void setFromSellerAtClosing(IntegratedDisclosureSectionSummaryModel fromSellerAtClosing) {
 		this.fromSellerAtClosing = fromSellerAtClosing;
 	}
-	/**
-	 * @return the cashFromSellerAtClosingAmount
-	 */
-	public String getCashFromSellerAtClosingAmount() {
-		return cashFromSellerAtClosingAmount;
-	}
-	/**
-	 * @param cashFromSellerAtClosingAmount the cashFromSellerAtClosingAmount to set
-	 */
-	public void setCashFromSellerAtClosingAmount(String cashFromSellerAtClosingAmount) {
-		this.cashFromSellerAtClosingAmount = cashFromSellerAtClosingAmount;
-	}
-	/**
-	 * @return the cashToSellerAtClosingAmount
-	 */
-	public String getCashToSellerAtClosingAmount() {
-		return cashToSellerAtClosingAmount;
-	}
-	/**
-	 * @param cashToSellerAtClosingAmount the cashToSellerAtClosingAmount to set
-	 */
-	public void setCashToSellerAtClosingAmount(String cashToSellerAtClosingAmount) {
-		this.cashToSellerAtClosingAmount = cashToSellerAtClosingAmount;
-	}
-	
-	
 	
 }

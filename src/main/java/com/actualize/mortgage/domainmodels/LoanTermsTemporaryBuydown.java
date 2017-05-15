@@ -13,7 +13,7 @@ public class LoanTermsTemporaryBuydown implements Serializable {
 	 */
 	private static final long serialVersionUID = 6107484815432690161L;
 	
-	private boolean buydownTemporarySubsidyFundingIndicator; 
+	private String buydownTemporarySubsidyFundingIndicator; 
 	private String buydownInitialEffectiveInterestRatePercent;
 	private boolean gseBuydownReflectedInNoteIndicator;
 	private String rateAfterBuydownApplied;//TBD
@@ -21,16 +21,17 @@ public class LoanTermsTemporaryBuydown implements Serializable {
 	private String totalNumberOfMonths; //TBD
 	private String buydownIncreaseRatePercent;
 	
+	
 	/**
 	 * @return the buydownTemporarySubsidyFundingIndicator
 	 */
-	public boolean isBuydownTemporarySubsidyFundingIndicator() {
+	public String getBuydownTemporarySubsidyFundingIndicator() {
 		return buydownTemporarySubsidyFundingIndicator;
 	}
 	/**
 	 * @param buydownTemporarySubsidyFundingIndicator the buydownTemporarySubsidyFundingIndicator to set
 	 */
-	public void setBuydownTemporarySubsidyFundingIndicator(boolean buydownTemporarySubsidyFundingIndicator) {
+	public void setBuydownTemporarySubsidyFundingIndicator(String buydownTemporarySubsidyFundingIndicator) {
 		this.buydownTemporarySubsidyFundingIndicator = buydownTemporarySubsidyFundingIndicator;
 	}
 	/**

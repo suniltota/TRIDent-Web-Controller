@@ -18,8 +18,7 @@ public class SummariesofTransactionsDetailsBorrowerTransaction implements Serial
 	
 	private IntegratedDisclosureSectionSummaryModel dueFromBorrowerAtClosing;
 	private IntegratedDisclosureSectionSummaryModel paidAlreadyByOrOnBehalfOfBorrowerAtClosing;
-	private String cashFromBorrowerAtClosingAmount;
-	private String cashToBorrowerAtClosingAmount;
+	
 	
 	/**
 	 * @return the dueFromBorrowerAtClosing
@@ -46,31 +45,5 @@ public class SummariesofTransactionsDetailsBorrowerTransaction implements Serial
 			IntegratedDisclosureSectionSummaryModel paidAlreadyByOrOnBehalfOfBorrowerAtClosing) {
 		this.paidAlreadyByOrOnBehalfOfBorrowerAtClosing = paidAlreadyByOrOnBehalfOfBorrowerAtClosing;
 	}
-	/**
-	 * @return the cashFromBorrowerAtClosingAmount
-	 */
-	public String getCashFromBorrowerAtClosingAmount() {
-		return cashFromBorrowerAtClosingAmount;
-	}
-	/**
-	 * @param cashFromBorrowerAtClosingAmount the cashFromBorrowerAtClosingAmount to set
-	 */
-	public void setCashFromBorrowerAtClosingAmount(String cashFromBorrowerAtClosingAmount) {
-		this.cashFromBorrowerAtClosingAmount = cashFromBorrowerAtClosingAmount;
-	}
-	/**
-	 * @return the cashToBorrowerAtClosingAmount
-	 */
-	public String getCashToBorrowerAtClosingAmount() {
-		return cashToBorrowerAtClosingAmount;
-	}
-	/**
-	 * @param cashToBorrowerAtClosingAmount the cashToBorrowerAtClosingAmount to set
-	 */
-	public void setCashToBorrowerAtClosingAmount(String cashToBorrowerAtClosingAmount) {
-		this.cashToBorrowerAtClosingAmount = cashToBorrowerAtClosingAmount;
-	}
-	
-	
 
 }

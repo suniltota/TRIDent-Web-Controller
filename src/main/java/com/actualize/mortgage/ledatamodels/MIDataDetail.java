@@ -9,6 +9,7 @@ import com.actualize.mortgage.domainmodels.MISMODataAccessObject;
  *
  */
 public class MIDataDetail extends MISMODataAccessObject {
+	private static final long serialVersionUID = 1306425929192950469L;
 	public final String miCertificateIdentifier;
 	public final String miCompanyNameType;
 	public final String miCompanyNameTypeOtherDescription;
@@ -17,7 +18,6 @@ public class MIDataDetail extends MISMODataAccessObject {
 	
 	public MIDataDetail(Element element) {
 		super(element);
-		// TODO
 		miCertificateIdentifier = getValueAddNS("MICertificateIdentifier");
 		miCompanyNameType = getValueAddNS("MICompanyNameType");
 		miCompanyNameTypeOtherDescription = getValueAddNS("MICompanyNameTypeOtherDescription");
