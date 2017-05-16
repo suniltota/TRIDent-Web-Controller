@@ -28,6 +28,7 @@ import com.actualize.mortgage.domainmodels.LiabilityModel;
 import com.actualize.mortgage.domainmodels.LoanCalculationsQualifiedMortgage;
 import com.actualize.mortgage.domainmodels.LoanDetailModel;
 import com.actualize.mortgage.domainmodels.LoanInformation;
+import com.actualize.mortgage.domainmodels.LoanProductModel;
 import com.actualize.mortgage.domainmodels.LoanTerms;
 import com.actualize.mortgage.domainmodels.MIDataDetailModel;
 import com.actualize.mortgage.domainmodels.MaturityRuleModel;
@@ -67,6 +68,7 @@ public class ClosingDisclosure implements Serializable {
     private NegativeAmortizationModel negativeAmortization;
     private InterestOnlyModel interestOnly;
     private MaturityRuleModel maturityRule;
+    private LoanProductModel loanProduct;
     private LoanTerms loanTerms;
     private ProjectedPaymentsDetails projectedPayments;
     private ETIASection etiaSection;
@@ -495,6 +497,18 @@ public class ClosingDisclosure implements Serializable {
 	 */
 	public void setMaturityRule(MaturityRuleModel maturityRule) {
 		this.maturityRule = maturityRule;
+	}
+	/**
+	 * @return the loanProduct
+	 */
+	public LoanProductModel getLoanProduct() {
+		return loanProduct;
+	}
+	/**
+	 * @param loanProduct the loanProduct to set
+	 */
+	public void setLoanProduct(LoanProductModel loanProduct) {
+		this.loanProduct = loanProduct;
 	}
 	
 	
