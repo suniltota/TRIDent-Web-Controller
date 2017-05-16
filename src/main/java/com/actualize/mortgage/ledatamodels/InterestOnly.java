@@ -9,6 +9,8 @@ import com.actualize.mortgage.domainmodels.MISMODataAccessObject;
  *
  */
 public class InterestOnly extends MISMODataAccessObject {
+
+	private static final long serialVersionUID = -1141535787390039253L;
 	public final String interestOnlyTermMonthsCount;
 	
 	public InterestOnly(Element element) {

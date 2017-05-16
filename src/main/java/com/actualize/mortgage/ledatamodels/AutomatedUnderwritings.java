@@ -14,7 +14,8 @@ import com.actualize.mortgage.domainmodels.MISMODataAccessObject;
  *
  */
 public class AutomatedUnderwritings extends MISMODataAccessObject {
-	 public final AutomatedUnderwriting[] automatedUnderwriting;
+	private static final long serialVersionUID = 6772013937327128363L;
+	public final AutomatedUnderwriting[] automatedUnderwriting;
 	public AutomatedUnderwritings(Element e) {
 		super(e);
 		NodeList nodes = getElementsAddNS((NS == null ? "" : NS)+"AUTOMATED_UNDERWRITING");

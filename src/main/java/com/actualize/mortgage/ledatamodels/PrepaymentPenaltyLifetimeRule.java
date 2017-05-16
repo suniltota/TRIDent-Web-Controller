@@ -3,16 +3,21 @@ package com.actualize.mortgage.ledatamodels;
 import org.w3c.dom.Element;
 
 import com.actualize.mortgage.domainmodels.MISMODataAccessObject;
-
+/**
+ * this class defines PrepaymentPenaltyLifetimeRule in MISMO XML
+ * @author sboragala
+ *
+ */
 public class PrepaymentPenaltyLifetimeRule extends MISMODataAccessObject {
-	public final String PrepaymentPenaltyExpirationDate;
-	public final String PrepaymentPenaltyExpirationMonthsCount;
-	public final String PrepaymentPenaltyMaximumLifeOfLoanAmount;
+	private static final long serialVersionUID = 6454447215728990189L;
+	public final String prepaymentPenaltyExpirationDate;
+	public final String prepaymentPenaltyExpirationMonthsCount;
+	public final String prepaymentPenaltyMaximumLifeOfLoanAmount;
 	
 	public PrepaymentPenaltyLifetimeRule(Element element) {
 		super(element);
-		PrepaymentPenaltyExpirationDate = getValueAddNS("PrepaymentPenaltyExpirationDate");
-		PrepaymentPenaltyExpirationMonthsCount = getValueAddNS("PrepaymentPenaltyExpirationMonthsCount");
-		PrepaymentPenaltyMaximumLifeOfLoanAmount = getValueAddNS("PrepaymentPenaltyMaximumLifeOfLoanAmount");
+		prepaymentPenaltyExpirationDate = getValueAddNS("PrepaymentPenaltyExpirationDate");
+		prepaymentPenaltyExpirationMonthsCount = getValueAddNS("PrepaymentPenaltyExpirationMonthsCount");
+		prepaymentPenaltyMaximumLifeOfLoanAmount = getValueAddNS("PrepaymentPenaltyMaximumLifeOfLoanAmount");
 	}
 }

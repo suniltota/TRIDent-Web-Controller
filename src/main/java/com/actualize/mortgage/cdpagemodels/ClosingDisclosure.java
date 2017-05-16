@@ -21,6 +21,7 @@ import com.actualize.mortgage.domainmodels.ContactInformationModel;
 import com.actualize.mortgage.domainmodels.DocumentClassificationModel;
 import com.actualize.mortgage.domainmodels.ETIASection;
 import com.actualize.mortgage.domainmodels.IntegratedDisclosureDetailModel;
+import com.actualize.mortgage.domainmodels.InterestOnlyModel;
 import com.actualize.mortgage.domainmodels.InterestRateAdjustmentModel;
 import com.actualize.mortgage.domainmodels.LateChargeRuleModel;
 import com.actualize.mortgage.domainmodels.LiabilityModel;
@@ -29,6 +30,8 @@ import com.actualize.mortgage.domainmodels.LoanDetailModel;
 import com.actualize.mortgage.domainmodels.LoanInformation;
 import com.actualize.mortgage.domainmodels.LoanTerms;
 import com.actualize.mortgage.domainmodels.MIDataDetailModel;
+import com.actualize.mortgage.domainmodels.MaturityRuleModel;
+import com.actualize.mortgage.domainmodels.NegativeAmortizationModel;
 import com.actualize.mortgage.domainmodels.PaymentModel;
 import com.actualize.mortgage.domainmodels.PrincipalAndInterestPaymentAdjustmentModel;
 import com.actualize.mortgage.domainmodels.ProjectedPaymentsDetails;
@@ -61,6 +64,9 @@ public class ClosingDisclosure implements Serializable {
     private LoanInformation loanInformation;
     private SalesContractDetailModel salesContractDetail;
     private IntegratedDisclosureDetailModel integratedDisclosureDetail;
+    private NegativeAmortizationModel negativeAmortization;
+    private InterestOnlyModel interestOnly;
+    private MaturityRuleModel maturityRule;
     private LoanTerms loanTerms;
     private ProjectedPaymentsDetails projectedPayments;
     private ETIASection etiaSection;
@@ -453,6 +459,42 @@ public class ClosingDisclosure implements Serializable {
 	 */
 	public void setMiDataDetail(MIDataDetailModel miDataDetail) {
 		this.miDataDetail = miDataDetail;
+	}
+	/**
+	 * @return the negativeAmortization
+	 */
+	public NegativeAmortizationModel getNegativeAmortization() {
+		return negativeAmortization;
+	}
+	/**
+	 * @param negativeAmortization the negativeAmortization to set
+	 */
+	public void setNegativeAmortization(NegativeAmortizationModel negativeAmortization) {
+		this.negativeAmortization = negativeAmortization;
+	}
+	/**
+	 * @return the interestOnly
+	 */
+	public InterestOnlyModel getInterestOnly() {
+		return interestOnly;
+	}
+	/**
+	 * @param interestOnly the interestOnly to set
+	 */
+	public void setInterestOnly(InterestOnlyModel interestOnly) {
+		this.interestOnly = interestOnly;
+	}
+	/**
+	 * @return the maturityRule
+	 */
+	public MaturityRuleModel getMaturityRule() {
+		return maturityRule;
+	}
+	/**
+	 * @param maturityRule the maturityRule to set
+	 */
+	public void setMaturityRule(MaturityRuleModel maturityRule) {
+		this.maturityRule = maturityRule;
 	}
 	
 	

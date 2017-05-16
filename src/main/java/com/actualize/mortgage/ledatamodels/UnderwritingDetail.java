@@ -11,6 +11,7 @@ import com.actualize.mortgage.domainmodels.MISMODataAccessObject;
  */
 public class UnderwritingDetail extends MISMODataAccessObject{
 
+	private static final long serialVersionUID = 5834552202933231788L;
 	public final String loanManualUnderwritingIndicator;
 	
 	protected UnderwritingDetail(Element e) {

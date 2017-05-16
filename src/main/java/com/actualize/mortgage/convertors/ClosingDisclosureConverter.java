@@ -42,6 +42,7 @@ import com.actualize.mortgage.domainmodels.IntegratedDisclosureDetailModel;
 import com.actualize.mortgage.domainmodels.IntegratedDisclosureSectionSummaryDetailModel;
 import com.actualize.mortgage.domainmodels.IntegratedDisclosureSectionSummaryModel;
 import com.actualize.mortgage.domainmodels.IntegratedDisclosureSubsectionPaymentModel;
+import com.actualize.mortgage.domainmodels.InterestOnlyModel;
 import com.actualize.mortgage.domainmodels.InterestRateAdjustmentModel;
 import com.actualize.mortgage.domainmodels.LateChargeRuleModel;
 import com.actualize.mortgage.domainmodels.LiabilityModel;
@@ -51,14 +52,12 @@ import com.actualize.mortgage.domainmodels.LoanDetailModel;
 import com.actualize.mortgage.domainmodels.LoanInformation;
 import com.actualize.mortgage.domainmodels.LoanInformationLoanIdentifier;
 import com.actualize.mortgage.domainmodels.LoanTerms;
-import com.actualize.mortgage.domainmodels.LoanTermsBalloonPayment;
-import com.actualize.mortgage.domainmodels.LoanTermsInterestRate;
-import com.actualize.mortgage.domainmodels.LoanTermsLoanAmount;
-import com.actualize.mortgage.domainmodels.LoanTermsPI;
 import com.actualize.mortgage.domainmodels.LoanTermsPrepaymentPenalty;
 import com.actualize.mortgage.domainmodels.LoanTermsTemporaryBuydown;
 import com.actualize.mortgage.domainmodels.MIDataDetailModel;
+import com.actualize.mortgage.domainmodels.MaturityRuleModel;
 import com.actualize.mortgage.domainmodels.NameModel;
+import com.actualize.mortgage.domainmodels.NegativeAmortizationModel;
 import com.actualize.mortgage.domainmodels.PartialPaymentModel;
 import com.actualize.mortgage.domainmodels.PartialPaymentsModel;
 import com.actualize.mortgage.domainmodels.PaymentModel;
@@ -117,7 +116,6 @@ import com.actualize.mortgage.ledatamodels.IntegratedDisclosureSubsectionPayment
 import com.actualize.mortgage.ledatamodels.IntegratedDisclosureSubsectionPayments;
 import com.actualize.mortgage.ledatamodels.InterestOnly;
 import com.actualize.mortgage.ledatamodels.InterestRateAdjustment;
-import com.actualize.mortgage.ledatamodels.InterestRateLifetimeAdjustmentRule;
 import com.actualize.mortgage.ledatamodels.InterestRatePerChangeAdjustmentRule;
 import com.actualize.mortgage.ledatamodels.LateChargeRule;
 import com.actualize.mortgage.ledatamodels.Liabilities;
@@ -131,13 +129,11 @@ import com.actualize.mortgage.ledatamodels.MISMODocument;
 import com.actualize.mortgage.ledatamodels.MaturityRule;
 import com.actualize.mortgage.ledatamodels.Name;
 import com.actualize.mortgage.ledatamodels.NegativeAmortization;
-import com.actualize.mortgage.ledatamodels.NegativeAmortizationRule;
 import com.actualize.mortgage.ledatamodels.Other;
 import com.actualize.mortgage.ledatamodels.PartialPayment;
 import com.actualize.mortgage.ledatamodels.Parties;
 import com.actualize.mortgage.ledatamodels.Party;
 import com.actualize.mortgage.ledatamodels.Payment;
-import com.actualize.mortgage.ledatamodels.PaymentRule;
 import com.actualize.mortgage.ledatamodels.PayoffsAndPayments;
 import com.actualize.mortgage.ledatamodels.PrepaidItem;
 import com.actualize.mortgage.ledatamodels.PrepaidItems;
@@ -192,7 +188,10 @@ public class ClosingDisclosureConverter {
 	        closingDisclosure.setMiDataDetail(createMIDataDetailModel(deal));
 	        closingDisclosure.setLoanInformation(createLoanInformation(deal));
 	        closingDisclosure.setSalesContractDetail(createSalesContractDetailModel(deal));
-	        closingDisclosure.setLoanTerms(createLoanTerms(mismodoc));
+	        closingDisclosure.setNegativeAmortization(createNegativeAmortizationModel(deal));
+	        closingDisclosure.setInterestOnly(createInterestOnlyModel(deal));
+	        closingDisclosure.setMaturityRule(createMaturityRuleModel(deal));
+	        closingDisclosure.setLoanTerms(createLoanTerms(deal));
 	        closingDisclosure.setProjectedPayments(createProjectedPayments(deal));
 	        closingDisclosure.setEtiaSection(createETIASection(deal));
 	        //closingDisclosure.setCostsAtClosing(createCostsAtClosing(deal));
@@ -216,7 +215,7 @@ public class ClosingDisclosureConverter {
         
         return closingDisclosure;
     }
-    
+
 	/**
      * get all the details regarding the current document
      * @param mismodoc
@@ -304,6 +303,49 @@ public class ClosingDisclosureConverter {
 		return closingInformationDetailModel;
     	
 	}
+    
+    /**
+     * converts NegativeAmortization to NegativeAmortizationModel
+     * @param deal
+     * @return NegativeAmortizationModel
+     */
+    private NegativeAmortizationModel createNegativeAmortizationModel(Deal deal) {
+    	NegativeAmortization negativeAmortization = new NegativeAmortization(null, (Element)deal.getElementAddNS("LOANS/LOAN/NEGATIVE_AMORTIZATION_RULE"));
+    	NegativeAmortizationModel negativeAmortizationModel = new NegativeAmortizationModel();
+	    	negativeAmortizationModel.setNegativeAmortizationLimitMonthsCount(negativeAmortization.negativeAmortizationLimitMonthsCount);
+	    	negativeAmortizationModel.setNegativeAmortizationMaximumLoanBalanceAmount(negativeAmortization.negativeAmortizationMaximumLoanBalanceAmount);
+	    	negativeAmortizationModel.setNegativeAmortizationType(negativeAmortization.negativeAmortizationType);
+    	
+		return negativeAmortizationModel;
+	}
+    
+    /**
+     * converts InterestOnly to InterestOnlyModel
+     * @param deal
+     * @return InterestOnlyModel
+     */
+    private InterestOnlyModel createInterestOnlyModel(Deal deal) {
+    	InterestOnlyModel interestOnlyModel = new InterestOnlyModel();
+    	InterestOnly interestOnly = new InterestOnly((Element)deal.getElementAddNS("LOANS/LOAN/INTEREST_ONLY"));
+    		interestOnlyModel.setInterestOnlyTermMonthsCount(interestOnly.interestOnlyTermMonthsCount);
+		return interestOnlyModel;
+	}
+
+    /**
+     * converts MaturityRule to MaturityRuleModel
+     * @param deal
+     * @return MaturityRuleModel
+     */
+    private MaturityRuleModel createMaturityRuleModel(Deal deal) {
+    	MaturityRuleModel maturityRuleModel = new MaturityRuleModel();
+    	MaturityRule maturityRule = new MaturityRule((Element)deal.getElementAddNS("LOANS/LOAN/MATURITY/MATURITY_RULE"));
+    		maturityRuleModel.setLoanMaturityPeriodCount(maturityRule.loanMaturityPeriodCount);
+    		maturityRuleModel.setLoanMaturityPeriodType(maturityRule.loanMaturityPeriodType);
+    		maturityRuleModel.setLoanTermMaximumMonthsCount(maturityRule.loanTermMaximumMonthsCount);
+    	
+		return maturityRuleModel;
+	}
+    
     /**
      * Creates Transaction Information from MISMODocument
      * @param deal
@@ -342,14 +384,9 @@ public class ClosingDisclosureConverter {
         String loanId = "";
     	String loanMic = "";
     	
-    	MaturityRule maturityRule = new MaturityRule((Element)deal.getElementAddNS(loan + "/MATURITY/MATURITY_RULE"));
- 	    
         AmortizationRule amortization = new AmortizationRule((Element)deal.getElementAddNS(loan + "/AMORTIZATION/AMORTIZATION_RULE"));
         LoanIdentifiers loanidentifiers = new LoanIdentifiers((Element)deal.getElementAddNS(loan + "/LOAN_IDENTIFIERS"));
         Underwriting underwriting = new Underwriting(null, (Element)deal.getElementAddNS(loan+"/UNDERWRITING"));
-        InterestOnly interestOnly = new InterestOnly((Element)deal.getElementAddNS(loan+"/INTEREST_ONLY"));
-        NegativeAmortization negativeAmortization = new NegativeAmortization(null, (Element)deal.getElementAddNS(loan+"/NEGATIVE_AMORTIZATION_RULE"));
-        
         
         List<LoanInformationLoanIdentifier> loanInformationLoanIdentifiers = new LinkedList<>();
         List<AutomatedUnderwritingsModel> automatedUnderwritingsModelList = new LinkedList<>();
@@ -410,22 +447,20 @@ public class ClosingDisclosureConverter {
 					if("AgencyCase".equalsIgnoreCase(loanidentifierdata.getLoanIdentifierType()))
 						loanMic = loanidentifierdata.getLoanIdentifier();
 				}
-		}*/
+		}
 		
 		for(LoanInformationLoanIdentifier loanidentifierdata : loanInformationLoanIdentifiers){
 			if("LenderLoan".equalsIgnoreCase(loanidentifierdata.getLoanIdentifierType()))
 				loanId = loanidentifierdata.getLoanIdentifier();
-		}
+		}*/
 		
  	   
- 	    loanInformationSection.setLoanMaturityPeriodType(maturityRule.loanMaturityPeriodType);
- 	    loanInformationSection.setLoanMaturityPeriodCount(maturityRule.loanMaturityPeriodCount);
+ 	    //loanInformationSection.setLoanMaturityPeriodType(maturityRule.loanMaturityPeriodType);
+ 	   // loanInformationSection.setLoanMaturityPeriodCount(maturityRule.loanMaturityPeriodCount);
  	    loanInformationSection.setLoanIdentifiers(loanInformationLoanIdentifiers);
  	    loanInformationSection.setAmortizationType(amortization.AmortizationType);
  	    loanInformationSection.setAutomatedUnderwritings(automatedUnderwritingsModelList);
  	    loanInformationSection.setLoanManualUnderwritingIndicator(Boolean.parseBoolean(underwriting.underwritingDetail.loanManualUnderwritingIndicator));
- 	    loanInformationSection.setNegativeAmortizationType(negativeAmortization.negativeAmortizationType);
- 	    loanInformationSection.setInterestOnlyTermMonthsCount(interestOnly.interestOnlyTermMonthsCount);
 
  	    return loanInformationSection;
     }
@@ -464,39 +499,33 @@ public class ClosingDisclosureConverter {
 		return miDataDetailModel;
     	
     }
+    
     /**
      * Creates Loan Terms Section from MISMODocument
      * @param mismodoc
      * @return
      */
-    private LoanTerms createLoanTerms(MISMODocument mismodoc)
+    private LoanTerms createLoanTerms(Deal deal)
     {
     	LoanTerms loanTerms = new LoanTerms();
-    	LoanTermsLoanAmount loanTermsLoanAmount = new LoanTermsLoanAmount();
-    	LoanTermsInterestRate loanTermsInterestRate = new LoanTermsInterestRate();
-    	LoanTermsPI loanTermsPI = new LoanTermsPI();
     	LoanTermsPrepaymentPenalty loanTermsPrepaymentPenalty = new LoanTermsPrepaymentPenalty();
-    	LoanTermsBalloonPayment loanTermsBalloonPayment = new LoanTermsBalloonPayment();
     	LoanTermsTemporaryBuydown loanTermsTemporaryBuydown = new LoanTermsTemporaryBuydown();
 
     	String interest ="";
     	String principalAmount = "";
-		Document document = null;
-        NodeList nodes = mismodoc.getElementsAddNS("//DOCUMENT");
+		//Document document = null;
+      // NodeList nodes = mismodoc.getElementsAddNS("//DOCUMENT");
         String loan = "LOANS/LOAN";
-        if (nodes.getLength() > 0)
+    /*    if (nodes.getLength() > 0)
             document = new Document(Document.NS, (Element)nodes.item(0));
-        Deal deal = new Deal(Deal.NS, (Element)document.getElementAddNS("DEAL_SETS/DEAL_SET/DEALS/DEAL"));
-       // TermsOfLoan termsOfLoan = new TermsOfLoan((Element)deal.getElementAddNS(loan + "/TERMS_OF_LOAN"));
-        NegativeAmortizationRule negativeAmortizationRule = new NegativeAmortizationRule((Element)deal.getElementAddNS(loan + "/NEGATIVE_AMORTIZATION/NEGATIVE_AMORTIZATION_RULE/"));
-       // LoanDetail loanDetail = new LoanDetail((Element)deal.getElementAddNS(loan + "/LOAN_DETAIL"));
+        Deal deal = new Deal(Deal.NS, (Element)document.getElementAddNS("DEAL_SETS/DEAL_SET/DEALS/DEAL"));*/
         BuydownRule buydownRule = new BuydownRule((Element)deal.getElementAddNS(loan + "/BUYDOWN/BUYDOWN_RULE"));
         BuydownOccurence buydownOccurence = new BuydownOccurence((Element)deal.getElementAddNS(loan + "/BUYDOWN/BUYDOWN_OCCURRENCES/BUYDOWN_OCCURRENCE"));
         Other other = buydownRule.extension.other;
-        InterestRatePerChangeAdjustmentRule interestRatePerChangeAdjustmentRule = new InterestRatePerChangeAdjustmentRule((Element)deal.getElementAddNS(loan + "/ADJUSTMENT/INTEREST_RATE_ADJUSTMENT/INTEREST_RATE_PER_CHANGE_ADJUSTMENT_RULES/INTEREST_RATE_PER_CHANGE_ADJUSTMENT_RULE")); 
-        InterestRateLifetimeAdjustmentRule interestRateLifetimeAdjustmentRule = new InterestRateLifetimeAdjustmentRule((Element)deal.getElementAddNS(loan + "/ADJUSTMENT/INTEREST_RATE_ADJUSTMENT/INTEREST_RATE_LIFETIME_ADJUSTMENT_RULE"));
-        PaymentRule paymentRule = new PaymentRule((Element)deal.getElementAddNS(loan + "/PAYMENT/PAYMENT_RULE"));
-        InterestOnly interestOnly = new InterestOnly((Element)deal.getElementAddNS(loan + "/INTEREST_ONLY"));
+       // InterestRatePerChangeAdjustmentRule interestRatePerChangeAdjustmentRule = new InterestRatePerChangeAdjustmentRule((Element)deal.getElementAddNS(loan + "/ADJUSTMENT/INTEREST_RATE_ADJUSTMENT/INTEREST_RATE_PER_CHANGE_ADJUSTMENT_RULES/INTEREST_RATE_PER_CHANGE_ADJUSTMENT_RULE")); 
+      //  InterestRateLifetimeAdjustmentRule interestRateLifetimeAdjustmentRule = new InterestRateLifetimeAdjustmentRule((Element)deal.getElementAddNS(loan + "/ADJUSTMENT/INTEREST_RATE_ADJUSTMENT/INTEREST_RATE_LIFETIME_ADJUSTMENT_RULE"));
+       // PaymentRule paymentRule = new PaymentRule((Element)deal.getElementAddNS(loan + "/PAYMENT/PAYMENT_RULE"));
+     //   InterestOnly interestOnly = new InterestOnly((Element)deal.getElementAddNS(loan + "/INTEREST_ONLY"));
         PrincipalAndInterestPaymentLifetimeAdjustmentRule principalAndInterestPaymentLifetimeAdjustmentRule = new PrincipalAndInterestPaymentLifetimeAdjustmentRule((Element)deal.getElementAddNS(loan + "/ADJUSTMENT/PRINCIPAL_AND_INTEREST_PAYMENT_ADJUSTMENT/PRINCIPAL_AND_INTEREST_PAYMENT_LIFETIME_ADJUSTMENT_RULE"));
         //InterestRatePerChangeAdjustmentRules interestRatePerChangeAdjustmentRules = new InterestRatePerChangeAdjustmentRules((Element)deal.getElementAddNS(loan + "/ADJUSTMENT/INTEREST_RATE_ADJUSTMENT/INTEREST_RATE_PER_CHANGE_ADJUSTMENT_RULES"));
         PrepaymentPenaltyLifetimeRule prepaymentPenaltyLifetimeRule = new PrepaymentPenaltyLifetimeRule((Element)deal.getElementAddNS(loan + "/PREPAYMENT_PENALTY/PREPAYMENT_PENALTY_LIFETIME_RULE"));
@@ -505,24 +534,25 @@ public class ClosingDisclosureConverter {
         PrincipalAndInterestPaymentPerChangeAdjustmentRules principalAndInterestPaymentPerChangeAdjustmentRules = new PrincipalAndInterestPaymentPerChangeAdjustmentRules((Element)deal.getElementAddNS(loan + "/ADJUSTMENT/PRINCIPAL_AND_INTEREST_PAYMENT_ADJUSTMENT/PRINCIPAL_AND_INTEREST_PAYMENT_PER_CHANGE_ADJUSTMENT_RULES"));
       //  List<AboutVersion> aboutVersionList = new LinkedList<>();
         LoanProduct loanProduct = new LoanProduct(null, (Element)deal.getElementAddNS("LOANS/LOAN/LOAN_PRODUCT"));
-        
+      
+        /* 
         loanTermsLoanAmount.setNoteAmount("termsOfLoan.noteAmount");
-       // loanTermsLoanAmount.setNegativeAmoritzationIndicator(Convertor.stringToBoolean(loanDetail.negativeAmortizationIndicator));
+        loanTermsLoanAmount.setNegativeAmoritzationIndicator(Convertor.stringToBoolean(loanDetail.negativeAmortizationIndicator));
         loanTermsLoanAmount.setNegativeAmortizationLimitMonthsCount(negativeAmortizationRule.NegativeAmortizationLimitMonthsCount);
         loanTermsLoanAmount.setNegativeAmortizationMaximumLoanBalanceAmount(negativeAmortizationRule.NegativeAmortizationMaximumLoanBalanceAmount);
        
-      /* if("true".equalsIgnoreCase(other.buydownReflectedInNoteIndicator) && !("").equals(buydownOccurence.BuydownInitialEffectiveInterestRatePercent))
+       if("true".equalsIgnoreCase(other.buydownReflectedInNoteIndicator) && !("").equals(buydownOccurence.BuydownInitialEffectiveInterestRatePercent))
 			interest = buydownOccurence.BuydownInitialEffectiveInterestRatePercent;
         else if(!"".equals(termsOfLoan.disclosedFullyIndexedRatePercent))
 			interest = termsOfLoan.disclosedFullyIndexedRatePercent;
 		else if(!"".equals(termsOfLoan.weightedAverageInterestRatePercent))
 			interest = termsOfLoan.weightedAverageInterestRatePercent;
-		else*/
+		else
 			interest = "cal from termsOfLoan and buydown";
        
  	    loanTermsInterestRate.setNoteRatePercent("termsOfLoan.noteRatePercent");
  	    loanTermsInterestRate.setDisclosedFullyIndexedRatePercent("termsOfLoan.disclosedFullyIndexedRatePercent");
- 	  //  loanTermsInterestRate.setInterestRateIncreaseIndicator(Convertor.stringToBoolean(loanDetail.interestRateIncreaseIndicator));
+ 	    loanTermsInterestRate.setInterestRateIncreaseIndicator(Convertor.stringToBoolean(loanDetail.interestRateIncreaseIndicator));
  	    loanTermsInterestRate.setAdjustmentRuleTypeFirst("TBD");
  	    loanTermsInterestRate.setPerChangeRateAdjustmentFrequencyMonthsCount(interestRatePerChangeAdjustmentRule.perChangeRateAdjustmentFrequencyMonthsCount);
  	    loanTermsInterestRate.setFirstRateChangeMonthsCount(interestRateLifetimeAdjustmentRule.firstRateChangeMonthsCount);
@@ -539,10 +569,10 @@ public class ClosingDisclosureConverter {
 			principalAmount = paymentRule.fullyIndexedInitialPrincipalAndInterestPaymentAmount;
         
 		//AboutVersionIdentifier
-		/*if(null != aboutVersions.aboutVersions)
+		if(null != aboutVersions.aboutVersions)
 		for(int i=0; i<aboutVersions.aboutVersions.length; i++){
 			aboutVersionList.add(aboutVersions.aboutVersions[i]);
-	    }*/
+	    }
 		   
 		if(principalAndInterestPaymentPerChangeAdjustmentRules.principalAndInterestPaymentPerChangeAdjustmentRules.length>0)
 	        for(int i=0; i<principalAndInterestPaymentPerChangeAdjustmentRules.principalAndInterestPaymentPerChangeAdjustmentRules.length;i++)
@@ -558,22 +588,21 @@ public class ClosingDisclosureConverter {
 		loanTermsPI.setFirstPrincipalAndInterestPaymentChangeMonthsCount(principalAndInterestPaymentLifetimeAdjustmentRule.firstPrincipalAndInterestPaymentChangeMonthsCount);
 		loanTermsPI.setPrincipalAndInterestPaymentMaximumAmountEarliestEffectiveMonthsCount(principalAndInterestPaymentLifetimeAdjustmentRule.principalAndInterestPaymentMaximumAmountEarliestEffectiveMonthsCount);
 		loanTermsPI.setPrincipalAndInterestPaymentMaximumAmount(principalAndInterestPaymentLifetimeAdjustmentRule.principalAndInterestPaymentMaximumAmount);
-		//loanTermsPI.setPaymentIncreaseIndicator(Convertor.stringToBoolean(loanDetail.paymentIncreaseIndicator));
+		loanTermsPI.setPaymentIncreaseIndicator(Convertor.stringToBoolean(loanDetail.paymentIncreaseIndicator));*/
 		//loanTermsPrepaymentPenalty
-		loanTermsPrepaymentPenalty.setPrepaymentPenaltyIndicator("loanDetail.prepaymentPenaltyIndicator");
-		loanTermsPrepaymentPenalty.setPrepaymentPenaltyMaximumLifeOfLoanAmount(prepaymentPenaltyLifetimeRule.PrepaymentPenaltyMaximumLifeOfLoanAmount);
-		loanTermsPrepaymentPenalty.setPrepaymentPenaltyExpirationMonthsCount(prepaymentPenaltyLifetimeRule.PrepaymentPenaltyExpirationMonthsCount);	
+		loanTermsPrepaymentPenalty.setPrepaymentPenaltyMaximumLifeOfLoanAmount(prepaymentPenaltyLifetimeRule.prepaymentPenaltyMaximumLifeOfLoanAmount);
+		loanTermsPrepaymentPenalty.setPrepaymentPenaltyExpirationMonthsCount(prepaymentPenaltyLifetimeRule.prepaymentPenaltyExpirationMonthsCount);	
 
 		//LoanTermsBalloonPayment
-		loanTermsBalloonPayment.setBalloonIndicator("loanDetail.balloonIndicator");
-		loanTermsBalloonPayment.setBalloonPaymentAmount("loanDetail.balloonPaymentAmount");
+		/*loanTermsBalloonPayment.setBalloonIndicator("loanDetail.balloonIndicator");
+		loanTermsBalloonPayment.setBalloonPaymentAmount("loanDetail.balloonPaymentAmount");*/
 		
 		//TemporaryBuydown
 		loanTermsTemporaryBuydown.setGseBuydownReflectedInNoteIndicator(Convertor.stringToBoolean(other.buydownReflectedInNoteIndicator));
         loanTermsTemporaryBuydown.setBuydownInitialEffectiveInterestRatePercent(buydownOccurence.BuydownInitialEffectiveInterestRatePercent);
         loanTermsTemporaryBuydown.setBuydownTemporarySubsidyFundingIndicator("loanDetail.buydownTemporarySubsidyFundingIndicator");
-        loanTermsTemporaryBuydown.setBuydownChangeFrequencyMonthsCount(buydownRule.BuydownChangeFrequencyMonthsCount);
-        loanTermsTemporaryBuydown.setBuydownIncreaseRatePercent(buydownRule.BuydownIncreaseRatePercent);
+        loanTermsTemporaryBuydown.setBuydownChangeFrequencyMonthsCount(buydownRule.buydownChangeFrequencyMonthsCount);
+        loanTermsTemporaryBuydown.setBuydownIncreaseRatePercent(buydownRule.buydownIncreaseRatePercent);
 		//LoanTermsIntialEscrow
 		/*if(null != escrowItems && null != escrowItem)
 		{
@@ -617,13 +646,13 @@ public class ClosingDisclosureConverter {
 		
 		loanTermsEscrowAccount.setFirstYearTotalNonEscrowPaymentDescription(idDetail.FirstYearTotalNonEscrowPaymentAmount);
 		loanTermsEscrowAccount.setFirstYearTotalNonEscrowPaymentAmount(idDetail.FirstYearTotalNonEscrowPaymentDescription);
-	*/
+	
         loanTerms.setLoanTermsLoanAmount(loanTermsLoanAmount);
  	    loanTerms.setLoanTermsInterestRate(loanTermsInterestRate);
- 	    loanTerms.setLoanTermsPI(loanTermsPI);
+ 	    loanTerms.setLoanTermsPI(loanTermsPI);*/
  	    loanTerms.setLoanTermsTemporaryBuydown(loanTermsTemporaryBuydown);
  	    loanTerms.setLoanTermsPrepaymentPenalty(loanTermsPrepaymentPenalty);
- 	    loanTerms.setLoanTermsBalloonPayment(loanTermsBalloonPayment);
+ 	   // loanTerms.setLoanTermsBalloonPayment(loanTermsBalloonPayment);
  	    
     	return loanTerms;
     }

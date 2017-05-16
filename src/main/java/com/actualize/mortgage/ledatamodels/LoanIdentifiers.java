@@ -5,11 +5,13 @@ import org.w3c.dom.NodeList;
 
 import com.actualize.mortgage.domainmodels.MISMODataAccessObject;
 /**
- * Defines loan Identifiers
+ * Defines loan Identifiers in MISMO XML
  * @author sboragala
  *
  */
 public class LoanIdentifiers extends MISMODataAccessObject {
+	
+	private static final long serialVersionUID = 7035183100459388137L;
 	public final LoanIdentifier[] loanIdentifieries;
 	
 	public LoanIdentifiers(String NS, Element element) {
