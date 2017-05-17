@@ -8,18 +8,13 @@ import java.io.Serializable;
  */
 public class LoanTermsTemporaryBuydown implements Serializable {
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 6107484815432690161L;
+	private static final long serialVersionUID = 4018555262212370899L;
 	
 	private String buydownInitialEffectiveInterestRatePercent;
 	private boolean gseBuydownReflectedInNoteIndicator;
-	private String rateAfterBuydownApplied;//TBD
 	private String buydownChangeFrequencyMonthsCount;
-	private String totalNumberOfMonths; //TBD
+	private String buydownDurationMonthsCount;
 	private String buydownIncreaseRatePercent;
-	
 	
 	/**
 	 * @return the buydownInitialEffectiveInterestRatePercent
@@ -46,18 +41,6 @@ public class LoanTermsTemporaryBuydown implements Serializable {
 		this.gseBuydownReflectedInNoteIndicator = gseBuydownReflectedInNoteIndicator;
 	}
 	/**
-	 * @return the rateAfterBuydownApplied
-	 */
-	public String getRateAfterBuydownApplied() {
-		return rateAfterBuydownApplied;
-	}
-	/**
-	 * @param rateAfterBuydownApplied the rateAfterBuydownApplied to set
-	 */
-	public void setRateAfterBuydownApplied(String rateAfterBuydownApplied) {
-		this.rateAfterBuydownApplied = rateAfterBuydownApplied;
-	}
-	/**
 	 * @return the buydownChangeFrequencyMonthsCount
 	 */
 	public String getBuydownChangeFrequencyMonthsCount() {
@@ -70,16 +53,16 @@ public class LoanTermsTemporaryBuydown implements Serializable {
 		this.buydownChangeFrequencyMonthsCount = buydownChangeFrequencyMonthsCount;
 	}
 	/**
-	 * @return the totalNumberOfMonths
+	 * @return the buydownDurationMonthsCount
 	 */
-	public String getTotalNumberOfMonths() {
-		return totalNumberOfMonths;
+	public String getBuydownDurationMonthsCount() {
+		return buydownDurationMonthsCount;
 	}
 	/**
-	 * @param totalNumberOfMonths the totalNumberOfMonths to set
+	 * @param buydownDurationMonthsCount the buydownDurationMonthsCount to set
 	 */
-	public void setTotalNumberOfMonths(String totalNumberOfMonths) {
-		this.totalNumberOfMonths = totalNumberOfMonths;
+	public void setBuydownDurationMonthsCount(String buydownDurationMonthsCount) {
+		this.buydownDurationMonthsCount = buydownDurationMonthsCount;
 	}
 	/**
 	 * @return the buydownIncreaseRatePercent
@@ -93,7 +76,7 @@ public class LoanTermsTemporaryBuydown implements Serializable {
 	public void setBuydownIncreaseRatePercent(String buydownIncreaseRatePercent) {
 		this.buydownIncreaseRatePercent = buydownIncreaseRatePercent;
 	}
-
+	
 	
 	
 }

@@ -15,6 +15,7 @@ import com.actualize.mortgage.domainmodels.MISMODataAccessObject;
  */
 public class ClosingCostFunds extends MISMODataAccessObject {
 
+	private static final long serialVersionUID = 6008502879702997456L;
 	public final ClosingCostFund closingCostFundList[];
 	
 	protected ClosingCostFunds(Element e) {

@@ -12,9 +12,6 @@ import java.io.Serializable;
  */
 public class TermsOfLoanModel implements Serializable {
 
-	/**
-	 * 
-	 */
 	private static  long serialVersionUID = -2962206706752424316L;
 	
 	private String assumedLoanAmount;

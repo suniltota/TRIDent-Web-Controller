@@ -2,6 +2,8 @@ package com.actualize.mortgage.cdservices;
 
 import java.io.InputStream;
 
+import org.w3c.dom.Document;
+
 import com.actualize.mortgage.cdpagemodels.ClosingDisclosure;
 /**
  * This is service interface for the Closing Disclosure which is used to define 
@@ -16,6 +18,6 @@ public interface ClosingDisclosureService {
 
     public ClosingDisclosure createClosingDisclosureObjectfromXMLDoc(InputStream inputXmlStream) throws Exception;
     
-    public ClosingDisclosure createClosingDisclosureXMLfromObject(ClosingDisclosure closingDisclosure) throws Exception;
+    public Document createClosingDisclosureXMLfromObject(ClosingDisclosure closingDisclosure) throws Exception;
 
 }

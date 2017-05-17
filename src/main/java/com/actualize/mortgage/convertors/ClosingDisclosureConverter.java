@@ -497,6 +497,7 @@ public class ClosingDisclosureConverter {
         loanTermsTemporaryBuydown.setBuydownInitialEffectiveInterestRatePercent(buydownOccurence.BuydownInitialEffectiveInterestRatePercent);
         loanTermsTemporaryBuydown.setBuydownChangeFrequencyMonthsCount(buydownRule.buydownChangeFrequencyMonthsCount);
         loanTermsTemporaryBuydown.setBuydownIncreaseRatePercent(buydownRule.buydownIncreaseRatePercent);
+        loanTermsTemporaryBuydown.setBuydownDurationMonthsCount(buydownRule.buydownDurationMonthsCount);
 		
  	    loanTerms.setLoanTermsTemporaryBuydown(loanTermsTemporaryBuydown);
  	    loanTerms.setLoanTermsPrepaymentPenalty(loanTermsPrepaymentPenalty);

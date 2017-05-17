@@ -4,11 +4,12 @@ import org.w3c.dom.Element;
 
 import com.actualize.mortgage.domainmodels.MISMODataAccessObject;
 /**
- * Maps to TermsOfLoan in XML
+ * defines TermsOfLoan in MISMO XML
  * @author sboragala
  *
  */
 public class TermsOfLoan extends MISMODataAccessObject {
+	private static final long serialVersionUID = -5795505327156218503L;
 	public final String assumedLoanAmount;
 	public final String disclosedFullyIndexedRatePercent;
 	public final String lienPriorityType;
