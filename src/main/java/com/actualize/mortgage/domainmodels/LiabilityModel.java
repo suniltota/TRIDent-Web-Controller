@@ -24,6 +24,7 @@ public class LiabilityModel implements Serializable {
 	private String liabilityHolderFullName;
 	private String payoffAmount;
 	private String payoffPrepaymentPenaltyAmount;
+	private boolean payoffPartialIndicator;
 	
 	/**
 	 * @return the displayLabel
@@ -132,6 +133,18 @@ public class LiabilityModel implements Serializable {
 	 */
 	public void setPayoffPrepaymentPenaltyAmount(String payoffPrepaymentPenaltyAmount) {
 		this.payoffPrepaymentPenaltyAmount = payoffPrepaymentPenaltyAmount;
+	}
+	/**
+	 * @return the payoffPartialIndicator
+	 */
+	public boolean isPayoffPartialIndicator() {
+		return payoffPartialIndicator;
+	}
+	/**
+	 * @param payoffPartialIndicator the payoffPartialIndicator to set
+	 */
+	public void setPayoffPartialIndicator(boolean payoffPartialIndicator) {
+		this.payoffPartialIndicator = payoffPartialIndicator;
 	}
 	
 	

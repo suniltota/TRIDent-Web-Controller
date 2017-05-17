@@ -494,7 +494,7 @@ public class ClosingDisclosureConverter {
 		
 		//TemporaryBuydown
 		loanTermsTemporaryBuydown.setGseBuydownReflectedInNoteIndicator(Convertor.stringToBoolean(other.buydownReflectedInNoteIndicator));
-        loanTermsTemporaryBuydown.setBuydownInitialEffectiveInterestRatePercent(buydownOccurence.BuydownInitialEffectiveInterestRatePercent);
+        loanTermsTemporaryBuydown.setBuydownInitialEffectiveInterestRatePercent(buydownOccurence.buydownInitialEffectiveInterestRatePercent);
         loanTermsTemporaryBuydown.setBuydownChangeFrequencyMonthsCount(buydownRule.buydownChangeFrequencyMonthsCount);
         loanTermsTemporaryBuydown.setBuydownIncreaseRatePercent(buydownRule.buydownIncreaseRatePercent);
         loanTermsTemporaryBuydown.setBuydownDurationMonthsCount(buydownRule.buydownDurationMonthsCount);
@@ -1678,6 +1678,7 @@ public class ClosingDisclosureConverter {
 	    		liabilityModel.setLiabilityTypeOtherDescription(liability[i].liabilityDetail.liabilityTypeOtherDescription);
 	    		liabilityModel.setPayoffAmount(liability[i].payOff.payoffAmount);
 	    		liabilityModel.setPayoffPrepaymentPenaltyAmount(liability[i].payOff.payoffPrepaymentPenaltyAmount);
+	    		liabilityModel.setPayoffPartialIndicator(Boolean.parseBoolean(liability[i].payOff.payoffPartialIndicator));
 	    	liabilityModels.add(liabilityModel);
     	}
 		return liabilityModels;
