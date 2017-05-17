@@ -151,8 +151,8 @@ public class LoanEstimateConvertor {
 	 * @param address
 	 * @return address Model
 	 */
-	private static com.actualize.mortgage.domainmodels.Address toAddressModel(Address address) {
-	com.actualize.mortgage.domainmodels.Address addressModel = new com.actualize.mortgage.domainmodels.Address();
+	private static com.actualize.mortgage.domainmodels.AddressModel toAddressModel(Address address) {
+	com.actualize.mortgage.domainmodels.AddressModel addressModel = new com.actualize.mortgage.domainmodels.AddressModel();
 		
 		if (!address.cityName.equals(""))
 			addressModel.setCityName(address.cityName);
@@ -193,7 +193,7 @@ public class LoanEstimateConvertor {
 		if (borrowers.parties.length > 0) {
 			LoanEstimateSectionBorrower loanEstimateSectionBorrower = new LoanEstimateSectionBorrower();
 			NameModel applicant = new NameModel();
-			com.actualize.mortgage.domainmodels.Address addressModel = new com.actualize.mortgage.domainmodels.Address();
+			com.actualize.mortgage.domainmodels.AddressModel addressModel = new com.actualize.mortgage.domainmodels.AddressModel();
 			if (!borrowers.parties[0].legalEntity.legalEntityDetail.fullName.equals(""))
 				applicant.setFullName(borrowers.parties[0].legalEntity.legalEntityDetail.fullName);
 			else

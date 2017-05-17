@@ -11,12 +11,25 @@ public class PropertyValuationDetailModel implements Serializable {
 	
 	private static final long serialVersionUID = -4243667995030954693L;
 	
-	private String propertyEstimatedValueAmount;
+	private String identifierOwnerURI;
+	private String propertyEstimatedValueAmount; //PropertyDetail datapoint
 	private String propertyValuationAmount;
 	private String propertyValuationMethodType; //refin
 	private String propertyValuationMethodTypeOtherDescription;
 	private String propertyValue;
 	
+	/**
+	 * @return the identifierOwnerURI
+	 */
+	public String getIdentifierOwnerURI() {
+		return identifierOwnerURI;
+	}
+	/**
+	 * @param identifierOwnerURI the identifierOwnerURI to set
+	 */
+	public void setIdentifierOwnerURI(String identifierOwnerURI) {
+		this.identifierOwnerURI = identifierOwnerURI;
+	}
 	/**
 	 * @return the propertyEstimatedValueAmount
 	 */

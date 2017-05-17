@@ -11,7 +11,7 @@ public class ClosingInformationModel implements Serializable {
 	private static final long serialVersionUID = 8557982875024822649L;
 	
 	private String dateIssued;
-	private Address property;
+	private AddressModel property;
 	private PropertyValuationDetailModel propertyValuationDetail;
 	/**
 	 * @return the dateIssued
@@ -28,13 +28,13 @@ public class ClosingInformationModel implements Serializable {
 	/**
 	 * @return the property
 	 */
-	public Address getProperty() {
+	public AddressModel getProperty() {
 		return property;
 	}
 	/**
 	 * @param property the property to set
 	 */
-	public void setProperty(Address property) {
+	public void setProperty(AddressModel property) {
 		this.property = property;
 	}
 	/**

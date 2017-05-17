@@ -18,6 +18,7 @@ import org.w3c.dom.NodeList;
 import com.actualize.mortgage.cddatamodels.PrepaidItemPayment;
 import com.actualize.mortgage.cdpagemodels.ClosingDisclosure;
 import com.actualize.mortgage.cdpagemodels.ClosingDisclosureDocumentDetails;
+import com.actualize.mortgage.domainmodels.AddressModel;
 import com.actualize.mortgage.domainmodels.AutomatedUnderwritingsModel;
 import com.actualize.mortgage.domainmodels.Borrower;
 import com.actualize.mortgage.domainmodels.CashToClose;
@@ -48,6 +49,7 @@ import com.actualize.mortgage.domainmodels.InterestOnlyModel;
 import com.actualize.mortgage.domainmodels.InterestRateAdjustmentModel;
 import com.actualize.mortgage.domainmodels.LateChargeRuleModel;
 import com.actualize.mortgage.domainmodels.LiabilityModel;
+import com.actualize.mortgage.domainmodels.LicenseDetailModel;
 import com.actualize.mortgage.domainmodels.LoanCalculationModel;
 import com.actualize.mortgage.domainmodels.LoanCalculationsQualifiedMortgage;
 import com.actualize.mortgage.domainmodels.LoanDetailModel;
@@ -142,9 +144,7 @@ import com.actualize.mortgage.ledatamodels.PrepaidItem;
 import com.actualize.mortgage.ledatamodels.PrepaidItems;
 import com.actualize.mortgage.ledatamodels.PrepaymentPenaltyLifetimeRule;
 import com.actualize.mortgage.ledatamodels.PrincipalAndInterestPaymentAdjustment;
-import com.actualize.mortgage.ledatamodels.PrincipalAndInterestPaymentLifetimeAdjustmentRule;
 import com.actualize.mortgage.ledatamodels.PrincipalAndInterestPaymentPerChangeAdjustmentRule;
-import com.actualize.mortgage.ledatamodels.PrincipalAndInterestPaymentPerChangeAdjustmentRules;
 import com.actualize.mortgage.ledatamodels.ProjectedPayment;
 import com.actualize.mortgage.ledatamodels.ProjectedPayments;
 import com.actualize.mortgage.ledatamodels.PropertyDetail;
@@ -255,6 +255,7 @@ public class ClosingDisclosureConverter {
 	 
       closingInformationSection.setDateIssued(idDetail.integratedDisclosureIssuedDate);
       closingInformationSection.setProperty(toAddressModel(propertyAddress));
+      	propertyValuationDetailModel.setIdentifierOwnerURI(propertyValuationDetail.identifierOwnerURI);
       	propertyValuationDetailModel.setPropertyEstimatedValueAmount(propertyDetail.propertyEstimatedValueAmount);
       	propertyValuationDetailModel.setPropertyValuationAmount(propertyValuationDetail.propertyValuationAmount);
       	propertyValuationDetailModel.setPropertyValuationMethodType(propertyValuationDetail.propertyValuationMethodType);
@@ -395,12 +396,8 @@ public class ClosingDisclosureConverter {
     private LoanInformation createLoanInformation(Deal deal)
     {
     	LoanInformation loanInformationSection = new LoanInformation();
-    	String loanTotalTerm = "";  
- 	    String loanType = "";
- 	    String loanProduct = "";
-        String loan = "LOANS/LOAN";
-        String loanId = "";
-    	String loanMic = "";
+
+    	String loan = "LOANS/LOAN";
     	
         AmortizationRule amortization = new AmortizationRule((Element)deal.getElementAddNS(loan + "/AMORTIZATION/AMORTIZATION_RULE"));
         LoanIdentifiers loanidentifiers = new LoanIdentifiers((Element)deal.getElementAddNS(loan + "/LOAN_IDENTIFIERS"));
@@ -430,51 +427,6 @@ public class ClosingDisclosureConverter {
  	  		loanInformationLoanIdentifiers.add(loanInformationLoanIdentifier);
  	  	}
  	  	
- 	    //Loan Term
- 	  	/*if(!"".equals(loanDetail.constructionLoanIndicator) && "ConstructionToPermanent".equalsIgnoreCase(construction.constructionLoanType))
-		{
-			loanTotalTerm = construction.constructionLoanTotalTermMonthsCount;
-		}
-		else if(!"".equals(maturityRule.LoanMaturityPeriodType) && "Year".equalsIgnoreCase(maturityRule.LoanMaturityPeriodType))
-		{
-			loanTotalTerm = maturityRule.LoanMaturityPeriodCount;
-		}
-		else if("Month".equalsIgnoreCase(maturityRule.LoanMaturityPeriodType) && !("").equalsIgnoreCase(maturityRule.LoanMaturityPeriodCount))
-		{
-			loanTotalTerm = maturityRule.LoanMaturityPeriodCount;
-		}*/
- 	    //Loan Purpose
-	/*	if(("Purchase").equalsIgnoreCase(loanTerms.loanPurposeType))
-			loanPurpose = "Purchase";
-		else if("true".equalsIgnoreCase(loanDetail.constructionLoanIndicator))
-			loanPurpose = "Construction";
-		else if("true".equalsIgnoreCase(idDetail.integratedDisclosureHomeEquityLoanIndicator))
-			loanPurpose = "Home Equity Loan";
-		else
-			loanPurpose = "Refinance"; 	  	
-		//Loan Type
-		loanType = loanTerms.mortgageType;
-		//Loan Product
-		loanProduct = idDetail.integratedDisclosureLoanProductDescription;
-		//Loan Mic && Loan Id
-		if("true".equalsIgnoreCase(loanDetail.miRequiredIndicator)){
-			if("Conventional".equalsIgnoreCase(loanTerms.mortgageType))
-				loanMic = miDataDetail.miCertificateIdentifier;
-			else
-				for(LoanInformationLoanIdentifier loanidentifierdata : loanInformationLoanIdentifiers){
-					if("AgencyCase".equalsIgnoreCase(loanidentifierdata.getLoanIdentifierType()))
-						loanMic = loanidentifierdata.getLoanIdentifier();
-				}
-		}
-		
-		for(LoanInformationLoanIdentifier loanidentifierdata : loanInformationLoanIdentifiers){
-			if("LenderLoan".equalsIgnoreCase(loanidentifierdata.getLoanIdentifierType()))
-				loanId = loanidentifierdata.getLoanIdentifier();
-		}*/
-		
- 	   
- 	    //loanInformationSection.setLoanMaturityPeriodType(maturityRule.loanMaturityPeriodType);
- 	   // loanInformationSection.setLoanMaturityPeriodCount(maturityRule.loanMaturityPeriodCount);
  	    loanInformationSection.setLoanIdentifiers(loanInformationLoanIdentifiers);
  	    loanInformationSection.setAmortizationType(amortization.AmortizationType);
  	    loanInformationSection.setAutomatedUnderwritings(automatedUnderwritingsModelList);
@@ -1088,12 +1040,9 @@ public class ClosingDisclosureConverter {
         String idSummary = "LOANS/LOAN/DOCUMENT_SPECIFIC_DATA_SETS/DOCUMENT_SPECIFIC_DATA_SET/INTEGRATED_DISCLOSURE/INTEGRATED_DISCLOSURE_SECTION_SUMMARIES/";
         
     	SummariesofTransactions summariesofTransactions = new SummariesofTransactions();
-    	
     	SummariesofTransactionsDetailsDueFromSellerAtClosing dueFromSellerAtClosing = new  SummariesofTransactionsDetailsDueFromSellerAtClosing();
     	
-    	//SalesContractDetail salesContractDetail = new SalesContractDetail((Element)deal.getElementAddNS(salesContract + "/SALES_CONTRACT_DETAIL"));
-    //	LoanDetail loanDetail = new LoanDetail((Element)deal.getElementAddNS("LOANS/LOAN/LOAN_DETAIL"));
-    //	TermsOfLoan loanTerms = new TermsOfLoan((Element)deal.getElementAddNS("LOANS/LOAN/TERMS_OF_LOAN"));
+    
     	IntegratedDisclosureSectionSummaries integratedDisclosureSectionSummaryList = new IntegratedDisclosureSectionSummaries((Element)deal.getElementAddNS(idSummary));
     	ClosingInformation closingInformation =  new ClosingInformation(null, (Element)deal.getElementAddNS("LOANS/LOAN/CLOSING_INFORMATION"));
     	ClosingInformationDetail closingInformationDetail = new ClosingInformationDetail((Element)deal.getElementAddNS("LOANS/LOAN/CLOSING_INFORMATION/CLOSING_INFORMATION_DETAIL"));
@@ -1349,13 +1298,13 @@ public class ClosingDisclosureConverter {
     	
     	IntegratedDisclosureDetail idDetail = new IntegratedDisclosureDetail((Element)deal.getElementAddNS("LOANS/LOAN/DOCUMENT_SPECIFIC_DATA_SETS/DOCUMENT_SPECIFIC_DATA_SET/INTEGRATED_DISCLOSURE/INTEGRATED_DISCLOSURE_DETAIL"));
     	
-    	integratedDisclosureDetailModel.setFirstYearTotalEscrowPaymentAmount(idDetail.firstYearTotalEscrowPaymentAmount);
-    	integratedDisclosureDetailModel.setFirstYearTotalEscrowPaymentDescription(idDetail.firstYearTotalEscrowPaymentDescription);
-    	integratedDisclosureDetailModel.setFirstYearTotalNonEscrowPaymentAmount(idDetail.firstYearTotalNonEscrowPaymentAmount);
-    	integratedDisclosureDetailModel.setFirstYearTotalNonEscrowPaymentDescription(idDetail.firstYearTotalNonEscrowPaymentDescription);
-    	integratedDisclosureDetailModel.setIntegratedDisclosureHomeEquityLoanIndicator(Boolean.parseBoolean(idDetail.integratedDisclosureHomeEquityLoanIndicator));
-    	integratedDisclosureDetailModel.setIntegratedDisclosureIssuedDate(idDetail.integratedDisclosureIssuedDate);
-    	integratedDisclosureDetailModel.setIntegratedDisclosureLoanProductDescription(idDetail.integratedDisclosureLoanProductDescription);
+	    	integratedDisclosureDetailModel.setFirstYearTotalEscrowPaymentAmount(idDetail.firstYearTotalEscrowPaymentAmount);
+	    	integratedDisclosureDetailModel.setFirstYearTotalEscrowPaymentDescription(idDetail.firstYearTotalEscrowPaymentDescription);
+	    	integratedDisclosureDetailModel.setFirstYearTotalNonEscrowPaymentAmount(idDetail.firstYearTotalNonEscrowPaymentAmount);
+	    	integratedDisclosureDetailModel.setFirstYearTotalNonEscrowPaymentDescription(idDetail.firstYearTotalNonEscrowPaymentDescription);
+	    	integratedDisclosureDetailModel.setIntegratedDisclosureHomeEquityLoanIndicator(Boolean.parseBoolean(idDetail.integratedDisclosureHomeEquityLoanIndicator));
+	    	integratedDisclosureDetailModel.setIntegratedDisclosureIssuedDate(idDetail.integratedDisclosureIssuedDate);
+	    	integratedDisclosureDetailModel.setIntegratedDisclosureLoanProductDescription(idDetail.integratedDisclosureLoanProductDescription);
 		return integratedDisclosureDetailModel;
     }
     
@@ -1462,7 +1411,11 @@ public class ClosingDisclosureConverter {
     private ContactInformationDetail getContactInformationDetail(List<Party> parties, String partyType)
     {
     	ContactInformationDetail contactInformationDetail = new ContactInformationDetail();
-    	String stateLicense = "ClosingAgent,RealEstateAgent"; 
+    	AddressModel addressModel = new AddressModel();
+		NameModel nameModel = new NameModel();
+		LicenseDetailModel individualLicenseDetail = new LicenseDetailModel();
+		LicenseDetailModel organizationLicenseDetail = new LicenseDetailModel();
+		
     	parties.forEach(party ->{
     		
     		for(int i=0;i<party.addresses.addresses.length; i++)
@@ -1470,52 +1423,53 @@ public class ClosingDisclosureConverter {
     			if(null != party.addresses.element && null != party.addresses.addresses[i].element)
     			{
     				Address address = party.addresses.addresses[i];
-    				contactInformationDetail.setOrganizationStreetAddr(address.addressLineText);
-    				contactInformationDetail.setOrganizationAddressType(address.addressType);
-    				contactInformationDetail.setOrganizationCity(address.cityName);
-    				contactInformationDetail.setOrganizationStateCode(address.stateCode);
-    				contactInformationDetail.setOrganizationPostalCode(address.postalCode);
+	    				addressModel.setAddressLineText(address.addressLineText);
+	    				addressModel.setAddressType(address.addressType);
+	    				addressModel.setCityName(address.cityName);
+	    				addressModel.setStateCode(address.stateCode);
+	    				addressModel.setCountryCode(address.countryCode);
+	    				addressModel.setPostalCode(address.postalCode);
     			}
 	    	}
     	
 	    	contactInformationDetail.setPartyRoleType(partyType);
 	    	
     	if(null != party.legalEntity.legalEntityDetail.element)
-	    	{
-	    		contactInformationDetail.setOrganizationName(party.legalEntity.legalEntityDetail.fullName);
+	   	{
+    		contactInformationDetail.setOrganizationName(party.legalEntity.legalEntityDetail.fullName);
 	    		
 	    		if(null != party.roles.element && null != party.roles.roles[0].licenses.element && null != party.roles.roles[0].licenses.licenses[0].licenseDetail.element)
 				{
 					LicenseDetail licenseDetail = party.roles.roles[0].licenses.licenses[0].licenseDetail;
-					if(!stateLicense.contains(partyType))
-						contactInformationDetail.setOrganizationNMLSID(licenseDetail.licenseIdentifier);
-					else
-						contactInformationDetail.setOrganizationStateLicenseID(licenseDetail.licenseIdentifier);
-					contactInformationDetail.setOrganizationLicenseAuthorityLevelType(licenseDetail.licenseAuthorityLevelType);
-					contactInformationDetail.setOrganizationLicenseIssuingAuthorityName(licenseDetail.licenseIssuingAuthorityName);
-					contactInformationDetail.setOrganizationLicenseIssueDate(licenseDetail.licenseIssueDate);
-				contactInformationDetail.setOrganizationIssuingAgencyURL(licenseDetail.identifierOwnerURI);
+					
+					organizationLicenseDetail.setIdentifierOwnerURI(licenseDetail.identifierOwnerURI);
+					organizationLicenseDetail.setLicenseAuthorityLevelType(licenseDetail.licenseAuthorityLevelType);
+					organizationLicenseDetail.setLicenseIdentifier(licenseDetail.licenseIdentifier);
+					organizationLicenseDetail.setLicenseIssueDate(licenseDetail.licenseIssueDate);
+					organizationLicenseDetail.setLicenseIssuingAuthorityName(licenseDetail.licenseIssuingAuthorityName);
+					organizationLicenseDetail.setLicenseIssuingAuthorityStateCode(licenseDetail.licenseIssuingAuthorityStateCode);
 				}
 	    	}
 	    	if(null != party.individual.element && null != party.individual.name.element)
 	    	{	
 	    		Name name = party.individual.name;
-			contactInformationDetail.setIndividualFirstName(name.firstName);
-				contactInformationDetail.setIndividualMiddleName(name.middleName);
-				contactInformationDetail.setIndividualLastName(name.lastName);
-				contactInformationDetail.setIndividualSuffix(name.suffixName);
+	    		
+    			nameModel.setFirstName(name.firstName);
+    			nameModel.setFullName(name.fullName);
+    			nameModel.setLastName(name.lastName);
+    			nameModel.setMiddleName(name.middleName);
+    			nameModel.setSuffixName(name.suffixName);
 				
 				if(null != party.roles.element &&  null != party.roles.roles[0].licenses.element && null != party.roles.roles[0].licenses.licenses[0].licenseDetail.element)
 				{
 					LicenseDetail licenseDetail = party.roles.roles[0].licenses.licenses[0].licenseDetail;
-					if(!stateLicense.contains(partyType))
-						contactInformationDetail.setIndividualNmlsID(licenseDetail.licenseIdentifier);
-					else
-						contactInformationDetail.setIndividualStateLicenseID(licenseDetail.licenseIdentifier);
-					contactInformationDetail.setIndividualLicenseAuthorityLevelType(licenseDetail.licenseAuthorityLevelType);
-					contactInformationDetail.setIndividualLicenseIssuingAuthorityName(licenseDetail.licenseIssuingAuthorityName);
-					contactInformationDetail.setIndividualLicenseIssueDate(licenseDetail.licenseIssueDate);
-					contactInformationDetail.setIndividualIssuingAgencyURL(licenseDetail.identifierOwnerURI);
+					
+					individualLicenseDetail.setIdentifierOwnerURI(licenseDetail.identifierOwnerURI);
+					individualLicenseDetail.setLicenseAuthorityLevelType(licenseDetail.licenseAuthorityLevelType);
+					individualLicenseDetail.setLicenseIdentifier(licenseDetail.licenseIdentifier);
+					individualLicenseDetail.setLicenseIssueDate(licenseDetail.licenseIssueDate);
+					individualLicenseDetail.setLicenseIssuingAuthorityName(licenseDetail.licenseIssuingAuthorityName);
+					individualLicenseDetail.setLicenseIssuingAuthorityStateCode(licenseDetail.licenseIssuingAuthorityStateCode);
 				}
 	    	
     	}
@@ -1530,6 +1484,11 @@ public class ClosingDisclosureConverter {
 	    		}
 	    	}
     	});
+    	
+    	contactInformationDetail.setAddress(addressModel);
+    	contactInformationDetail.setIndividualLicenseDetail(individualLicenseDetail);
+    	contactInformationDetail.setOrganizationLicenseDetail(organizationLicenseDetail);
+    	
 		return contactInformationDetail;
     }
     
@@ -1841,8 +1800,8 @@ public class ClosingDisclosureConverter {
 	 * @param address
 	 * @return address Model
 	 */
-	private static com.actualize.mortgage.domainmodels.Address toAddressModel(Address address) {
-	com.actualize.mortgage.domainmodels.Address addressModel = new com.actualize.mortgage.domainmodels.Address();
+	private static AddressModel toAddressModel(Address address) {
+	AddressModel addressModel = new AddressModel();
 		
 		if (!"".equals(address.addressType))
 			addressModel.setAddressType(address.addressType);
@@ -1889,7 +1848,7 @@ public class ClosingDisclosureConverter {
 			{
 				Borrower borrower = new Borrower();
 				NameModel applicant = new NameModel();
-				com.actualize.mortgage.domainmodels.Address addressModel = new com.actualize.mortgage.domainmodels.Address();
+				AddressModel addressModel = new AddressModel();
 				if (!borrowers.parties[i].legalEntity.legalEntityDetail.fullName.equals(""))
 				{	
 					applicant.setFullName(borrowers.parties[i].legalEntity.legalEntityDetail.fullName);

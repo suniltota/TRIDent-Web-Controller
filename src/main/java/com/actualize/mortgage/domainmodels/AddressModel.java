@@ -6,7 +6,7 @@ import java.io.Serializable;
  * @author sboragala
  *
  */
-public class Address implements Serializable {
+public class AddressModel implements Serializable {
 
 	/**
 	 * 

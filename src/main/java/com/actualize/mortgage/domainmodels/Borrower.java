@@ -10,7 +10,7 @@ public class Borrower implements Serializable {
 	private NameModel nameModel;
 	private String partyRoleType;
 	private String partyRoleOtherDescription;
-	private Address address;
+	private AddressModel addressModel;
 	
 	/**
 	 * @return the type
@@ -63,14 +63,14 @@ public class Borrower implements Serializable {
 	/**
 	 * @return the address
 	 */
-	public Address getAddress() {
-		return address;
+	public AddressModel getAddress() {
+		return addressModel;
 	}
 	/**
-	 * @param address the address to set
+	 * @param addressModel the address to set
 	 */
-	public void setAddress(Address address) {
-		this.address = address;
+	public void setAddress(AddressModel addressModel) {
+		this.addressModel = addressModel;
 	}
 		
 	

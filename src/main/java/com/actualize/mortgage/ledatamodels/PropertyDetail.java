@@ -9,6 +9,7 @@ import com.actualize.mortgage.domainmodels.MISMODataAccessObject;
  *
  */
 public class PropertyDetail extends MISMODataAccessObject {
+	private static final long serialVersionUID = 1383906429113848271L;
 	public final String propertyEstimatedValueAmount;
 	
 	public PropertyDetail(Element element) {

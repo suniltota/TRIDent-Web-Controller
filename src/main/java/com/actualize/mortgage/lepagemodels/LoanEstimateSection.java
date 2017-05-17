@@ -3,7 +3,7 @@ package com.actualize.mortgage.lepagemodels;
 import java.io.Serializable;
 import java.util.List;
 
-import com.actualize.mortgage.domainmodels.Address;
+import com.actualize.mortgage.domainmodels.AddressModel;
 
 
 /**
@@ -19,10 +19,10 @@ public class LoanEstimateSection implements Serializable {
 	private static final long serialVersionUID = 4136166273672214432L;
 	
 	private String lenderFullName;
-	private Address lenderAddress;
+	private AddressModel lenderAddress;
 	private String dateIssued;
 	private List<LoanEstimateSectionBorrower> applicants;
-	private Address property;
+	private AddressModel property;
 	private String estimatedPropValue;
 	private String loanTerm;
 	private String purpose;
@@ -46,13 +46,13 @@ public class LoanEstimateSection implements Serializable {
 	/**
 	 * @return the lenderAddress
 	 */
-	public Address getLenderAddress() {
+	public AddressModel getLenderAddress() {
 		return lenderAddress;
 	}
 	/**
 	 * @param lenderAddress the lenderAddress to set
 	 */
-	public void setLenderAddress(Address lenderAddress) {
+	public void setLenderAddress(AddressModel lenderAddress) {
 		this.lenderAddress = lenderAddress;
 	}
 	/**
@@ -82,13 +82,13 @@ public class LoanEstimateSection implements Serializable {
 	/**
 	 * @return the property
 	 */
-	public Address getProperty() {
+	public AddressModel getProperty() {
 		return property;
 	}
 	/**
 	 * @param property the property to set
 	 */
-	public void setProperty(Address property) {
+	public void setProperty(AddressModel property) {
 		this.property = property;
 	}
 	/**

@@ -2,7 +2,7 @@ package com.actualize.mortgage.lepagemodels;
 
 import java.io.Serializable;
 
-import com.actualize.mortgage.domainmodels.Address;
+import com.actualize.mortgage.domainmodels.AddressModel;
 import com.actualize.mortgage.domainmodels.NameModel;
 /**
  * Defines borrower details in JSON response for LoanEstimateSection in Page One of LE 
@@ -17,7 +17,7 @@ public class LoanEstimateSectionBorrower implements Serializable {
 	private static final long serialVersionUID = -1616508858110951273L;
 	
 	private NameModel name;
-	private Address address;
+	private AddressModel addressModel;
 	
 	/**
 	 * @return the name
@@ -34,14 +34,14 @@ public class LoanEstimateSectionBorrower implements Serializable {
 	/**
 	 * @return the address
 	 */
-	public Address getAddress() {
-		return address;
+	public AddressModel getAddress() {
+		return addressModel;
 	}
 	/**
-	 * @param address the address to set
+	 * @param addressModel the address to set
 	 */
-	public void setAddress(Address address) {
-		this.address = address;
+	public void setAddress(AddressModel addressModel) {
+		this.addressModel = addressModel;
 	}
 	
 }

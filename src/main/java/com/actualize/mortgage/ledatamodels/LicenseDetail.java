@@ -10,9 +10,10 @@ import com.actualize.mortgage.domainmodels.MISMODataAccessObject;
  *
  */
 public class LicenseDetail extends MISMODataAccessObject {
+	private static final long serialVersionUID = 8814441650293375683L;
 	public final String licenseAuthorityLevelType;
 	public final String licenseIdentifier;
-	public String identifierOwnerURI;
+	public String identifierOwnerURI = "";
 	public final String licenseIssueDate;
 	public final String licenseIssuingAuthorityName;
 	public final String licenseIssuingAuthorityStateCode;
