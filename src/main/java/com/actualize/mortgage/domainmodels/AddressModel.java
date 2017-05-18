@@ -8,21 +8,17 @@ import java.io.Serializable;
  */
 public class AddressModel implements Serializable {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -106009588148889457L;
-	
-	private String addressLineText;
-	private String addressType;
-	private String addressUnitDesignatorType;
-	private String addressUnitIdentifier;
-	private String cityName;
-	private String countryCode;
-	private String postalCode;
-	private String stateCode;
-	private String unparsedLegalDescription;
-	private boolean isLegalDescription;
+	private static final long serialVersionUID = 554440887940185066L;
+	private String addressLineText = "";
+	private String addressType = "";
+	private String addressUnitDesignatorType = "";
+	private String addressUnitIdentifier = "";
+	private String cityName = "";
+	private String countryCode = "";
+	private String postalCode = "";
+	private String stateCode = "";
+	private String unparsedLegalDescription = "";
+	private boolean isLegalDescription = false;
 	
 	/**
 	 * @return the addressLineText

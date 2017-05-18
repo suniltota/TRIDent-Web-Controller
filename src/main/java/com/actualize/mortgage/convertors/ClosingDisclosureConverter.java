@@ -1495,6 +1495,7 @@ public class ClosingDisclosureConverter {
     	contactInformationDetail.setAddress(addressModel);
     	contactInformationDetail.setIndividualLicenseDetail(individualLicenseDetail);
     	contactInformationDetail.setOrganizationLicenseDetail(organizationLicenseDetail);
+    	contactInformationDetail.setName(nameModel);
     	
 		return contactInformationDetail;
     }

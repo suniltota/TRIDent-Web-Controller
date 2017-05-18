@@ -13,12 +13,12 @@ import java.io.Serializable;
 public class LicenseDetailModel implements Serializable {
 	
 	private static final long serialVersionUID = -6907090439453120366L;
-	private String licenseAuthorityLevelType;
-	private String licenseIdentifier;
-	public String identifierOwnerURI;
-	private String licenseIssueDate;
-	private String licenseIssuingAuthorityName;
-	private String licenseIssuingAuthorityStateCode;
+	private String licenseAuthorityLevelType = "";
+	private String licenseIdentifier = "";
+	public String identifierOwnerURI = "";
+	private String licenseIssueDate = "";
+	private String licenseIssuingAuthorityName = "";
+	private String licenseIssuingAuthorityStateCode = "";
 	
 	/**
 	 * @return the licenseAuthorityLevelType
