@@ -56,7 +56,7 @@ public class ClosingDisclosureController {
      * @throws Exception
      */
     @RequestMapping(value = "/{version}/convertJsonToXml", method = { RequestMethod.POST })
-    public Document convertObjecttoXML(@PathVariable String version, @RequestBody ClosingDisclosure closingDisclosure) throws Exception {
+    public String convertObjecttoXML(@PathVariable String version, @RequestBody ClosingDisclosure closingDisclosure) throws Exception {
         return closingDisclosureService.createClosingDisclosureXMLfromObject(closingDisclosure);
     }
 }

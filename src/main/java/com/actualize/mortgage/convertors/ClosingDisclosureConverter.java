@@ -494,7 +494,7 @@ public class ClosingDisclosureConverter {
 		
 		//TemporaryBuydown
 		loanTermsTemporaryBuydown.setGseBuydownReflectedInNoteIndicator(Convertor.stringToBoolean(other.buydownReflectedInNoteIndicator));
-        loanTermsTemporaryBuydown.setBuydownInitialEffectiveInterestRatePercent(buydownOccurence.BuydownInitialEffectiveInterestRatePercent);
+        loanTermsTemporaryBuydown.setBuydownInitialEffectiveInterestRatePercent(buydownOccurence.buydownInitialEffectiveInterestRatePercent);
         loanTermsTemporaryBuydown.setBuydownChangeFrequencyMonthsCount(buydownRule.buydownChangeFrequencyMonthsCount);
         loanTermsTemporaryBuydown.setBuydownIncreaseRatePercent(buydownRule.buydownIncreaseRatePercent);
         loanTermsTemporaryBuydown.setBuydownDurationMonthsCount(buydownRule.buydownDurationMonthsCount);
@@ -1522,7 +1522,8 @@ public class ClosingDisclosureConverter {
 	    	loanDetailModel.setSeasonalPaymentFeatureIndicator(Boolean.parseBoolean(loanDetail.seasonalPaymentFeatureIndicator));
 	    	loanDetailModel.setStepPaymentsFeatureDescription(loanDetail.stepPaymentsFeatureDescription);
 	    	loanDetailModel.setTotalSubordinateFinancingAmount(loanDetail.totalSubordinateFinancingAmount);
-    	
+	    	loanDetailModel.setSubordinateFinancingIsNewIndicator(Boolean.parseBoolean(loanDetail.subordinateFinancingIsNewIndicator));
+	    	
 		return loanDetailModel;
     }
     

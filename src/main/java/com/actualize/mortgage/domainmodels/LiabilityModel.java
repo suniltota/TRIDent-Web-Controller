@@ -12,7 +12,6 @@ import java.io.Serializable;
  */
 public class LiabilityModel implements Serializable {
 
-
 	private static final long serialVersionUID = 6864703105075998928L;
 	
 	private String displayLabel;
@@ -146,7 +145,6 @@ public class LiabilityModel implements Serializable {
 	public void setPayoffPartialIndicator(boolean payoffPartialIndicator) {
 		this.payoffPartialIndicator = payoffPartialIndicator;
 	}
-	
 	
 	    
 }

@@ -18,6 +18,6 @@ public interface ClosingDisclosureService {
 
     public ClosingDisclosure createClosingDisclosureObjectfromXMLDoc(InputStream inputXmlStream) throws Exception;
     
-    public Document createClosingDisclosureXMLfromObject(ClosingDisclosure closingDisclosure) throws Exception;
+    public String createClosingDisclosureXMLfromObject(ClosingDisclosure closingDisclosure) throws Exception;
 
 }

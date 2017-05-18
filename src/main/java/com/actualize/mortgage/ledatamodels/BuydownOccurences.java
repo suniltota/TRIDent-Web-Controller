@@ -4,8 +4,14 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
 import com.actualize.mortgage.domainmodels.MISMODataAccessObject;
-
+/**
+ * this class defines BuydownOccurences in MISMO XML
+ * @author sboragala
+ *
+ */
 public class BuydownOccurences extends MISMODataAccessObject {
+	
+	private static final long serialVersionUID = 8716038821492999254L;
 	public final BuydownOccurence[] buydownOccurences;
 	
 	public BuydownOccurences(Element element, String qualifier) {

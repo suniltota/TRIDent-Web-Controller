@@ -34,7 +34,7 @@ public class ClosingDisclosureServiceImpl implements ClosingDisclosureService {
     }
 
     @Override
-    public Document createClosingDisclosureXMLfromObject(ClosingDisclosure closingDisclosure) throws Exception {
+    public String createClosingDisclosureXMLfromObject(ClosingDisclosure closingDisclosure) throws Exception {
     		JsonToUcd jsonToUcd = new JsonToUcd();
         return jsonToUcd.transform(closingDisclosure);
     }

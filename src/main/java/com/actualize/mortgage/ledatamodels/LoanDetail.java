@@ -9,7 +9,8 @@ import com.actualize.mortgage.domainmodels.MISMODataAccessObject;
  *
  */
 public class LoanDetail extends MISMODataAccessObject {
-	private static final long serialVersionUID = -335260455426246023L;
+	
+	private static final long serialVersionUID = -8845666261771481514L;
 	
 	public final String assumabilityIndicator;
 	public final String balloonIndicator;
@@ -30,6 +31,7 @@ public class LoanDetail extends MISMODataAccessObject {
 	public final String seasonalPaymentFeatureIndicator;
 	public final String stepPaymentsFeatureDescription;
 	public final String totalSubordinateFinancingAmount;
+	public final String subordinateFinancingIsNewIndicator;
 
 	public LoanDetail(Element element) {
 		super(element);
@@ -52,5 +54,6 @@ public class LoanDetail extends MISMODataAccessObject {
 		seasonalPaymentFeatureIndicator = getValueAddNS("SeasonalPaymentFeatureIndicator");
 		stepPaymentsFeatureDescription = getValueAddNS("StepPaymentsFeatureDescription");
 		totalSubordinateFinancingAmount = getValueAddNS("TotalSubordinateFinancingAmount");
+		subordinateFinancingIsNewIndicator = getValue("mismo:EXTENSION/mismo:OTHER/gse:SubordinateFinancingIsNewIndicator");
 	}
 }

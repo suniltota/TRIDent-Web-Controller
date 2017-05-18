@@ -11,12 +11,8 @@ import java.io.Serializable;
  *
  */
 public class LoanDetailModel implements Serializable {
-
-	/**
-	 *  
-	 */
-	private static long serialVersionUID = 4700438767412645658L;
 	
+	private static final long serialVersionUID = 5490338960551764090L;
 	private boolean assumabilityIndicator;
 	private boolean balloonIndicator;
 	private String balloonPaymentAmount;
@@ -36,6 +32,7 @@ public class LoanDetailModel implements Serializable {
 	private boolean seasonalPaymentFeatureIndicator;
 	private String stepPaymentsFeatureDescription;
 	private String totalSubordinateFinancingAmount;
+	private boolean subordinateFinancingIsNewIndicator;
 	
 	/**
 	 * @return the assumabilityIndicator
@@ -265,7 +262,17 @@ public class LoanDetailModel implements Serializable {
 	public void setTotalSubordinateFinancingAmount(String totalSubordinateFinancingAmount) {
 		this.totalSubordinateFinancingAmount = totalSubordinateFinancingAmount;
 	}
-	
-	
+	/**
+	 * @return the subordinateFinancingIsNewIndicator
+	 */
+	public boolean isSubordinateFinancingIsNewIndicator() {
+		return subordinateFinancingIsNewIndicator;
+	}
+	/**
+	 * @param subordinateFinancingIsNewIndicator the subordinateFinancingIsNewIndicator to set
+	 */
+	public void setSubordinateFinancingIsNewIndicator(boolean subordinateFinancingIsNewIndicator) {
+		this.subordinateFinancingIsNewIndicator = subordinateFinancingIsNewIndicator;
+	}
 	
 }
