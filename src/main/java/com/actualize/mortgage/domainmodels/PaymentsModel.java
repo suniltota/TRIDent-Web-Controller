@@ -10,11 +10,11 @@ public class PaymentsModel implements Serializable{
 	
 	private static final long serialVersionUID = -8897752986596663579L;
 	
-	private String bpAtClosing;
-	private String bpB4Closing;
-	private String spAtClosing;
-	private String spB4Closing;
-	private String paidByOthers;
+	private String bpAtClosing = "";
+	private String bpB4Closing = "";
+	private String spAtClosing = "";
+	private String spB4Closing = "";
+	private String paidByOthers = "";
 	private boolean lenderStatus = false;
 	
 	/**

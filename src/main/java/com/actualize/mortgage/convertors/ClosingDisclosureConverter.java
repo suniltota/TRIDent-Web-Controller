@@ -1050,7 +1050,7 @@ public class ClosingDisclosureConverter {
 /*
     	List<ProrationModel> prorationsModels = createProrationsModels(deal);
 		List<LiabilityModel> liabilityModels = createLiabilityModels(deal);
-		List<ClosingAdjustmentItemModel> closingAdjustmentItemModels = createClosingAdjustmentModels(deal);*/
+		*/
 		List<ClosingCostFundModel> closingCostFundModels = createClosingCostFundModels(deal);
 		/*
 		summariesofTransactions.setLiabilityList(liabilityModels);
@@ -1066,21 +1066,27 @@ public class ClosingDisclosureConverter {
 		
 		//Paid Already By
 		SummariesofTransactionsDetailsPaidByAlready paidByAlready = new SummariesofTransactionsDetailsPaidByAlready();
+		List<ClosingAdjustmentItemModel> closingAdjustmentItemModels = createClosingAdjustmentModels(deal);
+		
+		for(ClosingAdjustmentItemModel closingAdjustmentItem : closingAdjustmentItemModels)
+		{
+			if("PaidAlreadyByOrOnBehalfOfBorrowerAtClosing".equalsIgnoreCase(closingAdjustmentItem.getIntegratedDisclosureSectionType()) 
+					&& "SellerCredit".equalsIgnoreCase(closingAdjustmentItem.getClosingAdjustmentItemType()))
+			{
+				if(!"OtherCredits".equalsIgnoreCase(closingAdjustmentItem.getIntegratedDisclosureSubsectionType()) && !"OtherCredits".equalsIgnoreCase(closingAdjustmentItem.getIntegratedDisclosureSubsectionType()))
+				{
+					if (paidAlready.contains(closingAdjustmentItem.getClosingAdjustmentItemType()) && paidAlready.contains(closingAdjustmentItem.getClosingAdjustmentItemTypeOtherDescription()))
+					{
+						paidByAlready.setSubordinateLien(closingAdjustmentItem);
+					}
+				}
+			}
+		}
 		
 		
 		//Calculations
 		SummariesofTransactionsDetailsBorrowerTransaction borrowerTransaction = new SummariesofTransactionsDetailsBorrowerTransaction();
 		SummariesofTransactionsDetailsSellerTransaction sellerTransaction = new SummariesofTransactionsDetailsSellerTransaction();
-		
-    
-		//PAID ALREADY BY
-		if(!closingCostFundModels.isEmpty())
-			closingCostFundModels.stream()
-				.filter(closingCostFundModel -> "PaidAlreadyByOrOnBehalfOfBorrowerAtClosing".equalsIgnoreCase(closingCostFundModel.getIntegratedDisclosureSectionType())
-													&& "DepositOnSalesContract".equalsIgnoreCase(closingCostFundModel.getFundsType()))
-					.forEach(closingCostFundModel -> paidByAlready.setDeposit(closingCostFundModel));
-		
-		paidByAlready.setDisclosureDescription("todo");
 		
 		//Borrower Transaction
 		IntegratedDisclosureSectionSummaryModel dueFromBorrowerAtClosingSummaryModel = new IntegratedDisclosureSectionSummaryModel();

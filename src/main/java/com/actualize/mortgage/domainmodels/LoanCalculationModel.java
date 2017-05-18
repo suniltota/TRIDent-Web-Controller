@@ -6,6 +6,7 @@ package com.actualize.mortgage.domainmodels;
 import java.io.Serializable;
 
 /**
+ * this class defines LoanCalculationModel in JSON Response
  * @author sboragala
  *
  */

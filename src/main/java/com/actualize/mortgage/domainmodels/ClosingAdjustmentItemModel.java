@@ -12,18 +12,18 @@ import java.io.Serializable;
  */
 public class ClosingAdjustmentItemModel implements Serializable {
 
-	private static final long serialVersionUID = 1932939085882946292L;
-	
-	private String displayLabel;
-	private String closingAdjustmentItemAmount;
-	private boolean closingAdjustmentItemPaidOutsideOfClosingIndicator;
-	private String closingAdjustmentItemType;
-	private String closingAdjustmentItemTypeOtherDescription;
-	private String integratedDisclosureSectionType;
-	private String integratedDisclosureSubsectionType;
-	private String paidByIndividualFullName;
-	private String paidByEntityFullName;
-	private String paidToEntityFullName;
+	private static final long serialVersionUID = -8722334409738681690L;
+
+	private String displayLabel = "";
+	private String closingAdjustmentItemAmount = "";
+	private boolean closingAdjustmentItemPaidOutsideOfClosingIndicator = false;
+	private String closingAdjustmentItemType = "";
+	private String closingAdjustmentItemTypeOtherDescription = "";
+	private String integratedDisclosureSectionType = "";
+	private String integratedDisclosureSubsectionType = "";
+	private String paidByIndividualFullName = "";
+	private String paidByEntityFullName = "";
+	private String paidToEntityFullName = "";
 	
 	/**
 	 * @return the displayLabel

@@ -12,7 +12,7 @@ import java.io.Serializable;
  */
 public class OtherModel implements Serializable {
 	
-	private static final long serialVersionUID = 1355670724613756481L;
+	private static final long serialVersionUID = 4937365492092727921L;
 	
 	private String integratedDisclosureEstimatedClosingCostsExpirationTimezoneType;
 	private String lockExpirationTimezoneType;
@@ -25,6 +25,7 @@ public class OtherModel implements Serializable {
 	private String totalStepCount;                                                  
 	private String totalStepPaymentCount;                                           
 	private String subordinateFinancingIsNewIndicator;
+	private String paymentIncludedInAPRIndicator;
 	
 	/**
 	 * @return the integratedDisclosureEstimatedClosingCostsExpirationTimezoneType
@@ -158,6 +159,18 @@ public class OtherModel implements Serializable {
 	 */
 	public void setSubordinateFinancingIsNewIndicator(String subordinateFinancingIsNewIndicator) {
 		this.subordinateFinancingIsNewIndicator = subordinateFinancingIsNewIndicator;
+	}
+	/**
+	 * @return the paymentIncludedInAPRIndicator
+	 */
+	public String getPaymentIncludedInAPRIndicator() {
+		return paymentIncludedInAPRIndicator;
+	}
+	/**
+	 * @param paymentIncludedInAPRIndicator the paymentIncludedInAPRIndicator to set
+	 */
+	public void setPaymentIncludedInAPRIndicator(String paymentIncludedInAPRIndicator) {
+		this.paymentIncludedInAPRIndicator = paymentIncludedInAPRIndicator;
 	}
 	
 	
