@@ -12,6 +12,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import org.mismo.residential._2009.schemas.ESCROWDETAIL;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
@@ -102,6 +103,7 @@ import com.actualize.mortgage.ledatamodels.Deal;
 import com.actualize.mortgage.ledatamodels.Document;
 import com.actualize.mortgage.ledatamodels.DocumentClass;
 import com.actualize.mortgage.ledatamodels.DocumentClassification;
+import com.actualize.mortgage.ledatamodels.EscrowDetail;
 import com.actualize.mortgage.ledatamodels.EscrowItem;
 import com.actualize.mortgage.ledatamodels.EscrowItemDetail;
 import com.actualize.mortgage.ledatamodels.EscrowItemPayment;
@@ -179,7 +181,7 @@ public class ClosingDisclosureConverter {
         
         Deal deal = new Deal(Deal.NS, (Element)document.getElementAddNS("DEAL_SETS/DEAL_SET/DEALS/DEAL"));
 
-	        closingDisclosure.setClosingDisclosureDocType(createClosingDisclosureDocumentDetails(document));
+	        closingDisclosure.setClosingDisclosureDocDetails(createClosingDisclosureDocumentDetails(document));
 	        closingDisclosure.setTermsOfLoan(createTermsOfLoanModel(deal));
 	    	closingDisclosure.setLoanDetail(createLoanDetailModel(deal));
 	    	closingDisclosure.setDocumentClassification(createDocumentClassificationModel(document));
@@ -229,9 +231,14 @@ public class ClosingDisclosureConverter {
     {
     	ClosingDisclosureDocumentDetails closingDisclosureDocumentDetails = new ClosingDisclosureDocumentDetails();
     	
+    	DocumentClassification docClassification = new DocumentClassification(Document.NS, (Element)document.getElementAddNS("DOCUMENT_CLASSIFICATION"));
         Deal deal = new Deal(Deal.NS, (Element)document.getElementAddNS("DEAL_SETS/DEAL_SET/DEALS/DEAL"));
-	    
-    	
+        EscrowDetail escrowdetail = new EscrowDetail((Element)deal.getElementAddNS("LOANS/LOAN/ESCROW/ESCROW_DETAIL"));
+        
+        closingDisclosureDocumentDetails.setDocumentType(docClassification.documentClasses.documentClass.documentTypeOtherDescription.split(":")[0]);
+        closingDisclosureDocumentDetails.setFormType(docClassification.documentClasses.documentClass.documentTypeOtherDescription.split(":")[1]);
+        closingDisclosureDocumentDetails.setEscrowAggregateAccountingAdjustmentAmount(escrowdetail.escrowAggregateAccountingAdjustmentAmount);
+        
 		return closingDisclosureDocumentDetails;
     }
     

@@ -26,6 +26,7 @@ public class OtherModel implements Serializable {
 	private String totalStepPaymentCount;                                           
 	private String subordinateFinancingIsNewIndicator;
 	private String paymentIncludedInAPRIndicator;
+	private String payoffPartialIndicator;
 	
 	/**
 	 * @return the integratedDisclosureEstimatedClosingCostsExpirationTimezoneType
@@ -171,6 +172,18 @@ public class OtherModel implements Serializable {
 	 */
 	public void setPaymentIncludedInAPRIndicator(String paymentIncludedInAPRIndicator) {
 		this.paymentIncludedInAPRIndicator = paymentIncludedInAPRIndicator;
+	}
+	/**
+	 * @return the payoffPartialIndicator
+	 */
+	public String getPayoffPartialIndicator() {
+		return payoffPartialIndicator;
+	}
+	/**
+	 * @param payoffPartialIndicator the payoffPartialIndicator to set
+	 */
+	public void setPayoffPartialIndicator(String payoffPartialIndicator) {
+		this.payoffPartialIndicator = payoffPartialIndicator;
 	}
 	
 	

@@ -22,14 +22,19 @@ import com.actualize.mortgage.cdpagemodels.ClosingDisclosure;
 import com.actualize.mortgage.domainmodels.AddressModel;
 import com.actualize.mortgage.domainmodels.Borrower;
 import com.actualize.mortgage.domainmodels.ClosingCostFundModel;
+import com.actualize.mortgage.domainmodels.ClosingCostProperties;
 import com.actualize.mortgage.domainmodels.ClosingInformationDetailModel;
 import com.actualize.mortgage.domainmodels.ConstructionModel;
 import com.actualize.mortgage.domainmodels.DocumentClassificationModel;
+import com.actualize.mortgage.domainmodels.InterestOnlyModel;
 import com.actualize.mortgage.domainmodels.LiabilityModel;
+import com.actualize.mortgage.domainmodels.LoanCalculationModel;
 import com.actualize.mortgage.domainmodels.LoanInformation;
 import com.actualize.mortgage.domainmodels.LoanTermsTemporaryBuydown;
+import com.actualize.mortgage.domainmodels.MismoFeePaymentsModel;
 import com.actualize.mortgage.domainmodels.NameModel;
 import com.actualize.mortgage.domainmodels.OtherModel;
+import com.actualize.mortgage.domainmodels.PaymentsModel;
 import com.actualize.mortgage.domainmodels.PropertyValuationDetailModel;
 import com.actualize.mortgage.domainmodels.ProrationModel;
 import com.actualize.mortgage.domainmodels.SalesContractDetailModel;
@@ -156,7 +161,8 @@ public class JsonToUcd {
 		insertSubjectProperty(document, insertLevels(document, element, "COLLATERALS/COLLATERAL/SUBJECT_PROPERTY"), jsonDocument);
 		insertLoan(document, insertLevels(document, element, "LOANS/LOAN"), jsonDocument);
 		//insertParties(document, insertLevels(document, element, "PARTIES"), jsonDocument);
-		insertLiabilities(document, insertLevels(document, element, "LIABILITIES"), jsonDocument.getLiabilityList());
+		if(jsonDocument.getLiabilityList().size() > 0)
+			insertLiabilities(document, insertLevels(document, element, "LIABILITIES"), jsonDocument.getLiabilityList());
 	}
 	
 	/**
@@ -520,14 +526,14 @@ public class JsonToUcd {
 		insertClosingInformation(document, insertLevels(document, element, "CLOSING_INFORMATION"), jsonDocument);
 		insertConstruction(document, insertLevels(document, element, "CONSTRUCTION"), jsonDocument.getConstruction());
 		/*insertDocumentSpecificDataSet(document, insertLevels(document, element, "DOCUMENT_SPECIFIC_DATA_SETS/DOCUMENT_SPECIFIC_DATA_SET"), jsonDocument);
-		insertEscrow(document, insertLevels(document, element, "ESCROW"), jsonDocument);
+		insertEscrow(document, insertLevels(document, element, "ESCROW"), jsonDocument);*/
 		insertFeeInformation(document, insertLevels(document, element, "FEE_INFORMATION"), jsonDocument);
-		insertForeclosures(document, insertLevels(document, element, "FORECLOSURES"), jsonDocument); // Not needed for LE
+		/*insertForeclosures(document, insertLevels(document, element, "FORECLOSURES"), jsonDocument); // Not needed for LE
 		insertHeloc(document, insertLevels(document, element, "HELOC"), jsonDocument); // Not needed for LE
 		insertHighCostMortgages(document, insertLevels(document, element, "HIGH_COST_MORTGAGES"), jsonDocument); //  Not needed for LE
-		insertHmdaLoan(document, insertLevels(document, element, "HMDA_LOAN"), jsonDocument); //  Not needed for LE
-		insertInterestOnly(document, insertLevels(document, element, "INTEREST_ONLY"), jsonDocument);
-		insertLateChargeRule(document, insertLevels(document, element, "LATE_CHARGE/EXTENSION/OTHER/gse:LATE_CHARGE_RULES/LATE_CHARGE_RULE"), jsonDocument);
+		insertHmdaLoan(document, insertLevels(document, element, "HMDA_LOAN"), jsonDocument); //  Not needed for LE*/
+		insertInterestOnly(document, insertLevels(document, element, "INTEREST_ONLY"), jsonDocument.getInterestOnly());
+		/*insertLateChargeRule(document, insertLevels(document, element, "LATE_CHARGE/EXTENSION/OTHER/gse:LATE_CHARGE_RULES/LATE_CHARGE_RULE"), jsonDocument);
 		insertLoanDetail(document, insertLevels(document, element, "LOAN_DETAIL"), jsonDocument);
 		insertLoanIdentifiers(document, insertLevels(document, element, "LOAN_IDENTIFIERS"), jsonDocument);
 		insertLoanLevelCredit(document, insertLevels(document, element, "LOAN_LEVEL_CREDIT"), jsonDocument);
@@ -948,18 +954,17 @@ public class JsonToUcd {
 		insertData(document, element, "LateChargeRatePercent", "");
 		insertData(document, element, "LateChargeType", "");
 	}
-	*//**
-     * Inserts Interest Only from JSON Object
-     * @param document Output XML file
-     * @param element parent node of XML
-     * @param jsonDocument Input JSON Object
-     *//*
-	private void insertInterestOnly(Document document, Element element, ClosingDisclosureDocument jsonDocument) {
-		// TODO Auto-generated method stub
-		//insertData(document, element, "InterestOnlyTermMonthsCount", jsonDocument.getPageOne().getLoanTerms().getLoanTermsPI().getInterestOnlyTermMonthsCount());
-		System.out.println("insertInterestOnly");
+	*/
+	/**
+	 * insert insterestOnly in MISMO XML
+	 * @param document
+	 * @param element
+	 * @param interestOnly
+	 */
+	private void insertInterestOnly(Document document, Element element, InterestOnlyModel interestOnly) {
+		insertData(document, element, "InterestOnlyTermMonthsCount", interestOnly.getInterestOnlyTermMonthsCount());
 	}
-	*//**
+	/**
      * Inserts Hmda Loan from JSON Object
      * @param document Output XML file
      * @param element parent node of XML
@@ -1085,135 +1090,155 @@ public class JsonToUcd {
 		// TODO Auto-generated method stub
 		insertData(document, element, "DeficiencyRightsPreservedIndicator", "");
 	}
-	*//**
-     * Inserts Fee Information from JSON Object
-     * @param document Output XML file
-     * @param element parent node of XML
-     * @param jsonDocument Input JSON Object
-     *//*
-	private void insertFeeInformation(Document document, Element element, ClosingDisclosureDocument jsonDocument) {
-		// TODO Auto-generated method stub
+	*/
+	/**
+	 * inserts fee information in MISMO XML
+	 * @param document
+	 * @param element
+	 * @param jsonDocument
+	 */
+	private void insertFeeInformation(Document document, Element element, ClosingDisclosure jsonDocument) {
 		insertFees(document, insertLevels(document, element, "FEES"), jsonDocument);
-		insertFeeSummaryDetail(document, insertLevels(document, element, "FEES_SUMMARY/FEE_SUMMARY_DETAIL"), jsonDocument);
+		insertFeeSummaryDetail(document, insertLevels(document, element, "FEES_SUMMARY/FEE_SUMMARY_DETAIL"), jsonDocument.getLoanCalculationsQualifiedMortgage().getLoanCalculationModel());
 	}
-	*//**
-     * Inserts Fee Summary Detail from JSON Object
-     * @param document Output XML file
-     * @param element parent node of XML
-     * @param jsonDocument Input JSON Object
-     *//*
+	
+	/**
+	 * inserts FeeSummaryDetail in MISMO XML
+	 * @param document
+	 * @param element
+	 * @param loanCalculation
+	 */
 	private void insertFeeSummaryDetail(Document document, Element element,
-			ClosingDisclosureDocument jsonDocument) {
-		// TODO Auto-generated method stub
-		insertData(document, element, "APRPercent", "");
-		insertData(document, element, "FeeSummaryTotalAmountFinancedAmount", "");
-		insertData(document, element, "FeeSummaryTotalFinanceChargeAmount", "");
-		insertData(document, element, "FeeSummaryTotalInterestPercent", "");
-		insertData(document, element, "FeeSummaryTotalOfAllPaymentsAmount", "");
+			LoanCalculationModel loanCalculation) {
+		insertData(document, element, "APRPercent", loanCalculation.getAprPercent());
+		insertData(document, element, "FeeSummaryTotalAmountFinancedAmount", loanCalculation.getFeeSummaryTotalAmountFinancedAmount());
+		insertData(document, element, "FeeSummaryTotalFinanceChargeAmount", loanCalculation.getFeeSummaryTotalFinanceChargeAmount());
+		insertData(document, element, "FeeSummaryTotalInterestPercent", loanCalculation.getFeeSummaryTotalInterestPercent());
+		insertData(document, element, "FeeSummaryTotalOfAllPaymentsAmount", loanCalculation.getFeeSummaryTotalOfAllPaymentsAmount());
 	}
-	*//**
-     * Inserts Fees from JSON Object
-     * @param document Output XML file
-     * @param element parent node of XML
-     * @param jsonDocument Input JSON Object
-     *//*
-	private void insertFees(Document document, Element element, ClosingDisclosureDocument jsonDocument) {
-		// TODO Auto-generated method stub
-		//for (String group : groupings)
-			insertFee(document, insertLevels(document, element, "FEE"), jsonDocument);
+	
+	/**
+	 * inserts Fees in MISMO XML 
+	 * @param document
+	 * @param element
+	 * @param jsonDocument
+	 */
+	private void insertFees(Document document, Element element, ClosingDisclosure jsonDocument) {
+		 
+		if(jsonDocument.getClosingCostDetailsLoanCosts().getOriginationCharges().size() > 0)
+			for (ClosingCostProperties closingCostProperties : jsonDocument.getClosingCostDetailsLoanCosts().getOriginationCharges())
+				insertFee(document, insertLevels(document, element, "FEE"), closingCostProperties);
+		if(jsonDocument.getClosingCostDetailsLoanCosts().getSbDidNotShopFors().size() > 0)
+			for (ClosingCostProperties closingCostProperties : jsonDocument.getClosingCostDetailsLoanCosts().getSbDidNotShopFors())
+				insertFee(document, insertLevels(document, element, "FEE"), closingCostProperties);
+		if(jsonDocument.getClosingCostDetailsLoanCosts().getSbDidShopFors().size() > 0)
+			for (ClosingCostProperties closingCostProperties : jsonDocument.getClosingCostDetailsLoanCosts().getSbDidShopFors())
+				insertFee(document, insertLevels(document, element, "FEE"), closingCostProperties);
 	}
-	*//**
-     * Inserts Fee from JSON Object
-     * @param document Output XML file
-     * @param element parent node of XML
-     * @param jsonDocument Input JSON Object
-     *//*
-	private void insertFee(Document document, Element element, ClosingDisclosureDocument jsonDocument) {
-		// TODO Auto-generated method stub
-		insertFeeDetail(document,  insertLevels(document, element, "FEE_DETAIL"), jsonDocument);
-		insertFeePaidTo(document, 	insertLevels(document, element, "FEE_PAID_TO"), jsonDocument);
-		insertFeePayments(document, insertLevels(document, element, "FEE_PAYMENTS"), jsonDocument);
+	
+	/**
+	 * inserts Fee in MISMO XML
+	 * @param document
+	 * @param element
+	 * @param closingCostProperties
+	 */
+	private void insertFee(Document document, Element element, ClosingCostProperties closingCostProperties) {
+		insertFeeDetail(document,  insertLevels(document, element, "FEE_DETAIL"), closingCostProperties);
+		insertFeePaidTo(document, 	insertLevels(document, element, "FEE_PAID_TO"), closingCostProperties);
+		PaymentsModel paymentsModel = new PaymentsModel();
+			paymentsModel.setBpAtClosing(closingCostProperties.getBpAtClosing());
+			paymentsModel.setBpB4Closing(closingCostProperties.getBpB4Closing());
+			paymentsModel.setLenderStatus(closingCostProperties.isLenderStatus());
+			paymentsModel.setPaidByOthers(closingCostProperties.getPaidByOthers());
+			paymentsModel.setSpAtClosing(closingCostProperties.getSpAtClosing());
+			paymentsModel.setSpB4Closing(closingCostProperties.getSpB4Closing());
+		List<MismoFeePaymentsModel> mismoFeePaymentsModelList = Convertor.toMismoFeePayments(paymentsModel, "FEE");
+		if(mismoFeePaymentsModelList.size() > 0)
+			insertFeePayments(document, insertLevels(document, element, "FEE_PAYMENTS"), mismoFeePaymentsModelList);
 	}
-	*//**
-     * Inserts Fee Payments from JSON Object
-     * @param document Output XML file
-     * @param element parent node of XML
-     * @param jsonDocument Input JSON Object
-     *//*
-	private void insertFeePayments(Document document, Element element, ClosingDisclosureDocument jsonDocument) {
-		// TODO Auto-generated method stub
-		//for (String group : groupings)
-			insertFeePayment(document,	insertLevels(document, element, "FEE_PAYMENT"), jsonDocument);
+	
+	/**
+	 * inserts FeePayments in MISMO XML
+	 * @param document
+	 * @param element
+	 * @param closingCostProperties
+	 */
+	private void insertFeePayments(Document document, Element element, List<MismoFeePaymentsModel> MismoFeePaymentsModel) {
+		for (MismoFeePaymentsModel mismoFeePaymentsModel : MismoFeePaymentsModel)
+			insertFeePayment(document,	insertLevels(document, element, "FEE_PAYMENT"), mismoFeePaymentsModel);
 	}
-	*//**
-     * Inserts Fee Payment from JSON Object
-     * @param document Output XML file
-     * @param element parent node of XML
-     * @param jsonDocument Input JSON Object
-     *//*
-	private void insertFeePayment(Document document, Element element, ClosingDisclosureDocument jsonDocument) {
-		// TODO Auto-generated method stub
-		insertData(document, element, "FeeActualPaymentAmount", "");
-		insertData(document, element, "FeePaymentPaidByType", "");
-		insertData(document, element, "FeePaymentPaidOutsideOfClosingIndicator", "");
+	
+	/**
+	 * inserts FeePayment in MISMO XML
+	 * @param document
+	 * @param element
+	 * @param closingCostProperties
+	 */
+	private void insertFeePayment(Document document, Element element, MismoFeePaymentsModel mismoFeePaymentsModel) {
+		insertData(document, element, "FeeActualPaymentAmount", mismoFeePaymentsModel.getAmount());
+		insertData(document, element, "FeePaymentPaidByType", mismoFeePaymentsModel.getPaidByType());
+		insertData(document, element, "FeePaymentPaidOutsideOfClosingIndicator", mismoFeePaymentsModel.getClosingIndicator());
 	}
-	*//**
-     * Inserts Fee Paid To from JSON Object
-     * @param document Output XML file
-     * @param element parent node of XML
-     * @param jsonDocument Input JSON Object
-     *//*
-	private void insertFeePaidTo(Document document, Element element, ClosingDisclosureDocument jsonDocument) {
-		// TODO Auto-generated method stub
-		insertLegalEntity(document,	insertLevels(document, element, "LEGAL_ENTITY"), jsonDocument);
+	
+	/**
+	 * 
+	 * @param document
+	 * @param element
+	 * @param closingCostProperties
+	 */
+	private void insertFeePaidTo(Document document, Element element, ClosingCostProperties closingCostProperties) {
+		//insertLegalEntity(document,	insertLevels(document, element, "LEGAL_ENTITY"), jsonDocument);
 	}
-	*//**
-     * Inserts Fee Detail from JSON Object
-     * @param document Output XML file
-     * @param element parent node of XML
-     * @param jsonDocument Input JSON Object
-     *//*
-	private void insertFeeDetail(Document document, Element element, ClosingDisclosureDocument jsonDocument) {
-		// TODO Auto-generated method stub
+	
+	/**
+	 * 
+	 * @param document
+	 * @param element
+	 * @param closingCostProperties
+	 */
+	private void insertFeeDetail(Document document, Element element,  ClosingCostProperties closingCostProperties) {
+		
+		OtherModel other = new OtherModel();
+			other.setPaymentIncludedInAPRIndicator(Boolean.toString(closingCostProperties.isPaymentIncludedInAPRIndicator()));
 		insertData(document, element, "BorrowerChosenProviderIndicator", "");
-		insertData(document, element, "FeeActualTotalAmount", "");
-		insertData(document, element, "FeeEstimatedTotalAmount", "");
-		insertData(document, element, "FeePaidToType", "");
-		insertData(document, element, "FeePaidToTypeOtherDescription", "");
-		insertData(document, element, "FeePercentBasisType", "");
-		insertData(document, element, "FeeTotalPercent", "");
-		Element FeeTypeelement = insertData(document, element, "FeeType", "");
-		FeeTypeelement.setAttribute("gse:DisplayLabelText", "");
-		insertData(document, element, "FeeTypeOtherDescription", "");
-		insertData(document, element, "IntegratedDisclosureSectionType", "");
-		insertData(document, element, "OptionalCostIndicator", "");
-		insertData(document, element, "RegulationZPointsAndFeesIndicator", "");
+		insertData(document, element, "FeeActualTotalAmount", closingCostProperties.getFeeActualTotalAmount());
+		insertData(document, element, "FeeEstimatedTotalAmount", "" );
+		insertData(document, element, "FeePaidToType", closingCostProperties.getFeePaidToType());
+		insertData(document, element, "FeePaidToTypeOtherDescription", closingCostProperties.getFeePaidToTypeOtherDescription());
+		insertData(document, element, "FeePercentBasisType", closingCostProperties.getFeePercentBasisType());
+		insertData(document, element, "FeeTotalPercent", closingCostProperties.getFeeTotalPercent());
+		Element FeeTypeelement = insertData(document, element, "FeeType", closingCostProperties.getFeeType());
+		FeeTypeelement.setAttribute("gse:DisplayLabelText", closingCostProperties.getGseDisplayLabel());
+		insertData(document, element, "FeeTypeOtherDescription", closingCostProperties.getFeeTypeOtherDescription());
+		insertData(document, element, "IntegratedDisclosureSectionType", closingCostProperties.getIntegratedDisclosureSectionType());
+		insertData(document, element, "OptionalCostIndicator", Boolean.toString(closingCostProperties.isOptionalCostIndicator()));
+		insertData(document, element, "RegulationZPointsAndFeesIndicator", Boolean.toString(closingCostProperties.isRegulationZPointsAndFeesIndicator()).toLowerCase());
 		insertData(document, element, "RequiredProviderOfServiceIndicator", "");
-		insertExtension(document, insertLevels(document, element, "EXTENSION"), jsonDocument);
+		insertExtension(document, insertLevels(document, element, "EXTENSION"), other);
 	}
-	*//**
-     * Inserts Escrow from JSON Object
-     * @param document Output XML file
-     * @param element parent node of XML
-     * @param jsonDocument Input JSON Object
-     *//*
-	private void insertEscrow(Document document, Element element, ClosingDisclosureDocument jsonDocument) {
-		// TODO Auto-generated method stub
+	
+	/**
+	 * inserts Escrow in MISMO XML
+	 * @param document
+	 * @param element
+	 * @param jsonDocument
+	 */
+	private void insertEscrow(Document document, Element element, ClosingDisclosure jsonDocument) {
 		insertEscrowDetail(document, insertLevels(document, element, "ESCROW_DETAIL"), jsonDocument);
-		insertEscrowItems(document, insertLevels(document, element, "ESCROW_ITEMS"), jsonDocument);
+		//insertEscrowItems(document, insertLevels(document, element, "ESCROW_ITEMS"), jsonDocument.get);
 	}
-	*//**
-     * Inserts Escrow Items from JSON Object
-     * @param document Output XML file
-     * @param element parent node of XML
-     * @param jsonDocument Input JSON Object
-     *//*
-	private void insertEscrowItems(Document document, Element element, ClosingDisclosureDocument jsonDocument) {
-		// TODO Auto-generated method stub
-		//for (String group : groupings)
-			insertEscrowItem(document, insertLevels(document, element, "ESCROW_ITEM"), jsonDocument);
+	
+	/**
+	 * inserts EscrowItems in MISMO XML
+	 * @param document
+	 * @param element
+	 * @param jsonDocument
+	 */
+	private void insertEscrowItems(Document document, Element element, ClosingDisclosure jsonDocument) {
+		/*for (String group : groupings)
+			insertEscrowItem(document, insertLevels(document, element, "ESCROW_ITEM"), jsonDocument);*/
 	}
-	*//**
+	/**
      * Inserts Escrow Item from JSON Object
      * @param document Output XML file
      * @param element parent node of XML
@@ -1271,17 +1296,18 @@ public class JsonToUcd {
 		insertData(document, element, "RegulationZPointsAndFeesIndicator", "");
 		insertExtension(document, insertLevels(document, element, "EXTENSION"), jsonDocument);
 	}
-	*//**
-     * Inserts Escrow Detail from JSON Object
-     * @param document Output XML file
-     * @param element parent node of XML
-     * @param jsonDocument Input JSON Object
-     *//*
-	private void insertEscrowDetail(Document document, Element element, ClosingDisclosureDocument jsonDocument) {
-		// TODO Auto-generated method stub
-		insertData(document, element, "EscrowAggregateAccountingAdjustmentAmount", "");
+	*/
+	
+	/**
+	 * inserts EscrowDetail in MISMO XML
+	 * @param document
+	 * @param element
+	 * @param jsonDocument
+	 */
+	private void insertEscrowDetail(Document document, Element element, ClosingDisclosure jsonDocument) {
+		insertData(document, element, "EscrowAggregateAccountingAdjustmentAmount", jsonDocument.getClosingDisclosureDocDetails().getEscrowAggregateAccountingAdjustmentAmount());
 	}
-	*//**
+	/**
      * Inserts Document Specific DataSet from JSON Object
      * @param document Output XML file
      * @param element parent node of XML
@@ -2089,8 +2115,8 @@ public class JsonToUcd {
 	 * @param other
 	 */
 	private void insertMismo(Document document, Element element, OtherModel other) {
-		insertData(document, element, "PaymentIncludedInAPRIndicator", "");
-		insertData(document, element, "PayoffPartialIndicator", "");
+		insertData(document, element, "PaymentIncludedInAPRIndicator", other.getPaymentIncludedInAPRIndicator());
+		insertData(document, element, "PayoffPartialIndicator", other.getPayoffPartialIndicator());
 	}
 	/**
      * Inserts Index Rules from JSON Object
@@ -2286,7 +2312,6 @@ public class JsonToUcd {
      */
 	private void insertPropertyValuation(Document document, Element element,
 			PropertyValuationDetailModel propertyValuationDetailModel) {
-		// TODO Auto-generated method stub
 		insertPropertyValuationDetail(document, insertLevels(document, element, "PROPERTY_VALUATION_DETAIL"), propertyValuationDetailModel);
 	}
 	/**
@@ -2297,9 +2322,8 @@ public class JsonToUcd {
      */	
 	private void insertPropertyValuationDetail(Document document, Element element,
 			PropertyValuationDetailModel propertyValuationDetail) {
-		// TODO Auto-generated method stub
 		Element AppraisalIdentifierelement = insertLevels(document, element, "AppraisalIdentifier");
-		AppraisalIdentifierelement.setAttribute("IdentifierOwnerURI", "TODO");
+		AppraisalIdentifierelement.setAttribute("IdentifierOwnerURI",propertyValuationDetail.getIdentifierOwnerURI());
 		//insertAttributeValue(xmlout, element, "IdentifierOwnerURI", "");
 		insertData(document, element, "PropertyValuationAmount", propertyValuationDetail.getPropertyValuationAmount());
 		insertData(document, element, "PropertyValuationMethodType", propertyValuationDetail.getPropertyValuationMethodType());

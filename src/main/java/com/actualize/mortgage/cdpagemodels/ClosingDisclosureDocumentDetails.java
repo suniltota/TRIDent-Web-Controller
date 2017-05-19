@@ -17,9 +17,8 @@ public class ClosingDisclosureDocumentDetails implements Serializable {
 
     private String transactionType;
     private String documentType;
-    private boolean isSellerOnly;
-    private boolean isStandard;
-    private boolean isAlternativeView;
+    private String formType;
+    private String escrowAggregateAccountingAdjustmentAmount;
 	/**
 	 * @return the transactionType
 	 */
@@ -45,42 +44,28 @@ public class ClosingDisclosureDocumentDetails implements Serializable {
 		this.documentType = documentType;
 	}
 	/**
-	 * @return the isSellerOnly
+	 * @return the formType
 	 */
-	public boolean isSellerOnly() {
-		return isSellerOnly;
+	public String getFormType() {
+		return formType;
 	}
 	/**
-	 * @param isSellerOnly the isSellerOnly to set
+	 * @param formType the formType to set
 	 */
-	public void setSellerOnly(boolean isSellerOnly) {
-		this.isSellerOnly = isSellerOnly;
+	public void setFormType(String formType) {
+		this.formType = formType;
 	}
 	/**
-	 * @return the isStandard
+	 * @return the escrowAggregateAccountingAdjustmentAmount
 	 */
-	public boolean isStandard() {
-		return isStandard;
+	public String getEscrowAggregateAccountingAdjustmentAmount() {
+		return escrowAggregateAccountingAdjustmentAmount;
 	}
 	/**
-	 * @param isStandard the isStandard to set
+	 * @param escrowAggregateAccountingAdjustmentAmount the escrowAggregateAccountingAdjustmentAmount to set
 	 */
-	public void setStandard(boolean isStandard) {
-		this.isStandard = isStandard;
-	}
-	/**
-	 * @return the isAlternativeView
-	 */
-	public boolean isAlternativeView() {
-		return isAlternativeView;
-	}
-	/**
-	 * @param isAlternativeView the isAlternativeView to set
-	 */
-	public void setAlternativeView(boolean isAlternativeView) {
-		this.isAlternativeView = isAlternativeView;
+	public void setEscrowAggregateAccountingAdjustmentAmount(String escrowAggregateAccountingAdjustmentAmount) {
+		this.escrowAggregateAccountingAdjustmentAmount = escrowAggregateAccountingAdjustmentAmount;
 	}
     
-    
-	
 }

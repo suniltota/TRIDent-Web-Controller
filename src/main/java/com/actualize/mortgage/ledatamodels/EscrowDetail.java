@@ -6,11 +6,12 @@ import com.actualize.mortgage.domainmodels.MISMODataAccessObject;
 
 public class EscrowDetail extends MISMODataAccessObject{
 	
-    public final String EscrowAggregateAccountingAdjustmentAmount;
+	private static final long serialVersionUID = -9031296076021358307L;
+	public final String escrowAggregateAccountingAdjustmentAmount;
     
-	protected EscrowDetail(Element element) {
+	public EscrowDetail(Element element) {
 		super(element);
-		EscrowAggregateAccountingAdjustmentAmount = getValue("EscrowAggregateAccountingAdjustmentAmount");
+		escrowAggregateAccountingAdjustmentAmount = getValue("EscrowAggregateAccountingAdjustmentAmount");
 	}
 
 }

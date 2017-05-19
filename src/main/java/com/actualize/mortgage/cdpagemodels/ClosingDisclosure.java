@@ -52,8 +52,9 @@ import com.actualize.mortgage.ledatamodels.PayoffsAndPayments;
  */
 public class ClosingDisclosure implements Serializable {
 
-    private static final long serialVersionUID = 3808831045060865597L;
-    private ClosingDisclosureDocumentDetails closingDisclosureDocType;
+	private static final long serialVersionUID = 7465423018709662232L;
+	
+	private ClosingDisclosureDocumentDetails closingDisclosureDocDetails;
     private LoanDetailModel loanDetail;
     private TermsOfLoanModel termsOfLoan;
     private DocumentClassificationModel documentClassification;
@@ -90,16 +91,16 @@ public class ClosingDisclosure implements Serializable {
     private LoanCalculationsQualifiedMortgage loanCalculationsQualifiedMortgage;
     private ContactInformationModel contactInformation;
 	/**
-	 * @return the closingDisclosureDocType
+	 * @return the closingDisclosureDocDetails
 	 */
-	public ClosingDisclosureDocumentDetails getClosingDisclosureDocType() {
-		return closingDisclosureDocType;
+	public ClosingDisclosureDocumentDetails getClosingDisclosureDocDetails() {
+		return closingDisclosureDocDetails;
 	}
 	/**
-	 * @param closingDisclosureDocType the closingDisclosureDocType to set
+	 * @param closingDisclosureDocDetails the closingDisclosureDocDetails to set
 	 */
-	public void setClosingDisclosureDocType(ClosingDisclosureDocumentDetails closingDisclosureDocType) {
-		this.closingDisclosureDocType = closingDisclosureDocType;
+	public void setClosingDisclosureDocDetails(ClosingDisclosureDocumentDetails closingDisclosureDocDetails) {
+		this.closingDisclosureDocDetails = closingDisclosureDocDetails;
 	}
 	/**
 	 * @return the loanDetail
@@ -150,6 +151,42 @@ public class ClosingDisclosure implements Serializable {
 		this.closingInformation = closingInformation;
 	}
 	/**
+	 * @return the closingInformationDetail
+	 */
+	public ClosingInformationDetailModel getClosingInformationDetail() {
+		return closingInformationDetail;
+	}
+	/**
+	 * @param closingInformationDetail the closingInformationDetail to set
+	 */
+	public void setClosingInformationDetail(ClosingInformationDetailModel closingInformationDetail) {
+		this.closingInformationDetail = closingInformationDetail;
+	}
+	/**
+	 * @return the construction
+	 */
+	public ConstructionModel getConstruction() {
+		return construction;
+	}
+	/**
+	 * @param construction the construction to set
+	 */
+	public void setConstruction(ConstructionModel construction) {
+		this.construction = construction;
+	}
+	/**
+	 * @return the miDataDetail
+	 */
+	public MIDataDetailModel getMiDataDetail() {
+		return miDataDetail;
+	}
+	/**
+	 * @param miDataDetail the miDataDetail to set
+	 */
+	public void setMiDataDetail(MIDataDetailModel miDataDetail) {
+		this.miDataDetail = miDataDetail;
+	}
+	/**
 	 * @return the transactionInformation
 	 */
 	public TransactionInformation getTransactionInformation() {
@@ -174,6 +211,18 @@ public class ClosingDisclosure implements Serializable {
 		this.loanInformation = loanInformation;
 	}
 	/**
+	 * @return the salesContractDetail
+	 */
+	public SalesContractDetailModel getSalesContractDetail() {
+		return salesContractDetail;
+	}
+	/**
+	 * @param salesContractDetail the salesContractDetail to set
+	 */
+	public void setSalesContractDetail(SalesContractDetailModel salesContractDetail) {
+		this.salesContractDetail = salesContractDetail;
+	}
+	/**
 	 * @return the integratedDisclosureDetail
 	 */
 	public IntegratedDisclosureDetailModel getIntegratedDisclosureDetail() {
@@ -184,6 +233,54 @@ public class ClosingDisclosure implements Serializable {
 	 */
 	public void setIntegratedDisclosureDetail(IntegratedDisclosureDetailModel integratedDisclosureDetail) {
 		this.integratedDisclosureDetail = integratedDisclosureDetail;
+	}
+	/**
+	 * @return the negativeAmortization
+	 */
+	public NegativeAmortizationModel getNegativeAmortization() {
+		return negativeAmortization;
+	}
+	/**
+	 * @param negativeAmortization the negativeAmortization to set
+	 */
+	public void setNegativeAmortization(NegativeAmortizationModel negativeAmortization) {
+		this.negativeAmortization = negativeAmortization;
+	}
+	/**
+	 * @return the interestOnly
+	 */
+	public InterestOnlyModel getInterestOnly() {
+		return interestOnly;
+	}
+	/**
+	 * @param interestOnly the interestOnly to set
+	 */
+	public void setInterestOnly(InterestOnlyModel interestOnly) {
+		this.interestOnly = interestOnly;
+	}
+	/**
+	 * @return the maturityRule
+	 */
+	public MaturityRuleModel getMaturityRule() {
+		return maturityRule;
+	}
+	/**
+	 * @param maturityRule the maturityRule to set
+	 */
+	public void setMaturityRule(MaturityRuleModel maturityRule) {
+		this.maturityRule = maturityRule;
+	}
+	/**
+	 * @return the loanProduct
+	 */
+	public LoanProductModel getLoanProduct() {
+		return loanProduct;
+	}
+	/**
+	 * @param loanProduct the loanProduct to set
+	 */
+	public void setLoanProduct(LoanProductModel loanProduct) {
+		this.loanProduct = loanProduct;
 	}
 	/**
 	 * @return the loanTerms
@@ -414,102 +511,6 @@ public class ClosingDisclosure implements Serializable {
 	public void setContactInformation(ContactInformationModel contactInformation) {
 		this.contactInformation = contactInformation;
 	}
-	/**
-	 * @return the salesContractDetail
-	 */
-	public SalesContractDetailModel getSalesContractDetail() {
-		return salesContractDetail;
-	}
-	/**
-	 * @param salesContractDetail the salesContractDetail to set
-	 */
-	public void setSalesContractDetail(SalesContractDetailModel salesContractDetail) {
-		this.salesContractDetail = salesContractDetail;
-	}
-	/**
-	 * @return the closingInformationDetail
-	 */
-	public ClosingInformationDetailModel getClosingInformationDetail() {
-		return closingInformationDetail;
-	}
-	/**
-	 * @param closingInformationDetail the closingInformationDetail to set
-	 */
-	public void setClosingInformationDetail(ClosingInformationDetailModel closingInformationDetail) {
-		this.closingInformationDetail = closingInformationDetail;
-	}
-	/**
-	 * @return the construction
-	 */
-	public ConstructionModel getConstruction() {
-		return construction;
-	}
-	/**
-	 * @param construction the construction to set
-	 */
-	public void setConstruction(ConstructionModel construction) {
-		this.construction = construction;
-	}
-	/**
-	 * @return the miDataDetail
-	 */
-	public MIDataDetailModel getMiDataDetail() {
-		return miDataDetail;
-	}
-	/**
-	 * @param miDataDetail the miDataDetail to set
-	 */
-	public void setMiDataDetail(MIDataDetailModel miDataDetail) {
-		this.miDataDetail = miDataDetail;
-	}
-	/**
-	 * @return the negativeAmortization
-	 */
-	public NegativeAmortizationModel getNegativeAmortization() {
-		return negativeAmortization;
-	}
-	/**
-	 * @param negativeAmortization the negativeAmortization to set
-	 */
-	public void setNegativeAmortization(NegativeAmortizationModel negativeAmortization) {
-		this.negativeAmortization = negativeAmortization;
-	}
-	/**
-	 * @return the interestOnly
-	 */
-	public InterestOnlyModel getInterestOnly() {
-		return interestOnly;
-	}
-	/**
-	 * @param interestOnly the interestOnly to set
-	 */
-	public void setInterestOnly(InterestOnlyModel interestOnly) {
-		this.interestOnly = interestOnly;
-	}
-	/**
-	 * @return the maturityRule
-	 */
-	public MaturityRuleModel getMaturityRule() {
-		return maturityRule;
-	}
-	/**
-	 * @param maturityRule the maturityRule to set
-	 */
-	public void setMaturityRule(MaturityRuleModel maturityRule) {
-		this.maturityRule = maturityRule;
-	}
-	/**
-	 * @return the loanProduct
-	 */
-	public LoanProductModel getLoanProduct() {
-		return loanProduct;
-	}
-	/**
-	 * @param loanProduct the loanProduct to set
-	 */
-	public void setLoanProduct(LoanProductModel loanProduct) {
-		this.loanProduct = loanProduct;
-	}
 	
-	
+    
 }
