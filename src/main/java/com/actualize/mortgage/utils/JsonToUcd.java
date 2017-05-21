@@ -21,24 +21,34 @@ import org.w3c.dom.Element;
 import com.actualize.mortgage.cdpagemodels.ClosingDisclosure;
 import com.actualize.mortgage.domainmodels.AddressModel;
 import com.actualize.mortgage.domainmodels.Borrower;
+import com.actualize.mortgage.domainmodels.ClosingAdjustmentItemModel;
 import com.actualize.mortgage.domainmodels.ClosingCostFundModel;
 import com.actualize.mortgage.domainmodels.ClosingCostProperties;
 import com.actualize.mortgage.domainmodels.ClosingInformationDetailModel;
 import com.actualize.mortgage.domainmodels.ConstructionModel;
 import com.actualize.mortgage.domainmodels.DocumentClassificationModel;
 import com.actualize.mortgage.domainmodels.InterestOnlyModel;
+import com.actualize.mortgage.domainmodels.InterestRateAdjustmentModel;
 import com.actualize.mortgage.domainmodels.LiabilityModel;
 import com.actualize.mortgage.domainmodels.LoanCalculationModel;
+import com.actualize.mortgage.domainmodels.LoanDetailModel;
 import com.actualize.mortgage.domainmodels.LoanInformation;
+import com.actualize.mortgage.domainmodels.LoanProductModel;
 import com.actualize.mortgage.domainmodels.LoanTermsTemporaryBuydown;
+import com.actualize.mortgage.domainmodels.MIDataDetailModel;
+import com.actualize.mortgage.domainmodels.MaturityRuleModel;
 import com.actualize.mortgage.domainmodels.MismoFeePaymentsModel;
 import com.actualize.mortgage.domainmodels.NameModel;
 import com.actualize.mortgage.domainmodels.OtherModel;
 import com.actualize.mortgage.domainmodels.PaymentsModel;
+import com.actualize.mortgage.domainmodels.PrincipalAndInterestPaymentAdjustmentModel;
 import com.actualize.mortgage.domainmodels.PropertyValuationDetailModel;
 import com.actualize.mortgage.domainmodels.ProrationModel;
+import com.actualize.mortgage.domainmodels.QualifiedMortgageModel;
 import com.actualize.mortgage.domainmodels.SalesContractDetailModel;
 import com.actualize.mortgage.domainmodels.TermsOfLoanModel;
+import com.actualize.mortgage.ledatamodels.InterestRateLifetimeAdjustmentRule;
+import com.actualize.mortgage.ledatamodels.LoanDetail;
 
 public class JsonToUcd {
 	private static final String GSE_ALIAS = "gse";
@@ -520,7 +530,7 @@ public class JsonToUcd {
 	 */
 	private void insertLoan(Document document, Element element, ClosingDisclosure jsonDocument) {
 		
-		//insertAdjustment(document, insertLevels(document, element, "ADJUSTMENT"), jsonDocument);
+		insertAdjustment(document, insertLevels(document, element, "ADJUSTMENT"), jsonDocument);
 		insertAmortizationRule(document, insertLevels(document, element, "AMORTIZATION/AMORTIZATION_RULE"), jsonDocument.getLoanInformation());
 		insertBuydown(document, insertLevels(document, element, "BUYDOWN"), jsonDocument.getLoanTerms().getLoanTermsTemporaryBuydown());
 		insertClosingInformation(document, insertLevels(document, element, "CLOSING_INFORMATION"), jsonDocument);
@@ -529,18 +539,18 @@ public class JsonToUcd {
 		insertEscrow(document, insertLevels(document, element, "ESCROW"), jsonDocument);*/
 		insertFeeInformation(document, insertLevels(document, element, "FEE_INFORMATION"), jsonDocument);
 		/*insertForeclosures(document, insertLevels(document, element, "FORECLOSURES"), jsonDocument); // Not needed for LE
-		insertHeloc(document, insertLevels(document, element, "HELOC"), jsonDocument); // Not needed for LE
-		insertHighCostMortgages(document, insertLevels(document, element, "HIGH_COST_MORTGAGES"), jsonDocument); //  Not needed for LE
-		insertHmdaLoan(document, insertLevels(document, element, "HMDA_LOAN"), jsonDocument); //  Not needed for LE*/
+		insertHeloc(document, insertLevels(document, element, "HELOC"), jsonDocument); // Not needed for LE*/
+		insertHighCostMortgages(document, insertLevels(document, element, "HIGH_COST_MORTGAGES"), jsonDocument.getLoanCalculationsQualifiedMortgage().getQualifiedMortgage()); //  Not needed for LE
+		//insertHmdaLoan(document, insertLevels(document, element, "HMDA_LOAN"), jsonDocument); //  Not needed for LE*/
 		insertInterestOnly(document, insertLevels(document, element, "INTEREST_ONLY"), jsonDocument.getInterestOnly());
-		/*insertLateChargeRule(document, insertLevels(document, element, "LATE_CHARGE/EXTENSION/OTHER/gse:LATE_CHARGE_RULES/LATE_CHARGE_RULE"), jsonDocument);
-		insertLoanDetail(document, insertLevels(document, element, "LOAN_DETAIL"), jsonDocument);
-		insertLoanIdentifiers(document, insertLevels(document, element, "LOAN_IDENTIFIERS"), jsonDocument);
-		insertLoanLevelCredit(document, insertLevels(document, element, "LOAN_LEVEL_CREDIT"), jsonDocument);
-		insertLoanProduct(document, insertLevels(document, element, "LOAN_PRODUCT"), jsonDocument); //  Not needed for LE
-		insertMaturityRule(document, insertLevels(document, element, "MATURITY/MATURITY_RULE"), jsonDocument);
-		insertMIDataDetail(document, insertLevels(document, element, "MI_DATA/MI_DATA_DETAIL"), jsonDocument); // Not needed for LE
-		insertNegativeAmortization(document, insertLevels(document, element, "NEGATIVE_AMORTIZATION"), jsonDocument);
+		//insertLateChargeRule(document, insertLevels(document, element, "LATE_CHARGE/EXTENSION/OTHER/gse:LATE_CHARGE_RULES/LATE_CHARGE_RULE"), jsonDocument);
+		insertLoanDetail(document, insertLevels(document, element, "LOAN_DETAIL"), jsonDocument.getLoanDetail());
+		/*insertLoanIdentifiers(document, insertLevels(document, element, "LOAN_IDENTIFIERS"), jsonDocument);
+		insertLoanLevelCredit(document, insertLevels(document, element, "LOAN_LEVEL_CREDIT"), jsonDocument);*/
+		insertLoanProduct(document, insertLevels(document, element, "LOAN_PRODUCT"), jsonDocument.getLoanProduct());
+		insertMaturityRule(document, insertLevels(document, element, "MATURITY/MATURITY_RULE"), jsonDocument.getMaturityRule());
+		insertMIDataDetail(document, insertLevels(document, element, "MI_DATA/MI_DATA_DETAIL"), jsonDocument.getMiDataDetail()); 
+		/*insertNegativeAmortization(document, insertLevels(document, element, "NEGATIVE_AMORTIZATION"), jsonDocument);
 		insertPayment(document, insertLevels(document, element, "PAYMENT"), jsonDocument);
 		insertPrepaymentPenalty(document, insertLevels(document, element, "PREPAYMENT_PENALTY"), jsonDocument);
 		insertQualification(document, insertLevels(document, element, "QUALIFICATION"), jsonDocument); //Not needed for LE
@@ -796,30 +806,28 @@ public class JsonToUcd {
 		insertData(document, element, "NegativeAmortizationType", "");
 	}
 	*//**
-     * Inserts MI Data Detail from JSON Object
+     * Inserts MI Data Detail to MISMO XML
      * @param document Output XML file
      * @param element parent node of XML
      * @param jsonDocument Input JSON Object
-     *//*
-	private void insertMIDataDetail(Document document, Element element, ClosingDisclosureDocument jsonDocument) {
-		// TODO Auto-generated method stub
-		insertData(document, element, "MICertificateIdentifier", jsonDocument.getPageOne().getLoanInformation().getMiCertificateIdentifier());
-		insertData(document, element, "MICompanyNameType", "");
-		insertData(document, element, "MICompanyNameTypeOtherDescription", "");
-		insertData(document, element, "MIScheduledTerminationDate", "");
+     */
+	private void insertMIDataDetail(Document document, Element element, MIDataDetailModel miDataDetail) {
+		insertData(document, element, "MICertificateIdentifier", miDataDetail.getMiCertificateIdentifier());
+		insertData(document, element, "MICompanyNameType", miDataDetail.getMiCompanyNameType());
+		insertData(document, element, "MICompanyNameTypeOtherDescription",  miDataDetail.getMiCompanyNameTypeOtherDescription());
+		insertData(document, element, "MIScheduledTerminationDate",  miDataDetail.getMiScheduledTerminationDate());
 	}
-	*//**
-     * Inserts Loan Product from JSON Object
+	/**
+     * Inserts Loan Product to MISMO XML
      * @param document Output XML file
      * @param element parent node of XML
      * @param jsonDocument Input JSON Object
-     *//*
-	private void insertLoanProduct(Document document, Element element, ClosingDisclosureDocument jsonDocument) {
-		// TODO Auto-generated method stub
-		insertLoanPriceQuotes(document, insertLevels(document, element, "LOAN_PRICE_QUOTES"), jsonDocument);
-		insertLocks(document, insertLevels(document, element, "LOCKS"), jsonDocument);
+     */
+	private void insertLoanProduct(Document document, Element element, LoanProductModel loanProduct) {
+		insertLoanPriceQuotes(document, insertLevels(document, element, "LOAN_PRICE_QUOTES"), loanProduct);
+		//insertLocks(document, insertLevels(document, element, "LOCKS"), jsonDocument);
 	}
-	*//**
+	/**
      * Inserts Locks from JSON Object
      * @param document Output XML file
      * @param element parent node of XML
@@ -843,39 +851,36 @@ public class JsonToUcd {
 		insertExtension(document, insertLevels(document, element, "EXTENSION"), jsonDocument);
 	}
 	*//**
-     * Inserts Loan Price Quotes from JSON Object
+     * Inserts Loan Price Quotes to MISMO XML
      * @param document Output XML file
      * @param element parent node of XML
      * @param jsonDocument Input JSON Object
-     *//*
+     */
 	private void insertLoanPriceQuotes(Document document, Element element,
-			ClosingDisclosureDocument jsonDocument) {
-		// TODO Auto-generated method stub
+			LoanProductModel loanProduct) {
 		//for (String group : groupings)
-			insertLoanPriceQuote(document, insertLevels(document, element, "LOAN_PRICE_QUOTE"), jsonDocument);
+			insertLoanPriceQuote(document, insertLevels(document, element, "LOAN_PRICE_QUOTE"), loanProduct);
 	}
-	*//**
-     * Inserts Loan Price Quote from JSON Object
+	/**
+     * Inserts Loan Price Quote to MISMO XML
      * @param document Output XML file
      * @param element parent node of XML
      * @param jsonDocument Input JSON Object
-     *//*
-	private void insertLoanPriceQuote(Document document, Element element, ClosingDisclosureDocument jsonDocument) {
-		// TODO Auto-generated method stub
-		insertLoanPriceQuoteDetail(document, insertLevels(document, element, "LOAN_PRICE_QUOTE_DETAIL"), jsonDocument);
+     */
+	private void insertLoanPriceQuote(Document document, Element element, LoanProductModel loanProduct) {
+		insertLoanPriceQuoteDetail(document, insertLevels(document, element, "LOAN_PRICE_QUOTE_DETAIL"), loanProduct);
 	}
-	*//**
-     * Inserts Loan Price Quote Detail from JSON Object
+	/**
+     * Inserts Loan Price Quote Detail to MISMO XML
      * @param document Output XML file
      * @param element parent node of XML
      * @param jsonDocument Input JSON Object
-     *//*
+     */
 	private void insertLoanPriceQuoteDetail(Document document, Element element,
-			ClosingDisclosureDocument jsonDocument) {
-		// TODO Auto-generated method stub
-		insertData(document, element, "LoanPriceQuoteInterestRatePercent", "");
+			LoanProductModel loanProduct) {
+		insertData(document, element, "LoanPriceQuoteInterestRatePercent", loanProduct.getLoanPriceQuoteInterestRatePercent());
 	}
-	*//**
+	/**
      * Inserts Loan Level Credit from JSON Object
      * @param document Output XML file
      * @param element parent node of XML
@@ -900,46 +905,39 @@ public class JsonToUcd {
 		insertData(document, element, "CreditScoreCategoryVersionType", "");
 	}
 	*//**
-     * Inserts Loan Detail from JSON Object
+     * Inserts Loan Detail to MISMO XML
      * @param document Output XML file
      * @param element parent node of XML
      * @param jsonDocument Input JSON Object
-     *//*
-	private void insertLoanDetail(Document document, Element element, ClosingDisclosureDocument jsonDocument) {
-		// TODO Auto-generated method stub
-		LoanTerms loanterms = jsonDocument.getPageOne().getLoanTerms();
-		LoanTermsLoanAmount loanTermsLoanAmount = loanterms.getLoanTermsLoanAmount();
-		LoanTermsInterestRate loanTermsInterestRate = loanterms.getLoanTermsInterestRate();
-		LoanTermsPI loanTermsPI = loanterms.getLoanTermsPI();
-		LoanTermsPrepaymentPenalty loanTermsPrepaymentPenalty = loanterms.getLoanTermsPrepaymentPenalty();
-		LoanTermsBalloonPayment loanTermsBalloonPayment = loanterms.getLoanTermsBalloonPayment();
-		LoanTermsIntialEscrow loanTermsIntialEscrow = new LoanTermsIntialEscrow();
-		
-		insertData(document, element, "AssumedIndicator", ""); //TODO Not Found in UCD-Spec
-		insertData(document, element, "AssumabilityIndicator", "");
-		insertData(document, element, "BalloonIndicator",Convertor.booleanToString(loanTermsBalloonPayment.isBalloonIndicator()));
-		insertData(document, element, "BalloonPaymentAmount", loanTermsBalloonPayment.getBalloonPaymentAmount());
-		insertData(document, element, "BuydownTemporarySubsidyFundingIndicator", Convertor.booleanToString(loanTermsInterestRate.isBuydownTemporarySubsidyFundingIndicator()));
-		insertData(document, element, "ConstructionLoanIndicator", "");
-		insertData(document, element, "CreditorServicingOfLoanStatementType", ""); //TODO Not Found in UCD-Spec
-		insertData(document, element, "DemandFeatureIndicator", "");
-		insertData(document, element, "EscrowAbsenceReasonType", ""); 
-		insertData(document, element, "EscrowIndicator", Convertor.booleanToString(loanTermsIntialEscrow.isEscrowIndicator()));
-		//insertData(document, element, "InterestOnlyIndicator",Boolean.toString( loanTermsPI.isInterestOnlyIndicator()));
-		System.out.println("insertLoanDetail");
-		insertData(document, element, "InterestRateIncreaseIndicator",Boolean.toString(loanTermsInterestRate.isInterestRateIncreaseIndicator()));
-		insertData(document, element, "LoanAmountIncreaseIndicator", "");//TODO Need to add this data to the object "LoanTermsLoanAmount"
-		insertData(document, element, "LoanLevelCreditScoreValue", ""); //TODO Not Found in UCD-Spec
-		insertData(document, element, "MIRequiredIndicator",Convertor.booleanToString(jsonDocument.getPageOne().getLoanInformation().isMiRequiredIndicator()));
-		insertData(document, element, "NegativeAmortizationIndicator",Convertor.booleanToString(loanTermsLoanAmount.isNegativeAmoritzationIndicator()));
-		insertData(document, element, "PaymentIncreaseIndicator", ""); //TODO Need to add this to Object 
-		insertData(document, element, "PrepaymentPenaltyIndicator", Convertor.booleanToString(loanTermsPrepaymentPenalty.isPrepaymentPenaltyIndicator()));
-		insertData(document, element, "SeasonalPaymentFeatureIndicator", "");
-		insertData(document, element, "StepPaymentsFeatureDescription", "");//TODO Not Found in UCD-Spec
-		insertData(document, element, "TotalSubordinateFinancingAmount", "");
-		insertExtension(document, insertLevels(document, element, "EXTENSION"), jsonDocument);
+     */
+	private void insertLoanDetail(Document document, Element element, LoanDetailModel loanDetail) {
+			
+		//insertData(document, element, "AssumedIndicator",);
+		insertData(document, element, "AssumabilityIndicator", Boolean.toString(loanDetail.isAssumabilityIndicator()));
+		insertData(document, element, "BalloonIndicator", Boolean.toString(loanDetail.isBalloonIndicator()));
+		insertData(document, element, "BalloonPaymentAmount",  loanDetail.getBalloonPaymentAmount());
+		insertData(document, element, "BuydownTemporarySubsidyFundingIndicator",Boolean.toString(loanDetail.isBuydownTemporarySubsidyFundingIndicator()));
+		insertData(document, element, "ConstructionLoanIndicator",Boolean.toString(loanDetail.isConstructionLoanIndicator()));
+		insertData(document, element, "CreditorServicingOfLoanStatementType", loanDetail.getCreditorServicingOfLoanStatementType());
+		insertData(document, element, "DemandFeatureIndicator",Boolean.toString(loanDetail.isDemandFeatureIndicator()));
+		insertData(document, element, "EscrowAbsenceReasonType",  loanDetail.getEscrowAbsenceReasonType()); 
+		insertData(document, element, "EscrowIndicator", Boolean.toString(loanDetail.isEscrowIndicator()));
+		insertData(document, element, "InterestOnlyIndicator", Boolean.toString(loanDetail.isInterestOnlyIndicator()));
+		insertData(document, element, "InterestRateIncreaseIndicator", Boolean.toString(loanDetail.isInterestRateIncreaseIndicator()));
+		insertData(document, element, "LoanAmountIncreaseIndicator", Boolean.toString(loanDetail.isLoanAmountIncreaseIndicator()));
+		//insertData(document, element, "LoanLevelCreditScoreValue", ); 
+		insertData(document, element, "MIRequiredIndicator", Boolean.toString(loanDetail.isMiRequiredIndicator()));
+		insertData(document, element, "NegativeAmortizationIndicator", Boolean.toString(loanDetail.isNegativeAmortizationIndicator()));
+		insertData(document, element, "PaymentIncreaseIndicator",Boolean.toString(loanDetail.isPaymentIncreaseIndicator()));  
+		insertData(document, element, "PrepaymentPenaltyIndicator",Boolean.toString(loanDetail.isPrepaymentPenaltyIndicator()));
+		insertData(document, element, "SeasonalPaymentFeatureIndicator", Boolean.toString(loanDetail.isSeasonalPaymentFeatureIndicator()));
+		insertData(document, element, "StepPaymentsFeatureDescription", loanDetail.getStepPaymentsFeatureDescription());
+		insertData(document, element, "TotalSubordinateFinancingAmount", loanDetail.getTotalSubordinateFinancingAmount());
+		OtherModel other = new OtherModel();
+			other.setSubordinateFinancingIsNewIndicator(Boolean.toString(loanDetail.isSubordinateFinancingIsNewIndicator()).toLowerCase());
+		insertExtension(document, insertLevels(document, element, "EXTENSION"), other);
 	}
-	*//**
+	/**
      * Inserts Late Charge Rule from JSON Object
      * @param document Output XML file
      * @param element parent node of XML
@@ -1011,34 +1009,33 @@ public class JsonToUcd {
 		insertData(document, element, "HMDAReasonForDenialType", "");
 		insertData(document, element, "HMDAReasonForDenialTypeOtherDescription", "");
 	}
-	*//**
-     * Inserts High Cost Mortgages from JSON Object
-     * @param document Output XML file
-     * @param element parent node of XML
-     * @param jsonDocument Input JSON Object
-     *//*
-	private void insertHighCostMortgages(Document document, Element element, ClosingDisclosureDocument jsonDocument) {
+	*/
+	/**
+	 * Inserts HighCostMortgages to MISMO XML
+	 * @param document
+	 * @param element
+	 * @param jsonDocument
+	 */
+	private void insertHighCostMortgages(Document document, Element element, QualifiedMortgageModel qualifiedMortgage) {
 		// TODO Auto-generated method stub
 		//for (String group : groupings)
-			insertHighCostMortgage(document, insertLevels(document, element, "HIGH_COST_MORTGAGE"), jsonDocument);
+			insertHighCostMortgage(document, insertLevels(document, element, "HIGH_COST_MORTGAGE"), qualifiedMortgage);
 	}
-	*//**
-     * Inserts High Cost Mortgage from JSON Object
+	/**
+     * Inserts High Cost Mortgage to MISMO XML
      * @param document Output XML file
      * @param element parent node of XML
      * @param jsonDocument Input JSON Object
-     *//*
+     */
 	private void insertHighCostMortgage(Document document, Element element,
-			ClosingDisclosureDocument jsonDocument) {
-		// TODO Auto-generated method stub
-		insertData(document, element, "AveragePrimeOfferRatePercent", "");
-		insertData(document, element, "RegulationZExcludedBonaFideDiscountPointsIndicator", "");
-		insertData(document, element, "RegulationZExcludedBonaFideDiscountPointsPercent", "");
-		insertData(document, element, "RegulationZTotalAffiliateFeesAmount", "");
-		insertData(document, element, "RegulationZTotalLoanAmount", "");
-		insertData(document, element, "RegulationZTotalPointsAndFeesAmount", "");
+			 QualifiedMortgageModel qualifiedMortgage) {
+		insertData(document, element, "AveragePrimeOfferRatePercent", qualifiedMortgage.getAveragePrimeOfferRatePercent());
+		insertData(document, element, "RegulationZExcludedBonaFideDiscountPointsIndicator", qualifiedMortgage.getRegulationZExcludedBonaFideDiscountPointsPercent() );
+		insertData(document, element, "RegulationZTotalAffiliateFeesAmount", qualifiedMortgage.getRegulationZTotalAffiliateFeesAmount());
+		insertData(document, element, "RegulationZTotalLoanAmount", qualifiedMortgage.getRegulationZTotalLoanAmount());
+		insertData(document, element, "RegulationZTotalPointsAndFeesAmount", qualifiedMortgage.getRegulationZTotalPointsAndFeesAmount());
 	}
-	*//**
+	/**
      * Inserts Heloc from JSON Object
      * @param document Output XML file
      * @param element parent node of XML
@@ -1638,11 +1635,13 @@ public class JsonToUcd {
      * @param jsonDocument
      */
 	private void insertClosingInformation(Document document, Element element, ClosingDisclosure jsonDocument) {
-		//insertClosingAdjustmentItems(document ,insertLevels(document, element, "CLOSING_ADJUSTMENT_ITEMS"), jsonDocument);
-		insertClosingCostFunds(document ,insertLevels(document, element, "CLOSING_COST_FUNDS"), jsonDocument.getClosingCostFundList());
+		insertClosingAdjustmentItems(document ,insertLevels(document, element, "CLOSING_ADJUSTMENT_ITEMS"), jsonDocument.getClosingAdjustmentItemList());
+		if(jsonDocument.getClosingCostFundList().size() > 0)
+			insertClosingCostFunds(document ,insertLevels(document, element, "CLOSING_COST_FUNDS"), jsonDocument.getClosingCostFundList());
 		insertClosingInformationDetail(document,insertLevels(document, element, "CLOSING_INFORMATION_DETAIL"), jsonDocument.getClosingInformationDetail());
 		//insertPrepaidItems(document ,insertLevels(document, element, "PREPAID_ITEMS"), jsonDocument);
-		insertProrationItems(document ,insertLevels(document, element, "PRORATION_ITEMS"), jsonDocument.getProrationsList());
+		if(jsonDocument.getProrationsList().size() > 0)
+			insertProrationItems(document ,insertLevels(document, element, "PRORATION_ITEMS"), jsonDocument.getProrationsList());
 	}
 	
 	/**
@@ -1791,45 +1790,41 @@ public class JsonToUcd {
 		insertData(document, element, "IntegratedDisclosureSectionType", closingCostFund.getIntegratedDisclosureSectionType());
 	}
 	/**
-     * Inserts Closing Adjustment Items from JSON Object
+     * Inserts Closing Adjustment Items to MISMO XML
      * @param document Output XML file
      * @param element parent node of XML
      * @param jsonDocument Input JSON Object
-     *//*
-	private void insertClosingAdjustmentItems(Document document, Element element, ClosingDisclosureDocument jsonDocument) {
-		// TODO Auto-generated method stub
-		List<ClosingAdjustmentItem> closingAdjustmentItems = jsonDocument.getPageThree().getClosingAdjustmentItem();
-		for (ClosingAdjustmentItem closingAdjustmentItem : closingAdjustmentItems)
-			insertClosingAdjustmentItem(document, insertLevels(document, element, "CLOSING_ADJUSTMENT_ITEM"), jsonDocument);
+     */
+	private void insertClosingAdjustmentItems(Document document, Element element, List<ClosingAdjustmentItemModel> closingAdjustmentItemList) {
+		for (ClosingAdjustmentItemModel closingAdjustmentItem : closingAdjustmentItemList)
+			insertClosingAdjustmentItem(document, insertLevels(document, element, "CLOSING_ADJUSTMENT_ITEM"), closingAdjustmentItem);
 	}
-	*//**
-     * Inserts Closing Adjustment Item from JSON Object
+	/**
+     * Inserts Closing Adjustment Item to MISMO XML
      * @param document Output XML file
      * @param element parent node of XML
      * @param jsonDocument Input JSON Object
-     *//*
-	private void insertClosingAdjustmentItem(Document document, Element element, ClosingDisclosureDocument jsonDocument) {
-		// TODO Auto-generated method stub
-
-		insertClosingAdjustmentItemDetail(document,insertLevels(document, element, "CLOSING_ADJUSTMENT_ITEM_DETAIL"), jsonDocument);
-		insertClosingAdjustmentItemPaidBy(document,insertLevels(document, element, "CLOSING_ADJUSTMENT_ITEM_PAID_BY"), jsonDocument);
-		insertLegalEntityDetail(document,insertLevels(document, element, "EXTENSION/OTHER/gse:CLOSING_ADJUSTMENT_ITEM_PAID_TO/LEGAL_ENTITY/LEGAL_ENTITY_DETAIL/"), jsonDocument);
+     */
+	private void insertClosingAdjustmentItem(Document document, Element element, ClosingAdjustmentItemModel closingAdjustmentItem) {
+		insertClosingAdjustmentItemDetail(document,insertLevels(document, element, "CLOSING_ADJUSTMENT_ITEM_DETAIL"), closingAdjustmentItem);
+		insertClosingAdjustmentItemPaidBy(document,insertLevels(document, element, "CLOSING_ADJUSTMENT_ITEM_PAID_BY"), closingAdjustmentItem);
+		if(!"".equalsIgnoreCase(closingAdjustmentItem.getPaidToEntityFullName()))
+			insertLegalEntityDetail(document,insertLevels(document, element, "EXTENSION/OTHER/gse:CLOSING_ADJUSTMENT_ITEM_PAID_TO/LEGAL_ENTITY/LEGAL_ENTITY_DETAIL/"), closingAdjustmentItem.getPaidToEntityFullName());
 	
 	}
-	*//**
-     * Inserts Closing Adjustment Item Paid By from JSON Object
+	/**
+     * Inserts Closing Adjustment Item Paid By to MISMO XML
      * @param document Output XML file
      * @param element parent node of XML
      * @param jsonDocument Input JSON Object
-     *//*
+     */
 	private void insertClosingAdjustmentItemPaidBy(Document document, Element element,
-			ClosingDisclosureDocument jsonDocument) {
-		// TODO Auto-generated method stub
-
-		insertLegalEntity(document,insertLevels(document, element, "LEGAL_ENTITY"), jsonDocument);
-		insertIndividual(document,insertLevels(document, element, "INDIVIDUAL"), jsonDocument);
+			 ClosingAdjustmentItemModel closingAdjustmentItem) {
+		if(!"".equals(closingAdjustmentItem.getPaidByEntityFullName()))
+		  insertLegalEntity(document,insertLevels(document, element, "LEGAL_ENTITY"), closingAdjustmentItem.getPaidByEntityFullName());
+		//insertIndividual(document,insertLevels(document, element, "INDIVIDUAL"), jsonDocument);
 	}
-	*//**
+	/**
      * Inserts Individual from JSON Object
      * @param document Output XML file
      * @param element parent node of XML
@@ -1900,48 +1895,43 @@ public class JsonToUcd {
 		insertData(document, element, "ContactPointEmailValue","");
 	}
 	*//**
-     * Inserts Legal Entity from JSON Object
+     * Inserts Legal Entity to MISMO XML
      * @param document Output XML file
      * @param element parent node of XML
      * @param jsonDocument Input JSON Object
-     *//*
-	private void insertLegalEntity(Document document, Element element, ClosingDisclosureDocument jsonDocument) {
-		// TODO Auto-generated method stub
-		insertLegalEntityDetail(document,insertLevels(document, element, "LEGAL_ENTITY_DETAIL"), jsonDocument);
+     */
+	private void insertLegalEntity(Document document, Element element, String fullName) {
+		insertLegalEntityDetail(document,insertLevels(document, element, "LEGAL_ENTITY_DETAIL"), fullName);
 	}
-	*//**
-     * Inserts Legal Entity Detail from JSON Object
+	/**
+     * Inserts Legal Entity Detail to MISMO XML
      * @param document Output XML file
      * @param element parent node of XML
      * @param jsonDocument Input JSON Object
-     *//*
+     */
 	private void insertLegalEntityDetail(Document document, Element element,
-			ClosingDisclosureDocument jsonDocument) {
-		// TODO Auto-generated method stub
-		//LegalEntityDetail legalEntityDetail = jsonDocument.getPageOne().getClosingInformation().getClosingAdjustmentItems().getClosingAdjustmentItem().getClosingAdjustmentItemPaidBy().getLegalEntity().getLegalEntityDetail();
-		insertData(document, element, "FullName", "");
-		insertData(document, element, "GlobalLegalEntityIdentifier", "");
+			String fullName) {
+		insertData(document, element, "FullName", fullName);
+		//insertData(document, element, "GlobalLegalEntityIdentifier", "");
 	}
-	*//**
-     * Inserts Closing Adjustment Item Detail from JSON Object
+	/**
+     * Inserts Closing Adjustment Item Detail to MISMO XML
      * @param document Output XML file
      * @param element parent node of XML
      * @param jsonDocument Input JSON Object
-     *//*
+     */
 	private void insertClosingAdjustmentItemDetail(Document document, Element element,
-			ClosingDisclosureDocument jsonDocument) {
-		// TODO Auto-generated method stub
-		insertData(document, element, "ClosingAdjustmentItemAmount", "");
-		insertData(document, element, "ClosingAdjustmentItemPaidOutsideOfClosingIndicator", "");
-		Element closingAdjustmentItemTypeElement = insertData(document, element, "ClosingAdjustmentItemType", "");
-		closingAdjustmentItemTypeElement.setAttribute("gse:DisplayLabelText", "");
-		//insertAttribute(document, closingAdjustmentItemTypeElement, "gse:DisplayLabelText", jsonDocument);
-		insertData(document, element, "ClosingAdjustmentItemTypeOtherDescription", "");
-		insertData(document, element, "IntegratedDisclosureSectionType", "");
-		insertData(document, element, "IntegratedDisclosureSubsectionType", "");
+			ClosingAdjustmentItemModel closingAdjustmentItem) {
+		insertData(document, element, "ClosingAdjustmentItemAmount", closingAdjustmentItem.getClosingAdjustmentItemAmount());
+		//insertData(document, element, "ClosingAdjustmentItemPaidOutsideOfClosingIndicator",);
+		Element closingAdjustmentItemTypeElement = insertData(document, element, "ClosingAdjustmentItemType", closingAdjustmentItem.getClosingAdjustmentItemType());
+		//closingAdjustmentItemTypeElement.setAttribute("gse:DisplayLabelText", "");
+		//insertAttribute(document, closingAdjustmentItemTypeElement, "gse:DisplayLabelText", closingAdjustmentItem.getDisplayLabel());
+		insertData(document, element, "ClosingAdjustmentItemTypeOtherDescription", closingAdjustmentItem.getClosingAdjustmentItemTypeOtherDescription());
+		insertData(document, element, "IntegratedDisclosureSectionType", closingAdjustmentItem.getIntegratedDisclosureSectionType());
+		insertData(document, element, "IntegratedDisclosureSubsectionType", closingAdjustmentItem.getIntegratedDisclosureSubsectionType());
 	
 	}
-	*/
 	/**
 	 * inserts AmortizationRule in MISMO XML
 	 * @param document
@@ -1952,130 +1942,139 @@ public class JsonToUcd {
 		insertData(document ,element ,"AmortizationType" , loanInformation.getAmortizationType());
 	}
 	/**
-     * Inserts Adjustment from JSON Object
+     * Inserts Adjustment to MISMO XML
      * @param document Output XML file
      * @param element parent node of XML
      * @param jsonDocument Input JSON Object
-     *//*
-	private void insertAdjustment(Document document, Element element, ClosingDisclosureDocument jsonDocument) {
-		// TODO Auto-generated method stub
-		insertInterestRateAdjustment(document ,insertLevels(document, element, "INTEREST_RATE_ADJUSTMENT"), jsonDocument);
-		insertPrincipalAndInterestPaymentAdjustment(document ,insertLevels(document, element, "PRINCIPAL_AND_INTEREST_PAYMENT_ADJUSTMENT"), jsonDocument);
+     */
+	private void insertAdjustment(Document document, Element element, ClosingDisclosure jsonDocument) {
+		insertInterestRateAdjustment(document ,insertLevels(document, element, "INTEREST_RATE_ADJUSTMENT"), jsonDocument.getInterestRateAdjustment());
+		insertPrincipalAndInterestPaymentAdjustment(document ,insertLevels(document, element, "PRINCIPAL_AND_INTEREST_PAYMENT_ADJUSTMENT"), jsonDocument.getPrincipalAndInterestPaymentAdjustment());
 	}
-	*//**
-     * Inserts Principal And Interest Payment Adjustment from JSON Object
+	/**
+     * Inserts Principal And Interest Payment Adjustment to MISMO XML
      * @param document Output XML file
      * @param element parent node of XML
-     * @param jsonDocument Input JSON Object
-     *//*
+     * @param principalAndInterestPaymentAdjustment Input JSON Object
+     */
 	private void insertPrincipalAndInterestPaymentAdjustment(Document document, Element element,
-			ClosingDisclosureDocument jsonDocument) {
-		// TODO Auto-generated method stub
-		insertPrincipalAndInterestPaymentLifetimeAdjustmentRule(document ,insertLevels(document, element, "PRINCIPAL_AND_INTEREST_PAYMENT_LIFETIME_ADJUSTMENT_RULE"), jsonDocument);
-		insertPrincipalAndInterestPaymentPerChangeAdjustmentRules(document ,insertLevels(document, element, "PRINCIPAL_AND_INTEREST_PAYMENT_PER_CHANGE_ADJUSTMENT_RULES"), jsonDocument);
+			PrincipalAndInterestPaymentAdjustmentModel principalAndInterestPaymentAdjustment) {
+		insertPrincipalAndInterestPaymentLifetimeAdjustmentRule(document ,insertLevels(document, element, "PRINCIPAL_AND_INTEREST_PAYMENT_LIFETIME_ADJUSTMENT_RULE"), principalAndInterestPaymentAdjustment);
+		insertPrincipalAndInterestPaymentPerChangeAdjustmentRules(document ,insertLevels(document, element, "PRINCIPAL_AND_INTEREST_PAYMENT_PER_CHANGE_ADJUSTMENT_RULES"), principalAndInterestPaymentAdjustment);
 	}
-	*//**
-     * Inserts Principal And Interest Payment Per Change Adjustment Rules from JSON Object
+	/**
+     * Inserts Principal And Interest Payment Per Change Adjustment Rules to MISMO XML
      * @param document Output XML file
      * @param element parent node of XML
      * @param jsonDocument Input JSON Object
-     *//*
+     */
 	private void insertPrincipalAndInterestPaymentPerChangeAdjustmentRules(Document document, Element element,
-			ClosingDisclosureDocument jsonDocument) {
-		// TODO Auto-generated method stub
-		List<PrincipalAndInterestPaymentPerChangeAdjustmentRules> principalAndInterestPaymentPerChangeAdjustmentRules = jsonDocument.getPageFour().getPrincipalAndInterestPaymentPerChangeAdjustmentRule();
-		for (PrincipalAndInterestPaymentPerChangeAdjustmentRule principalAndInterestPaymentPerChangeAdjustmentRule : principalAndInterestPaymentPerChangeAdjustmentRules)
-			insertPrincipalAndInterestPaymentPerChangeAdjustmentRule(document,insertLevels(document, element, "PRINCIPAL_AND_INTEREST_PAYMENT_PER_CHANGE_ADJUSTMENT_RULE"),jsonDocument);
+			PrincipalAndInterestPaymentAdjustmentModel principalAndInterestPaymentAdjustment) {
+		if("First".equalsIgnoreCase(principalAndInterestPaymentAdjustment.getFirstAdjustmentRuleType()))
+			insertPrincipalAndInterestPaymentPerChangeAdjustmentRule(document,insertLevels(document, element, "PRINCIPAL_AND_INTEREST_PAYMENT_PER_CHANGE_ADJUSTMENT_RULE"),principalAndInterestPaymentAdjustment);
+		if("Subsequent".equalsIgnoreCase(principalAndInterestPaymentAdjustment.getSubsequentAdjustmentRuleType()))
+			insertPrincipalAndInterestPaymentPerChangeAdjustmentRule(document,insertLevels(document, element, "PRINCIPAL_AND_INTEREST_PAYMENT_PER_CHANGE_ADJUSTMENT_RULE"),principalAndInterestPaymentAdjustment);
 	}
-	*//**
-     * Inserts Principal And Interest Payment Per Change Adjustment Rule from JSON Object
+	/**
+     * Inserts Principal And Interest Payment Per Change Adjustment Rule to MISMO XML
      * @param document Output XML file
      * @param element parent node of XML
      * @param jsonDocument Input JSON Object
-     *//*
+     */
 	private void insertPrincipalAndInterestPaymentPerChangeAdjustmentRule(Document document, Element element,
-			ClosingDisclosureDocument jsonDocument) {
-		// TODO Auto-generated method stub
-		LoanTermsPI loanTermsPI = jsonDocument.getPageOne().getLoanTerms().getLoanTermsPI();
-		insertData(document,element, "AdjustmentRuleType", loanTermsPI.getAdjustmentRuleType());
-		insertData(document,element, "PerChangeMaximumPrincipalAndInterestPaymentAmount", ""); //TODO Value not binded to Object
-		insertData(document,element, "PerChangeMinimumPrincipalAndInterestPaymentAmount", ""); //TODO Value not binded to Object
-		insertData(document,element, "PerChangePrincipalAndInterestPaymentAdjustmentFrequencyMonthsCount", loanTermsPI.getPerChangePrincipalAndInterestPaymentAdjustmentFrequencyMonthsCount());
+			PrincipalAndInterestPaymentAdjustmentModel principalAndInterestPaymentAdjustment) {
+		if("First".equalsIgnoreCase(principalAndInterestPaymentAdjustment.getFirstAdjustmentRuleType()))
+		{
+			insertData(document,element, "AdjustmentRuleType", principalAndInterestPaymentAdjustment.getFirstAdjustmentRuleType());
+			insertData(document,element, "PerChangeMaximumPrincipalAndInterestPaymentAmount", principalAndInterestPaymentAdjustment.getFirstPerChangeMaximumPrincipalAndInterestPaymentAmount()); 
+			insertData(document,element, "PerChangeMinimumPrincipalAndInterestPaymentAmount", principalAndInterestPaymentAdjustment.getFirstPerChangeMinimumPrincipalAndInterestPaymentAmount());
+			insertData(document,element, "PerChangePrincipalAndInterestPaymentAdjustmentFrequencyMonthsCount", principalAndInterestPaymentAdjustment.getFirstPerChangePrincipalAndInterestPaymentAdjustmentFrequencyMonthsCount());
+		}
+		if("Subsequent".equalsIgnoreCase(principalAndInterestPaymentAdjustment.getSubsequentAdjustmentRuleType()))
+		{
+			insertData(document,element, "AdjustmentRuleType", principalAndInterestPaymentAdjustment.getSubsequentAdjustmentRuleType());
+			insertData(document,element, "PerChangeMaximumPrincipalAndInterestPaymentAmount", principalAndInterestPaymentAdjustment.getSubsequentPerChangeMaximumPrincipalAndInterestPaymentAmount()); 
+			insertData(document,element, "PerChangeMinimumPrincipalAndInterestPaymentAmount", principalAndInterestPaymentAdjustment.getSubsequentPerChangeMinimumPrincipalAndInterestPaymentAmount());
+			insertData(document,element, "PerChangePrincipalAndInterestPaymentAdjustmentFrequencyMonthsCount", principalAndInterestPaymentAdjustment.getSubsequentPerChangePrincipalAndInterestPaymentAdjustmentFrequencyMonthsCount());
+		}
 	}
-	*//**
-     * Inserts Principal And Interest Payment Lifetime Adjustment Rule from JSON Object
+	/**
+     * Inserts Principal And Interest Payment Lifetime Adjustment Rule to MISMO XML
      * @param document Output XML file
      * @param element parent node of XML
      * @param jsonDocument Input JSON Object
-     *//*
+     */
 	private void insertPrincipalAndInterestPaymentLifetimeAdjustmentRule(Document document, Element element,
-			ClosingDisclosureDocument jsonDocument) {
-		// TODO Auto-generated method stub
-		LoanTermsPI loanTermsPI = jsonDocument.getPageOne().getLoanTerms().getLoanTermsPI();
-		insertData(document, element, "FirstPrincipalAndInterestPaymentChangeMonthsCount",loanTermsPI.getFirstPrincipalAndInterestPaymentChangeMonthsCount() );
-		insertData(document, element, "PrincipalAndInterestPaymentMaximumAmount", loanTermsPI.getPrincipalAndInterestPaymentMaximumAmount());
-		insertData(document, element, "PrincipalAndInterestPaymentMaximumAmountEarliestEffectiveMonthsCount", loanTermsPI.getPrincipalAndInterestPaymentMaximumAmountEarliestEffectiveMonthsCount());
+			PrincipalAndInterestPaymentAdjustmentModel principalAndInterestPaymentAdjustment) {
+		insertData(document, element, "FirstPrincipalAndInterestPaymentChangeMonthsCount",principalAndInterestPaymentAdjustment.getFirstPrincipalAndInterestPaymentChangeMonthsCount() );
+		insertData(document, element, "PrincipalAndInterestPaymentMaximumAmount", principalAndInterestPaymentAdjustment.getPrincipalAndInterestPaymentMaximumAmount());
+		insertData(document, element, "PrincipalAndInterestPaymentMaximumAmountEarliestEffectiveMonthsCount", principalAndInterestPaymentAdjustment.getPrincipalAndInterestPaymentMaximumAmountEarliestEffectiveMonthsCount());
 	}
-	*//**
-     * Inserts Interest Rate Adjustment from JSON Object
+	/**
+     * Inserts Interest Rate Adjustment to MISMO XML
      * @param document Output XML file
      * @param element parent node of XML
      * @param jsonDocument Input JSON Object
-     *//*
-	private void insertInterestRateAdjustment(Document document, Element element, ClosingDisclosureDocument jsonDocument) {
-		// TODO Auto-generated method stub
-		insertIndexRules(document ,insertLevels(document, element, "INDEX_RULES"), jsonDocument);
-		insertInterestRateLifetimeAdjustmentRule(document ,insertLevels(document, element, "INTEREST_RATE_LIFETIME_ADJUSTMENT_RULE"), jsonDocument);
-		insertInterestRatePerChangeAdjustmentRules(document ,insertLevels(document, element, "INTEREST_RATE_PER_CHANGE_ADJUSTMENT_RULES"), jsonDocument);
+     */
+	private void insertInterestRateAdjustment(Document document, Element element, InterestRateAdjustmentModel interestRateAdjustment) {
+		//insertIndexRules(document ,insertLevels(document, element, "INDEX_RULES"), jsonDocument);
+		insertInterestRateLifetimeAdjustmentRule(document ,insertLevels(document, element, "INTEREST_RATE_LIFETIME_ADJUSTMENT_RULE"), interestRateAdjustment);
+		insertInterestRatePerChangeAdjustmentRules(document ,insertLevels(document, element, "INTEREST_RATE_PER_CHANGE_ADJUSTMENT_RULES"), interestRateAdjustment);
 	}
-	*//**
-     * Inserts Interest Rate Per Change Adjustment Rules from JSON Object
+	/**
+     * Inserts Interest Rate Per Change Adjustment Rules to MISMO XML
      * @param document Output XML file
      * @param element parent node of XML
      * @param jsonDocument Input JSON Object
-     *//*
+     */
 	private void insertInterestRatePerChangeAdjustmentRules(Document document, Element element,
-			ClosingDisclosureDocument jsonDocument) {
-		// TODO Auto-generated method stub
-		List<InterestRatePerChangeAdjustmentRule> interestRatePerChangeAdjustmentRules = jsonDocument.getPageFour().getInterestRatePerChangeAdjustmentRule();
-		for (InterestRatePerChangeAdjustmentRule interestRatePerChangeAdjustmentRule : interestRatePerChangeAdjustmentRules)
-			insertInterestRatePerChangeAdjustmentRule(document ,insertLevels(document, element, "INTEREST_RATE_PER_CHANGE_ADJUSTMENT_RULE"), jsonDocument);
+			InterestRateAdjustmentModel interestRateAdjustment) {
+		if("First".equalsIgnoreCase(interestRateAdjustment.getFirstAdjustmentRule()))
+			insertInterestRatePerChangeAdjustmentRule(document ,insertLevels(document, element, "INTEREST_RATE_PER_CHANGE_ADJUSTMENT_RULE"), interestRateAdjustment);
+		if("Subsequent".equalsIgnoreCase(interestRateAdjustment.getSubsequentAdjustmentRule()))
+			insertInterestRatePerChangeAdjustmentRule(document ,insertLevels(document, element, "INTEREST_RATE_PER_CHANGE_ADJUSTMENT_RULE"), interestRateAdjustment);
 		
 	}
-	*//**
-     * Inserts Interest Rate Per Change Adjustment Rule from JSON Object
+	/**
+     * Inserts Interest Rate Per Change Adjustment Rule to MISMO XML
      * @param document Output XML file
      * @param element parent node of XML
      * @param jsonDocument Input JSON Object
-     *//*
+     */
 	private void insertInterestRatePerChangeAdjustmentRule(Document document, Element element,
-			ClosingDisclosureDocument jsonDocument) {
-		// TODO Auto-generated method stub
-		LoanTerms loanTerms = jsonDocument.getPageOne().getLoanTerms();
-		LoanTermsInterestRate loanTermsInterestRate = loanTerms.getLoanTermsInterestRate();
-		insertData(document ,element , "AdjustmentRuleType", loanTermsInterestRate.getAdjustmentRuleTypeFirst());
-		insertData(document ,element , "PerChangeMaximumIncreaseRatePercent", "");
-		insertData(document ,element , "PerChangeRateAdjustmentFrequencyMonthsCount", loanTermsInterestRate.getPerChangeRateAdjustmentFrequencyMonthsCount());
+			InterestRateAdjustmentModel interestRateAdjustment) {
+		if("First".equalsIgnoreCase(interestRateAdjustment.getFirstAdjustmentRule()))
+		{
+			insertData(document ,element , "AdjustmentRuleType", interestRateAdjustment.getFirstAdjustmentRule());
+			insertData(document ,element , "PerChangeMaximumIncreaseRatePercent", interestRateAdjustment.getFirstPerChangeMaximumIncreaseRatePercent());
+			insertData(document ,element , "PerChangeRateAdjustmentFrequencyMonthsCount", interestRateAdjustment.getFirstPerChangeRateAdjustmentFrequencyMonthsCount());
+		}
+		if("Subsequent".equalsIgnoreCase(interestRateAdjustment.getSubsequentAdjustmentRule()))
+		{
+			insertData(document ,element , "AdjustmentRuleType", interestRateAdjustment.getSubsequentAdjustmentRule());
+			insertData(document ,element , "PerChangeMaximumIncreaseRatePercent", interestRateAdjustment.getSubsequentPerChangeMaximumIncreaseRatePercent());
+			insertData(document ,element , "PerChangeRateAdjustmentFrequencyMonthsCount", interestRateAdjustment.getSubsequentPerChangeRateAdjustmentFrequencyMonthsCount());
+		}
+		
 	}                                
-	*//**
-     * Inserts Interest Rate Lifetime Adjustment Rule from JSON Object
+	/**
+     * Inserts Interest Rate Lifetime Adjustment Rule to MISMO XML
      * @param document Output XML file
      * @param element parent node of XML
      * @param jsonDocument Input JSON Object
-     *//*
+     */
 	private void insertInterestRateLifetimeAdjustmentRule(Document document, Element element,
-			ClosingDisclosureDocument jsonDocument) {
-		// TODO Auto-generated method stub
-		LoanTerms loanTerms = jsonDocument.getPageOne().getLoanTerms();
-		LoanTermsInterestRate loanTermsInterestRate = loanTerms.getLoanTermsInterestRate();
-		insertData(document, element, "CeilingRatePercent", loanTermsInterestRate.getCeilingRatePercent());
-		insertData(document, element, "CeilingRatePercentEarliestEffectiveMonthsCount", loanTermsInterestRate.getCeilingRatePercentEarliestEffectiveMonthsCount());
-		insertData(document, element, "FirstRateChangeMonthsCount", "FirstRateChangeMonthsCount");
-		insertData(document, element, "FloorRatePercent", "FloorRatePercent");
-		insertData(document, element, "MarginRatePercent", "MarginRatePercent");
-		insertExtension(document ,insertLevels(document, element, "EXTENSION"), jsonDocument);
+			InterestRateAdjustmentModel interestRateLifetimeAdjustmentRule) {
+		insertData(document, element, "CeilingRatePercent", interestRateLifetimeAdjustmentRule.getCeilingRatePercent());
+		insertData(document, element, "CeilingRatePercentEarliestEffectiveMonthsCount", interestRateLifetimeAdjustmentRule.getCeilingRatePercentEarliestEffectiveMonthsCount());
+		insertData(document, element, "FirstRateChangeMonthsCount", interestRateLifetimeAdjustmentRule.getFirstRateChangeMonthsCount());
+		insertData(document, element, "FloorRatePercent", interestRateLifetimeAdjustmentRule.getFloorRatePercent());
+		insertData(document, element, "MarginRatePercent", interestRateLifetimeAdjustmentRule.getMarginRatePercent());
+		OtherModel other = new OtherModel();
+			other.setTotalStepCount(interestRateLifetimeAdjustmentRule.getTotalStepCount());
+		insertExtension(document ,insertLevels(document, element, "EXTENSION"), other);
 		
-	}*/
+	}
 	/**
 	 * inserts Extension in MISMO XML
 	 * @param document
@@ -2168,20 +2167,17 @@ public class JsonToUcd {
 		}
 	}
 	*//**
-     * Inserts Maturity Rule from JSON Object
+     * Inserts Maturity Rule to MISMO XML
      * @param document Output XML file
      * @param element parent node of XML
      * @param jsonDocument Input JSON Object
-     *//*
-	private void insertMaturityRule(Document document, Element element, ClosingDisclosureDocument jsonDocument) {
-		LoanInformation loanInformation = jsonDocument.getPageOne().getLoanInformation();
-		if (!loanInformation.getLoanTerm().isEmpty()) {
-			insertData(document, element, "LoanMaturityPeriodCount", loanInformation.getLoanMaturityPeriodCount());
-			insertData(document, element, "LoanMaturityPeriodType", loanInformation.getLoanMaturityPeriodType());
-			insertData(document, element, "LoanTermMaximumMonthsCount", "");
-		}
+     */
+	private void insertMaturityRule(Document document, Element element, MaturityRuleModel maturityRule) {
+			insertData(document, element, "LoanMaturityPeriodCount", maturityRule.getLoanMaturityPeriodCount());
+			insertData(document, element, "LoanMaturityPeriodType", maturityRule.getLoanMaturityPeriodType());
+			insertData(document, element, "LoanTermMaximumMonthsCount", maturityRule.getLoanTermMaximumMonthsCount());
 	}
-    *//**
+    /**
      * Inserts Message from JSON Object
      * @param document Output XML file
      * @param element parent node of XML

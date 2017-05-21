@@ -12,7 +12,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import org.mismo.residential._2009.schemas.ESCROWDETAIL;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
