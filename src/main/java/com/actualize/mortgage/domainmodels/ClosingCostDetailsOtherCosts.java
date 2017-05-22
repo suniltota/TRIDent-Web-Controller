@@ -9,19 +9,18 @@ import java.util.List;
  */
 public class ClosingCostDetailsOtherCosts implements Serializable {
 
-
-	private static final long serialVersionUID = 132247422580755292L;
-	
+	private static final long serialVersionUID = -4429240770157151663L;
 	private String tOGovtFeesTotalAmount;
 	private String prepaidsTotalAmount;
-	private String iEPatClosingTotalAmount;
+	private String escrowItemsTotalAmount;
 	private String otherTotalAmount;
 	private String totalOtherCostsTotalAmount;
 	private PaymentsModel totalOtherCosts;
 	private List<ClosingCostProperties> tOGovtFeesList;
 	private List<Prepaids> prepaidsList;
-	private List<EscrowItemModel> iEPatClosingList;
-	private List<ClosingCostProperties> OtherCostsList;
+	private List<EscrowItemModel> escrowItemsList;
+	private List<ClosingCostProperties> otherCostsList;
+	
 	/**
 	 * @return the tOGovtFeesTotalAmount
 	 */
@@ -47,16 +46,16 @@ public class ClosingCostDetailsOtherCosts implements Serializable {
 		this.prepaidsTotalAmount = prepaidsTotalAmount;
 	}
 	/**
-	 * @return the iEPatClosingTotalAmount
+	 * @return the escrowItemsTotalAmount
 	 */
-	public String getiEPatClosingTotalAmount() {
-		return iEPatClosingTotalAmount;
+	public String getEscrowItemsTotalAmount() {
+		return escrowItemsTotalAmount;
 	}
 	/**
-	 * @param iEPatClosingTotalAmount the iEPatClosingTotalAmount to set
+	 * @param escrowItemsTotalAmount the escrowItemsTotalAmount to set
 	 */
-	public void setiEPatClosingTotalAmount(String iEPatClosingTotalAmount) {
-		this.iEPatClosingTotalAmount = iEPatClosingTotalAmount;
+	public void setEscrowItemsTotalAmount(String escrowItemsTotalAmount) {
+		this.escrowItemsTotalAmount = escrowItemsTotalAmount;
 	}
 	/**
 	 * @return the otherTotalAmount
@@ -119,31 +118,29 @@ public class ClosingCostDetailsOtherCosts implements Serializable {
 		this.prepaidsList = prepaidsList;
 	}
 	/**
-	 * @return the iEPatClosingList
+	 * @return the escrowItemsList
 	 */
-	public List<EscrowItemModel> getiEPatClosingList() {
-		return iEPatClosingList;
+	public List<EscrowItemModel> getEscrowItemsList() {
+		return escrowItemsList;
 	}
 	/**
-	 * @param iEPatClosingList the iEPatClosingList to set
+	 * @param escrowItemsList the escrowItemsList to set
 	 */
-	public void setiEPatClosingList(List<EscrowItemModel> iEPatClosingList) {
-		this.iEPatClosingList = iEPatClosingList;
+	public void setEscrowItemsList(List<EscrowItemModel> escrowItemsList) {
+		this.escrowItemsList = escrowItemsList;
 	}
 	/**
 	 * @return the otherCostsList
 	 */
 	public List<ClosingCostProperties> getOtherCostsList() {
-		return OtherCostsList;
+		return otherCostsList;
 	}
 	/**
 	 * @param otherCostsList the otherCostsList to set
 	 */
 	public void setOtherCostsList(List<ClosingCostProperties> otherCostsList) {
-		OtherCostsList = otherCostsList;
+		this.otherCostsList = otherCostsList;
 	}
-
 	
-
 	
 }

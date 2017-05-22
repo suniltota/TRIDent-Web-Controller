@@ -782,7 +782,7 @@ public class ClosingDisclosureConverter {
     	
     	List<ClosingCostProperties> tOGovtFeesList = new ArrayList<>();
 		List<Prepaids> prepaidsList = new LinkedList<>();
-		List<EscrowItemModel> iePatClosingList = new LinkedList<>();
+		List<EscrowItemModel> escrowItemsList = new LinkedList<>();
 		List<ClosingCostProperties> otherCostsList = new LinkedList<>();
 		
 		IntegratedDisclosureSectionSummaries idSectionSummaries = new IntegratedDisclosureSectionSummaries((Element)deal.getElementAddNS(idSummaryBase));
@@ -799,7 +799,7 @@ public class ClosingDisclosureConverter {
     		else if("Prepaids".equalsIgnoreCase(idSectionSummaries.integratedDisclosureSectionSummaries[i].integratedDisclosureSectionSummaryDetail.integratedDisclosureSectionType))
 				closingCostDetailsOtherCosts.setPrepaidsTotalAmount(idSectionSummaries.integratedDisclosureSectionSummaries[i].integratedDisclosureSectionSummaryDetail.integratedDisclosureSectionTotalAmount);
     		else if("InitialEscrowPaymentAtClosing".equalsIgnoreCase(idSectionSummaries.integratedDisclosureSectionSummaries[i].integratedDisclosureSectionSummaryDetail.integratedDisclosureSectionType))
-				closingCostDetailsOtherCosts.setiEPatClosingTotalAmount(idSectionSummaries.integratedDisclosureSectionSummaries[i].integratedDisclosureSectionSummaryDetail.integratedDisclosureSectionTotalAmount);
+				closingCostDetailsOtherCosts.setEscrowItemsTotalAmount(idSectionSummaries.integratedDisclosureSectionSummaries[i].integratedDisclosureSectionSummaryDetail.integratedDisclosureSectionTotalAmount);
     		else if("TotalOtherCosts".equalsIgnoreCase(idSectionSummaries.integratedDisclosureSectionSummaries[i].integratedDisclosureSectionSummaryDetail.integratedDisclosureSectionType))
 				closingCostDetailsOtherCosts.setTotalOtherCostsTotalAmount(idSectionSummaries.integratedDisclosureSectionSummaries[i].integratedDisclosureSectionSummaryDetail.integratedDisclosureSectionTotalAmount);
     	 if("OtherCostsSubtotal".equalsIgnoreCase(idSectionSummaries.integratedDisclosureSectionSummaries[i].integratedDisclosureSectionSummaryDetail.integratedDisclosureSubsectionType))
@@ -872,26 +872,26 @@ public class ClosingDisclosureConverter {
 			{
 				EscrowItem escrowItem = getEscrowItem(escrowItems, escrow);
 				 if (null != escrowItem.element)
-					 iePatClosingList.add(getEscrowModel(escrowItem));
+					 escrowItemsList.add(getEscrowModel(escrowItem));
 			}
 			
 			for(int i=0; i<escrowItems.escrowItems.length;i++)
 	 	    {
 				if (("Property Tax").equalsIgnoreCase(escrowItems.escrowItems[i].escrowItemDetail.displayLabelText)) {
-					iePatClosingList.add(getEscrowModel(escrowItems.escrowItems[i]));
+					escrowItemsList.add(getEscrowModel(escrowItems.escrowItems[i]));
 					break;
 				} 
 				else if (isPropertyTax(escrowItems.escrowItems[i].escrowItemDetail.escrowItemType)) {
 					EscrowItemModel iePatClosing = new EscrowItemModel();
 						iePatClosing = getEscrowModel(escrowItems.escrowItems[i]);
 						iePatClosing.setDisplayLabel("Property Taxes");
-					iePatClosingList.add(iePatClosing);
+					escrowItemsList.add(iePatClosing);
 				}
 	 	    }
 			
 			for(int i=0; i<escrowItems.escrowItems.length;i++)
 				if(checkOtherEscrows(escrowItems.escrowItems[i].escrowItemDetail.escrowItemType))
-					iePatClosingList.add(getEscrowModel(escrowItems.escrowItems[i]));
+					escrowItemsList.add(getEscrowModel(escrowItems.escrowItems[i]));
 		}
 		
 		//OtherFees
@@ -901,7 +901,7 @@ public class ClosingDisclosureConverter {
 		 
 		closingCostDetailsOtherCosts.settOGovtFeesList(tOGovtFeesList);
 		closingCostDetailsOtherCosts.setPrepaidsList(prepaidsList);
-		closingCostDetailsOtherCosts.setiEPatClosingList(iePatClosingList);
+		closingCostDetailsOtherCosts.setEscrowItemsList(escrowItemsList);
 		closingCostDetailsOtherCosts.setOtherCostsList(otherCostsList);
 		closingCostDetailsOtherCosts.setTotalOtherCosts(totalOtherCosts);
 		
