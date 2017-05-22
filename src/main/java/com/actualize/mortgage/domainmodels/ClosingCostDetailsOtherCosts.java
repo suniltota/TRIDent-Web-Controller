@@ -20,7 +20,7 @@ public class ClosingCostDetailsOtherCosts implements Serializable {
 	private PaymentsModel totalOtherCosts;
 	private List<ClosingCostProperties> tOGovtFeesList;
 	private List<Prepaids> prepaidsList;
-	private List<IEPatClosing> iEPatClosingList;
+	private List<EscrowItemModel> iEPatClosingList;
 	private List<ClosingCostProperties> OtherCostsList;
 	/**
 	 * @return the tOGovtFeesTotalAmount
@@ -121,13 +121,13 @@ public class ClosingCostDetailsOtherCosts implements Serializable {
 	/**
 	 * @return the iEPatClosingList
 	 */
-	public List<IEPatClosing> getiEPatClosingList() {
+	public List<EscrowItemModel> getiEPatClosingList() {
 		return iEPatClosingList;
 	}
 	/**
 	 * @param iEPatClosingList the iEPatClosingList to set
 	 */
-	public void setiEPatClosingList(List<IEPatClosing> iEPatClosingList) {
+	public void setiEPatClosingList(List<EscrowItemModel> iEPatClosingList) {
 		this.iEPatClosingList = iEPatClosingList;
 	}
 	/**

@@ -7,7 +7,7 @@ import java.io.Serializable;
  * @author sboragala
  *
  */
-public class IEPatClosing extends PaymentsModel implements Serializable{
+public class EscrowItemModel extends PaymentsModel implements Serializable{
 
 	private static final long serialVersionUID = -1627061167861563038L;
 	private String displayLabel;
@@ -18,8 +18,8 @@ public class IEPatClosing extends PaymentsModel implements Serializable{
 	private String feePaidToType;
 	private String feePaidToTypeOtherDescription;
 	private String integratedDisclosureSectionType;
-	private String regulationZPointsAndFeesIndicator;
-	private String paymentIncludedInAPRIndicator;
+	private boolean regulationZPointsAndFeesIndicator;
+	private boolean paymentIncludedInAPRIndicator;
 	
 	/**
 	 * @return the displayLabel
@@ -120,25 +120,25 @@ public class IEPatClosing extends PaymentsModel implements Serializable{
 	/**
 	 * @return the regulationZPointsAndFeesIndicator
 	 */
-	public String getRegulationZPointsAndFeesIndicator() {
+	public boolean isRegulationZPointsAndFeesIndicator() {
 		return regulationZPointsAndFeesIndicator;
 	}
 	/**
 	 * @param regulationZPointsAndFeesIndicator the regulationZPointsAndFeesIndicator to set
 	 */
-	public void setRegulationZPointsAndFeesIndicator(String regulationZPointsAndFeesIndicator) {
+	public void setRegulationZPointsAndFeesIndicator(boolean regulationZPointsAndFeesIndicator) {
 		this.regulationZPointsAndFeesIndicator = regulationZPointsAndFeesIndicator;
 	}
 	/**
 	 * @return the paymentIncludedInAPRIndicator
 	 */
-	public String getPaymentIncludedInAPRIndicator() {
+	public boolean isPaymentIncludedInAPRIndicator() {
 		return paymentIncludedInAPRIndicator;
 	}
 	/**
 	 * @param paymentIncludedInAPRIndicator the paymentIncludedInAPRIndicator to set
 	 */
-	public void setPaymentIncludedInAPRIndicator(String paymentIncludedInAPRIndicator) {
+	public void setPaymentIncludedInAPRIndicator(boolean paymentIncludedInAPRIndicator) {
 		this.paymentIncludedInAPRIndicator = paymentIncludedInAPRIndicator;
 	}
 	

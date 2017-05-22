@@ -40,7 +40,7 @@ import com.actualize.mortgage.domainmodels.CostsAtClosingClosingCosts;
 import com.actualize.mortgage.domainmodels.DocumentClassificationModel;
 import com.actualize.mortgage.domainmodels.ETIA;
 import com.actualize.mortgage.domainmodels.ETIASection;
-import com.actualize.mortgage.domainmodels.IEPatClosing;
+import com.actualize.mortgage.domainmodels.EscrowItemModel;
 import com.actualize.mortgage.domainmodels.IntegratedDisclosureDetailModel;
 import com.actualize.mortgage.domainmodels.IntegratedDisclosureSectionSummaryDetailModel;
 import com.actualize.mortgage.domainmodels.IntegratedDisclosureSectionSummaryModel;
@@ -782,7 +782,7 @@ public class ClosingDisclosureConverter {
     	
     	List<ClosingCostProperties> tOGovtFeesList = new ArrayList<>();
 		List<Prepaids> prepaidsList = new LinkedList<>();
-		List<IEPatClosing> iePatClosingList = new LinkedList<>();
+		List<EscrowItemModel> iePatClosingList = new LinkedList<>();
 		List<ClosingCostProperties> otherCostsList = new LinkedList<>();
 		
 		IntegratedDisclosureSectionSummaries idSectionSummaries = new IntegratedDisclosureSectionSummaries((Element)deal.getElementAddNS(idSummaryBase));
@@ -882,7 +882,7 @@ public class ClosingDisclosureConverter {
 					break;
 				} 
 				else if (isPropertyTax(escrowItems.escrowItems[i].escrowItemDetail.escrowItemType)) {
-					IEPatClosing iePatClosing = new IEPatClosing();
+					EscrowItemModel iePatClosing = new EscrowItemModel();
 						iePatClosing = getEscrowModel(escrowItems.escrowItems[i]);
 						iePatClosing.setDisplayLabel("Property Taxes");
 					iePatClosingList.add(iePatClosing);
@@ -2112,9 +2112,9 @@ public class ClosingDisclosureConverter {
 	 * @param escrowItem
 	 * @return IEPatClosing
 	 */
-	private IEPatClosing getEscrowModel(EscrowItem escrowItem)
+	private EscrowItemModel getEscrowModel(EscrowItem escrowItem)
 	{
-		IEPatClosing iePatClosing = new IEPatClosing();
+		EscrowItemModel iePatClosing = new EscrowItemModel();
 		
 		EscrowItemDetail escrowItemDetail = escrowItem.escrowItemDetail;  
 		
@@ -2126,8 +2126,8 @@ public class ClosingDisclosureConverter {
 		iePatClosing.setFeePaidToType(escrowItemDetail.feePaidToType);
 		iePatClosing.setFeePaidToTypeOtherDescription(escrowItemDetail.feePaidToTypeOtherDescription);
 		iePatClosing.setIntegratedDisclosureSectionType(escrowItemDetail.integratedDisclosureSectionType);
-		iePatClosing.setRegulationZPointsAndFeesIndicator(escrowItemDetail.regulationZPointsAndFeesIndicator);
-		iePatClosing.setPaymentIncludedInAPRIndicator(escrowItemDetail.paymentIncludedInAPRIndicator);
+		iePatClosing.setRegulationZPointsAndFeesIndicator(Boolean.parseBoolean(escrowItemDetail.regulationZPointsAndFeesIndicator));
+		iePatClosing.setPaymentIncludedInAPRIndicator(Boolean.parseBoolean(escrowItemDetail.paymentIncludedInAPRIndicator));
 		
 		for(EscrowItemPayment escrowitempayment : escrowItem.escrowItemPayments.escrowItemPayment)
 		{
