@@ -75,7 +75,7 @@ public class Convertor {
 				MismoFeePaymentsModel mismoPaymentsModel = new MismoFeePaymentsModel();
 					mismoPaymentsModel.setAmount(paymentsModel.getBpAtClosing());
 					mismoPaymentsModel.setPaidByType("Buyer");
-					mismoPaymentsModel.setClosingIndicator("true");
+					mismoPaymentsModel.setClosingIndicator("AtClosing");
 				mismoFeePaymentList.add(mismoPaymentsModel);
 			}
 			if(!"".equals(paymentsModel.getBpB4Closing()) && null != paymentsModel.getBpB4Closing())
@@ -91,7 +91,7 @@ public class Convertor {
 				MismoFeePaymentsModel mismoPaymentsModel = new MismoFeePaymentsModel();
 					mismoPaymentsModel.setAmount(paymentsModel.getSpAtClosing());
 					mismoPaymentsModel.setPaidByType("Seller");
-					mismoPaymentsModel.setClosingIndicator("true");
+					mismoPaymentsModel.setClosingIndicator("AtClosing");
 				mismoFeePaymentList.add(mismoPaymentsModel);
 			}
 			if("".equals(paymentsModel.getSpB4Closing()) && null != paymentsModel.getSpB4Closing())
