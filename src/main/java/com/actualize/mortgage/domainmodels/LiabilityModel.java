@@ -14,16 +14,16 @@ public class LiabilityModel implements Serializable {
 
 	private static final long serialVersionUID = 6864703105075998928L;
 	
-	private String displayLabel;
-	private String liabilityDescription;
-	private String liabilityType;
-	private String liabilityTypeOtherDescription;
-	private String integratedDisclosureSectionType;
-	private boolean liabilitySecuredBySubjectPropertyIndicator;
-	private String liabilityHolderFullName;
-	private String payoffAmount;
-	private String payoffPrepaymentPenaltyAmount;
-	private boolean payoffPartialIndicator;
+	private String displayLabel = "";
+	private String liabilityDescription = "";
+	private String liabilityType = "";
+	private String liabilityTypeOtherDescription = "";
+	private String integratedDisclosureSectionType = "";
+	private boolean liabilitySecuredBySubjectPropertyIndicator = false;
+	private String liabilityHolderFullName = "";
+	private String payoffAmount = "";
+	private String payoffPrepaymentPenaltyAmount = "";
+	private boolean payoffPartialIndicator = false;
 	
 	/**
 	 * @return the displayLabel

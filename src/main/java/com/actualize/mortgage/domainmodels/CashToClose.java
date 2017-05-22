@@ -1,6 +1,7 @@
 package com.actualize.mortgage.domainmodels;
 
 import java.io.Serializable;
+import java.util.LinkedList;
 import java.util.List;
 /**
  * this class defines cash to close  in JSON response
@@ -11,31 +12,18 @@ public class CashToClose implements Serializable{
 
 	private static final long serialVersionUID = 4357130776769001121L;
 	
-	private boolean isAlternateView;
-	private CashToCloseModel loanAmount;
-	private CashToCloseModel totalClosingCosts;
-	private CashToCloseModel closingCostsPaidBeforeClosing;
-	private CashToCloseModel closingCostsFinanced;
-	private CashToCloseModel downPayment;
-	private CashToCloseModel totalPayoffsAndPayments;
-	private CashToCloseModel deposit;
-	private CashToCloseModel fundsForBorrower;
-	private CashToCloseModel sellerCredits;
-	private CashToCloseModel adjustmentsAndOtherCredits;
-	private List<CashToCloseModel> cashToCloseTotal;
+	private CashToCloseModel loanAmount = new CashToCloseModel();
+	private CashToCloseModel totalClosingCosts = new CashToCloseModel();
+	private CashToCloseModel closingCostsPaidBeforeClosing = new CashToCloseModel();
+	private CashToCloseModel closingCostsFinanced = new CashToCloseModel();
+	private CashToCloseModel downPayment = new CashToCloseModel();
+	private CashToCloseModel totalPayoffsAndPayments = new CashToCloseModel();
+	private CashToCloseModel deposit = new CashToCloseModel();
+	private CashToCloseModel fundsForBorrower = new CashToCloseModel();
+	private CashToCloseModel sellerCredits = new CashToCloseModel();
+	private CashToCloseModel adjustmentsAndOtherCredits = new CashToCloseModel();
+	private List<CashToCloseModel> cashToCloseTotal = new LinkedList<>();
 	
-	/**
-	 * @return the isAlternateView
-	 */
-	public boolean isAlternateView() {
-		return isAlternateView;
-	}
-	/**
-	 * @param isAlternateView the isAlternateView to set
-	 */
-	public void setAlternateView(boolean isAlternateView) {
-		this.isAlternateView = isAlternateView;
-	}
 	/**
 	 * @return the loanAmount
 	 */

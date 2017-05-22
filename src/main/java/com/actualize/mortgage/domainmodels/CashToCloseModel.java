@@ -11,13 +11,12 @@ public class CashToCloseModel implements Serializable {
 	
 	private static final long serialVersionUID = -4771787160333094672L;
 	
-	private boolean integratedDisclosureCashToCloseItemAmountChangedIndicator;
-    private String integratedDisclosureCashToCloseItemChangeDescription;
-    private String integratedDisclosureCashToCloseItemEstimatedAmount;
-    private String integratedDisclosureCashToCloseItemFinalAmount;
-    private String integratedDisclosureCashToCloseItemPaymentType;
-    private String integratedDisclosureCashToCloseItemType;
-    private String index;
+	private boolean integratedDisclosureCashToCloseItemAmountChangedIndicator = false;
+    private String integratedDisclosureCashToCloseItemChangeDescription = " ";
+    private String integratedDisclosureCashToCloseItemEstimatedAmount ="";
+    private String integratedDisclosureCashToCloseItemFinalAmount="";
+    private String integratedDisclosureCashToCloseItemPaymentType="";
+    private String integratedDisclosureCashToCloseItemType="";
     
     /**
 	 * @return the integratedDisclosureCashToCloseItemAmountChangedIndicator
@@ -95,18 +94,5 @@ public class CashToCloseModel implements Serializable {
 	public void setIntegratedDisclosureCashToCloseItemType(String integratedDisclosureCashToCloseItemType) {
 		this.integratedDisclosureCashToCloseItemType = integratedDisclosureCashToCloseItemType;
 	}
-	/**
-	 * @return the index
-	 */
-	public String getIndex() {
-		return index;
-	}
-	/**
-	 * @param index the index to set
-	 */
-	public void setIndex(String index) {
-		this.index = index;
-	}
-    
 	
 }
