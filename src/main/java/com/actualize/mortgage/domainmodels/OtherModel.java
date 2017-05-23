@@ -14,19 +14,19 @@ public class OtherModel implements Serializable {
 	
 	private static final long serialVersionUID = 4937365492092727921L;
 	
-	private String integratedDisclosureEstimatedClosingCostsExpirationTimezoneType;
-	private String lockExpirationTimezoneType;
-	private String buydownReflectedInNoteIndicator;                                 
-	private String documentSignatureRequiredIndicator;                              
-	private String escrowAccountRolloverAmount;                                     
-	private String integratedDisclosureSectionType;                                 
-	private String liabilitySecuredBySubjectPropertyIndicator;                      
-	private String totalOptionalPaymentCount;                                       
-	private String totalStepCount;                                                  
-	private String totalStepPaymentCount;                                           
-	private String subordinateFinancingIsNewIndicator;
-	private String paymentIncludedInAPRIndicator;
-	private String payoffPartialIndicator;
+	private String integratedDisclosureEstimatedClosingCostsExpirationTimezoneType = "";
+	private String lockExpirationTimezoneType = "";
+	private String buydownReflectedInNoteIndicator = "";                                 
+	private String documentSignatureRequiredIndicator = "";                              
+	private String escrowAccountRolloverAmount = "";                                     
+	private String integratedDisclosureSectionType = "";                                 
+	private String liabilitySecuredBySubjectPropertyIndicator = "";                      
+	private String totalOptionalPaymentCount = "";                                       
+	private String totalStepCount = "";                                                  
+	private String totalStepPaymentCount = "";                                           
+	private String subordinateFinancingIsNewIndicator = "";
+	private String paymentIncludedInAPRIndicator = "";
+	private String payoffPartialIndicator = "";
 	
 	/**
 	 * @return the integratedDisclosureEstimatedClosingCostsExpirationTimezoneType
