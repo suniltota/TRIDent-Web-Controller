@@ -10,8 +10,8 @@ public class ProjectedPaymentsET implements Serializable {
 
 	private static final long serialVersionUID = 3337686189596337094L;
 	
-	private String projectedPaymentEstimatedTotalMaximumPaymentAmount;
-	private String projectedPaymentEstimatedTotalMinimumPaymentAmount;
+	private String projectedPaymentEstimatedTotalMaximumPaymentAmount = "";
+	private String projectedPaymentEstimatedTotalMinimumPaymentAmount = "";
 	 
 	/**
 	 * @return the projectedPaymentEstimatedTotalMaximumPaymentAmount

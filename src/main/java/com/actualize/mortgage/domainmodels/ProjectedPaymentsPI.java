@@ -6,9 +6,9 @@ public class ProjectedPaymentsPI implements Serializable {
 
 	private static final long serialVersionUID = -773708562272145688L;
 	
-	private String projectedPaymentPrincipalAndInterestMaximumPaymentAmount;
-    private String projectedPaymentPrincipalAndInterestMinimumPaymentAmount;
-    private boolean interestOnlyStatus;
+	private String projectedPaymentPrincipalAndInterestMaximumPaymentAmount = "";
+    private String projectedPaymentPrincipalAndInterestMinimumPaymentAmount = "";
+    private boolean interestOnlyStatus = false;
     
 	/**
 	 * @return the projectedPaymentPrincipalAndInterestMaximumPaymentAmount

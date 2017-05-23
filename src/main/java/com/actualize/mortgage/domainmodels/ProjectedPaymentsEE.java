@@ -14,7 +14,7 @@ public class ProjectedPaymentsEE implements Serializable{
 
 	private static final long serialVersionUID = -3833721422110952372L;
 	
-	private String projectedPaymentEstimatedEscrowPaymentAmount;
+	private String projectedPaymentEstimatedEscrowPaymentAmount = "";
 	
 
 	/**

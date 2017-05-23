@@ -9,6 +9,7 @@ import com.actualize.mortgage.domainmodels.MISMODataAccessObject;
  *
  */
 public class ProjectedPayment extends MISMODataAccessObject {
+	private static final long serialVersionUID = 1965224472442051932L;
 	public final String sequenceNumber;
 	public final String paymentFrequencyType;
 	public final String projectedPaymentCalculationPeriodEndNumber;

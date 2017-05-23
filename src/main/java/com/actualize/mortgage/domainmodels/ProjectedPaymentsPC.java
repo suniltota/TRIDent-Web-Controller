@@ -8,15 +8,13 @@ import java.io.Serializable;
  *
  */
 public class ProjectedPaymentsPC  implements Serializable{
-
 	
-	private static final long serialVersionUID = -2178495500766904390L;
-	
-	private String sequenceNumber;
-	private String projectedPaymentCalculationPeriodEndNumber;
-    private String projectedPaymentCalculationPeriodStartNumber;
-    private String projectedPaymentCalculationPeriodTermType;
-    private String projectedPaymentCalculationPeriodTermTypeOtherDescription;
+	private static final long serialVersionUID = -3182209711085503326L;
+	private String sequenceNumber = "";
+	private String projectedPaymentCalculationPeriodEndNumber = "";
+    private String projectedPaymentCalculationPeriodStartNumber = "";
+    private String projectedPaymentCalculationPeriodTermType = "";
+    private String projectedPaymentCalculationPeriodTermTypeOtherDescription = "";
     
 	/**
 	 * @return the sequenceNumber

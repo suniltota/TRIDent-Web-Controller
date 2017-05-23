@@ -11,7 +11,7 @@ public class ProjectedPaymentsMI implements Serializable {
 		
 	private static final long serialVersionUID = 5490856710267963123L;
 	
-	private String projectedPaymentMIPaymentAmount;
+	private String projectedPaymentMIPaymentAmount = "";
 
 	/**
 	 * @return the projectedPaymentMIPaymentAmount
