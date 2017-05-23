@@ -11,7 +11,7 @@ public class EscrowDetail extends MISMODataAccessObject{
     
 	public EscrowDetail(Element element) {
 		super(element);
-		escrowAggregateAccountingAdjustmentAmount = getValue("EscrowAggregateAccountingAdjustmentAmount");
+		escrowAggregateAccountingAdjustmentAmount = getValueAddNS("EscrowAggregateAccountingAdjustmentAmount");
 	}
 
 }
