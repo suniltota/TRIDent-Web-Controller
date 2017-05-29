@@ -8,6 +8,7 @@ import com.actualize.mortgage.domainmodels.MISMODataAccessObject;
 public class PropertyValuationDetail extends MISMODataAccessObject {
 
 	private static final long serialVersionUID = -5802480622181227042L;
+	public final String appraisalIdentifier;
 	public String identifierOwnerURI = "";
 	public final String propertyValuationAmount;
 	public final String propertyValuationMethodType;
@@ -15,6 +16,7 @@ public class PropertyValuationDetail extends MISMODataAccessObject {
 	
 	public PropertyValuationDetail(Element element) {
 		super(element);
+		appraisalIdentifier = getValueAddNS("AppraisalIdentifier");
 		//IdentifierOwnerURI = getValueAddNS("IdentifierOwnerURI");
 		NodeList node = getElementsAddNS("FeeType");
 		if(null != node)

@@ -11,6 +11,7 @@ public class PropertyValuationDetailModel implements Serializable {
 	
 	private static final long serialVersionUID = -4243667995030954693L;
 	
+	private String appraisalIdentifier;
 	private String identifierOwnerURI;
 	private String propertyEstimatedValueAmount; //PropertyDetail datapoint
 	private String propertyValuationAmount;
@@ -18,6 +19,19 @@ public class PropertyValuationDetailModel implements Serializable {
 	private String propertyValuationMethodTypeOtherDescription;
 	private String propertyValue;
 	
+	
+	/**
+     * @return the appraisalIdentifier
+     */
+    public String getAppraisalIdentifier() {
+        return appraisalIdentifier;
+    }
+    /**
+     * @param appraisalIdentifier the appraisalIdentifier to set
+     */
+    public void setAppraisalIdentifier(String appraisalIdentifier) {
+        this.appraisalIdentifier = appraisalIdentifier;
+    }
 	/**
 	 * @return the identifierOwnerURI
 	 */

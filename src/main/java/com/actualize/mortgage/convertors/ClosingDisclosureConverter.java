@@ -261,6 +261,7 @@ public class ClosingDisclosureConverter {
 	 
       closingInformationSection.setDateIssued(idDetail.integratedDisclosureIssuedDate);
       closingInformationSection.setProperty(toAddressModel(propertyAddress));
+        propertyValuationDetailModel.setAppraisalIdentifier(propertyValuationDetail.appraisalIdentifier);
       	propertyValuationDetailModel.setIdentifierOwnerURI(propertyValuationDetail.identifierOwnerURI);
       	propertyValuationDetailModel.setPropertyEstimatedValueAmount(propertyDetail.propertyEstimatedValueAmount);
       	propertyValuationDetailModel.setPropertyValuationAmount(propertyValuationDetail.propertyValuationAmount);
