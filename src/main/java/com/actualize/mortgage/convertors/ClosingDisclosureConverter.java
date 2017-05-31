@@ -383,12 +383,46 @@ public class ClosingDisclosureConverter {
         
     	String refinanceSameLenderIndicator = deal.getValueAddNS("LOANS/LOAN/REFINANCE/RefinanceSameLenderIndicator");
     	
-    	Parties borrowerParties = new Parties((Element)deal.getElementAddNS("PARTIES"), "[ROLES/ROLE/ROLE_DETAIL/PartyRoleType='Borrower']");
-    	Parties sellerParties = new Parties((Element)deal.getElementAddNS("PARTIES"), "[ROLES/ROLE/ROLE_DETAIL/PartyRoleType='PropertySeller']");
-    	Parties lenders = new Parties((Element)deal.getElementAddNS("PARTIES"), "[ROLES/ROLE/ROLE_DETAIL/PartyRoleType='NotePayTo']");
-    	transactionInformation.setBorrower(createBorrowers(borrowerParties,"Borrower"));
-    	transactionInformation.setSeller(createBorrowers(sellerParties,"PropertySeller"));
-    	transactionInformation.setLender(createBorrowers(lenders,"NotePayTo"));
+		List borrowerParties = new LinkedList<Party>();
+		List sellerParties = new LinkedList<Party>();
+		List lenders = new LinkedList<Party>();
+		
+		Parties parties = new Parties((Element)deal.getElementAddNS("PARTIES"), null);
+			
+		if(parties.parties.length >0)
+		for(int i=0;i<parties.parties.length; i++)
+		{	
+			if(null != parties.parties[i].roles.element)
+			switch(parties.parties[i].roles.roles[0].roleDetail.PartyRoleType)
+			{
+				case "Borrower":
+					borrowerParties.add(parties.parties[i]);
+				break;
+				case "NonTitleSpouse":
+					borrowerParties.add(parties.parties[i]);
+				break;
+				case "TitleHolder":
+					borrowerParties.add(parties.parties[i]);
+				break;
+				case "Other":
+					borrowerParties.add(parties.parties[i]);
+				break;
+				case "NotePayTo":
+					lenders.add(parties.parties[i]);
+				break;
+				case "PropertySeller":
+					sellerParties.add(parties.parties[i]);
+				break;
+					
+				}  		
+		}
+	
+    	
+    	transactionInformation.setBorrower(createBorrowers(borrowerParties));
+    	transactionInformation.setSeller(createBorrowers(sellerParties));
+    	transactionInformation.setLender(createBorrowers(lenders));
+    	
+    	
     	transactionInformation.setRefinanceSameLenderIndicator(Boolean.parseBoolean(refinanceSameLenderIndicator));
     	
 		return transactionInformation;
@@ -1844,39 +1878,39 @@ public class ClosingDisclosureConverter {
 	
 	
     /**
-     * fetches the list of sellers from the XMl
-     * @param borrowers
-     * @return borrowers list as JSON
+     * converts parties from xml to borrower model for JSON Model
+     * @param partyList
+     * @return list of parties
      */
-	private List<Borrower> createBorrowers(Parties borrowers, String partyRoleType) {
+	private List<Borrower> createBorrowers(List<Party> partyList) {
 		
 		List<Borrower> borrowersList = new LinkedList<>();
-		if (borrowers.parties.length > 0) {
-			for(int i=0; i<borrowers.parties.length;i++)
+		
+		for(Party party : partyList)
+		{
+			Borrower borrower = new Borrower();
+			NameModel applicant = new NameModel();
+			AddressModel addressModel = new AddressModel();
+			if (!party.legalEntity.legalEntityDetail.fullName.equals(""))
+			{	
+				applicant.setFullName(party.legalEntity.legalEntityDetail.fullName);
+				borrower.setType("O");
+			}
+			else
 			{
-				Borrower borrower = new Borrower();
-				NameModel applicant = new NameModel();
-				AddressModel addressModel = new AddressModel();
-				if (!borrowers.parties[i].legalEntity.legalEntityDetail.fullName.equals(""))
-				{	
-					applicant.setFullName(borrowers.parties[i].legalEntity.legalEntityDetail.fullName);
-					borrower.setType("O");
-				}
-				else
-				{
-					applicant = toNameModel(borrowers.parties[i].individual.name);
-					borrower.setType("I");
-				}
-				addressModel = toAddressModel(new Address((Element)borrowers.parties[i].getElementAddNS("ADDRESSES/ADDRESS[AddressType='Mailing']")));
-				String status = borrowers.parties[i].getValueAddNS("LEGAL_DESCRIPTIONS/LEGAL_DESCRIPTION/UNPARSED_LEGAL_DESCRIPTIONS/UNPARSED_LEGAL_DESCRIPTION/UnparsedLegalDescription");
-				addressModel.setUnparsedLegalDescription(status);
-				addressModel.setLegalDescription(status.length() >0 ? true : false);
-				borrower.setNameModel(applicant);
-				borrower.setAddress(addressModel);
-				borrower.setPartyRoleType(partyRoleType);
-				borrowersList.add(borrower);
-			}	
-		}
+				applicant = toNameModel(party.individual.name);
+				borrower.setType("I");
+			}
+			addressModel = toAddressModel(new Address((Element)party.getElementAddNS("ADDRESSES/ADDRESS[AddressType='Mailing']")));
+			String status = party.getValueAddNS("LEGAL_DESCRIPTIONS/LEGAL_DESCRIPTION/UNPARSED_LEGAL_DESCRIPTIONS/UNPARSED_LEGAL_DESCRIPTION/UnparsedLegalDescription");
+			addressModel.setUnparsedLegalDescription(status);
+			addressModel.setLegalDescription(status.length() >0 ? true : false);
+			borrower.setNameModel(applicant);
+			borrower.setAddress(addressModel);
+			borrower.setPartyRoleType(party.roles.roles[0].roleDetail.PartyRoleType);
+			borrowersList.add(borrower);
+		}	
+	
 		return borrowersList;
 	}
 	
