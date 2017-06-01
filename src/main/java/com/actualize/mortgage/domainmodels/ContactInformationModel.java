@@ -14,70 +14,70 @@ public class ContactInformationModel implements Serializable {
 
 	private static final long serialVersionUID = -7662263979240332066L;
 	
-	private ContactInformationDetail lender;
-	private ContactInformationDetail mortagageBroker;
-	private ContactInformationDetail realEstateBrokerB;
-	private ContactInformationDetail realEstateBrokerS;
-	private ContactInformationDetail settlementAgent;
+	private ContactInformationDetailModel lender;
+	private ContactInformationDetailModel mortagageBroker;
+	private ContactInformationDetailModel realEstateBrokerB;
+	private ContactInformationDetailModel realEstateBrokerS;
+	private ContactInformationDetailModel settlementAgent;
 	
 	/**
 	 * @return the lender
 	 */
-	public ContactInformationDetail getLender() {
+	public ContactInformationDetailModel getLender() {
 		return lender;
 	}
 	/**
 	 * @param lender the lender to set
 	 */
-	public void setLender(ContactInformationDetail lender) {
+	public void setLender(ContactInformationDetailModel lender) {
 		this.lender = lender;
 	}
 	/**
 	 * @return the mortagageBroker
 	 */
-	public ContactInformationDetail getMortagageBroker() {
+	public ContactInformationDetailModel getMortagageBroker() {
 		return mortagageBroker;
 	}
 	/**
 	 * @param mortagageBroker the mortagageBroker to set
 	 */
-	public void setMortagageBroker(ContactInformationDetail mortagageBroker) {
+	public void setMortagageBroker(ContactInformationDetailModel mortagageBroker) {
 		this.mortagageBroker = mortagageBroker;
 	}
 	/**
 	 * @return the realEstateBrokerB
 	 */
-	public ContactInformationDetail getRealEstateBrokerB() {
+	public ContactInformationDetailModel getRealEstateBrokerB() {
 		return realEstateBrokerB;
 	}
 	/**
 	 * @param realEstateBrokerB the realEstateBrokerB to set
 	 */
-	public void setRealEstateBrokerB(ContactInformationDetail realEstateBrokerB) {
+	public void setRealEstateBrokerB(ContactInformationDetailModel realEstateBrokerB) {
 		this.realEstateBrokerB = realEstateBrokerB;
 	}
 	/**
 	 * @return the realEstateBrokerS
 	 */
-	public ContactInformationDetail getRealEstateBrokerS() {
+	public ContactInformationDetailModel getRealEstateBrokerS() {
 		return realEstateBrokerS;
 	}
 	/**
 	 * @param realEstateBrokerS the realEstateBrokerS to set
 	 */
-	public void setRealEstateBrokerS(ContactInformationDetail realEstateBrokerS) {
+	public void setRealEstateBrokerS(ContactInformationDetailModel realEstateBrokerS) {
 		this.realEstateBrokerS = realEstateBrokerS;
 	}
 	/**
 	 * @return the settlementAgent
 	 */
-	public ContactInformationDetail getSettlementAgent() {
+	public ContactInformationDetailModel getSettlementAgent() {
 		return settlementAgent;
 	}
 	/**
 	 * @param settlementAgent the settlementAgent to set
 	 */
-	public void setSettlementAgent(ContactInformationDetail settlementAgent) {
+	public void setSettlementAgent(ContactInformationDetailModel settlementAgent) {
 		this.settlementAgent = settlementAgent;
 	}
 	

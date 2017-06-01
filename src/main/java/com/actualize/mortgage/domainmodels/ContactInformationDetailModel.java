@@ -10,18 +10,18 @@ import java.io.Serializable;
  * @author sboragala
  *
  */
-public class ContactInformationDetail implements Serializable {
+public class ContactInformationDetailModel implements Serializable {
 
-	private static final long serialVersionUID = -7630860887726112324L;
-	
-	private String partyRoleType;
-	private String organizationName;  
-	private AddressModel address;
-	private LicenseDetailModel organizationLicenseDetail;
-	private NameModel name;
-	private LicenseDetailModel individualLicenseDetail;
-	private String individualEmail;
-	private String individualPhone;
+	private static final long serialVersionUID = 5757669572320827341L;
+
+	private String partyRoleType = "";
+	private String organizationName = "";  
+	private AddressModel address = new AddressModel();
+	private LicenseDetailModel organizationLicenseDetail = new LicenseDetailModel();
+	private NameModel name = new NameModel();
+	private LicenseDetailModel individualLicenseDetail = new LicenseDetailModel();
+	private String individualEmail = "";
+	private String individualPhone = "";
 	
 	/**
 	 * @return the partyRoleType

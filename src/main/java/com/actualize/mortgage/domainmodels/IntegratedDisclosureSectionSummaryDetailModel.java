@@ -6,16 +6,14 @@ package com.actualize.mortgage.domainmodels;
 import java.io.Serializable;
 
 /**
+ * this class defines IntegratedDisclosureSectionSummaryDetail in JSON Response
  * @author sboragala
  *
  */
 public class IntegratedDisclosureSectionSummaryDetailModel implements Serializable {
 
-	/**
-	 * 
-	 */
-	private static  long serialVersionUID = 2883274049231196002L;
-	
+	private static final long serialVersionUID = 8448232498165634324L;
+
 	private  String integratedDisclosureSectionTotalAmount;
 	private  String integratedDisclosureSectionType;
 	private  String integratedDisclosureSubsectionTotalAmount;

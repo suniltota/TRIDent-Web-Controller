@@ -1,8 +1,16 @@
 package com.actualize.mortgage.utils;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
+import java.util.TimeZone;
 
+import com.actualize.mortgage.cdpagemodels.ClosingDisclosure;
+import com.actualize.mortgage.domainmodels.IntegratedDisclosureSectionSummaryDetailModel;
+import com.actualize.mortgage.domainmodels.IntegratedDisclosureSectionSummaryModel;
+import com.actualize.mortgage.domainmodels.IntegratedDisclosureSubsectionPaymentModel;
 import com.actualize.mortgage.domainmodels.MismoPaymentsModel;
 import com.actualize.mortgage.domainmodels.MismoProjectedPaymentsModel;
 import com.actualize.mortgage.domainmodels.PaymentsModel;
@@ -209,6 +217,102 @@ public class Convertor {
 		return mismoProjectedPaymentsModels;
 	}
 	
+	/**
+	 * calculates IntegratedDisclosureSectionSummaryModels to insert into MISMO XML
+	 * @param json
+	 * @return list of IntegratedDisclosureSectionSummaryModel
+	 */
+	public static List<IntegratedDisclosureSectionSummaryModel> createIntegratedDisclosureSectionSummaryModel(ClosingDisclosure json)
+	{
+		List<IntegratedDisclosureSectionSummaryModel> integratedDisclosureSectionSummaryModels = new LinkedList<>();
+		
+		if(!"".equals(json.getClosingCostDetailsLoanCosts().getOcTotalAmount()) && null != json.getClosingCostDetailsLoanCosts().getOcTotalAmount())
+		{
+			IntegratedDisclosureSectionSummaryModel integratedDisclosureSectionSummaryModel = new IntegratedDisclosureSectionSummaryModel();
+			IntegratedDisclosureSectionSummaryDetailModel integratedDisclosureSectionSummaryDetailModel = new IntegratedDisclosureSectionSummaryDetailModel();
+			
+			integratedDisclosureSectionSummaryDetailModel.setIntegratedDisclosureSectionTotalAmount(json.getClosingCostDetailsLoanCosts().getOcTotalAmount());
+			integratedDisclosureSectionSummaryDetailModel.setIntegratedDisclosureSectionType("OriginationCharges");
+			
+			
+			integratedDisclosureSectionSummaryModel.setIntegratedDisclosureSectionSummaryDetailModel(integratedDisclosureSectionSummaryDetailModel);
+			integratedDisclosureSectionSummaryModels.add(integratedDisclosureSectionSummaryModel);
+		}
+		
+		if(!"".equals(json.getClosingCostDetailsLoanCosts().getSbDidShopTotalAmount()) && null != json.getClosingCostDetailsLoanCosts().getSbDidShopTotalAmount())
+		{
+			IntegratedDisclosureSectionSummaryModel integratedDisclosureSectionSummaryModel = new IntegratedDisclosureSectionSummaryModel();
+			IntegratedDisclosureSectionSummaryDetailModel integratedDisclosureSectionSummaryDetailModel = new IntegratedDisclosureSectionSummaryDetailModel();
+			
+			integratedDisclosureSectionSummaryDetailModel.setIntegratedDisclosureSectionTotalAmount(json.getClosingCostDetailsLoanCosts().getSbDidShopTotalAmount());
+			integratedDisclosureSectionSummaryDetailModel.setIntegratedDisclosureSectionType("ServicesBorrowerDidShopFor");
+			
+			
+			integratedDisclosureSectionSummaryModel.setIntegratedDisclosureSectionSummaryDetailModel(integratedDisclosureSectionSummaryDetailModel);
+			integratedDisclosureSectionSummaryModels.add(integratedDisclosureSectionSummaryModel);
+		}
+		
+		if(!"".equals(json.getClosingCostDetailsLoanCosts().getSbDidNotShopTotalAmount()) && null != json.getClosingCostDetailsLoanCosts().getSbDidNotShopTotalAmount())
+		{
+			IntegratedDisclosureSectionSummaryModel integratedDisclosureSectionSummaryModel = new IntegratedDisclosureSectionSummaryModel();
+			IntegratedDisclosureSectionSummaryDetailModel integratedDisclosureSectionSummaryDetailModel = new IntegratedDisclosureSectionSummaryDetailModel();
+			
+			integratedDisclosureSectionSummaryDetailModel.setIntegratedDisclosureSectionTotalAmount(json.getClosingCostDetailsLoanCosts().getSbDidNotShopTotalAmount());
+			integratedDisclosureSectionSummaryDetailModel.setIntegratedDisclosureSectionType("ServicesBorrowerDidNotShopFor");
+			
+			
+			integratedDisclosureSectionSummaryModel.setIntegratedDisclosureSectionSummaryDetailModel(integratedDisclosureSectionSummaryDetailModel);
+			integratedDisclosureSectionSummaryModels.add(integratedDisclosureSectionSummaryModel);
+		}
+		
+		if(!"".equals(json.getClosingCostDetailsLoanCosts().getTlCostsTotalAmount()) && null != json.getClosingCostDetailsLoanCosts().getTlCostsTotalAmount())
+		{
+			IntegratedDisclosureSectionSummaryModel integratedDisclosureSectionSummaryModel = new IntegratedDisclosureSectionSummaryModel();
+			IntegratedDisclosureSectionSummaryDetailModel integratedDisclosureSectionSummaryDetailModel = new IntegratedDisclosureSectionSummaryDetailModel();
+			List<IntegratedDisclosureSubsectionPaymentModel> integratedDisclosureSubsectionPaymentModels = new LinkedList<>();
+			
+			integratedDisclosureSectionSummaryDetailModel.setIntegratedDisclosureSectionTotalAmount(json.getClosingCostDetailsLoanCosts().getTlCostsTotalAmount());
+			integratedDisclosureSectionSummaryDetailModel.setIntegratedDisclosureSectionType("TotalLoanCosts");
+			integratedDisclosureSectionSummaryDetailModel.setIntegratedDisclosureSubsectionType("LoanCostsSubtotal");
+			
+			
+			List<MismoPaymentsModel> mismoPaymentsModels = toMismoFeePayments(json.getClosingCostDetailsLoanCosts().getTlCosts(),"PREPAIDS");
+			for(MismoPaymentsModel payment : mismoPaymentsModels)
+			{
+				IntegratedDisclosureSubsectionPaymentModel integratedDisclosureSubsectionPayment = new IntegratedDisclosureSubsectionPaymentModel();
+					integratedDisclosureSubsectionPayment.setIntegratedDisclosureSubsectionPaidByType(payment.getPaidByType());
+					integratedDisclosureSubsectionPayment.setIntegratedDisclosureSubsectionPaymentAmount(payment.getAmount());
+					integratedDisclosureSubsectionPayment.setIntegratedDisclosureSubsectionPaymentTimingType(payment.getClosingIndicator());
+				
+			   integratedDisclosureSubsectionPaymentModels.add(integratedDisclosureSubsectionPayment);
+			}
+			
+			integratedDisclosureSectionSummaryModel.setIntegratedDisclosureSectionSummaryDetailModel(integratedDisclosureSectionSummaryDetailModel);
+			integratedDisclosureSectionSummaryModel.setIntegratedDisclosureSubsectionPayments(integratedDisclosureSubsectionPaymentModels);
+			
+			integratedDisclosureSectionSummaryModels.add(integratedDisclosureSectionSummaryModel);
+		}
+		
+		if(!"".equals(json.getClosingCostDetailsOtherCosts().gettOGovtFeesTotalAmount()) && null != json.getClosingCostDetailsOtherCosts().gettOGovtFeesTotalAmount())
+		{
+			IntegratedDisclosureSectionSummaryModel integratedDisclosureSectionSummaryModel = new IntegratedDisclosureSectionSummaryModel();
+			IntegratedDisclosureSectionSummaryDetailModel integratedDisclosureSectionSummaryDetailModel = new IntegratedDisclosureSectionSummaryDetailModel();
+			
+			integratedDisclosureSectionSummaryDetailModel.setIntegratedDisclosureSectionTotalAmount(json.getClosingCostDetailsOtherCosts().gettOGovtFeesTotalAmount());
+			integratedDisclosureSectionSummaryDetailModel.setIntegratedDisclosureSectionType("TaxesAndOtherGovernmentFees");
+			
+			integratedDisclosureSectionSummaryModel.setIntegratedDisclosureSectionSummaryDetailModel(integratedDisclosureSectionSummaryDetailModel);
+			
+			integratedDisclosureSectionSummaryModels.add(integratedDisclosureSectionSummaryModel);
+		}
+		
+		return integratedDisclosureSectionSummaryModels;
+	}
+	
+	
+	 
+	
+	
 	public static String booleanToString(boolean status)
 	{
 		if(status)
@@ -231,7 +335,19 @@ public class Convertor {
 	        return month;
 		}
 		
-			return 0;
-	        
+			return 0;        
+	}
+	
+	/**
+	 * get the current date and time with UTC time zone formatted as yyyy-MM-dd'T'HH:mm:ss.SSS'Z
+	 * @return date as String 
+	 */
+	public static String getUTCDate()
+	{
+		Date date = new Date();  
+        SimpleDateFormat formatter = new SimpleDateFormat( "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.US);
+        formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
+        return formatter.format(date);  
+		
 	}
 }

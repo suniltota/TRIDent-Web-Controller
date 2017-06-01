@@ -32,7 +32,7 @@ import com.actualize.mortgage.domainmodels.ClosingCostsTotal;
 import com.actualize.mortgage.domainmodels.ClosingInformationDetailModel;
 import com.actualize.mortgage.domainmodels.ClosingInformationModel;
 import com.actualize.mortgage.domainmodels.ConstructionModel;
-import com.actualize.mortgage.domainmodels.ContactInformationDetail;
+import com.actualize.mortgage.domainmodels.ContactInformationDetailModel;
 import com.actualize.mortgage.domainmodels.ContactInformationModel;
 import com.actualize.mortgage.domainmodels.CostsAtClosing;
 import com.actualize.mortgage.domainmodels.CostsAtClosingCashToClose;
@@ -1452,9 +1452,9 @@ public class ClosingDisclosureConverter {
     * @param party
     * @return ContactInformationDetail
     */
-    private ContactInformationDetail getContactInformationDetail(List<Party> parties, String partyType)
+    private ContactInformationDetailModel getContactInformationDetail(List<Party> parties, String partyType)
     {
-    	ContactInformationDetail contactInformationDetail = new ContactInformationDetail();
+    	ContactInformationDetailModel contactInformationDetailModel = new ContactInformationDetailModel();
     	AddressModel addressModel = new AddressModel();
 		NameModel nameModel = new NameModel();
 		LicenseDetailModel individualLicenseDetail = new LicenseDetailModel();
@@ -1476,11 +1476,11 @@ public class ClosingDisclosureConverter {
     			}
 	    	}
     	
-	    	contactInformationDetail.setPartyRoleType(partyType);
+	    	contactInformationDetailModel.setPartyRoleType(partyType);
 	    	
     	if(null != party.legalEntity.legalEntityDetail.element)
 	   	{
-    		contactInformationDetail.setOrganizationName(party.legalEntity.legalEntityDetail.fullName);
+    		contactInformationDetailModel.setOrganizationName(party.legalEntity.legalEntityDetail.fullName);
 	    		
 	    		if(null != party.roles.element && null != party.roles.roles[0].licenses.element && null != party.roles.roles[0].licenses.licenses[0].licenseDetail.element)
 				{
@@ -1522,19 +1522,19 @@ public class ClosingDisclosureConverter {
 	    		for(int i=0; i<party.individual.contactPoints.contactPoints.length; i++)
 	    		{
 	    			if(null != party.individual.contactPoints.contactPoints[i].contactPointEmail.element)
-	    				contactInformationDetail.setIndividualEmail(party.individual.contactPoints.contactPoints[i].contactPointEmail.ContactPointEmailValue);
+	    				contactInformationDetailModel.setIndividualEmail(party.individual.contactPoints.contactPoints[i].contactPointEmail.ContactPointEmailValue);
 	    			if(null != party.individual.contactPoints.contactPoints[i].contactPointTelephone.element)
-	    				contactInformationDetail.setIndividualPhone(party.individual.contactPoints.contactPoints[i].contactPointTelephone.ContactPointTelephoneValue);
+	    				contactInformationDetailModel.setIndividualPhone(party.individual.contactPoints.contactPoints[i].contactPointTelephone.ContactPointTelephoneValue);
 	    		}
 	    	}
     	});
     	
-    	contactInformationDetail.setAddress(addressModel);
-    	contactInformationDetail.setIndividualLicenseDetail(individualLicenseDetail);
-    	contactInformationDetail.setOrganizationLicenseDetail(organizationLicenseDetail);
-    	contactInformationDetail.setName(nameModel);
+    	contactInformationDetailModel.setAddress(addressModel);
+    	contactInformationDetailModel.setIndividualLicenseDetail(individualLicenseDetail);
+    	contactInformationDetailModel.setOrganizationLicenseDetail(organizationLicenseDetail);
+    	contactInformationDetailModel.setName(nameModel);
     	
-		return contactInformationDetail;
+		return contactInformationDetailModel;
     }
     
     /**
