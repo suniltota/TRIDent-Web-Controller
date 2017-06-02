@@ -141,6 +141,22 @@ public class JsonToUcd {
 		return element;
 	}
 	/**
+	 * Inserts Data to XML Object from JSON Object
+	 * @param document Output XML file
+	 * @param element parent node of XML
+	 * @param element parent node of XMLName
+	 * @param element parent node of XMLValue
+	 * @return
+	 */
+	private Element returnElement(Document document, Element element, String elementName, String elementValue) {
+		Element e = null;
+		if (elementValue != null && !elementValue.isEmpty()) {
+			e = (Element)element.appendChild(document.createElement(addNamespace(elementName)));
+			e.appendChild(document.createTextNode(elementValue));
+		}
+		return e;
+	}
+	/**
 	 * Inserts Levels from JSON Object
 	 * @param document Output XML file
 	 * @param element parent node of XML
@@ -1215,13 +1231,15 @@ public class JsonToUcd {
 		insertData(document, element, "FeePaidToTypeOtherDescription", closingCostProperties.getFeePaidToTypeOtherDescription());
 		insertData(document, element, "FeePercentBasisType", closingCostProperties.getFeePercentBasisType());
 		insertData(document, element, "FeeTotalPercent", closingCostProperties.getFeeTotalPercent());
-		Element FeeTypeelement = insertData(document, element, "FeeType", closingCostProperties.getFeeType());
+		Element feeTypeElement = returnElement(document, element, "FeeType", closingCostProperties.getFeeType());
+			if(!closingCostProperties.getGseDisplayLabel().isEmpty() && null != closingCostProperties.getGseDisplayLabel())
+				feeTypeElement.setAttribute("gse:DisplayLabelText", closingCostProperties.getGseDisplayLabel());
 		insertData(document, element, "FeeTypeOtherDescription", closingCostProperties.getFeeTypeOtherDescription());
 		insertData(document, element, "IntegratedDisclosureSectionType", closingCostProperties.getIntegratedDisclosureSectionType());
 		insertData(document, element, "OptionalCostIndicator", Boolean.toString(closingCostProperties.isOptionalCostIndicator()));
 		insertData(document, element, "RegulationZPointsAndFeesIndicator", Boolean.toString(closingCostProperties.isRegulationZPointsAndFeesIndicator()).toLowerCase());
 		insertData(document, element, "RequiredProviderOfServiceIndicator", "");
-		FeeTypeelement.setAttribute("gse:DisplayLabelText", closingCostProperties.getGseDisplayLabel());
+		
 		insertExtension(document, insertLevels(document, element, "EXTENSION"), other);
 	}
 	
@@ -1301,8 +1319,9 @@ public class JsonToUcd {
 		insertData(document, element, "EscrowCollectedNumberOfMonthsCount", escrowItem.getEscrowCollectedNumberOfMonthsCount());
 		insertData(document, element, "EscrowItemCategoryType","");
 		insertData(document, element, "EscrowItemEstimatedTotalAmount","");
-		insertData(document, element, "EscrowItemType", escrowItem.getEscrowItemType());
-		element.setAttribute("gse:DisplayLabelText",  escrowItem.getDisplayLabel());
+		Element itemType = returnElement(document, element, "EscrowItemType", escrowItem.getEscrowItemType());
+			if(!escrowItem.getDisplayLabel().isEmpty() && null != escrowItem.getDisplayLabel())
+				itemType.setAttribute("gse:DisplayLabelText",  escrowItem.getDisplayLabel());
 		insertData(document, element, "EscrowItemTypeOtherDescription", escrowItem.getEscrowItemTypeOtherDescription());
 		insertData(document, element, "EscrowMonthlyPaymentAmount", escrowItem.getEscrowMonthlyPaymentAmount());
 		insertData(document, element, "FeePaidToType", escrowItem.getFeePaidToType());
@@ -1678,8 +1697,9 @@ public class JsonToUcd {
 		insertData(document, element, "ProrationItemAmount", prorationItem.getProrationItemAmount());
 		insertData(document, element, "ProrationItemPaidFromDate",  prorationItem.getProrationItemPaidFromDate());
 		insertData(document, element, "ProrationItemPaidThroughDate",  prorationItem.getProrationItemPaidThroughDate());
-		Element prorationItemTypeElement = insertData(document, element, "ProrationItemType",  prorationItem.getProrationItemType());
-		prorationItemTypeElement.setAttribute("gse:DisplayLabelText",  prorationItem.getDisplayLabel());
+		Element prorationItemTypeElement = returnElement(document, element, "ProrationItemType",  prorationItem.getProrationItemType());
+			if(!prorationItem.getDisplayLabel().isEmpty() && null != prorationItem.getDisplayLabel())
+				prorationItemTypeElement.setAttribute("gse:DisplayLabelText",  prorationItem.getDisplayLabel());
 		insertData(document, element, "ProrationItemTypeOtherDescription", prorationItem.getProrationItemTypeOtherDescription());
 	}
 		
@@ -1768,9 +1788,9 @@ public class JsonToUcd {
 		insertData(document, element, "PrepaidItemPaidThroughDate", prepaidItem.getPrepaidItemPaidThroughDate());
 		insertData(document, element, "PrepaidItemPerDiemAmount", prepaidItem.getPrepaidItemPerDiemAmount());
 		insertData(document, element, "PrepaidItemPerDiemCalculationMethodType", prepaidItem.getPrepaidItemPerDiemCalculationMethodType());
-		Element prepaidItemTypeElement = insertData(document, element, "PrepaidItemType", prepaidItem.getPrepaidItemType());
-		prepaidItemTypeElement.setAttribute("gse:DisplayLabelText", prepaidItem.getDisplayLabel());
-		//insertAttributeValue(xmlout, prepaidItemTypeElement, "gse:DisplayLabelText", "");
+		Element prepaidItemTypeElement = returnElement(document, element, "PrepaidItemType", prepaidItem.getPrepaidItemType());
+			if(!prepaidItem.getDisplayLabel().isEmpty() && null != prepaidItem.getDisplayLabel())
+				prepaidItemTypeElement.setAttribute("gse:DisplayLabelText", prepaidItem.getDisplayLabel());
 		insertData(document, element, "PrepaidItemTypeOtherDescription", prepaidItem.getPrepaidItemTypeOtherDescription());
 		insertData(document, element, "RegulationZPointsAndFeesIndicator", Boolean.toString(prepaidItem.isRegulationZPointsAndFeesIndicator()));
 		OtherModel other = new OtherModel();
@@ -1941,8 +1961,8 @@ public class JsonToUcd {
 		insertData(document, element, "ClosingAdjustmentItemAmount", closingAdjustmentItem.getClosingAdjustmentItemAmount());
 		//insertData(document, element, "ClosingAdjustmentItemPaidOutsideOfClosingIndicator",);
 		Element closingAdjustmentItemTypeElement = insertData(document, element, "ClosingAdjustmentItemType", closingAdjustmentItem.getClosingAdjustmentItemType());
-		closingAdjustmentItemTypeElement.setAttribute("gse:DisplayLabelText",closingAdjustmentItem.getDisplayLabel());
-		//insertAttribute(document, closingAdjustmentItemTypeElement, "gse:DisplayLabelText", closingAdjustmentItem.getDisplayLabel());
+			if(!closingAdjustmentItem.getDisplayLabel().isEmpty() && null != closingAdjustmentItem.getDisplayLabel())
+				closingAdjustmentItemTypeElement.setAttribute("gse:DisplayLabelText",closingAdjustmentItem.getDisplayLabel());
 		insertData(document, element, "ClosingAdjustmentItemTypeOtherDescription", closingAdjustmentItem.getClosingAdjustmentItemTypeOtherDescription());
 		insertData(document, element, "IntegratedDisclosureSectionType", closingAdjustmentItem.getIntegratedDisclosureSectionType());
 		insertData(document, element, "IntegratedDisclosureSubsectionType", closingAdjustmentItem.getIntegratedDisclosureSubsectionType());
@@ -2357,8 +2377,8 @@ public class JsonToUcd {
 	private void insertSubjectProperty(Document document, Element element, ClosingDisclosure jsonDocument) {
 
 		insertAddress(document, insertLevels(document, element, "ADDRESS"), jsonDocument.getClosingInformation().getProperty());
-		insertUnparsedLegalDescription(document, 
-				insertLevels(document, element,"LEGAL_DESCRIPTIONS/LEGAL_DESCRIPTION/UNPARSED_LEGAL_DESCRIPTIONS/UNPARSED_LEGAL_DESCRIPTION"), "TODO");
+		//insertUnparsedLegalDescription(document, 
+			//	insertLevels(document, element,"LEGAL_DESCRIPTIONS/LEGAL_DESCRIPTION/UNPARSED_LEGAL_DESCRIPTIONS/UNPARSED_LEGAL_DESCRIPTION"), "TODO");
 		//insertLocationIdentifier(document, insertLevels(document, element, "LOCATION_IDENTIFIER"), jsonDocument);
 		insertPropertyDetail(document, insertLevels(document, element, "PROPERTY_DETAIL"), jsonDocument.getClosingInformation().getPropertyValuationDetail().getPropertyEstimatedValueAmount());
 		insertPropertyValuations(document, insertLevels(document, element, "PROPERTY_VALUATIONS"), jsonDocument.getClosingInformation().getPropertyValuationDetail());
