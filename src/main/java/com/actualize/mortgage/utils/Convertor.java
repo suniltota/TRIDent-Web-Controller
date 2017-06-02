@@ -222,7 +222,7 @@ public class Convertor {
 	 * @param json
 	 * @return list of IntegratedDisclosureSectionSummaryModel
 	 */
-	public static List<IntegratedDisclosureSectionSummaryModel> createIntegratedDisclosureSectionSummaryModel(ClosingDisclosure json)
+	public static List<IntegratedDisclosureSectionSummaryModel> createIntegratedDisclosureSectionSummaryModels(ClosingDisclosure json)
 	{
 		List<IntegratedDisclosureSectionSummaryModel> integratedDisclosureSectionSummaryModels = new LinkedList<>();
 		
@@ -332,12 +332,74 @@ public class Convertor {
 			integratedDisclosureSectionSummaryModels.add(integratedDisclosureSectionSummaryModel);
 		}
 		
+		if(!"".equals(json.getClosingCostDetailsOtherCosts().getOtherTotalAmount()) && null != json.getClosingCostDetailsOtherCosts().getOtherTotalAmount())
+		{
+			IntegratedDisclosureSectionSummaryModel integratedDisclosureSectionSummaryModel = new IntegratedDisclosureSectionSummaryModel();
+			IntegratedDisclosureSectionSummaryDetailModel integratedDisclosureSectionSummaryDetailModel = new IntegratedDisclosureSectionSummaryDetailModel();
+			
+			integratedDisclosureSectionSummaryDetailModel.setIntegratedDisclosureSectionTotalAmount(json.getClosingCostDetailsOtherCosts().getOtherTotalAmount());
+			integratedDisclosureSectionSummaryDetailModel.setIntegratedDisclosureSectionType("OtherCosts");
+			
+			integratedDisclosureSectionSummaryModel.setIntegratedDisclosureSectionSummaryDetailModel(integratedDisclosureSectionSummaryDetailModel);
+			
+			integratedDisclosureSectionSummaryModels.add(integratedDisclosureSectionSummaryModel);
+		}
+		
+		if(!"".equals(json.getClosingCostDetailsOtherCosts().getTotalOtherCostsTotalAmount()) && null != json.getClosingCostDetailsOtherCosts().getTotalOtherCostsTotalAmount())
+		{
+			IntegratedDisclosureSectionSummaryModel integratedDisclosureSectionSummaryModel = new IntegratedDisclosureSectionSummaryModel();
+			IntegratedDisclosureSectionSummaryDetailModel integratedDisclosureSectionSummaryDetailModel = new IntegratedDisclosureSectionSummaryDetailModel();
+			List<IntegratedDisclosureSubsectionPaymentModel> integratedDisclosureSubsectionPaymentModels = new LinkedList<>();
+			
+			integratedDisclosureSectionSummaryDetailModel.setIntegratedDisclosureSectionTotalAmount(json.getClosingCostDetailsOtherCosts().getTotalOtherCostsTotalAmount());
+			integratedDisclosureSectionSummaryDetailModel.setIntegratedDisclosureSectionType("TotalOtherCosts");
+			integratedDisclosureSectionSummaryDetailModel.setIntegratedDisclosureSubsectionType("OtherCostsSubtotal");
+			
+			
+			List<MismoPaymentsModel> mismoPaymentsModels = toMismoFeePayments(json.getClosingCostDetailsLoanCosts().getTlCosts(),"PREPAID");
+			for(MismoPaymentsModel payment : mismoPaymentsModels)
+			{
+				IntegratedDisclosureSubsectionPaymentModel integratedDisclosureSubsectionPayment = new IntegratedDisclosureSubsectionPaymentModel();
+					integratedDisclosureSubsectionPayment.setIntegratedDisclosureSubsectionPaidByType(payment.getPaidByType());
+					integratedDisclosureSubsectionPayment.setIntegratedDisclosureSubsectionPaymentAmount(payment.getAmount());
+					integratedDisclosureSubsectionPayment.setIntegratedDisclosureSubsectionPaymentTimingType(payment.getClosingIndicator());
+				
+			   integratedDisclosureSubsectionPaymentModels.add(integratedDisclosureSubsectionPayment);
+			}
+			
+			
+			
+			integratedDisclosureSectionSummaryModel.setIntegratedDisclosureSectionSummaryDetailModel(integratedDisclosureSectionSummaryDetailModel);
+			
+			integratedDisclosureSectionSummaryModels.add(integratedDisclosureSectionSummaryModel);
+		}
+		
 		return integratedDisclosureSectionSummaryModels;
 	}
 	
 	
-	 
-	
+	/*private IntegratedDisclosureSectionSummaryModel createIntegratedDisclosureSectionSummaryModels(String amount, String sectionType, String subSectionType, boolean hasPayments, PaymentsModel paymentsModel)
+	{
+		IntegratedDisclosureSectionSummaryModel integratedDisclosureSectionSummaryModel = new IntegratedDisclosureSectionSummaryModel();
+		IntegratedDisclosureSectionSummaryDetailModel integratedDisclosureSectionSummaryDetail = new IntegratedDisclosureSectionSummaryDetailModel();
+		List<IntegratedDisclosureSubsectionPaymentModel> integratedDisclosureSubsectionPaymentModels = new LinkedList<>();
+		
+		List<MismoPaymentsModel> mismoPaymentsModels = toMismoFeePayments(json.getClosingCostDetailsLoanCosts().getTlCosts(),"PREPAID");
+		for(MismoPaymentsModel payment : mismoPaymentsModels)
+		{
+			IntegratedDisclosureSubsectionPaymentModel integratedDisclosureSubsectionPayment = new IntegratedDisclosureSubsectionPaymentModel();
+				integratedDisclosureSubsectionPayment.setIntegratedDisclosureSubsectionPaidByType(payment.getPaidByType());
+				integratedDisclosureSubsectionPayment.setIntegratedDisclosureSubsectionPaymentAmount(payment.getAmount());
+				integratedDisclosureSubsectionPayment.setIntegratedDisclosureSubsectionPaymentTimingType(payment.getClosingIndicator());
+			
+		   integratedDisclosureSubsectionPaymentModels.add(integratedDisclosureSubsectionPayment);
+		}
+		
+		integratedDisclosureSectionSummaryModel.setIntegratedDisclosureSectionSummaryDetailModel(integratedDisclosureSectionSummaryDetailModel);
+		
+		integratedDisclosureSectionSummaryModels.add(integratedDisclosureSectionSummaryModel);
+	}
+	*/
 	
 	public static String booleanToString(boolean status)
 	{

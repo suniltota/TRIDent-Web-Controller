@@ -1431,7 +1431,7 @@ public class JsonToUcd {
      */
 	private void insertIntegratedDisclosureSectionSummaries(Document document, Element element,
 			ClosingDisclosure jsonDocument) {
-		for (IntegratedDisclosureSectionSummaryModel integratedDisclosureSectionSummary : Convertor.createIntegratedDisclosureSectionSummaryModel(jsonDocument)) //TODO Not Implemented
+		for (IntegratedDisclosureSectionSummaryModel integratedDisclosureSectionSummary : Convertor.createIntegratedDisclosureSectionSummaryModels(jsonDocument)) //TODO Not Implemented
 			insertIntegratedDisclosureSectionSummary(document, insertLevels(document, element, "INTEGRATED_DISCLOSURE_SECTION_SUMMARY"), integratedDisclosureSectionSummary);
 	}
 	/**
