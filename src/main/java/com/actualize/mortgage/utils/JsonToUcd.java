@@ -1467,8 +1467,8 @@ public class JsonToUcd {
 	private void insertIntegratedDisclosureSubsectionPayment(Document document, Element element,
 			IntegratedDisclosureSubsectionPaymentModel integratedDisclosureSubsectionPayment) {
 		insertData(document, element, "IntegratedDisclosureSubsectionPaidByType", integratedDisclosureSubsectionPayment.getIntegratedDisclosureSubsectionPaidByType());
-		insertData(document, element, "IntegratedDisclosureSubsectionPaymentAmount", "");
-		insertData(document, element, "IntegratedDisclosureSubsectionPaymentTimingType","");
+		insertData(document, element, "IntegratedDisclosureSubsectionPaymentAmount", integratedDisclosureSubsectionPayment.getIntegratedDisclosureSubsectionPaymentAmount());
+		insertData(document, element, "IntegratedDisclosureSubsectionPaymentTimingType", integratedDisclosureSubsectionPayment.getIntegratedDisclosureSubsectionPaymentTimingType());
 	}
 	/**
      * Inserts Integrated Disclosure Section Summary Detail to MISMO XML
@@ -2054,7 +2054,7 @@ public class JsonToUcd {
      */
 	private void insertInterestRateAdjustment(Document document, Element element, InterestRateAdjustmentModel interestRateAdjustment) {
 		if(!interestRateAdjustment.getIndexType().isEmpty() && null != interestRateAdjustment.getIndexType())
-			insertIndexRules(document ,insertLevels(document, element, "INDEX_RULES"), interestRateAdjustment.getIndexType());
+			insertIndexRules(document ,insertLevels(document, element, "INDEX_RULES/INDEX_RULE"), interestRateAdjustment.getIndexType());
 		insertInterestRateLifetimeAdjustmentRule(document ,insertLevels(document, element, "INTEREST_RATE_LIFETIME_ADJUSTMENT_RULE"), interestRateAdjustment);
 		insertInterestRatePerChangeAdjustmentRules(document ,insertLevels(document, element, "INTEREST_RATE_PER_CHANGE_ADJUSTMENT_RULES"), interestRateAdjustment);
 	}
@@ -2163,7 +2163,7 @@ public class JsonToUcd {
      */
 	private void insertIndexRules(Document document, Element element, String indexType) {
 		//for (IndexRule indexRule : indexRules)
-			insertIndexRule(document, element, "INDEX_RULE", indexType);
+		insertIndexRule(document, element, "INDEX_RULE", indexType);
 	}
 	/**
      * Inserts Index Rule from JSON Object

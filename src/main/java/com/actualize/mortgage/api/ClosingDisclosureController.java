@@ -92,4 +92,10 @@ public class ClosingDisclosureController {
         }
         return pdfResponseList;
     }
+    
+    @RequestMapping(value = "/{version}/ucdxml", method = { RequestMethod.POST })
+    public String generateUCD(@PathVariable String version, @RequestBody String xmldoc) throws Exception {
+    	 InputStream doc = new ByteArrayInputStream(xmldoc.getBytes(StandardCharsets.UTF_8));
+        return closingDisclosureService.createClosingDisclosureUCDXML(doc);
+    }
 }

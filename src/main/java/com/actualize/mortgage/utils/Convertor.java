@@ -276,7 +276,7 @@ public class Convertor {
 			integratedDisclosureSectionSummaryDetailModel.setIntegratedDisclosureSubsectionType("LoanCostsSubtotal");
 			
 			
-			List<MismoPaymentsModel> mismoPaymentsModels = toMismoFeePayments(json.getClosingCostDetailsLoanCosts().getTlCosts(),"PREPAIDS");
+			List<MismoPaymentsModel> mismoPaymentsModels = toMismoFeePayments(json.getClosingCostDetailsLoanCosts().getTlCosts(),"PREPAID");
 			for(MismoPaymentsModel payment : mismoPaymentsModels)
 			{
 				IntegratedDisclosureSubsectionPaymentModel integratedDisclosureSubsectionPayment = new IntegratedDisclosureSubsectionPaymentModel();
@@ -300,6 +300,32 @@ public class Convertor {
 			
 			integratedDisclosureSectionSummaryDetailModel.setIntegratedDisclosureSectionTotalAmount(json.getClosingCostDetailsOtherCosts().gettOGovtFeesTotalAmount());
 			integratedDisclosureSectionSummaryDetailModel.setIntegratedDisclosureSectionType("TaxesAndOtherGovernmentFees");
+			
+			integratedDisclosureSectionSummaryModel.setIntegratedDisclosureSectionSummaryDetailModel(integratedDisclosureSectionSummaryDetailModel);
+			
+			integratedDisclosureSectionSummaryModels.add(integratedDisclosureSectionSummaryModel);
+		}
+		
+		if(!"".equals(json.getClosingCostDetailsOtherCosts().getPrepaidsTotalAmount()) && null != json.getClosingCostDetailsOtherCosts().getPrepaidsTotalAmount())
+		{
+			IntegratedDisclosureSectionSummaryModel integratedDisclosureSectionSummaryModel = new IntegratedDisclosureSectionSummaryModel();
+			IntegratedDisclosureSectionSummaryDetailModel integratedDisclosureSectionSummaryDetailModel = new IntegratedDisclosureSectionSummaryDetailModel();
+			
+			integratedDisclosureSectionSummaryDetailModel.setIntegratedDisclosureSectionTotalAmount(json.getClosingCostDetailsOtherCosts().getPrepaidsTotalAmount());
+			integratedDisclosureSectionSummaryDetailModel.setIntegratedDisclosureSectionType("Prepaids");
+			
+			integratedDisclosureSectionSummaryModel.setIntegratedDisclosureSectionSummaryDetailModel(integratedDisclosureSectionSummaryDetailModel);
+			
+			integratedDisclosureSectionSummaryModels.add(integratedDisclosureSectionSummaryModel);
+		}
+		
+		if(!"".equals(json.getClosingCostDetailsOtherCosts().getEscrowItemsTotalAmount()) && null != json.getClosingCostDetailsOtherCosts().getEscrowItemsTotalAmount())
+		{
+			IntegratedDisclosureSectionSummaryModel integratedDisclosureSectionSummaryModel = new IntegratedDisclosureSectionSummaryModel();
+			IntegratedDisclosureSectionSummaryDetailModel integratedDisclosureSectionSummaryDetailModel = new IntegratedDisclosureSectionSummaryDetailModel();
+			
+			integratedDisclosureSectionSummaryDetailModel.setIntegratedDisclosureSectionTotalAmount(json.getClosingCostDetailsOtherCosts().getEscrowItemsTotalAmount());
+			integratedDisclosureSectionSummaryDetailModel.setIntegratedDisclosureSectionType("InitialEscrowPaymentAtClosing");
 			
 			integratedDisclosureSectionSummaryModel.setIntegratedDisclosureSectionSummaryDetailModel(integratedDisclosureSectionSummaryDetailModel);
 			

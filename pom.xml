@@ -195,6 +195,11 @@
 			<artifactId>UCDBuilder</artifactId>
 			<version>1.0-SNAPSHOT</version>
 		</dependency>
+		<dependency>
+			<groupId>XMLUtils</groupId>
+			<artifactId>UCDXMLBuilder</artifactId>
+			<version>1.0-SNAPSHOT</version>
+		</dependency>
     </dependencies>
     
     <build>
