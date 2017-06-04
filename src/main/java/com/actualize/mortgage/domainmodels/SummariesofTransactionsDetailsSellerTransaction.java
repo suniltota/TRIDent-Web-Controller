@@ -6,16 +6,17 @@ package com.actualize.mortgage.domainmodels;
 import java.io.Serializable;
 
 /**
+ * defines Seller Transaction for  Summaries of Transactions in JSON response 
  * @author sboragala
  *
  */
 public class SummariesofTransactionsDetailsSellerTransaction implements Serializable {
 
-
-	private static final long serialVersionUID = 901746957146752719L;
+	private static final long serialVersionUID = 7135974335217469384L;
 	
-	private IntegratedDisclosureSectionSummaryModel toSellerAtClosing;
-	private IntegratedDisclosureSectionSummaryModel fromSellerAtClosing;
+	private IntegratedDisclosureSectionSummaryModel toSellerAtClosing = new IntegratedDisclosureSectionSummaryModel();
+	private IntegratedDisclosureSectionSummaryModel fromSellerAtClosing = new IntegratedDisclosureSectionSummaryModel();
+	
 	/**
 	 * @return the toSellerAtClosing
 	 */

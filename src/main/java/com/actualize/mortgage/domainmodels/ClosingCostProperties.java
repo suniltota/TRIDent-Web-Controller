@@ -11,7 +11,6 @@ public class ClosingCostProperties extends PaymentsModel implements Serializable
 	private static final long serialVersionUID = 943579811603225142L;
 	
 	private String displayLabel;
-	private String gseDisplayLabel;
 	private String feePaidToFullName;
 	private String feeActualTotalAmount;
 	private String feePaidToType;
@@ -37,18 +36,6 @@ public class ClosingCostProperties extends PaymentsModel implements Serializable
 	 */
 	public void setDisplayLabel(String displayLabel) {
 		this.displayLabel = displayLabel;
-	}
-	/**
-	 * @return the gseDisplayLabel
-	 */
-	public String getGseDisplayLabel() {
-		return gseDisplayLabel;
-	}
-	/**
-	 * @param gseDisplayLabel the gseDisplayLabel to set
-	 */
-	public void setGseDisplayLabel(String gseDisplayLabel) {
-		this.gseDisplayLabel = gseDisplayLabel;
 	}
 	/**
 	 * @return the feePaidToFullName

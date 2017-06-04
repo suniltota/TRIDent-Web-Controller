@@ -15,6 +15,7 @@ public class ExceptionAdvisor {
 		ErrorResponse error = new ErrorResponse();
 		error.setErrorCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
 		error.setMessage(ex.getMessage());
+		error.setDetail(ex);
 		return new ResponseEntity<ErrorResponse>(error, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	

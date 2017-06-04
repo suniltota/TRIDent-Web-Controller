@@ -1954,11 +1954,9 @@ public class ClosingDisclosureConverter {
 	{
 		ClosingCostProperties closingCostProperties = new ClosingCostProperties();
 		
-		closingCostProperties.setGseDisplayLabel(fee.feeDetail.displayLabelText);
-		
 		  if ("true".equals(fee.feeDetail.optionalCostIndicator) && !"".equals(fee.feeDetail.feePaidToTypeOtherDescription) && !fee.feeDetail.feePaidToTypeOtherDescription.toLowerCase().contains("optional"))
 			  fee.feeDetail.displayLabelText += " (optional)";
-	
+		  
 		closingCostProperties.setFeeType(fee.feeDetail.feeType);
 		closingCostProperties.setFeeTypeOtherDescription(fee.feeDetail.feePaidToTypeOtherDescription);
 		closingCostProperties.setOptionalCostIndicator(Convertor.stringToBoolean(fee.feeDetail.optionalCostIndicator));
@@ -1974,10 +1972,9 @@ public class ClosingDisclosureConverter {
 		
 		if(!"".equals(fee.feeDetail.displayLabelText))
 			closingCostProperties.setDisplayLabel(fee.feeDetail.displayLabelText);
-		else if("Other".equalsIgnoreCase(fee.feeDetail.feeType))
-			    closingCostProperties.setDisplayLabel(StringFormatter.CAMEL.formatString(fee.feeDetail.feeTypeOtherDescription));
-		else
-			closingCostProperties.setDisplayLabel(StringFormatter.CAMEL.formatString(fee.feeDetail.feeType));
+		//else if("Other".equalsIgnoreCase(fee.feeDetail.feeType))
+			//    closingCostProperties.setDisplayLabel(StringFormatter.CAMEL.formatString(fee.feeDetail.feeTypeOtherDescription));
+		
 		
 		if(fee.feePayments.feePayments.length > 0)
 		for(FeePayment feepay :fee.feePayments.feePayments)
