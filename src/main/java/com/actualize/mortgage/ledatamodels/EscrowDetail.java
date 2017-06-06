@@ -8,7 +8,7 @@ public class EscrowDetail extends MISMODataAccessObject{
 	
 	private static final long serialVersionUID = -9031296076021358307L;
 	public final String escrowAggregateAccountingAdjustmentAmount;
-	public Other other;
+	public final Other other;
     
 	public EscrowDetail(Element element) {
 		super(element);

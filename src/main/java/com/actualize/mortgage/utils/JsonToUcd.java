@@ -1354,6 +1354,7 @@ public class JsonToUcd {
 			OtherModel other = new OtherModel();
 				other.setEscrowAggregateAccountingAdjustmentPaidByType("Seller");
 				other.setEscrowAggregateAccountingAdjustmentPaymentTimingType("AtClosing");
+				insertData(document, element, "EscrowAggregateAccountingAdjustmentAmount", closingDisclosureDocumentDetails.getEscrowAggregateAccountingAdjustmentAmount());
 			insertExtension(document, insertLevels(document, element, "EXTENSION"), other);	
 		}
 		else if(!"".equals(closingDisclosureDocumentDetails.getEscrowAggregateAccountingAdjustmentAmountOthersPaid()) && null != closingDisclosureDocumentDetails.getEscrowAggregateAccountingAdjustmentAmountOthersPaid())
@@ -1361,6 +1362,7 @@ public class JsonToUcd {
 			OtherModel other = new OtherModel();
 				other.setEscrowAggregateAccountingAdjustmentPaidByType("ThirdParty");
 				other.setEscrowAggregateAccountingAdjustmentPaymentTimingType("AtClosing");
+				insertData(document, element, "EscrowAggregateAccountingAdjustmentAmount", closingDisclosureDocumentDetails.getEscrowAggregateAccountingAdjustmentAmount());
 			insertExtension(document, insertLevels(document, element, "EXTENSION"), other);
 		}	
 		else if(!"".equals(closingDisclosureDocumentDetails.getEscrowAggregateAccountingAdjustmentAmount()) && null != closingDisclosureDocumentDetails.getEscrowAggregateAccountingAdjustmentAmount())	
