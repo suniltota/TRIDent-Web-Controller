@@ -1258,7 +1258,6 @@ public class JsonToUcd {
 	 * @param jsonDocument
 	 */
 	private void insertEscrow(Document document, Element element, ClosingDisclosure jsonDocument) {
-		if(!"".equals(jsonDocument.getClosingDisclosureDocDetails().getEscrowAggregateAccountingAdjustmentAmount()))
 			insertEscrowDetail(document, insertLevels(document, element, "ESCROW_DETAIL"), jsonDocument.getClosingDisclosureDocDetails());
 		if(jsonDocument.getClosingCostDetailsOtherCosts().getEscrowItemsList().size() > 0)
 			insertEscrowItems(document, insertLevels(document, element, "ESCROW_ITEMS"), jsonDocument.getClosingCostDetailsOtherCosts().getEscrowItemsList());
@@ -1354,7 +1353,7 @@ public class JsonToUcd {
 			OtherModel other = new OtherModel();
 				other.setEscrowAggregateAccountingAdjustmentPaidByType("Seller");
 				other.setEscrowAggregateAccountingAdjustmentPaymentTimingType("AtClosing");
-				insertData(document, element, "EscrowAggregateAccountingAdjustmentAmount", closingDisclosureDocumentDetails.getEscrowAggregateAccountingAdjustmentAmount());
+			insertData(document, element, "EscrowAggregateAccountingAdjustmentAmount", closingDisclosureDocumentDetails.getEscrowAggregateAccountingAdjustmentAmountSellerPaid());
 			insertExtension(document, insertLevels(document, element, "EXTENSION"), other);	
 		}
 		else if(!"".equals(closingDisclosureDocumentDetails.getEscrowAggregateAccountingAdjustmentAmountOthersPaid()) && null != closingDisclosureDocumentDetails.getEscrowAggregateAccountingAdjustmentAmountOthersPaid())
@@ -1362,7 +1361,7 @@ public class JsonToUcd {
 			OtherModel other = new OtherModel();
 				other.setEscrowAggregateAccountingAdjustmentPaidByType("ThirdParty");
 				other.setEscrowAggregateAccountingAdjustmentPaymentTimingType("AtClosing");
-				insertData(document, element, "EscrowAggregateAccountingAdjustmentAmount", closingDisclosureDocumentDetails.getEscrowAggregateAccountingAdjustmentAmount());
+				insertData(document, element, "EscrowAggregateAccountingAdjustmentAmount", closingDisclosureDocumentDetails.getEscrowAggregateAccountingAdjustmentAmountOthersPaid());
 			insertExtension(document, insertLevels(document, element, "EXTENSION"), other);
 		}	
 		else if(!"".equals(closingDisclosureDocumentDetails.getEscrowAggregateAccountingAdjustmentAmount()) && null != closingDisclosureDocumentDetails.getEscrowAggregateAccountingAdjustmentAmount())	
@@ -2169,6 +2168,8 @@ public class JsonToUcd {
 		insertData(document, element, GSE_ALIAS + ":TotalStepCount", other.getTotalStepCount());
 		insertData(document, element, GSE_ALIAS + ":TotalStepPaymentCount", other.getTotalStepPaymentCount());
 		insertData(document, element, GSE_ALIAS + ":SubordinateFinancingIsNewIndicator", other.getSubordinateFinancingIsNewIndicator());
+		insertData(document, element, GSE_ALIAS + ":EscrowAggregateAccountingAdjustmentPaidByType", other.getEscrowAggregateAccountingAdjustmentPaidByType());
+		insertData(document, element, GSE_ALIAS + ":EscrowAggregateAccountingAdjustmentPaymentTimingType", other.getEscrowAggregateAccountingAdjustmentPaymentTimingType());
 	}
 	
 	/**
