@@ -1428,7 +1428,7 @@ public class JsonToUcd {
 		insertData(document, element, "ProjectedPaymentEstimatedTotalMinimumPaymentAmount",  projectedPayment.getProjectedPaymentEstimatedTotalMinimumPaymentAmount());
 		insertData(document, element, "ProjectedPaymentMIPaymentAmount", projectedPayment.getProjectedPaymentMIPaymentAmount());
 		insertData(document, element, "ProjectedPaymentPrincipalAndInterestMaximumPaymentAmount", projectedPayment.getProjectedPaymentPrincipalAndInterestMaximumPaymentAmount());
-		insertData(document, element, "ProjectedPaymentPrincipalAndInterestMinimumPaymentAmount", projectedPayment.getProjectedPaymentEstimatedTotalMinimumPaymentAmount());
+		insertData(document, element, "ProjectedPaymentPrincipalAndInterestMinimumPaymentAmount", projectedPayment.getProjectedPaymentPrincipalAndInterestMinimumPaymentAmount());
 	}
 	/**
      * Inserts Integrated Disclosure Section Summaries to MISMO XML
@@ -2328,9 +2328,10 @@ public class JsonToUcd {
 				insertData(document, address, "StateCode", partyDetail.getAddress().getStateCode());
 				
 				Element licenseDetail = insertLevels(document, party, "LICENSE/LICENSE_DETAIL");
-					insertData(document, licenseDetail, "identifierOwnerURI", partyDetail.getOrganizationLicenseDetail().getIdentifierOwnerURI());
 					insertData(document, licenseDetail, "licenseAuthorityLevelType", partyDetail.getOrganizationLicenseDetail().getLicenseAuthorityLevelType());
-					insertData(document, licenseDetail, "licenseIdentifier", partyDetail.getOrganizationLicenseDetail().getLicenseIdentifier());
+					Element identifier =  returnElement(document, licenseDetail, "licenseIdentifier", partyDetail.getOrganizationLicenseDetail().getLicenseIdentifier());
+					if(null != partyDetail.getOrganizationLicenseDetail().getIdentifierOwnerURI() && !partyDetail.getOrganizationLicenseDetail().getIdentifierOwnerURI().isEmpty())
+						identifier.setAttribute("IdentifierOwnerURI", partyDetail.getOrganizationLicenseDetail().getIdentifierOwnerURI());
 					insertData(document, licenseDetail, "licenseIssueDate", partyDetail.getOrganizationLicenseDetail().getLicenseIssueDate());
 					insertData(document, licenseDetail, "licenseIssuingAuthorityName", partyDetail.getOrganizationLicenseDetail().getLicenseIssuingAuthorityName());
 					insertData(document, licenseDetail, "licenseIssuingAuthorityStateCode", partyDetail.getOrganizationLicenseDetail().getLicenseIssuingAuthorityStateCode());
@@ -2366,9 +2367,11 @@ public class JsonToUcd {
 			
 			}
 			Element licenseDetail = insertLevels(document, party, "LICENSE/LICENSE_DETAIL");
-				insertData(document, licenseDetail, "identifierOwnerURI", partyDetail.getIndividualLicenseDetail().getIdentifierOwnerURI());
+			
 				insertData(document, licenseDetail, "licenseAuthorityLevelType", partyDetail.getIndividualLicenseDetail().getLicenseAuthorityLevelType());
-				insertData(document, licenseDetail, "licenseIdentifier", partyDetail.getIndividualLicenseDetail().getLicenseIdentifier());
+				Element identifier =  returnElement(document, licenseDetail, "licenseIdentifier", partyDetail.getIndividualLicenseDetail().getLicenseIdentifier());
+					if(null != partyDetail.getIndividualLicenseDetail().getIdentifierOwnerURI() && !partyDetail.getIndividualLicenseDetail().getIdentifierOwnerURI().isEmpty())
+						identifier.setAttribute("IdentifierOwnerURI", partyDetail.getIndividualLicenseDetail().getIdentifierOwnerURI());
 				insertData(document, licenseDetail, "licenseIssueDate", partyDetail.getIndividualLicenseDetail().getLicenseIssueDate());
 				insertData(document, licenseDetail, "licenseIssuingAuthorityName", partyDetail.getIndividualLicenseDetail().getLicenseIssuingAuthorityName());
 				insertData(document, licenseDetail, "licenseIssuingAuthorityStateCode", partyDetail.getIndividualLicenseDetail().getLicenseIssuingAuthorityStateCode());
