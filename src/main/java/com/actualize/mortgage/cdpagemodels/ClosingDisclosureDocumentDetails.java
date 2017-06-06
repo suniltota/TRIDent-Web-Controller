@@ -15,10 +15,13 @@ public class ClosingDisclosureDocumentDetails implements Serializable {
 
     private static final long serialVersionUID = 1957140105029843535L;
 
-    private String transactionType;
-    private String documentType;
-    private String formType;
-    private String escrowAggregateAccountingAdjustmentAmount;
+    private String transactionType = "";
+    private String documentType = "";
+    private String formType = "";
+    private String escrowAggregateAccountingAdjustmentAmount = "";
+    private String escrowAggregateAccountingAdjustmentAmountSellerPaid = "";
+    private String escrowAggregateAccountingAdjustmentAmountOthersPaid = "";
+    
 	/**
 	 * @return the transactionType
 	 */
@@ -66,6 +69,32 @@ public class ClosingDisclosureDocumentDetails implements Serializable {
 	 */
 	public void setEscrowAggregateAccountingAdjustmentAmount(String escrowAggregateAccountingAdjustmentAmount) {
 		this.escrowAggregateAccountingAdjustmentAmount = escrowAggregateAccountingAdjustmentAmount;
+	}
+	/**
+	 * @return the escrowAggregateAccountingAdjustmentAmountSellerPaid
+	 */
+	public String getEscrowAggregateAccountingAdjustmentAmountSellerPaid() {
+		return escrowAggregateAccountingAdjustmentAmountSellerPaid;
+	}
+	/**
+	 * @param escrowAggregateAccountingAdjustmentAmountSellerPaid the escrowAggregateAccountingAdjustmentAmountSellerPaid to set
+	 */
+	public void setEscrowAggregateAccountingAdjustmentAmountSellerPaid(
+			String escrowAggregateAccountingAdjustmentAmountSellerPaid) {
+		this.escrowAggregateAccountingAdjustmentAmountSellerPaid = escrowAggregateAccountingAdjustmentAmountSellerPaid;
+	}
+	/**
+	 * @return the escrowAggregateAccountingAdjustmentAmountOthersPaid
+	 */
+	public String getEscrowAggregateAccountingAdjustmentAmountOthersPaid() {
+		return escrowAggregateAccountingAdjustmentAmountOthersPaid;
+	}
+	/**
+	 * @param escrowAggregateAccountingAdjustmentAmountOthersPaid the escrowAggregateAccountingAdjustmentAmountOthersPaid to set
+	 */
+	public void setEscrowAggregateAccountingAdjustmentAmountOthersPaid(
+			String escrowAggregateAccountingAdjustmentAmountOthersPaid) {
+		this.escrowAggregateAccountingAdjustmentAmountOthersPaid = escrowAggregateAccountingAdjustmentAmountOthersPaid;
 	}
     
 }

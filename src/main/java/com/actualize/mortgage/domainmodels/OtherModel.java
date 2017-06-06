@@ -27,6 +27,8 @@ public class OtherModel implements Serializable {
 	private String subordinateFinancingIsNewIndicator = "";
 	private String paymentIncludedInAPRIndicator = "";
 	private String payoffPartialIndicator = "";
+	private String escrowAggregateAccountingAdjustmentPaidByType = "";
+	private String escrowAggregateAccountingAdjustmentPaymentTimingType = "";
 	
 	/**
 	 * @return the integratedDisclosureEstimatedClosingCostsExpirationTimezoneType
@@ -184,6 +186,31 @@ public class OtherModel implements Serializable {
 	 */
 	public void setPayoffPartialIndicator(String payoffPartialIndicator) {
 		this.payoffPartialIndicator = payoffPartialIndicator;
+	}
+	/**
+	 * @return the escrowAggregateAccountingAdjustmentPaidByType
+	 */
+	public String getEscrowAggregateAccountingAdjustmentPaidByType() {
+		return escrowAggregateAccountingAdjustmentPaidByType;
+	}
+	/**
+	 * @param escrowAggregateAccountingAdjustmentPaidByType the escrowAggregateAccountingAdjustmentPaidByType to set
+	 */
+	public void setEscrowAggregateAccountingAdjustmentPaidByType(String escrowAggregateAccountingAdjustmentPaidByType) {
+		this.escrowAggregateAccountingAdjustmentPaidByType = escrowAggregateAccountingAdjustmentPaidByType;
+	}
+	/**
+	 * @return the escrowAggregateAccountingAdjustmentPaymentTimingType
+	 */
+	public String getEscrowAggregateAccountingAdjustmentPaymentTimingType() {
+		return escrowAggregateAccountingAdjustmentPaymentTimingType;
+	}
+	/**
+	 * @param escrowAggregateAccountingAdjustmentPaymentTimingType the escrowAggregateAccountingAdjustmentPaymentTimingType to set
+	 */
+	public void setEscrowAggregateAccountingAdjustmentPaymentTimingType(
+			String escrowAggregateAccountingAdjustmentPaymentTimingType) {
+		this.escrowAggregateAccountingAdjustmentPaymentTimingType = escrowAggregateAccountingAdjustmentPaymentTimingType;
 	}
 	
 	

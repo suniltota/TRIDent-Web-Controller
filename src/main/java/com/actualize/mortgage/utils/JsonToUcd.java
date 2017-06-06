@@ -19,6 +19,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import com.actualize.mortgage.cdpagemodels.ClosingDisclosure;
+import com.actualize.mortgage.cdpagemodels.ClosingDisclosureDocumentDetails;
 import com.actualize.mortgage.domainmodels.AddressModel;
 import com.actualize.mortgage.domainmodels.AutomatedUnderwritingsModel;
 import com.actualize.mortgage.domainmodels.Borrower;
@@ -1258,7 +1259,7 @@ public class JsonToUcd {
 	 */
 	private void insertEscrow(Document document, Element element, ClosingDisclosure jsonDocument) {
 		if(!"".equals(jsonDocument.getClosingDisclosureDocDetails().getEscrowAggregateAccountingAdjustmentAmount()))
-			insertEscrowDetail(document, insertLevels(document, element, "ESCROW_DETAIL"), jsonDocument.getClosingDisclosureDocDetails().getEscrowAggregateAccountingAdjustmentAmount());
+			insertEscrowDetail(document, insertLevels(document, element, "ESCROW_DETAIL"), jsonDocument.getClosingDisclosureDocDetails());
 		if(jsonDocument.getClosingCostDetailsOtherCosts().getEscrowItemsList().size() > 0)
 			insertEscrowItems(document, insertLevels(document, element, "ESCROW_ITEMS"), jsonDocument.getClosingCostDetailsOtherCosts().getEscrowItemsList());
 	}
@@ -1346,8 +1347,24 @@ public class JsonToUcd {
 	 * @param element
 	 * @param jsonDocument
 	 */
-	private void insertEscrowDetail(Document document, Element element, String  escrowAggregateAccountingAdjustmentAmount) {
-		insertData(document, element, "EscrowAggregateAccountingAdjustmentAmount", escrowAggregateAccountingAdjustmentAmount);
+	private void insertEscrowDetail(Document document, Element element, ClosingDisclosureDocumentDetails  closingDisclosureDocumentDetails) {
+		
+		if(!"".equals(closingDisclosureDocumentDetails.getEscrowAggregateAccountingAdjustmentAmountSellerPaid()) && null != closingDisclosureDocumentDetails.getEscrowAggregateAccountingAdjustmentAmountSellerPaid())
+		{
+			OtherModel other = new OtherModel();
+				other.setEscrowAggregateAccountingAdjustmentPaidByType("Seller");
+				other.setEscrowAggregateAccountingAdjustmentPaymentTimingType("AtClosing");
+			insertExtension(document, insertLevels(document, element, "EXTENSION"), other);	
+		}
+		else if(!"".equals(closingDisclosureDocumentDetails.getEscrowAggregateAccountingAdjustmentAmountOthersPaid()) && null != closingDisclosureDocumentDetails.getEscrowAggregateAccountingAdjustmentAmountOthersPaid())
+		{
+			OtherModel other = new OtherModel();
+				other.setEscrowAggregateAccountingAdjustmentPaidByType("ThirdParty");
+				other.setEscrowAggregateAccountingAdjustmentPaymentTimingType("AtClosing");
+			insertExtension(document, insertLevels(document, element, "EXTENSION"), other);
+		}	
+		else if(!"".equals(closingDisclosureDocumentDetails.getEscrowAggregateAccountingAdjustmentAmount()) && null != closingDisclosureDocumentDetails.getEscrowAggregateAccountingAdjustmentAmount())	
+			insertData(document, element, "EscrowAggregateAccountingAdjustmentAmount", closingDisclosureDocumentDetails.getEscrowAggregateAccountingAdjustmentAmount());
 	}
 	/**
      * Inserts Document Specific DataSet to MISMO XML

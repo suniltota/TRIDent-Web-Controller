@@ -236,7 +236,13 @@ public class ClosingDisclosureConverter {
         
         closingDisclosureDocumentDetails.setDocumentType(docClassification.documentClasses.documentClass.documentTypeOtherDescription.split(":")[0]);
         closingDisclosureDocumentDetails.setFormType(docClassification.documentClasses.documentClass.documentTypeOtherDescription.split(":")[1]);
-        closingDisclosureDocumentDetails.setEscrowAggregateAccountingAdjustmentAmount(escrowdetail.escrowAggregateAccountingAdjustmentAmount);
+       
+        if("Seller".equalsIgnoreCase(escrowdetail.other.escrowAggregateAccountingAdjustmentPaidByType) )
+        	closingDisclosureDocumentDetails.setEscrowAggregateAccountingAdjustmentAmountOthersPaid(escrowdetail.escrowAggregateAccountingAdjustmentAmount);
+        else if("ThirdParty".equalsIgnoreCase(escrowdetail.other.escrowAggregateAccountingAdjustmentPaidByType) )
+        	closingDisclosureDocumentDetails.setEscrowAggregateAccountingAdjustmentAmountSellerPaid(escrowdetail.escrowAggregateAccountingAdjustmentAmount);
+        else
+    	 	closingDisclosureDocumentDetails.setEscrowAggregateAccountingAdjustmentAmount(escrowdetail.escrowAggregateAccountingAdjustmentAmount);
         
 		return closingDisclosureDocumentDetails;
     }

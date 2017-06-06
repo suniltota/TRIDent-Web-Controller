@@ -23,6 +23,8 @@ public class Other extends MISMODataAccessObject {
 	public final String totalStepCount;                                                  
 	public final String totalStepPaymentCount;                                           
 	public final String subordinateFinancingIsNewIndicator;
+	public final String escrowAggregateAccountingAdjustmentPaidByType;
+	public final String escrowAggregateAccountingAdjustmentPaymentTimingType;
 	
 	public Other(Element element) {
 		super(element);
@@ -37,5 +39,7 @@ public class Other extends MISMODataAccessObject {
 		totalStepCount = getValue("gse:TotalStepCount");
 		totalStepPaymentCount = getValue("gse:TotalStepPaymentCount");
 		subordinateFinancingIsNewIndicator = getValue("gse:SubordinateFinancingIsNewIndicator");
+		escrowAggregateAccountingAdjustmentPaidByType = getValue("gse:EscrowAggregateAccountingAdjustmentPaidByType");
+		escrowAggregateAccountingAdjustmentPaymentTimingType = getValue("gse:EscrowAggregateAccountingAdjustmentPaymentTimingType");
 	}
 }
