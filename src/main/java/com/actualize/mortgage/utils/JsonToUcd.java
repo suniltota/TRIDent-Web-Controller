@@ -2292,6 +2292,7 @@ public class JsonToUcd {
 			insertData(document, address, "AddressLineText", borrower.getAddress().getAddressLineText());
 			insertData(document, address, "AddressUnitDesignatorType", borrower.getAddress().getAddressUnitDesignatorType());
 			insertData(document, address, "AddressUnitIdentifier", borrower.getAddress().getAddressUnitIdentifier());
+			insertData(document, address, "AddressType", borrower.getAddress().getAddressType());
 			insertData(document, address, "CityName", borrower.getAddress().getCityName());
 			insertData(document, address, "CountryCode", borrower.getAddress().getCountryCode());
 			insertData(document, address, "PostalCode", borrower.getAddress().getPostalCode());
@@ -2320,6 +2321,7 @@ public class JsonToUcd {
 				insertData(document, address, "AddressLineText", partyDetail.getAddress().getAddressLineText());
 				insertData(document, address, "AddressUnitDesignatorType", partyDetail.getAddress().getAddressUnitDesignatorType());
 				insertData(document, address, "AddressUnitIdentifier", partyDetail.getAddress().getAddressUnitIdentifier());
+				insertData(document, address, "AddressType", partyDetail.getAddress().getAddressType());
 				insertData(document, address, "CityName", partyDetail.getAddress().getCityName());
 				insertData(document, address, "CountryCode", partyDetail.getAddress().getCountryCode());
 				insertData(document, address, "PostalCode", partyDetail.getAddress().getPostalCode());
