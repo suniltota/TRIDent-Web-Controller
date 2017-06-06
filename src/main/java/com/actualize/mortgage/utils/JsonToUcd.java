@@ -2307,14 +2307,14 @@ public class JsonToUcd {
 	 */
 	private void insertParty(Document document, Element element, ContactInformationDetailModel partyDetail)
 	{
-		if(!partyDetail.getName().getFullName().isEmpty())
+		if(null != partyDetail.getOrganizationName() && !partyDetail.getOrganizationName().isEmpty())
 		{
 			Element party = insertLevels(document, element, "PARTY");
 			Element roleDetail = insertLevels(document, party, "ROLES/ROLE/ROLE_DETAIL");
 				insertData(document, roleDetail, "PartyRoleType", partyDetail.getPartyRoleType());
 			
 			Element legalEntity = insertLevels(document, party, "LEGAL_ENTITY/LEGAL_ENTITY_DETAIL");
-				insertData(document, legalEntity, "FullName",partyDetail.getName().getFullName());
+				insertData(document, legalEntity, "FullName",partyDetail.getOrganizationName());
 				
 			Element address = insertLevels(document, party, "ADDRESSES/ADDRESS");
 				insertData(document, address, "AddressLineText", partyDetail.getAddress().getAddressLineText());
