@@ -7,9 +7,16 @@ package com.actualize.mortgage.api;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
+import java.io.StringWriter;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,6 +30,7 @@ import org.w3c.dom.Document;
 import com.actualize.mortgage.cdpagemodels.ClosingDisclosure;
 import com.actualize.mortgage.cdservices.ClosingDisclosureService;
 import com.actualize.mortgage.domainmodels.PDFResponse;
+import com.actualize.mortgage.ucd.calculatepayments.CalculatePayments;
 import com.uniformdisclosure.UniformDisclosureBuilder;
 import com.uniformdisclosure.UniformDisclosureBuilderSeller;
 
@@ -98,4 +106,5 @@ public class ClosingDisclosureController {
     	 InputStream doc = new ByteArrayInputStream(xmldoc.getBytes(StandardCharsets.UTF_8));
         return closingDisclosureService.createClosingDisclosureUCDXML(doc);
     }
+    
 }
