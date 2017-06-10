@@ -1832,8 +1832,8 @@ public class ClosingDisclosureConverter {
 	private static NameModel toNameModel(Name name) {
 		NameModel nameModel = new NameModel();
 		
-		if (!name.fullName.equals(""))
-			nameModel.setFullName(name.fullName);
+		if (!name.firstName.equals(""))
+			nameModel.setFirstName(name.firstName);
 		if (!name.middleName.equals("")) 
 			nameModel.setMiddleName(name.middleName);
 		if (!name.lastName.equals("")) 
