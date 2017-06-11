@@ -1,4 +1,4 @@
-*TRIDent-Web-Controller*
+#TRIDent-Web-Controller
 This project defines the code for authentication and following services:
 
 01. Closing Disclosure: JSON to UCD and vice versa.(Repo: TRIDent-CD) 
@@ -20,7 +20,7 @@ Before building this service, we need to clone the following repos and build the
 
 After building the above services, each independently. Continue to build this service.
 
-<failing to build one or more above services will fail this service while building>
+*failing to build one or more above services will fail this service while building*
 
 
 This service runs on port :9020

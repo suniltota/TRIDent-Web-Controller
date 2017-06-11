@@ -9,7 +9,7 @@
 	<packaging>war</packaging>
 
 	<name>TRIDENT-Web-Controller</name>
-	<description>Project to incoperate on services with authentication</description>
+	<description>Project to incoperate all services with authentication</description>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>
