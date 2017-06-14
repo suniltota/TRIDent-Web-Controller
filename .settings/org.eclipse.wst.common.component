@@ -10,6 +10,21 @@
         <dependent-module archiveName="TransformX-Service-UCD-CalculatePayments-1.0-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/TransformX-Service-UCD-CalculatePayments/TransformX-Service-UCD-CalculatePayments">
             <dependency-type>uses</dependency-type>
         </dependent-module>
+        <dependent-module archiveName="TransformX-Service-UCD-ConvertTemplate-1.0-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/TransformX-Service-UCD-ConvertTemplate/TransformX-Service-UCD-ConvertTemplate">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="TransformX-Service-UCD-LoanEstimatePdf-1.0-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/TransformX-Service-UCD-LoanEstimatePdf/TransformX-Service-UCD-LoanEstimatePdf">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="TransformX-Service-UCD-Trim-1.0-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/TransformX-Service-UCD-Trim/TransformX-Service-UCD-Trim">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="TRIDent-LE-1.0-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/TRIDent-LE/TRIDent-LE">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="TransformX-Service-UCD-ClosingDisclosurePdf-1.0-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/TransformX-Service-UCD-ClosingDisclosurePdf/TransformX-Service-UCD-ClosingDisclosurePdf">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
         <property name="context-root" value="trident"/>
         <property name="java-output-path" value="/TRIDENT-Web-Controller/target/classes"/>
     </wb-module>

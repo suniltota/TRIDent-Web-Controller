@@ -25,23 +25,17 @@
 	</properties>
 
 	<dependencies>
+		
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-security</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-thymeleaf</artifactId>
-		</dependency>
+		
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>net.sourceforge.nekohtml</groupId>
-			<artifactId>nekohtml</artifactId>
-			<version>1.9.21</version>
-		</dependency>
+		
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter</artifactId>
@@ -52,51 +46,66 @@
 	      		</exclusion>
 	   		</exclusions>
 		</dependency>
+		
 		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-tomcat</artifactId>
-			<scope>provided</scope>
+    		<groupId>org.springframework.boot</groupId>
+    		<artifactId>spring-boot-starter-log4j2</artifactId>
 		</dependency>
+		
+		 <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-tomcat</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        
 		<dependency>
 			<groupId>com.actualize.mortgage</groupId>
 			<artifactId>TRIDent-CD</artifactId>
 			<version>1.0-SNAPSHOT</version>
 		</dependency>
+		
 		 <dependency>
 			<groupId>com.actualize.mortgage</groupId>
 			<artifactId>TransformX-Service-UCD-CalculatePayments</artifactId>
 			<version>1.0-SNAPSHOT</version>
 		</dependency>
+		
 		<dependency>
 			<groupId>com.actualize.mortgage</groupId>
 			<artifactId>TransformX-Service-UCD-ConvertTemplate</artifactId>
 			<version>1.0-SNAPSHOT</version>
 		</dependency>
+		
 		<dependency>
 			<groupId>com.actualize.mortgage</groupId>
 			<artifactId>TransformX-Service-UCD-LoanEstimatePdf</artifactId>
 			<version>1.0-SNAPSHOT</version>
 		</dependency>
+		
 		<dependency>
 			<groupId>com.actualize.mortgage</groupId>
 			<artifactId>TransformX-Service-UCD-Trim</artifactId>
 			<version>1.0-SNAPSHOT</version>
 		</dependency>
+		
 		<dependency>
 			<groupId>com.actualize.mortgage</groupId>
 			<artifactId>TRIDent-LE</artifactId>
 			<version>1.0-SNAPSHOT</version>
 		</dependency>
+		
 		<dependency>
 			<groupId>com.actualize.mortgage</groupId>
 			<artifactId>TransformX-Service-UCD-ClosingDisclosurePdf</artifactId>
 			<version>1.0-SNAPSHOT</version>
 		</dependency>
+		
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+	
 	</dependencies>
 
 	<build>
