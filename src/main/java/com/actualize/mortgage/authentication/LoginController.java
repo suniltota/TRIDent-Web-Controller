@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class LoginController {
    
-	@RequestMapping(value={"/", "/login"}, method = RequestMethod.GET)
+	@RequestMapping(value={"/", "/login"}, method = {RequestMethod.GET,RequestMethod.POST})
 	public String login(HttpServletRequest request,
             HttpServletResponse response){
 		return "Login Success";
