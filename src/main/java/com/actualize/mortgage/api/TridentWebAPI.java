@@ -221,7 +221,6 @@ public class TridentWebAPI {
         UCDTransformerServiceImpl  ucdTransformerServiceImpl = new UCDTransformerServiceImpl();
          
         IntermediateXMLData intermediateXMLData = ucdTransformerServiceImpl.generateIntermediateXMLForTxtTemplate(mappingFileStream, propFile);
-        LOG.info(ucdTransformerServiceImpl.generateDocument(intermediateXMLData));
          return ucdTransformerServiceImpl.generateDocument(intermediateXMLData); 
     }
 }
