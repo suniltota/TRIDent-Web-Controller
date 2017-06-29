@@ -61,36 +61,13 @@ public class TridentWebAPI {
 	
 
 	@RequestMapping(value = "/{version}/templatetocdjson", method = { RequestMethod.POST })
-	public String templatetocdjson(@PathVariable String version, @RequestBody String txtdoc) throws Exception
-	{
-		LOG.info("Service: CD text template to json object called");
+	public String templatetocdjson(@PathVariable String version, @RequestBody String txtdoc) throws Exception {
+		LOG.info("Service: CD text template to json object api invoked");
         Properties propFile = parsePropertiesString(txtdoc);
-        InputStream mappingFileStream;
-        FileService fileService = new FileService();
+        InputStream mappingFileStream = getClass().getClassLoader().getResourceAsStream("TextTemplateMap.xml");
         UCDTransformerServiceImpl  ucdTransformerServiceImpl = new UCDTransformerServiceImpl();
-        ClosingDisclosureServicesImpl closingDisclosureServicesImpl = new ClosingDisclosureServicesImpl();
-        
-        if(null!=fileService.getTextMappingFile() && !"".equalsIgnoreCase(fileService.getTextMappingFile()) && !"TextTemplateMap.xml".equalsIgnoreCase(fileService.getTextMappingFile())) {
-            mappingFileStream = new FileInputStream(fileService.getTextMappingFile());
-        } else {
-            mappingFileStream = getClass().getClassLoader().getResourceAsStream("TextTemplateMap.xml");
-        }
         IntermediateXMLData intermediateXMLData = ucdTransformerServiceImpl.generateIntermediateXMLForTxtTemplate(mappingFileStream, propFile);
-        MESSAGE message = ucdTransformerServiceImpl.generateMasterXML(intermediateXMLData);
-        UCDXMLResult ucdXMLResult = ucdTransformerServiceImpl.generateUCDXML(message);
-        
-        MESSAGE msgObject = ucdXMLResult.getUcdDocument().getMessage();
-		
-		StringWriter sw = new StringWriter();
-    	JAXBContext jaxbContext = JAXBContext.newInstance(UCDXMLResult.class);
-    	Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
-    		jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-    	jaxbMarshaller.marshal(ucdXMLResult, sw);
-    	String xmldoc = sw.toString();
-		//InputStream in = new ByteArrayInputStream(xmldoc.getBytes(StandardCharsets.UTF_8));
-		
-		//return closingDisclosureServicesImpl.createClosingDisclosureObjectfromXMLDoc(in);
-    	return xmldoc;
+        return ucdTransformerServiceImpl.generateDocument(intermediateXMLData);
 	}
 	
 	@RequestMapping(value = "/{version}/templatetolejson", method = { RequestMethod.POST })
