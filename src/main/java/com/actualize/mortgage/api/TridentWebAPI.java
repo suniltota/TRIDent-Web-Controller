@@ -61,44 +61,22 @@ public class TridentWebAPI {
 	
 
 	@RequestMapping(value = "/{version}/templatetocdjson", method = { RequestMethod.POST })
-	public String templatetocdjson(@PathVariable String version, @RequestBody String txtdoc) throws Exception {
+	public ClosingDisclosure templatetocdjson(@PathVariable String version, @RequestBody String txtdoc) throws Exception {
 		LOG.info("Service: CD text template to json object api invoked");
-        Properties propFile = parsePropertiesString(txtdoc);
-        InputStream mappingFileStream = getClass().getClassLoader().getResourceAsStream("TextTemplateMap.xml");
-        UCDTransformerServiceImpl  ucdTransformerServiceImpl = new UCDTransformerServiceImpl();
-        IntermediateXMLData intermediateXMLData = ucdTransformerServiceImpl.generateIntermediateXMLForTxtTemplate(mappingFileStream, propFile);
-        return ucdTransformerServiceImpl.generateDocument(intermediateXMLData);
+		ClosingDisclosureServicesImpl closingDisclosureServicesImpl = new ClosingDisclosureServicesImpl();
+      
+        InputStream in = new ByteArrayInputStream(getMISMOXML(txtdoc).getBytes(StandardCharsets.UTF_8));
+        		
+        return closingDisclosureServicesImpl.createClosingDisclosureObjectfromXMLDoc(in);
 	}
 	
 	@RequestMapping(value = "/{version}/templatetolejson", method = { RequestMethod.POST })
 	public LoanEstimate templatetolejson(@PathVariable String version, @RequestBody String txtdoc) throws Exception
 	{
 		LOG.info("Service: LE text template to json object called");
-        Properties propFile = parsePropertiesString(txtdoc);
-        InputStream mappingFileStream;
         
-        FileService fileService = new FileService();
-        UCDTransformerServiceImpl  ucdTransformerServiceImpl = new UCDTransformerServiceImpl();
-        LoanEstimateServicesImpl loanEstimateServicesImpl = new LoanEstimateServicesImpl();
-        
-        if(null!=fileService.getTextMappingFile() && !"".equalsIgnoreCase(fileService.getTextMappingFile()) && !"TextTemplateMap.xml".equalsIgnoreCase(fileService.getTextMappingFile())) {
-            mappingFileStream = new FileInputStream(fileService.getTextMappingFile());
-        } else {
-            mappingFileStream = getClass().getClassLoader().getResourceAsStream("TextTemplateMap.xml");
-        }
-        IntermediateXMLData intermediateXMLData = ucdTransformerServiceImpl.generateIntermediateXMLForTxtTemplate(mappingFileStream, propFile);
-        MESSAGE message = ucdTransformerServiceImpl.generateMasterXML(intermediateXMLData);
-        UCDXMLResult ucdXMLResult = ucdTransformerServiceImpl.generateUCDXML(message);
-        
-		MESSAGE msgObject = ucdXMLResult.getUcdDocument().getMessage();
-		
-		StringWriter sw = new StringWriter();
-    	JAXBContext jaxbContext = JAXBContext.newInstance(MESSAGE.class);
-    	Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
-    		jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-    	jaxbMarshaller.marshal(msgObject, sw);
-    	String xmldoc = sw.toString();
-		InputStream in = new ByteArrayInputStream(xmldoc.getBytes(StandardCharsets.UTF_8));
+		LoanEstimateServicesImpl loanEstimateServicesImpl = new LoanEstimateServicesImpl();
+		InputStream in = new ByteArrayInputStream(getMISMOXML(txtdoc).getBytes(StandardCharsets.UTF_8));
 		
 		return loanEstimateServicesImpl.createLoanEstimateDocumentObjectfromXMLDoc(in);
 		
@@ -193,6 +171,13 @@ public class TridentWebAPI {
 		return ucdValidator.validateUCDXML(document);
 	}
 	
+	/**
+	 * generate mismo ucd xml from CD JSON
+	 * @param version
+	 * @param closingDisclosure
+	 * @return string 
+	 * @throws Exception
+	 */
 	@RequestMapping(value = "/{version}/cdjsontrim", method = { RequestMethod.POST })
 	public String cdjsontrim(@PathVariable String version, @RequestBody ClosingDisclosure closingDisclosure) throws Exception
 	{
@@ -210,7 +195,7 @@ public class TridentWebAPI {
 
 	/**
      *convert input data to properties
-     * @param s
+     * @param inputdata
      * @return Properties
      * @throws Exception
      */
@@ -220,5 +205,23 @@ public class TridentWebAPI {
         final Properties p = new Properties();
         p.load(new StringReader(inputData));
         return p;
+    }
+    
+    /**
+     * converts text template to mismo xml
+     * @param txtdoc
+     * @return string as mismo xml
+     * @throws Exception
+     */
+    private String getMISMOXML(String txtdoc) throws Exception
+    {
+    	Properties propFile = parsePropertiesString(txtdoc);
+        InputStream mappingFileStream = getClass().getClassLoader().getResourceAsStream("TextTemplateMap.xml");
+        
+        UCDTransformerServiceImpl  ucdTransformerServiceImpl = new UCDTransformerServiceImpl();
+         
+        IntermediateXMLData intermediateXMLData = ucdTransformerServiceImpl.generateIntermediateXMLForTxtTemplate(mappingFileStream, propFile);
+        LOG.info(ucdTransformerServiceImpl.generateDocument(intermediateXMLData));
+         return ucdTransformerServiceImpl.generateDocument(intermediateXMLData); 
     }
 }
