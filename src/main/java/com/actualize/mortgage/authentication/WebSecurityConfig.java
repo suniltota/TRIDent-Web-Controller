@@ -1,5 +1,11 @@
 package com.actualize.mortgage.authentication;
 
+import java.io.IOException;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.context.annotation.Bean;
@@ -11,6 +17,8 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
@@ -24,6 +32,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	private RESTAuthenticationFailureHandler authenticationFailureHandler;
 	@Autowired
 	private RESTAuthenticationSuccessHandler authenticationSuccessHandler;
+	@Autowired
+	private LogoutHandler logoutHandler;
+	
 	
 	@Autowired
     public void globalUserDetails(final AuthenticationManagerBuilder auth) throws Exception {
@@ -44,6 +55,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		http.exceptionHandling().authenticationEntryPoint(authenticationEntryPoint);
 		http.formLogin().successHandler(authenticationSuccessHandler);
 		http.formLogin().failureHandler(authenticationFailureHandler);
+		http.logout().logoutUrl("/logout").logoutSuccessHandler(logoutHandler).deleteCookies("JSESSIONID").logoutSuccessUrl("/logoutSuccess");
     }
     
  	@Override
