@@ -18,8 +18,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 @Order(SecurityProperties.ACCESS_OVERRIDE_ORDER)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-	//@Autowired
-	//private RESTAuthenticationEntryPoint authenticationEntryPoint;
+	@Autowired
+	private RESTAuthenticationEntryPoint authenticationEntryPoint;
 	@Autowired
 	private RESTAuthenticationFailureHandler authenticationFailureHandler;
 	@Autowired
@@ -58,7 +58,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(final HttpSecurity http) throws Exception {
 		http.authorizeRequests().antMatchers("/login").permitAll().anyRequest().authenticated().and().formLogin().permitAll().and().csrf().disable();
-		//http.exceptionHandling().authenticationEntryPoint(authenticationEntryPoint);
+		http.exceptionHandling().authenticationEntryPoint(authenticationEntryPoint);
 		http.formLogin().successHandler(authenticationSuccessHandler);
 		http.formLogin().failureHandler(authenticationFailureHandler);
 		http.logout().logoutUrl("/logout").logoutSuccessHandler(logoutHandler).deleteCookies("JSESSIONID").logoutSuccessUrl("/logoutSuccess");
