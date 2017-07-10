@@ -23,7 +23,7 @@ public class UserDetailsServiceImpl implements UserDetailsService{
 			throw new UsernameNotFoundException("User Name can't be empty ");
 		String password = userConfig.getEnv().getProperty(username.toLowerCase());
 		if(password!=null && password.length()>0){
-			String userRoles = userConfig.getEnv().getProperty(username+"-roles");
+			String userRoles = userConfig.getEnv().getProperty(username.toLowerCase()+"-roles");
 			if(userRoles == null || userRoles.trim().length() == 0){
 				throw new UsernameNotFoundException("User roles not found: "+ username);
 			}
