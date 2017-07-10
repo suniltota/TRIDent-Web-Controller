@@ -3,6 +3,9 @@
  */
 package com.actualize.mortgage.api;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
@@ -15,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.actualize.mortgage.authentication.services.impl.LateChargeRuleServiceImpl;
 import com.actualize.mortgage.authentication.services.impl.TRIDentWebServiceImpl;
 import com.actualize.mortgage.cd.domainmodels.ClosingDisclosure;
 import com.actualize.mortgage.domainmodels.LoanEstimate;
@@ -33,6 +37,9 @@ public class TridentWebAPI {
 	
 	@Autowired
 	private TRIDentWebServiceImpl triDentWebService;
+	
+	@Autowired
+	private LateChargeRuleServiceImpl lateChargeRuleService;
 	
 	@RequestMapping(value = "/{version}/templatetocdjson", method = { RequestMethod.POST })
 	public ClosingDisclosure templatetocdjson(@PathVariable String version, @RequestBody String txtdoc) throws Exception {
@@ -95,5 +102,14 @@ public class TridentWebAPI {
 	{
 		LOG.info("user "+SecurityContextHolder.getContext().getAuthentication().getName()+" used Service: CDJSONtoPDF");
     	return triDentWebService.trimCDJson(closingDisclosure);
+	}
+	
+	
+	@RequestMapping(value = "/{version}/calculateLateCharge", method = { RequestMethod.POST })
+	public String calculateLateCharge(@PathVariable String version, @RequestBody String mismoString) throws Exception
+	{
+		LOG.info("user "+SecurityContextHolder.getContext().getAuthentication().getName()+" used Service: CalculateLateCharge");
+		
+		return lateChargeRuleService.calculateLateChargeRule(mismoString);
 	}
 }
