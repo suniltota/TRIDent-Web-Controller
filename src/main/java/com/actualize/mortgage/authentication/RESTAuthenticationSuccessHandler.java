@@ -15,14 +15,18 @@ import org.springframework.stereotype.Component;
 public class RESTAuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
 	private static final Logger LOG = LogManager.getLogger(RESTAuthenticationSuccessHandler.class);
-	
+	public final Integer SESSION_TIMEOUT_IN_SECONDS = 60 * 60 * 3; //3 hours
+
 	@Override
 	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
 			Authentication authentication) throws IOException, ServletException {
 	
 		LOG.info(authentication.getName()+" user signed in Sucessfully");
-		
+		request.getSession().setMaxInactiveInterval(SESSION_TIMEOUT_IN_SECONDS);
+	 
+        getRedirectStrategy().sendRedirect(request, response, "/userDetails");
+	        
 		clearAuthenticationAttributes(request);
-	//	getRedirectStrategy().sendRedirect(request, response, "/userDetails");
+		
 	}
 }
