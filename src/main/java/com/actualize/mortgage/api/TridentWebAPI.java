@@ -3,9 +3,6 @@
  */
 package com.actualize.mortgage.api;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
@@ -21,6 +18,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.actualize.mortgage.authentication.services.impl.LateChargeRuleServiceImpl;
 import com.actualize.mortgage.authentication.services.impl.TRIDentWebServiceImpl;
 import com.actualize.mortgage.cd.domainmodels.ClosingDisclosure;
+import com.actualize.mortgage.domainmodels.CalculateCDResponse;
+import com.actualize.mortgage.domainmodels.CalculateLEResponse;
 import com.actualize.mortgage.domainmodels.LoanEstimate;
 import com.actualize.mortgage.domainmodels.PDFResponse;
 import com.actualize.mortgage.validation.domainmodels.UCDValidationErrors;
@@ -60,6 +59,20 @@ public class TridentWebAPI {
 	{
 		LOG.info("user "+SecurityContextHolder.getContext().getAuthentication().getName()+" used Service: CD Calculations");
 		return triDentWebService.calculateCDPayments(closingDisclosure);
+	}
+	
+	@RequestMapping(value = "/{version}/calculatecdjson", method = { RequestMethod.POST })
+	public CalculateCDResponse calculateCDJSON(@PathVariable String version, @RequestBody ClosingDisclosure closingDisclosure) throws Exception
+	{
+		LOG.info("user "+SecurityContextHolder.getContext().getAuthentication().getName()+" used Service:CD JSON to CD JSON with Calculations ");
+		return triDentWebService.createCalculateCDResponse(closingDisclosure);
+	}
+	
+	@RequestMapping(value = "/{version}/calculatelejson", method = { RequestMethod.POST })
+	public CalculateLEResponse calculateLEJSON(@PathVariable String version, @RequestBody LoanEstimate loanEstimateJSON) throws Exception
+	{
+		LOG.info("user "+SecurityContextHolder.getContext().getAuthentication().getName()+" used Service:LE JSON to LE JSON with Calculations ");
+		return triDentWebService.createCalculateLEResponse(loanEstimateJSON);
 	}
 	
 	@RequestMapping(value = "/{version}/calculatelepayments", method = { RequestMethod.POST })

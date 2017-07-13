@@ -11,6 +11,9 @@ import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Properties;
 
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.Unmarshaller;
+import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
@@ -18,19 +21,28 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
+import javax.xml.xpath.XPath;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.w3c.dom.Document;
+import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
 import com.actualize.mortgage.cd.domainmodels.ClosingDisclosure;
+import com.actualize.mortgage.domainmodels.CalculateCDResponse;
+import com.actualize.mortgage.domainmodels.CalculateLEResponse;
+import com.actualize.mortgage.domainmodels.ErrorsListModel;
 import com.actualize.mortgage.domainmodels.LoanEstimate;
 import com.actualize.mortgage.domainmodels.PDFResponse;
+import com.actualize.mortgage.exceptions.ServiceException;
 import com.actualize.mortgage.mappingmodels.IntermediateXMLData;
 import com.actualize.mortgage.pdf.mismodao.MISMODocument;
 import com.actualize.mortgage.service.impl.UCDXMLServiceImpl;
 import com.actualize.mortgage.services.impl.ClosingDisclosurePDFServicesImpl;
 import com.actualize.mortgage.services.impl.ClosingDisclosureServicesImpl;
+import com.actualize.mortgage.services.impl.IClosingDisclosureServices;
+import com.actualize.mortgage.services.impl.ILoanEstimateServices;
 import com.actualize.mortgage.services.impl.LoanEstimatePDFServicesImpl;
 import com.actualize.mortgage.services.impl.LoanEstimateServicesImpl;
 import com.actualize.mortgage.services.impl.UCDTransformerServiceImpl;
@@ -44,6 +56,12 @@ import com.actualize.mortgage.validation.services.impl.UCDValidator;
  */
 @Service
 public class TRIDentWebServiceImpl {
+	
+	@Autowired
+	private IClosingDisclosureServices closingDisclosureServices;
+	
+	@Autowired
+	private ILoanEstimateServices loanEstimateServices;
 
 	public ClosingDisclosure convertTemplateToCDJson(String txtdoc) throws Exception {
 		ClosingDisclosureServicesImpl closingDisclosureServicesImpl = new ClosingDisclosureServicesImpl();
@@ -154,4 +172,74 @@ public class TRIDentWebServiceImpl {
 		InputStream inputXmlStream = new ByteArrayInputStream(xmldoc.getBytes(StandardCharsets.UTF_8));
 		return ucdxmlServiceImpl.createClosingDisclosureUCDXML(inputXmlStream);
 	}
+	
+	public boolean hasExceptions(String xmlDoc) throws ServiceException
+	{
+		final String MISMO_URL = "http://www.mismo.org/residential/2009/schemas";
+		XPath xpath = null;
+		String mismo = "";
+		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+	    factory.setNamespaceAware(true);
+	    DocumentBuilder builder;  
+        try  
+        {  
+            builder = factory.newDocumentBuilder();  
+            Document doc = builder.parse(new InputSource(new StringReader(xmlDoc)));
+            NodeList root = doc.getElementsByTagName("mismo:MESSAGE");
+    		System.out.println();
+    		if(root.getLength() >0 )
+    			return false;
+    		else
+    			return true;
+        } catch (Exception e) {  
+        	throw new ServiceException("Unable to Parse the String");
+        }
+        
+	}
+	
+	
+	public CalculateCDResponse createCalculateCDResponse(ClosingDisclosure closingDisclosure) throws Exception
+	{
+		CalculateCDResponse calculateCDResponse = new CalculateCDResponse();
+		
+		String xmlDoc = calculateCDPayments(closingDisclosure);
+		if(!hasExceptions(xmlDoc))
+		{
+			InputStream in = new ByteArrayInputStream(xmlDoc.getBytes(StandardCharsets.UTF_8));
+			ClosingDisclosure closingDisclosureResponse = closingDisclosureServices.createClosingDisclosureObjectfromXMLDoc(in);
+			calculateCDResponse.setClosingDisclosure(closingDisclosureResponse);
+		}
+		else
+		{
+		JAXBContext jaxbContext = JAXBContext.newInstance(ErrorsListModel.class);  
+        Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();  
+        StringReader reader = new StringReader(xmlDoc);
+        ErrorsListModel errorsList = (ErrorsListModel) jaxbUnmarshaller.unmarshal(reader);
+        calculateCDResponse.setErrorsList(errorsList);
+		}
+		return calculateCDResponse;
+	}
+	
+	public CalculateLEResponse createCalculateLEResponse(LoanEstimate loanEstimate) throws Exception
+	{
+		CalculateLEResponse calculateLEResponse = new CalculateLEResponse();
+		
+		String xmlDoc = calculateLEPayments(loanEstimate);
+		if(!hasExceptions(xmlDoc))
+		{
+			InputStream in = new ByteArrayInputStream(xmlDoc.getBytes(StandardCharsets.UTF_8));
+			LoanEstimate loanEstimateResponse = loanEstimateServices.createLoanEstimateDocumentObjectfromXMLDoc(in);
+			calculateLEResponse.setLoanEstimate(loanEstimateResponse);
+		}
+		else
+		{
+			JAXBContext jaxbContext = JAXBContext.newInstance(ErrorsListModel.class);  
+	        Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();  
+	        StringReader reader = new StringReader(xmlDoc);
+	        ErrorsListModel errorsList = (ErrorsListModel) jaxbUnmarshaller.unmarshal(reader);
+	        calculateLEResponse.setErrorsList(errorsList);
+		}
+		return calculateLEResponse;
+	}
+	
 }
