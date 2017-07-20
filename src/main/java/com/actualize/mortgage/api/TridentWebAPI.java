@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.actualize.mortgage.authentication.services.impl.LateChargeRuleServiceImpl;
 import com.actualize.mortgage.authentication.services.impl.TRIDentWebServiceImpl;
 import com.actualize.mortgage.cd.domainmodels.ClosingDisclosure;
+import com.actualize.mortgage.cd.domainmodels.LoanInformationLoanIdentifier;
 import com.actualize.mortgage.domainmodels.CalculateCDResponse;
 import com.actualize.mortgage.domainmodels.CalculateLEResponse;
 import com.actualize.mortgage.domainmodels.LoanEstimate;
@@ -57,49 +58,49 @@ public class TridentWebAPI {
 	@RequestMapping(value = "/{version}/calculatecdpayments", method = { RequestMethod.POST })
 	public String calculateCDPayments(@PathVariable String version, @RequestBody ClosingDisclosure closingDisclosure) throws Exception
 	{
-		LOG.info("user "+SecurityContextHolder.getContext().getAuthentication().getName()+" used Service: CD Calculations");
+		LOG.info("user "+SecurityContextHolder.getContext().getAuthentication().getName()+" with Loan Id: "+getLoanIdFromCD(closingDisclosure)+ " used Service: CD Calculations");
 		return triDentWebService.calculateCDPayments(closingDisclosure);
 	}
 	
 	@RequestMapping(value = "/{version}/calculatecdjson", method = { RequestMethod.POST })
 	public CalculateCDResponse calculateCDJSON(@PathVariable String version, @RequestBody ClosingDisclosure closingDisclosure) throws Exception
 	{
-		LOG.info("user "+SecurityContextHolder.getContext().getAuthentication().getName()+" used Service:CD JSON to CD JSON with Calculations ");
+		LOG.info("user "+SecurityContextHolder.getContext().getAuthentication().getName()+" with Loan Id: "+getLoanIdFromCD(closingDisclosure)+ " used Service:CD JSON to CD JSON with Calculations ");
 		return triDentWebService.createCalculateCDResponse(closingDisclosure);
 	}
 	
 	@RequestMapping(value = "/{version}/calculatelejson", method = { RequestMethod.POST })
 	public CalculateLEResponse calculateLEJSON(@PathVariable String version, @RequestBody LoanEstimate loanEstimateJSON) throws Exception
 	{
-		LOG.info("user "+SecurityContextHolder.getContext().getAuthentication().getName()+" used Service:LE JSON to LE JSON with Calculations ");
+		LOG.info("user "+SecurityContextHolder.getContext().getAuthentication().getName()+" with Loan Id: "+getLoanIdFromLE(loanEstimateJSON)+ " used Service:LE JSON to LE JSON with Calculations ");
 		return triDentWebService.createCalculateLEResponse(loanEstimateJSON);
 	}
 	
 	@RequestMapping(value = "/{version}/calculatelepayments", method = { RequestMethod.POST })
 	public String calculateLEPayments(@PathVariable String version, @RequestBody LoanEstimate loanEstimateJSON) throws Exception
 	{
-		LOG.info("user "+SecurityContextHolder.getContext().getAuthentication().getName()+" used Service: LE Calculations");
+		LOG.info("user "+SecurityContextHolder.getContext().getAuthentication().getName()+" with Loan Id: "+getLoanIdFromLE(loanEstimateJSON)+ " used Service: LE Calculations");
 		return triDentWebService.calculateLEPayments(loanEstimateJSON);
 	}
 	
 	@RequestMapping(value = "/{version}/cdjsontopdf", method = { RequestMethod.POST })
 	public List<PDFResponse> cdJsonToPdf(@PathVariable String version, @RequestBody ClosingDisclosure closingDisclosure) throws Exception
 	{
-		LOG.info("user "+SecurityContextHolder.getContext().getAuthentication().getName()+" used Service: CDJSONtoPDF");
+		LOG.info("user "+SecurityContextHolder.getContext().getAuthentication().getName()+" with Loan Id: "+getLoanIdFromCD(closingDisclosure)+ " used Service: CDJSONtoPDF");
 		return triDentWebService.cdJsonToPdf(closingDisclosure);
 	}
 	
 	@RequestMapping(value = "/{version}/lejsontopdf", method = { RequestMethod.POST })
 	public PDFResponse leJsonToPdf(@PathVariable String version, @RequestBody LoanEstimate loanEstimateJSON) throws Exception
 	{
-		LOG.info("user "+SecurityContextHolder.getContext().getAuthentication().getName()+" used Service: LEJSONtoPDF");
+		LOG.info("user "+SecurityContextHolder.getContext().getAuthentication().getName() +" with Loan Id: "+getLoanIdFromLE(loanEstimateJSON)+ " used Service: LEJSONtoPDF");
     	return triDentWebService.leJsonToPdf(loanEstimateJSON);
 	}
 	
 	@RequestMapping(value = "/{version}/validatecdjson", method = { RequestMethod.POST })
 	public UCDValidationErrors validateCDJson(@PathVariable String version, @RequestBody ClosingDisclosure closingDisclosure) throws Exception
 	{
-		LOG.info("user "+SecurityContextHolder.getContext().getAuthentication().getName()+" used Service: ValidateCDJSON");
+		LOG.info("user "+SecurityContextHolder.getContext().getAuthentication().getName()+" with Loan Id: "+getLoanIdFromCD(closingDisclosure)+ " used Service: ValidateCDJSON");
     	return triDentWebService.validateCDJson(closingDisclosure);
 	}
 	
@@ -113,7 +114,7 @@ public class TridentWebAPI {
 	@RequestMapping(value = "/{version}/cdjsontrim", method = { RequestMethod.POST })
 	public String trimCDJson(@PathVariable String version, @RequestBody ClosingDisclosure closingDisclosure) throws Exception
 	{
-		LOG.info("user "+SecurityContextHolder.getContext().getAuthentication().getName()+" used Service: CDJSONtoPDF");
+		LOG.info("user "+SecurityContextHolder.getContext().getAuthentication().getName()+" with Loan Id: "+getLoanIdFromCD(closingDisclosure)+ " used Service: CD JSON to UCD XML");
     	return triDentWebService.trimCDJson(closingDisclosure);
 	}
 	
@@ -124,5 +125,32 @@ public class TridentWebAPI {
 		LOG.info("user "+SecurityContextHolder.getContext().getAuthentication().getName()+" used Service: CalculateLateCharge");
 		
 		return lateChargeRuleService.calculateLateChargeRule(mismoString);
+	}
+	
+	
+	private String getLoanIdFromCD(ClosingDisclosure closingDisclosure)
+	{
+		String loanId = "Not Defined";
+		
+		List<LoanInformationLoanIdentifier> loanIdentifierors =  closingDisclosure.getLoanInformation().getLoanIdentifiers();
+		
+		for(LoanInformationLoanIdentifier loanIdentifier : loanIdentifierors)
+			if("LenderLoan".equalsIgnoreCase(loanIdentifier.getLoanIdentifierType()))
+					loanId = loanIdentifier.getLoanIdentifier();	
+		
+		return loanId;
+	}
+	
+	private String getLoanIdFromLE(LoanEstimate loanEstimate)
+	{
+		String loanId = "Not Defined";
+		
+		List<com.actualize.mortgage.domainmodels.LoanInformationLoanIdentifier> loanIdentifierors =  loanEstimate.getLoanInformation().getLoanIdentifiers();
+		
+		for(com.actualize.mortgage.domainmodels.LoanInformationLoanIdentifier loanIdentifier : loanIdentifierors)
+			if("LenderLoan".equalsIgnoreCase(loanIdentifier.getLoanIdentifierType()))
+					loanId = loanIdentifier.getLoanIdentifier();	
+		
+		return loanId;
 	}
 }
