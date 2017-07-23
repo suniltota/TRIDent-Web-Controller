@@ -3,6 +3,9 @@
  */
 package com.actualize.mortgage.api;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
@@ -23,6 +26,8 @@ import com.actualize.mortgage.domainmodels.CalculateCDResponse;
 import com.actualize.mortgage.domainmodels.CalculateLEResponse;
 import com.actualize.mortgage.domainmodels.LoanEstimate;
 import com.actualize.mortgage.domainmodels.PDFResponse;
+import com.actualize.mortgage.services.impl.ClosingDisclosureServicesImpl;
+import com.actualize.mortgage.services.impl.LoanEstimateServicesImpl;
 import com.actualize.mortgage.validation.domainmodels.UCDValidationErrors;
 
 /**
@@ -40,6 +45,12 @@ public class TridentWebAPI {
 	
 	@Autowired
 	private LateChargeRuleServiceImpl lateChargeRuleService;
+	
+	@Autowired
+	private ClosingDisclosureServicesImpl closingDisclosureServices;
+	
+	@Autowired
+	private LoanEstimateServicesImpl loanEstimateServices;
 	
 	@RequestMapping(value = "/{version}/templatetocdjson", method = { RequestMethod.POST })
 	public ClosingDisclosure templatetocdjson(@PathVariable String version, @RequestBody String txtdoc) throws Exception {
@@ -119,14 +130,25 @@ public class TridentWebAPI {
 	}
 	
 	
-	@RequestMapping(value = "/{version}/calculateLateCharge", method = { RequestMethod.POST })
-	public String calculateLateCharge(@PathVariable String version, @RequestBody String mismoString) throws Exception
+	@RequestMapping(value = "/{version}/cd/calculateLateCharge", method = { RequestMethod.POST })
+	public ClosingDisclosure cdCalculateLateCharge(@PathVariable String version, @RequestBody ClosingDisclosure closingDisclosure) throws Exception
 	{
-		LOG.info("user "+SecurityContextHolder.getContext().getAuthentication().getName()+" used Service: CalculateLateCharge");
+		LOG.info("user "+SecurityContextHolder.getContext().getAuthentication().getName()+" used Service: CD CalculateLateCharge");
+		String mismoXML = lateChargeRuleService.calculateLateChargeRule(closingDisclosureServices.createClosingDisclosureXMLfromObject(closingDisclosure));
+		InputStream in = new ByteArrayInputStream(mismoXML.getBytes(StandardCharsets.UTF_8));
+		return closingDisclosureServices.createClosingDisclosureObjectfromXMLDoc(in);
+		//return mismoXML;
 		
-		return lateChargeRuleService.calculateLateChargeRule(mismoString);
 	}
 	
+	@RequestMapping(value = "/{version}/le/calculateLateCharge", method = { RequestMethod.POST })
+	public LoanEstimate leCalculateLateCharge(@PathVariable String version, @RequestBody LoanEstimate loanEstimate) throws Exception
+	{
+		LOG.info("user "+SecurityContextHolder.getContext().getAuthentication().getName()+" used Service: LE CalculateLateCharge");
+		String mismoXML = lateChargeRuleService.calculateLateChargeRule(loanEstimateServices.createLoanEstimateXMLfromObject(loanEstimate));
+		InputStream in = new ByteArrayInputStream(mismoXML.getBytes(StandardCharsets.UTF_8));
+		return loanEstimateServices.createLoanEstimateDocumentObjectfromXMLDoc(in);
+	}
 	
 	private String getLoanIdFromCD(ClosingDisclosure closingDisclosure)
 	{

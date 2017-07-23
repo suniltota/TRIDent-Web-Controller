@@ -186,7 +186,6 @@ public class TRIDentWebServiceImpl {
             builder = factory.newDocumentBuilder();  
             Document doc = builder.parse(new InputSource(new StringReader(xmlDoc)));
             NodeList root = doc.getElementsByTagName("mismo:MESSAGE");
-    		System.out.println();
     		if(root.getLength() >0 )
     			return false;
     		else
