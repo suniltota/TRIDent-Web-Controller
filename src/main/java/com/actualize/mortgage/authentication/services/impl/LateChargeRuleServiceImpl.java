@@ -55,6 +55,8 @@ import com.actualize.mortgage.domainmodels.LateChargeRuleObject;
 import com.actualize.mortgage.domainmodels.LateChargeRuleUIObject;
 import com.actualize.mortgage.domainmodels.LateRuleProperties;
 import com.actualize.mortgage.exceptions.ServiceException;
+import com.actualize.mortgage.pdf.mismodao.Buydown;
+import com.actualize.mortgage.pdf.mismodao.LoanDetail;
 import com.actualize.mortgage.ucd.calculationutils.CalculationErrorType;
 
 @Service
@@ -136,7 +138,6 @@ public class LateChargeRuleServiceImpl {
 	 
 	 
 	    @SuppressWarnings("deprecation")
-	//	public void main(String[] args) {
 	    public List<LateChargeRuleObject> readLateChangeRulePropertiesFromExcel() throws ServiceException{
 	        try {
 
@@ -245,7 +246,7 @@ public class LateChargeRuleServiceImpl {
 		private LateChargeRuleUIObject getValuesFromMISMO(InputStream inputXmlStream) throws ServiceException
 		{
 			LateChargeRuleUIObject lateChargeRuleUIObject = new LateChargeRuleUIObject();
-			
+			String noteRatePercent = "";
 			try {
 				MISMODocument mismodoc = new MISMODocument(inputXmlStream);
 				 Document document = null;
@@ -254,29 +255,42 @@ public class LateChargeRuleServiceImpl {
 			            document = new Document(Document.NS, (Element)nodes.item(0));
 			        
 			   Deal deal = new Deal(Deal.NS, (Element)document.getElementAddNS("DEAL_SETS/DEAL_SET/DEALS/DEAL"));
-			   TermsOfLoan loanTerms = new TermsOfLoan((Element)deal.getElementAddNS("LOANS/LOAN/TERMS_OF_LOAN"));
+			   TermsOfLoan loanTerm = new TermsOfLoan((Element)deal.getElementAddNS("LOANS/LOAN/TERMS_OF_LOAN"));
 			   FeeSummaryDetail feeSummaryDetail = new FeeSummaryDetail((Element)deal.getElementAddNS("LOANS/LOAN/FEE_INFORMATION/FEES_SUMMARY/FEE_SUMMARY_DETAIL"));
 			   MaturityRule maturityRule = new MaturityRule((Element)deal.getElementAddNS("LOANS/LOAN/MATURITY/MATURITY_RULE"));
-			   
+			   LoanDetail loanDetail = new LoanDetail((Element)deal.getElementAddNS("LOANS/LOAN/LOAN_DETAIL"));
+			   Buydown buydownRule = new Buydown(null, (Element)deal.getElementAddNS("LOANS/LOAN/BUYDOWN/BUYDOWN_RULE"));
 			   String stateCode = deal.getValueAddNS("COLLATERALS/COLLATERAL/SUBJECT_PROPERTY/ADDRESS/StateCode");
+			   
+			   if (buydownRule.buydownRule.extension.other.buydownReflectedInNoteIndicator.equalsIgnoreCase("true")) {
+				   noteRatePercent = buydownRule.buydownOccurences.buydownOccurences[0].BuydownInitialEffectiveInterestRatePercent;
+				} else if(!loanTerm.disclosedFullyIndexedRatePercent.equals("")) {
+					noteRatePercent = loanTerm.disclosedFullyIndexedRatePercent;
+				} else if (!loanTerm.weightedAverageInterestRatePercent.equals("")) {
+					noteRatePercent = loanTerm.weightedAverageInterestRatePercent;
+				} else {
+					noteRatePercent = loanTerm.noteRatePercent;
+				}
+			   
+			   
 			   
 			   if(null == stateCode || stateCode.isEmpty())
 				   throw new ServiceException("Required field stateCode is missing in SUBJECT_PROPERTY");
 			   
-			   if(null == loanTerms.lienPriorityType || loanTerms.lienPriorityType.isEmpty())
+			   if(null == loanTerm.lienPriorityType || loanTerm.lienPriorityType.isEmpty())
 				   throw new ServiceException("Required field lienPriorityType is missing in LOAN_TERMS");
 			   
-			   if(null == loanTerms.mortgageType || loanTerms.mortgageType.isEmpty())
+			   if(null == loanTerm.mortgageType || loanTerm.mortgageType.isEmpty())
 				   throw new ServiceException("Required field mortgageType is missing in LOAN_TERMS");
 
 			   lateChargeRuleUIObject.setAprPercent(feeSummaryDetail.aprPercent);
-			   lateChargeRuleUIObject.setLienPriorityType(loanTerms.lienPriorityType);
+			   lateChargeRuleUIObject.setLienPriorityType(loanTerm.lienPriorityType);
 			   lateChargeRuleUIObject.setLoanMaturityPeriodCount(maturityRule.loanMaturityPeriodCount);
-			   lateChargeRuleUIObject.setLoanPurpose(loanTerms.loanPurposeType);
+			   lateChargeRuleUIObject.setLoanPurpose(loanTerm.loanPurposeType);
 			  // lateChargeRuleUIObject.setLoanToValuePercent(loanTerms.);
-			   lateChargeRuleUIObject.setMortgageType(loanTerms.mortgageType);
-			   lateChargeRuleUIObject.setNoteAmount(loanTerms.noteAmount);
-			   lateChargeRuleUIObject.setNoteRatePercent(loanTerms.noteRatePercent);
+			   lateChargeRuleUIObject.setMortgageType(loanTerm.mortgageType);
+			   lateChargeRuleUIObject.setNoteAmount(loanTerm.noteAmount);
+			   lateChargeRuleUIObject.setNoteRatePercent(noteRatePercent);
 			   lateChargeRuleUIObject.setStateCode(stateCode);
 			   
 			} catch (ParserConfigurationException | SAXException | IOException e) {
@@ -395,7 +409,7 @@ public class LateChargeRuleServiceImpl {
 							errors.add(new CalculationError(CalculationErrorType.INTERNAL_ERROR, "required container 'LOAN' is missing and can't be added"));
 						Node lateChargeRule = replaceNode(doc, lateChargeRules, addNamespace("LATE_CHARGE_RULE", gse));
 						lateChargeRule.appendChild(doc.createElement(addNamespace("LateChargeGracePeriodDaysCount", gse))).appendChild(doc.createTextNode(null == lateChargeRuleObject.getLateChargeGracePeriodDaysCount() ? "" : lateChargeRuleObject.getLateChargeGracePeriodDaysCount()));
-						lateChargeRule.appendChild(doc.createElement(addNamespace("LateChargeRatePercent", gse))).appendChild(doc.createTextNode(null == lateChargeRuleObject.getLateChargeRatePercent() ? "" :String.format("%.5g", Double.parseDouble(lateChargeRuleObject.getLateChargeRatePercent())*100)));
+						lateChargeRule.appendChild(doc.createElement(addNamespace("LateChargeRatePercent", gse))).appendChild(doc.createTextNode(null == lateChargeRuleObject.getLateChargeRatePercent() ? "" : String.format("%.5g", Double.parseDouble(lateChargeRuleObject.getLateChargeRatePercent())*100)));
 						lateChargeRule.appendChild(doc.createElement(addNamespace("LateChargeMinimumAmount", gse))).appendChild(doc.createTextNode(null == lateChargeRuleObject.getLateChargeMinimumAmount() ? "" : lateChargeRuleObject.getLateChargeMinimumAmount()));
 						lateChargeRule.appendChild(doc.createElement(addNamespace("LateChargeMaxmimumAmount", gse))).appendChild(doc.createTextNode(null == lateChargeRuleObject.getLateChargeMaximumAmount() ? "" : lateChargeRuleObject.getLateChargeMaximumAmount()));
 												
@@ -432,7 +446,6 @@ public class LateChargeRuleServiceImpl {
 						{
 							if(ruleProperty.getComparand().equalsIgnoreCase(rule.getNoteAmount().getComparand()))
 								filteredLateChargeRuleNoteAmountList.add(rule);
-								
 						}
 					}
 					else
@@ -625,7 +638,7 @@ public class LateChargeRuleServiceImpl {
 			try {
 				return (NodeList)xpath.evaluate(expression, node, XPathConstants.NODESET);
 			} catch (XPathExpressionException e) {
-				//errors.add(new CalculationError(CalculationErrorType.INTERNAL_ERROR, "bad xpath expression '" + expression + "'"));
+				errors.add(new CalculationError(CalculationErrorType.INTERNAL_ERROR, "bad xpath expression '" + expression + "'"));
 				return null;
 			}
 		}
