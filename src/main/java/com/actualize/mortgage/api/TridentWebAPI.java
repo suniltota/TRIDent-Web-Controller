@@ -130,10 +130,10 @@ public class TridentWebAPI {
 	}
 	
 	
-	@RequestMapping(value = "/{version}/cd/calculateLateCharge", method = { RequestMethod.POST })
+	@RequestMapping(value = "/cd/{version}/calculateLateCharge", method = { RequestMethod.POST })
 	public ClosingDisclosure cdCalculateLateCharge(@PathVariable String version, @RequestBody ClosingDisclosure closingDisclosure) throws Exception
 	{
-		LOG.info("user "+SecurityContextHolder.getContext().getAuthentication().getName()+" used Service: CD CalculateLateCharge");
+		LOG.info("user "+SecurityContextHolder.getContext().getAuthentication().getName()+" with Loan Id: "+getLoanIdFromCD(closingDisclosure)+ " used Service: CD CalculateLateCharge");
 		String mismoXML = lateChargeRuleService.calculateLateChargeRule(closingDisclosureServices.createClosingDisclosureXMLfromObject(closingDisclosure));
 		InputStream in = new ByteArrayInputStream(mismoXML.getBytes(StandardCharsets.UTF_8));
 		return closingDisclosureServices.createClosingDisclosureObjectfromXMLDoc(in);
@@ -141,10 +141,10 @@ public class TridentWebAPI {
 		
 	}
 	
-	@RequestMapping(value = "/{version}/le/calculateLateCharge", method = { RequestMethod.POST })
+	@RequestMapping(value = "/le/{version}/calculateLateCharge", method = { RequestMethod.POST })
 	public LoanEstimate leCalculateLateCharge(@PathVariable String version, @RequestBody LoanEstimate loanEstimate) throws Exception
 	{
-		LOG.info("user "+SecurityContextHolder.getContext().getAuthentication().getName()+" used Service: LE CalculateLateCharge");
+		LOG.info("user "+SecurityContextHolder.getContext().getAuthentication().getName() +" with Loan Id: "+getLoanIdFromLE(loanEstimate) +" used Service: LE CalculateLateCharge");
 		String mismoXML = lateChargeRuleService.calculateLateChargeRule(loanEstimateServices.createLoanEstimateXMLfromObject(loanEstimate));
 		InputStream in = new ByteArrayInputStream(mismoXML.getBytes(StandardCharsets.UTF_8));
 		return loanEstimateServices.createLoanEstimateDocumentObjectfromXMLDoc(in);
