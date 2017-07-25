@@ -408,7 +408,7 @@ public class LateChargeRuleServiceImpl {
 						if (lateChargeRules == null)
 							errors.add(new CalculationError(CalculationErrorType.INTERNAL_ERROR, "required container 'LOAN' is missing and can't be added"));
 						Node lateChargeRule = replaceNode(doc, lateChargeRules, addNamespace("LATE_CHARGE_RULE", gse));
-						lateChargeRule.appendChild(doc.createElement(addNamespace("LateChargeGracePeriodDaysCount", gse))).appendChild(doc.createTextNode(null == lateChargeRuleObject.getLateChargeGracePeriodDaysCount() ? "" : lateChargeRuleObject.getLateChargeGracePeriodDaysCount()));
+						lateChargeRule.appendChild(doc.createElement(addNamespace("LateChargeGracePeriodDaysCount", gse))).appendChild(doc.createTextNode(null == lateChargeRuleObject.getLateChargeGracePeriodDaysCount() ? "" : lateChargeRuleObject.getLateChargeGracePeriodDaysCount().contains(".") ? lateChargeRuleObject.getLateChargeGracePeriodDaysCount().split("\\.")[0] :lateChargeRuleObject.getLateChargeGracePeriodDaysCount() ));
 						lateChargeRule.appendChild(doc.createElement(addNamespace("LateChargeRatePercent", gse))).appendChild(doc.createTextNode(null == lateChargeRuleObject.getLateChargeRatePercent() ? "" : String.format("%.5g", Double.parseDouble(lateChargeRuleObject.getLateChargeRatePercent())*100)));
 						lateChargeRule.appendChild(doc.createElement(addNamespace("LateChargeMinimumAmount", gse))).appendChild(doc.createTextNode(null == lateChargeRuleObject.getLateChargeMinimumAmount() ? "" : lateChargeRuleObject.getLateChargeMinimumAmount()));
 						lateChargeRule.appendChild(doc.createElement(addNamespace("LateChargeMaxmimumAmount", gse))).appendChild(doc.createTextNode(null == lateChargeRuleObject.getLateChargeMaximumAmount() ? "" : lateChargeRuleObject.getLateChargeMaximumAmount()));
@@ -610,7 +610,7 @@ public class LateChargeRuleServiceImpl {
 				lateRulePropertiesList.add(lateRuleProperties);	
 			}
 			
-			if(lateRule.getUpperLimit() != 0.0  && value <= lateRule.getLowerLimit() && value >= lateRule.getUpperLimit() && "Range".equalsIgnoreCase(lateRule.getComparand()))
+			if(lateRule.getUpperLimit() != 0.0  && value >= lateRule.getLowerLimit() && value <= lateRule.getUpperLimit() && "Range".equalsIgnoreCase(lateRule.getComparand()))
 			{
 				LateRuleProperties lateRuleProperties = new LateRuleProperties();
 				lateRuleProperties.setComparand("Range");
