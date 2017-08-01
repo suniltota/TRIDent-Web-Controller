@@ -135,8 +135,6 @@ public class LateChargeRuleServiceImpl {
 		 
 	  }
 	 
-	 
-	 
 	    @SuppressWarnings("deprecation")
 	    public List<LateChargeRuleObject> readLateChangeRulePropertiesFromExcel() throws ServiceException{
 	        try {
@@ -235,10 +233,10 @@ public class LateChargeRuleServiceImpl {
 				String[] types = mortgageType.split(",");
 				
 				for(int i=0; i< types.length; i++)
-					mortgageTypes.add(types[i]);
+					mortgageTypes.add(types[i].trim());
 			}
 			else
-				mortgageTypes.add(mortgageType);
+				mortgageTypes.add(mortgageType.trim());
 			
 			return mortgageTypes;
 		}
