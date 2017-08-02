@@ -24,6 +24,8 @@ public class LateChargeRuleObject {
 	private String lateChargeRatePercent;
 	private String lateChargeMinimumAmount;
 	private String lateChargeMaximumAmount;
+	private String lateChargeAmount;
+	private String lateChargeType;
 	
 	/**
 	 * @return the stateCode
@@ -180,6 +182,30 @@ public class LateChargeRuleObject {
 	 */
 	public void setLateChargeMaximumAmount(String lateChargeMaximumAmount) {
 		this.lateChargeMaximumAmount = lateChargeMaximumAmount;
+	}
+	/**
+	 * @return the lateChargeAmount
+	 */
+	public String getLateChargeAmount() {
+		return lateChargeAmount;
+	}
+	/**
+	 * @param lateChargeAmount the lateChargeAmount to set
+	 */
+	public void setLateChargeAmount(String lateChargeAmount) {
+		this.lateChargeAmount = lateChargeAmount;
+	}
+	/**
+	 * @return the lateChargeType
+	 */
+	public String getLateChargeType() {
+		return lateChargeType;
+	}
+	/**
+	 * @param lateChargeType the lateChargeType to set
+	 */
+	public void setLateChargeType(String lateChargeType) {
+		this.lateChargeType = lateChargeType;
 	}
 	
 	

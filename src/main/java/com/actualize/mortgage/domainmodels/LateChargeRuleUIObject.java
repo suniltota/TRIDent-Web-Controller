@@ -14,15 +14,17 @@ public class LateChargeRuleUIObject implements Serializable{
 	
 	private static final long serialVersionUID = 7200073701320611824L;
 	
-	private String stateCode;
-	private String lienPriorityType;
-	private String noteAmount;
-	private String loanPurpose;
-	private String loanToValuePercent;
-	private String loanMaturityPeriodCount;
-	private String aprPercent;
-	private String noteRatePercent;
-	private String mortgageType;
+	private String stateCode = "";
+	private String lienPriorityType = "";
+	private String noteAmount = "";
+	private String loanPurpose = "";
+	private String loanToValuePercent = "";
+	private String loanMaturityPeriodCount = "";
+	private String aprPercent = "";
+	private String noteRatePercent = "";
+	private String mortgageType = "";
+	private String lateChargeAmount = "";
+	private String lateChargeType = "";
 	
 	/**
 	 * @return the stateCode
@@ -132,7 +134,29 @@ public class LateChargeRuleUIObject implements Serializable{
 	public void setMortgageType(String mortgageType) {
 		this.mortgageType = mortgageType;
 	}
+	/**
+	 * @return the lateChargeAmount
+	 */
+	public String getLateChargeAmount() {
+		return lateChargeAmount;
+	}
+	/**
+	 * @param lateChargeAmount the lateChargeAmount to set
+	 */
+	public void setLateChargeAmount(String lateChargeAmount) {
+		this.lateChargeAmount = lateChargeAmount;
+	}
+	/**
+	 * @return the lateChargeType
+	 */
+	public String getLateChargeType() {
+		return lateChargeType;
+	}
+	/**
+	 * @param lateChargeType the lateChargeType to set
+	 */
+	public void setLateChargeType(String lateChargeType) {
+		this.lateChargeType = lateChargeType;
+	}
 	
-	
-
 }

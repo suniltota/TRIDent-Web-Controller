@@ -46,6 +46,7 @@ import org.xml.sax.SAXException;
 import com.actualize.mortgage.cd.datamodels.Deal;
 import com.actualize.mortgage.cd.datamodels.Document;
 import com.actualize.mortgage.cd.datamodels.FeeSummaryDetail;
+import com.actualize.mortgage.cd.datamodels.LateChargeRule;
 import com.actualize.mortgage.cd.datamodels.MISMODocument;
 import com.actualize.mortgage.cd.datamodels.MaturityRule;
 import com.actualize.mortgage.cd.datamodels.TermsOfLoan;
@@ -259,6 +260,7 @@ public class LateChargeRuleServiceImpl {
 			   LoanDetail loanDetail = new LoanDetail((Element)deal.getElementAddNS("LOANS/LOAN/LOAN_DETAIL"));
 			   Buydown buydownRule = new Buydown(null, (Element)deal.getElementAddNS("LOANS/LOAN/BUYDOWN/BUYDOWN_RULE"));
 			   String stateCode = deal.getValueAddNS("COLLATERALS/COLLATERAL/SUBJECT_PROPERTY/ADDRESS/StateCode");
+			   LateChargeRule lateChargeRule = new LateChargeRule((Element)deal.getElement("mismo:LOANS/mismo:LOAN/mismo:LATE_CHARGE/mismo:EXTENSION/mismo:OTHER/gse:LATE_CHARGE_RULES/gse:LATE_CHARGE_RULE"));
 			   
 			   if (buydownRule.buydownRule.extension.other.buydownReflectedInNoteIndicator.equalsIgnoreCase("true")) {
 				   noteRatePercent = buydownRule.buydownOccurences.buydownOccurences[0].BuydownInitialEffectiveInterestRatePercent;
@@ -269,8 +271,6 @@ public class LateChargeRuleServiceImpl {
 				} else {
 					noteRatePercent = loanTerm.noteRatePercent;
 				}
-			   
-			   
 			   
 			   if(null == stateCode || stateCode.isEmpty())
 				   throw new ServiceException("Required field stateCode is missing in SUBJECT_PROPERTY");
@@ -290,6 +290,8 @@ public class LateChargeRuleServiceImpl {
 			   lateChargeRuleUIObject.setNoteAmount(loanTerm.noteAmount);
 			   lateChargeRuleUIObject.setNoteRatePercent(noteRatePercent);
 			   lateChargeRuleUIObject.setStateCode(stateCode);
+			   lateChargeRuleUIObject.setLateChargeType(lateChargeRule.lateChargeType);
+			   lateChargeRuleUIObject.setLateChargeAmount(lateChargeRule.lateChargeAmount);
 			   
 			} catch (ParserConfigurationException | SAXException | IOException e) {
 				 new ServiceException("Invalid or not well formmatted MISMO xml");
@@ -328,7 +330,7 @@ public class LateChargeRuleServiceImpl {
 				if(null != rule.getStateCode() && lateChargeRuleUIObject.getStateCode().equalsIgnoreCase(rule.getStateCode()))
 					if(null != rule.getLienPriorityType() && lateChargeRuleUIObject.getLienPriorityType().equalsIgnoreCase(rule.getLienPriorityType()))
 						if((null != rule.getLoanPurpose() && !rule.getLoanPurpose().isEmpty()) ? lateChargeRuleUIObject.getLoanPurpose().equalsIgnoreCase(rule.getLoanPurpose()) : true)
-							if((null != rule.getMortgageType() || "SecondLien".equalsIgnoreCase(rule.getLienPriorityType())) ? rule.getMortgageType().contains(lateChargeRuleUIObject.getMortgageType()) : true)
+							if(("FirstLien".equalsIgnoreCase(rule.getLienPriorityType())) ? rule.getMortgageType().contains(lateChargeRuleUIObject.getMortgageType()) : true)
 								filteredLateChargeRuleObjects.add(rule);
 			});
 			
@@ -369,6 +371,9 @@ public class LateChargeRuleServiceImpl {
 			else if(filteredLateChargeRuleObjects.isEmpty())
 				throw new ServiceException("No Results Found");
 				
+			lateChargeRuleValues.setLateChargeAmount(null != lateChargeRuleUIObject.getLateChargeAmount() ? lateChargeRuleUIObject.getLateChargeAmount() : "");
+			lateChargeRuleValues.setLateChargeType(null != lateChargeRuleUIObject.getLateChargeType() ? lateChargeRuleUIObject.getLateChargeType() : "");
+			
 			return	lateChargeRuleValues;	
 				
 		}
@@ -406,10 +411,12 @@ public class LateChargeRuleServiceImpl {
 						if (lateChargeRules == null)
 							errors.add(new CalculationError(CalculationErrorType.INTERNAL_ERROR, "required container 'LOAN' is missing and can't be added"));
 						Node lateChargeRule = replaceNode(doc, lateChargeRules, addNamespace("LATE_CHARGE_RULE", gse));
+						lateChargeRule.appendChild(doc.createElement(addNamespace("LateChargeAmount", gse))).appendChild(doc.createTextNode(lateChargeRuleObject.getLateChargeAmount()));
 						lateChargeRule.appendChild(doc.createElement(addNamespace("LateChargeGracePeriodDaysCount", gse))).appendChild(doc.createTextNode(null == lateChargeRuleObject.getLateChargeGracePeriodDaysCount() ? "" : lateChargeRuleObject.getLateChargeGracePeriodDaysCount().contains(".") ? lateChargeRuleObject.getLateChargeGracePeriodDaysCount().split("\\.")[0] :lateChargeRuleObject.getLateChargeGracePeriodDaysCount() ));
 						lateChargeRule.appendChild(doc.createElement(addNamespace("LateChargeRatePercent", gse))).appendChild(doc.createTextNode(null == lateChargeRuleObject.getLateChargeRatePercent() ? "" : String.format("%.5g", Double.parseDouble(lateChargeRuleObject.getLateChargeRatePercent())*100)));
 						lateChargeRule.appendChild(doc.createElement(addNamespace("LateChargeMinimumAmount", gse))).appendChild(doc.createTextNode(null == lateChargeRuleObject.getLateChargeMinimumAmount() ? "" : lateChargeRuleObject.getLateChargeMinimumAmount()));
 						lateChargeRule.appendChild(doc.createElement(addNamespace("LateChargeMaxmimumAmount", gse))).appendChild(doc.createTextNode(null == lateChargeRuleObject.getLateChargeMaximumAmount() ? "" : lateChargeRuleObject.getLateChargeMaximumAmount()));
+						lateChargeRule.appendChild(doc.createElement(addNamespace("LateChargeType", gse))).appendChild(doc.createTextNode(lateChargeRuleObject.getLateChargeType()));
 												
 					} catch (SAXException | IOException e) {
 						// TODO Auto-generated catch block
@@ -420,7 +427,7 @@ public class LateChargeRuleServiceImpl {
 		
 		private List<LateChargeRuleObject> calculateNoteAmount(List<LateChargeRuleObject> filteredLateChargeRuleObjects, String noteAmount) throws ServiceException
 		{
-			if(null != noteAmount && !noteAmount.isEmpty()){
+		if(null != noteAmount && !noteAmount.isEmpty()){
 				double amount;
 				
 				List<LateRuleProperties> lateRulePropertiesList = new LinkedList<>();
