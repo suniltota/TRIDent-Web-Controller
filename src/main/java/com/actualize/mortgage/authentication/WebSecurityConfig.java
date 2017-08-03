@@ -28,11 +28,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private LogoutHandler logoutHandler;
 	@Autowired
 	private UserDetailsService userDetailsService;
-
+	
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
-        return new BCryptPasswordEncoder();
+       return new BCryptPasswordEncoder();
     }
+    
 	
 	/*@Autowired
     public void globalUserDetails(final AuthenticationManagerBuilder auth) throws Exception {
@@ -40,15 +41,50 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	auth.inMemoryAuthentication()
 	  .withUser("admin").password("123456").roles("ADMIN");
     }*/
-    /*public static void main(String[] args) {
+  /* public static void main(String[] args) {
 		System.out.println(new BCryptPasswordEncoder().encode("Compugain@123"));
 	}*/
-    @Autowired
+  /*  @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
     	
-        auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder());
+        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
+    }*/
+    
+    @Autowired
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        /*ReflectionSaltSource rss = new ReflectionSaltSource();
+        rss.setUserPropertyToUse("username");
+        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+        provider.setSaltSource(rss);
+        provider.setUserDetailsService(userDetailsService);
+        provider.setPasswordEncoder(passwordEncoder());
+        auth.authenticationProvider(provider);
+       */
+    	auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder());
     }
     /*
+    @SuppressWarnings("deprecation")
+	@Bean
+    public PasswordEncoder passwordEncoder() throws Exception{
+    	return new PasswordEncoder() {
+    		 private final PasswordEncoder myEncoder = new ShaPasswordEncoder( 256 );
+			
+			@Override
+			public boolean isPasswordValid(String encPass, String rawPass, Object salt) {
+				if(encPass.equalsIgnoreCase(encodePassword(rawPass, salt)))
+					return true;
+				return false;
+			}
+			
+			@Override
+			public String encodePassword(String rawPass, Object salt) {
+				return myEncoder.encodePassword(rawPass, salt);
+			}
+			
+		};
+    	
+    }
+
     @Override
     @Bean
     public AuthenticationManager authenticationManagerBean() throws Exception {

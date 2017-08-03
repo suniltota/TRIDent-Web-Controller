@@ -1,0 +1,29 @@
+/**
+ * 
+ */
+package com.actualize.mortgage.manager;
+
+import java.util.List;
+
+import com.actualize.mortgage.datamodels.ClientEntity;
+import com.actualize.mortgage.exceptions.ServiceException;
+
+/**
+ * @author sboragala
+ *
+ */
+public interface ClientManager {
+	
+	public ClientEntity getClientById(String clientId);
+	
+	public ClientEntity getClientByClientName(String clientName) throws ServiceException;
+	
+	public ClientEntity addClient(ClientEntity clientEntity);
+	
+	public ClientEntity updateClient(ClientEntity clientEntity);
+	
+	public void deleteClient(String clientId);
+		
+	public List<ClientEntity> getAllClients();
+
+}

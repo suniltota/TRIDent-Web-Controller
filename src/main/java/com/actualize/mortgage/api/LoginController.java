@@ -1,4 +1,4 @@
-package com.actualize.mortgage.authentication;
+package com.actualize.mortgage.api;
 
 
 import java.security.Principal;
@@ -7,10 +7,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.actualize.mortgage.domainmodels.UserDetailsModel;
 
 @RestController
 public class LoginController {
@@ -29,10 +30,9 @@ public class LoginController {
 	}
 	
 	@RequestMapping(value={"/userDetails"}, method = RequestMethod.GET)
-	public User logoutSuccess(HttpServletRequest request,
+	public UserDetailsModel getUserDetails(HttpServletRequest request,
             HttpServletResponse response){
-		 User authUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		return authUser;
+		return (UserDetailsModel) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 	}
 	
 	@RequestMapping(value={"/logout"}, method = RequestMethod.GET)

@@ -1,5 +1,6 @@
 package com.actualize.mortgage.authentication;
 import java.io.IOException;
+import java.io.PrintWriter;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -10,6 +11,9 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
+
+import com.actualize.mortgage.domainmodels.UserDetailsModel;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Component
 public class RESTAuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
@@ -23,9 +27,16 @@ public class RESTAuthenticationSuccessHandler extends SimpleUrlAuthenticationSuc
 	
 		LOG.info(authentication.getName()+" user signed in Sucessfully");
 		request.getSession().setMaxInactiveInterval(SESSION_TIMEOUT_IN_SECONDS);
-	 
-        getRedirectStrategy().sendRedirect(request, response, "/userDetails");
-	        
+		
+		ObjectMapper mapper = new ObjectMapper();
+        response.setStatus(HttpServletResponse.SC_OK);
+        response.setContentType("application/json");
+        PrintWriter writer = response.getWriter();
+        UserDetailsModel userDetails = (UserDetailsModel) authentication.getPrincipal();
+        userDetails.setPassword("");
+        writer.write(mapper.writeValueAsString(userDetails));
+        writer.flush();	
+        
 		clearAuthenticationAttributes(request);
 		
 	}
