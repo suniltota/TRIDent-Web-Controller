@@ -180,7 +180,6 @@ public class LateChargeRuleServiceImpl {
                 		lateChargeRuleModelUI.setLateChargeMaximumAmount(datatypeSheet.getRow(i).getCell(12).getStringCellValue());
                 	else if(datatypeSheet.getRow(i).getCell(12).getCellTypeEnum() == CellType.NUMERIC)
                 		lateChargeRuleModelUI.setLateChargeMaximumAmount(String.valueOf(datatypeSheet.getRow(i).getCell(12).getNumericCellValue()));
-	            	
                 	lateChargeRuleModelUIs.add(lateChargeRuleModelUI);
 	            }
 	            LateChargeRuleServiceImpl lateChargeRuleServiceImpl = new LateChargeRuleServiceImpl();
@@ -214,7 +213,7 @@ public class LateChargeRuleServiceImpl {
 	    		lateChargeRuleObject.setLoanMaturityPeriodCount(loanMaturityPeriodCount);
 	    		lateChargeRuleObject.setAprPercent(aprPercent);
 	    		lateChargeRuleObject.setNoteRatePercent(noteRatePercent);
-	    		if(null != rule.getMortgageType())
+	    		if(null != rule.getMortgageType() && !rule.getMortgageType().isEmpty())
 	    			lateChargeRuleObject.setMortgageType(getMortgageTypes(rule.getMortgageType()));
 	    		lateChargeRuleObject.setLateChargeGracePeriodDaysCount(rule.getLateChargeGracePeriodDaysCount());
 	    		lateChargeRuleObject.setLateChargeRatePercent(rule.getLateChargeRatePercent());
@@ -327,10 +326,10 @@ public class LateChargeRuleServiceImpl {
 			LateChargeRuleObject lateChargeRuleValues = new LateChargeRuleObject();
 			List<LateChargeRuleObject> filteredLateChargeRuleObjects = new LinkedList<>();
 			lateChargeRuleObjects.stream().forEach(rule ->{
-				if(null != rule.getStateCode() && lateChargeRuleUIObject.getStateCode().equalsIgnoreCase(rule.getStateCode()))
-					if(null != rule.getLienPriorityType() && lateChargeRuleUIObject.getLienPriorityType().equalsIgnoreCase(rule.getLienPriorityType()))
+				if((null != rule.getStateCode() && !rule.getStateCode().isEmpty()) && lateChargeRuleUIObject.getStateCode().equalsIgnoreCase(rule.getStateCode()))
+					if((null != rule.getLienPriorityType() && !rule.getLienPriorityType().isEmpty()) ? lateChargeRuleUIObject.getLienPriorityType().equalsIgnoreCase(rule.getLienPriorityType()) : true )
 						if((null != rule.getLoanPurpose() && !rule.getLoanPurpose().isEmpty()) ? lateChargeRuleUIObject.getLoanPurpose().equalsIgnoreCase(rule.getLoanPurpose()) : true)
-							if(("FirstLien".equalsIgnoreCase(rule.getLienPriorityType())) ? rule.getMortgageType().contains(lateChargeRuleUIObject.getMortgageType()) : true)
+							if(null != rule.getMortgageType() ? rule.getMortgageType().contains(lateChargeRuleUIObject.getMortgageType()) : true)
 								filteredLateChargeRuleObjects.add(rule);
 			});
 			
@@ -427,7 +426,7 @@ public class LateChargeRuleServiceImpl {
 		
 		private List<LateChargeRuleObject> calculateNoteAmount(List<LateChargeRuleObject> filteredLateChargeRuleObjects, String noteAmount) throws ServiceException
 		{
-		if(null != noteAmount && !noteAmount.isEmpty()){
+			if(null != noteAmount && !noteAmount.isEmpty()){
 				double amount;
 				
 				List<LateRuleProperties> lateRulePropertiesList = new LinkedList<>();
@@ -450,7 +449,10 @@ public class LateChargeRuleServiceImpl {
 						for(LateRuleProperties ruleProperty: lateRulePropertiesList)
 						{
 							if(ruleProperty.getComparand().equalsIgnoreCase(rule.getNoteAmount().getComparand()))
+							{
 								filteredLateChargeRuleNoteAmountList.add(rule);
+								lateRulePropertiesList.remove(rule);
+							}
 						}
 					}
 					else
@@ -486,7 +488,10 @@ public class LateChargeRuleServiceImpl {
 						for(LateRuleProperties ruleProperty: lateRulePropertiesList)
 						{
 							if(ruleProperty.getComparand().equalsIgnoreCase(rule.getLoanToValuePercent().getComparand()))
+							{
 								filteredLateChargeRuleNoteAmountList.add(rule);
+								lateRulePropertiesList.remove(rule);
+							}
 						}
 				return filteredLateChargeRuleNoteAmountList;	
 			}
@@ -515,8 +520,10 @@ public class LateChargeRuleServiceImpl {
 				for(LateChargeRuleObject rule: filteredLateChargeRuleObjects )
 					for(LateRuleProperties ruleProperty: lateRulePropertiesList)
 					{
-						if(ruleProperty.getComparand().equalsIgnoreCase(rule.getLoanMaturityPeriodCount().getComparand()))
+						if(ruleProperty.getComparand().equalsIgnoreCase(rule.getLoanMaturityPeriodCount().getComparand())){
 							filteredLateChargeRuleNoteAmountList.add(rule);
+							lateRulePropertiesList.remove(rule);
+						}
 					}
 			
 				return filteredLateChargeRuleNoteAmountList;
@@ -546,8 +553,11 @@ public class LateChargeRuleServiceImpl {
 				for(LateChargeRuleObject rule: filteredLateChargeRuleObjects )
 					for(LateRuleProperties ruleProperty: lateRulePropertiesList)
 					{
-						if(ruleProperty.getComparand().equalsIgnoreCase(rule.getAprPercent().getComparand()))
+						if(ruleProperty.getComparand().equalsIgnoreCase(rule.getAprPercent().getComparand())){
 							filteredLateChargeRuleNoteAmountList.add(rule);
+							lateRulePropertiesList.remove(rule);
+						}
+							
 					}
 			
 				return filteredLateChargeRuleNoteAmountList;
@@ -577,8 +587,10 @@ public class LateChargeRuleServiceImpl {
 				for(LateChargeRuleObject rule: filteredLateChargeRuleObjects )
 					for(LateRuleProperties ruleProperty: lateRulePropertiesList)
 					{
-						if(ruleProperty.getComparand().equalsIgnoreCase(rule.getNoteRatePercent().getComparand()))
+						if(ruleProperty.getComparand().equalsIgnoreCase(rule.getNoteRatePercent().getComparand())){
 							filteredLateChargeRuleNoteAmountList.add(rule);
+							lateRulePropertiesList.remove(rule);
+						}
 					}
 			
 				return filteredLateChargeRuleNoteAmountList;
