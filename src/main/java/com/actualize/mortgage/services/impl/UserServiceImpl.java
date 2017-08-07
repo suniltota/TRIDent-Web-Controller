@@ -48,7 +48,7 @@ public class UserServiceImpl implements UserService {
 		
 		UserDetailsEntity userDetailsEntity = userManagerImpl.getUserByUserName(userName);
 		if(null == userDetailsEntity)
-			throw new ServiceException("No results found with userName: "+ userName);
+			throw new ServiceException("User doesnot exits, Please contact administrator");
 		return convertor.toUserDetails(userDetailsEntity);
 	}
 
