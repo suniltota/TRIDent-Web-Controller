@@ -75,7 +75,7 @@ public class OAuth2Configuration {
 	          .secret("exc9ll9ntapp")
 	          .authorizedGrantTypes(
 	            "password","authorization_code", "refresh_token")
-	          .scopes("read");
+	          .scopes("read").accessTokenValiditySeconds(24 * 3600);
 	    }
 	 
 	        
