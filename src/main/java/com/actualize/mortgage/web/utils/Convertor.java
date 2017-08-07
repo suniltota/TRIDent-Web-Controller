@@ -3,11 +3,15 @@
  */
 package com.actualize.mortgage.web.utils;
 
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.apache.tomcat.jni.Local;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.datetime.joda.LocalDateParser;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
 
@@ -128,7 +132,9 @@ public class Convertor {
 			userDetailsEntity.setPasswordExpiryDate(userDetails.getPasswordExpiryDate());
 			userDetailsEntity.setLastSuccessfulLogin(userDetails.getLastSuccessfulLogin());
 			userDetailsEntity.setLastSuccessfulLogout(userDetails.getLastSuccessfulLogout());
-			
+			userDetailsEntity.setModificationDate(Date.valueOf(LocalDate.now()));
+			userDetailsEntity.setCreationDate((Date.valueOf(LocalDate.now())));
+			userDetailsEntity.setSessionTimeOut(userDetails.getSessionTimeOut());
 		return userDetailsEntity;
 	}
 

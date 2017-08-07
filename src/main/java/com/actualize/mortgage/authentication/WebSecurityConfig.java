@@ -5,6 +5,7 @@ import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -34,21 +35,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
        return new BCryptPasswordEncoder();
     }
     
-	
-	/*@Autowired
-    public void globalUserDetails(final AuthenticationManagerBuilder auth) throws Exception {
-      
-	auth.inMemoryAuthentication()
-	  .withUser("admin").password("123456").roles("ADMIN");
-    }*/
-  /* public static void main(String[] args) {
-		System.out.println(new BCryptPasswordEncoder().encode("Compugain@123"));
-	}*/
-  /*  @Autowired
-    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-    	
-        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
-    }*/
     
     @Autowired
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -85,19 +71,21 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     	
     }
 
-    @Override
-    @Bean
-    public AuthenticationManager authenticationManagerBean() throws Exception {
-        return super.authenticationManagerBean();
-    }*/
+*/
 
     @Override
     protected void configure(final HttpSecurity http) throws Exception {
-		http.authorizeRequests().antMatchers("/login").permitAll().anyRequest().authenticated().and().formLogin().permitAll().and().csrf().disable();
+/*		http.authorizeRequests().antMatchers("/login").permitAll().anyRequest().authenticated().and().formLogin().permitAll().and().csrf().disable();
 		http.exceptionHandling().authenticationEntryPoint(authenticationEntryPoint);
 		http.formLogin().successHandler(authenticationSuccessHandler);
 		http.formLogin().failureHandler(authenticationFailureHandler);
 		http.logout().logoutUrl("/logout").logoutSuccessHandler(logoutHandler).deleteCookies("JSESSIONID").logoutSuccessUrl("/logoutSuccess");
+*/   
+    	
+    	http.authorizeRequests().antMatchers("/oauth/token").permitAll().anyRequest().authenticated()
+		.and().formLogin().permitAll();
+		http.formLogin().failureHandler(authenticationFailureHandler);
+		http.exceptionHandling().authenticationEntryPoint(authenticationEntryPoint);
     }
     
  	@Override
@@ -105,6 +93,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	    web
 	       .ignoring()
 	       .antMatchers("/resources/**", "/static/**", "/css/**", "/js/**", "/images/**");
+	}
+
+ 	@Override
+	@Bean
+	public AuthenticationManager authenticationManagerBean() throws Exception {
+		return super.authenticationManagerBean();
 	}
 
 }

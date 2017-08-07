@@ -23,9 +23,11 @@ import com.actualize.mortgage.web.utils.Convertor;
  * @author sboragala
  *
  */
-@Service
+@Service("userService")
 public class UserServiceImpl implements UserService {
 	
+	private static final String DEFAULT_SESSION_TIME = "21600";
+
 	@Autowired
 	private UserManager userManagerImpl;
 	
@@ -61,9 +63,16 @@ public class UserServiceImpl implements UserService {
 		if(null != userDetailsEntity)
 			throw new ServiceException("Email not available");*/
 			userDetails.setPasswordExpiryDate(LocalDate.now().plusDays(30).toString());
-			userDetails.setCreationDate(LocalDate.now().toString());
 			userDetails.setUpdatedBy(SecurityContextHolder.getContext().getAuthentication().getName());
 			userDetails.setPassword(new BCryptPasswordEncoder().encode(userDetails.getPassword().trim()));
+			String current = LocalDate.now().toString();
+			userDetails.setModificationDate(current);
+			userDetails.setCreationDate(current);
+			userDetails.setLastSuccessfulLogin(current);
+			userDetails.setLastSuccessfulLogout(current);
+			if(userDetails.getSessionTimeOut() == null || userDetails.getSessionTimeOut().length() == 0){
+				userDetails.setSessionTimeOut(DEFAULT_SESSION_TIME);
+			}
 		return convertor.toUserDetails(userManagerImpl.addUser(convertor.toUserDetailsEntity(userDetails)));
 	}
 
