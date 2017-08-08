@@ -14,11 +14,12 @@ import com.actualize.mortgage.exceptions.ServiceException;
  *
  */
 public interface ClientService {
-	
+
 	public ClientModel addClient(ClientModel clientModel) throws ServiceException;
 	public ClientModel updateClient(ClientModel clientModel) throws ServiceException;
 	public ClientModel viewClientById(String clientId) throws ServiceException;
 	public ClientModel viewClientByName(String clientName) throws ServiceException;
 	public List<ClientModel> viewAllClients() throws ServiceException;
+	public void deleteClient(String clientId) throws ServiceException;
 
 }

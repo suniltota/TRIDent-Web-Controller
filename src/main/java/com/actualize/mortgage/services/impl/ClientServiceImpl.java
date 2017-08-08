@@ -22,10 +22,10 @@ import com.actualize.mortgage.web.utils.Convertor;
  */
 @Service
 public class ClientServiceImpl implements ClientService {
-	
+
 	@Autowired
 	ClientManager clientManager;
-	
+
 	@Autowired
 	Convertor convertor;
 
@@ -38,14 +38,14 @@ public class ClientServiceImpl implements ClientService {
 		if(null != clientEntity)
 			throw new ServiceException("Client Name already exists");
 		client = convertor.toClientModel(clientManager.addClient(convertor.toClientEntity(clientModel)));
-		
+
 		return client;
 	}
 
 	@Override
 	public ClientModel updateClient(ClientModel clientModel) throws ServiceException {
 		viewClientById(clientModel.getClientId());
-		
+
 		return convertor.toClientModel(clientManager.updateClient(convertor.toClientEntity(clientModel)));
 	}
 
@@ -54,7 +54,7 @@ public class ClientServiceImpl implements ClientService {
 		ClientEntity clientEntity = clientManager.getClientById(clientId);
 		if(null == clientEntity)
 			throw new ServiceException("Invalid Client");
-		
+
 		return convertor.toClientModel(clientEntity);
 	}
 
@@ -63,7 +63,7 @@ public class ClientServiceImpl implements ClientService {
 		ClientEntity clientEntity = clientManager.getClientByClientName(clientName);
 		if(null == clientEntity)
 			throw new ServiceException("Invalid Client");
-		
+
 		return convertor.toClientModel(clientEntity);
 	}
 
@@ -77,5 +77,11 @@ public class ClientServiceImpl implements ClientService {
 			clientModelList.add(convertor.toClientModel(clientEntity));
 		return clientModelList;
 	}
+
+	@Override
+	public void deleteClient(String clientId) throws ServiceException {
+		clientManager.deleteClient(clientId);
+	}
+
 
 }
