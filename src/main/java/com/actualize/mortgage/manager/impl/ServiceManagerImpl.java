@@ -3,6 +3,8 @@
  */
 package com.actualize.mortgage.manager.impl;
 
+import java.util.List;
+
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.NonUniqueResultException;
@@ -11,7 +13,6 @@ import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Repository;
 
-import com.actualize.mortgage.datamodels.RoleEntity;
 import com.actualize.mortgage.datamodels.ServicesEntity;
 import com.actualize.mortgage.exceptions.ServiceException;
 import com.actualize.mortgage.manager.ServiceManager;
@@ -27,11 +28,11 @@ public class ServiceManagerImpl implements ServiceManager{
 	@PersistenceContext
 	EntityManager entityManager;
 
-	
+
 	@Override
 	public ServicesEntity addService(ServicesEntity servicesEntity) {
-		 entityManager.persist(servicesEntity);
-		 return servicesEntity;
+		entityManager.persist(servicesEntity);
+		return servicesEntity;
 	}
 
 	@Override
@@ -42,10 +43,10 @@ public class ServiceManagerImpl implements ServiceManager{
 	@Override
 	public ServicesEntity getServiceByServiceName(String serviceName) {
 		try{
-			 return (ServicesEntity) entityManager.createQuery(
-				        "from ServicesEntity where serviceName = :serviceName")
-				        .setParameter("serviceName", serviceName)
-				        .getSingleResult();
+			return (ServicesEntity) entityManager.createQuery(
+					"from ServicesEntity where serviceName = :serviceName")
+					.setParameter("serviceName", serviceName)
+					.getSingleResult();
 		}
 		catch(NoResultException e)
 		{
@@ -57,15 +58,28 @@ public class ServiceManagerImpl implements ServiceManager{
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public ServicesEntity getAllSevices() {
-		// TODO Auto-generated method stub
-		return null;
+	public List<ServicesEntity> getAllSevices() {
+		try{
+			return (List<ServicesEntity>) entityManager.createQuery("from ServicesEntity").getResultList();
+		}
+		catch(NoResultException e)
+		{
+			return null;
+		}
 	}
 
 	@Override
-	public void deleteService(String ServiceId) {
+	public void deleteService(String serviceId) {
+		entityManager.remove(serviceId);
 	}
-	
+
+	@Override
+	public ServicesEntity updateService(ServicesEntity servicesEntity) {
+		entityManager.merge(servicesEntity);
+		return servicesEntity;
+	}
+
 
 }
