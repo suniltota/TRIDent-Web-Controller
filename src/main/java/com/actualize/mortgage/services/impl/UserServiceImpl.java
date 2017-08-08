@@ -25,12 +25,12 @@ import com.actualize.mortgage.web.utils.Convertor;
  */
 @Service("userService")
 public class UserServiceImpl implements UserService {
-	
+
 	private static final String DEFAULT_SESSION_TIME = "21600";
 
 	@Autowired
 	private UserManager userManagerImpl;
-	
+
 	@Autowired
 	private Convertor convertor;
 
@@ -39,47 +39,47 @@ public class UserServiceImpl implements UserService {
 		UserDetailsEntity userDetailsEntity = userManagerImpl.getUserById(userId);
 		if(null == userDetailsEntity)
 			throw new ServiceException("No results found with userId: "+ userId);
-		
+
 		return convertor.toUserDetails(userDetailsEntity);
 	}
 
 	@Override
 	public UserDetailsModel getUserDetailsByUsername(String userName) throws ServiceException {
-		
+
 		UserDetailsEntity userDetailsEntity = userManagerImpl.getUserByUserName(userName);
 		if(null == userDetailsEntity)
-			throw new ServiceException("User doesnot exits, Please contact administrator");
+			return null;
 		return convertor.toUserDetails(userDetailsEntity);
 	}
 
-	//@SuppressWarnings("deprecation")
 	@Override
 	public UserDetailsModel addUserDetails(UserDetailsModel userDetails) throws ServiceException {
-		
+
 		UserDetailsEntity userDetailsEntity = userManagerImpl.getUserByUserName(userDetails.getUsername());
 		if(null != userDetailsEntity)
 			throw new ServiceException("Username not available");
 		/*userDetailsEntity = userManagerImpl.getUserByEmail(userDetails.getEmail());
 		if(null != userDetailsEntity)
 			throw new ServiceException("Email not available");*/
-			userDetails.setPasswordExpiryDate(LocalDate.now().plusDays(30).toString());
-			userDetails.setUpdatedBy(SecurityContextHolder.getContext().getAuthentication().getName());
-			userDetails.setPassword(new BCryptPasswordEncoder().encode(userDetails.getPassword().trim()));
-			String current = LocalDate.now().toString();
-			userDetails.setModificationDate(current);
-			userDetails.setCreationDate(current);
-			userDetails.setLastSuccessfulLogin(current);
-			userDetails.setLastSuccessfulLogout(current);
-			if(userDetails.getSessionTimeOut() == null || userDetails.getSessionTimeOut().length() == 0){
-				userDetails.setSessionTimeOut(DEFAULT_SESSION_TIME);
-			}
+		userDetails.setPasswordExpiryDate(LocalDate.now().plusDays(30).toString());
+		userDetails.setUpdatedBy(SecurityContextHolder.getContext().getAuthentication().getName());
+		userDetails.setPassword(new BCryptPasswordEncoder().encode(userDetails.getPassword().trim()));
+		if(userDetails.getSessionTimeOut() == null || userDetails.getSessionTimeOut().length() == 0){
+			userDetails.setSessionTimeOut(DEFAULT_SESSION_TIME);
+		}
 		return convertor.toUserDetails(userManagerImpl.addUser(convertor.toUserDetailsEntity(userDetails)));
 	}
 
 	@Override
 	public UserDetailsModel updateUser(UserDetailsModel userDetails) throws ServiceException {
-		UserDetailsModel userDetailsModel = convertor.toUserDetails(userManagerImpl.getUserByUserName(userDetails.getUsername()));
+		UserDetailsEntity userDetailsEntity = userManagerImpl.getUserById(userDetails.getUserId());
+		if(null == userDetailsEntity)
+			throw new ServiceException("Invalid user id");
+		UserDetailsModel userDetailsModel = convertor.toUserDetails(userDetailsEntity);
+		userDetails.setUsername(userDetailsModel.getUsername());
+		userDetails.setUpdatedBy(SecurityContextHolder.getContext().getAuthentication().getName());
 		userDetails.setPassword(userDetailsModel.getPassword());
+
 		return convertor.toUserDetails(userManagerImpl.updateUser(convertor.toUserDetailsEntity(userDetails)));
 	}
 
@@ -91,7 +91,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public List<UserDetailsModel> getAllUsersbyClientId(String clientId) throws ServiceException {
 		List<UserDetailsModel> userDetailsList = new LinkedList<>();
-		
+
 		List<UserDetailsEntity> userDetailsEntities = userManagerImpl.getAllUsersbyClientId(clientId);
 		for(UserDetailsEntity  userDetailsEntity: userDetailsEntities)
 		{
@@ -99,15 +99,15 @@ public class UserServiceImpl implements UserService {
 			userDetails.setPassword("[PROTECTED]");
 			userDetailsList.add(userDetails);
 		}
-		
+
 		return userDetailsList;
 	}
 
 	@Override
 	public List<UserDetailsModel> getAllUsers() throws ServiceException {
-		
+
 		List<UserDetailsModel> userDetailsList = new LinkedList<>();
-		
+
 		List<UserDetailsEntity> userDetailsEntities = userManagerImpl.getAllUsers();
 		for(UserDetailsEntity  userDetailsEntity: userDetailsEntities)
 		{
@@ -115,14 +115,13 @@ public class UserServiceImpl implements UserService {
 			userDetails.setPassword("[PROTECTED]");
 			userDetailsList.add(userDetails);
 		}
-		
+
 		return userDetailsList;
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public UserDetailsModel changePassword(String currentPassword, String newPassword, String confirmNewPassword) throws ServiceException {
-		
+
 		if( currentPassword.contains(" ") || newPassword.contains(" ") || confirmNewPassword.contains(" ") )
 			throw new ServiceException("Spaces not allowed in password");
 		if(currentPassword.trim().isEmpty())
@@ -139,16 +138,36 @@ public class UserServiceImpl implements UserService {
 		if(newPassword.equalsIgnoreCase(confirmNewPassword))
 		{
 			userDetails = getUserDetailsByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
-			
+
 			if(userDetails.getPassword().equals(new BCryptPasswordEncoder().encode(currentPassword)))
 			{
 				userDetails.setPassword(new BCryptPasswordEncoder().encode(newPassword));
 				updateUser(userDetails);
 			}
-			
+
 		}
 		else
 			throw new ServiceException("New Password and Confirm New Password does not match");
+		return userDetails;
+	}
+
+	@Override
+	public UserDetailsModel resetPassword(String userName, String desiredPassword) throws ServiceException {
+		if( desiredPassword.contains(" "))
+			throw new ServiceException("Spaces not allowed in password");
+		if(desiredPassword.trim().isEmpty())
+			throw new ServiceException("Password Required");
+		if("[PROTECTED]".equalsIgnoreCase(desiredPassword))
+			throw new ServiceException("Invalid New Password");
+		if(userName.trim().isEmpty())
+			throw new ServiceException("User Name Required");
+
+		UserDetailsModel userDetails = getUserDetailsByUsername(userName);
+		if(null == userDetails)
+			throw new ServiceException("Invalid UserName");
+		userDetails.setPassword(new BCryptPasswordEncoder().encode(desiredPassword));
+		updateUser(userDetails);
+
 		return userDetails;
 	}
 }
