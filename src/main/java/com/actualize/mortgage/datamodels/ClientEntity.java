@@ -27,6 +27,7 @@ public class ClientEntity implements Serializable {
 	private String clientId;
 	private String clientName;
 	private String address;
+	private boolean isEnabled; 
 	private String sessionTimeOut;
 	private Date creationDate;
 	private Date modificationDate;
@@ -66,6 +67,18 @@ public class ClientEntity implements Serializable {
 	 */
 	public void setAddress(String address) {
 		this.address = address;
+	}
+	/**
+	 * @return the isEnabled
+	 */
+	public boolean isEnabled() {
+		return isEnabled;
+	}
+	/**
+	 * @param isEnabled the isEnabled to set
+	 */
+	public void setEnabled(boolean isEnabled) {
+		this.isEnabled = isEnabled;
 	}
 	/**
 	 * @return the sessionTimeOut

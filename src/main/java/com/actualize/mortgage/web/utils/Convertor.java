@@ -105,6 +105,7 @@ public class Convertor {
 		client.setClientId(clientEntity.getClientId());
 		client.setClientName(clientEntity.getClientName());
 		client.setAddress(clientEntity.getAddress());
+		client.setEnabled(clientEntity.isEnabled());
 		client.setSessionTimeOut(clientEntity.getSessionTimeOut());
 		//client.setCreationDate(clientEntity.getCreationDate().toString());
 		client.setModificationDate(clientEntity.getModificationDate().toString());
@@ -174,6 +175,7 @@ public class Convertor {
 		ClientEntity clientEntity = new ClientEntity();
 		clientEntity.setClientId(client.getClientId());
 		clientEntity.setClientName(client.getClientName());
+		clientEntity.setEnabled(client.isEnabled());
 		clientEntity.setAddress(client.getAddress());
 		clientEntity.setSessionTimeOut(client.getSessionTimeOut());
 		return clientEntity;

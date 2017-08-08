@@ -15,6 +15,7 @@ public class ClientModel implements Serializable {
 	private String clientId;
 	private String clientName;
 	private String address;
+	private boolean isEnabled;
 	private String sessionTimeOut;
 	private String creationDate;
 	private String modificationDate;
@@ -54,6 +55,18 @@ public class ClientModel implements Serializable {
 	 */
 	public void setAddress(String address) {
 		this.address = address;
+	}
+	/**
+	 * @return the isEnabled
+	 */
+	public boolean isEnabled() {
+		return isEnabled;
+	}
+	/**
+	 * @param isEnabled the isEnabled to set
+	 */
+	public void setEnabled(boolean isEnabled) {
+		this.isEnabled = isEnabled;
 	}
 	/**
 	 * @return the sessionTimeOut
