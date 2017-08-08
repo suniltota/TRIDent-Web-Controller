@@ -18,6 +18,7 @@ import com.actualize.mortgage.exceptions.ServiceException;
 import com.actualize.mortgage.manager.RoleManager;
 
 /**
+ * 
  * @author sboragala
  *
  */
@@ -27,7 +28,7 @@ public class RoleManagerImpl implements RoleManager {
 
 	@PersistenceContext
 	private EntityManager entityManager;
-	
+
 	@Override
 	public RoleEntity getRoleById(String roleId) {
 		try{
@@ -37,16 +38,16 @@ public class RoleManagerImpl implements RoleManager {
 		{
 			return null;
 		}
-		
+
 	}
 
 	@Override
 	public RoleEntity getRoleByRoleName(String roleName) throws ServiceException {
 		try{
-			 return (RoleEntity) entityManager.createQuery(
-				        "from RoleEntity where roleName = :roleName")
-				        .setParameter("roleName", roleName)
-				        .getSingleResult();
+			return (RoleEntity) entityManager.createQuery(
+					"from RoleEntity where roleName = :roleName")
+					.setParameter("roleName", roleName)
+					.getSingleResult();
 		}
 		catch(NoResultException e)
 		{
@@ -58,6 +59,7 @@ public class RoleManagerImpl implements RoleManager {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<RoleEntity> getAllRoles() throws ServiceException {
 		try{

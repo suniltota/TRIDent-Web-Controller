@@ -5,7 +5,6 @@ package com.actualize.mortgage.datamodels;
 
 import java.io.Serializable;
 import java.sql.Date;
-import java.time.LocalDate;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;

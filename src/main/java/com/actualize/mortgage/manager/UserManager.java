@@ -21,11 +21,11 @@ public interface UserManager  {
 	
 	public UserDetailsEntity getUserByUserName(String userName) throws ServiceException;
 	
-	public UserDetailsEntity addUser(UserDetailsEntity userDetailsEntity);
+	public UserDetailsEntity addUser(UserDetailsEntity userDetailsEntity) throws ServiceException;
 	
-	public UserDetailsEntity updateUser(UserDetailsEntity userDetailsEntity);
+	public UserDetailsEntity updateUser(UserDetailsEntity userDetailsEntity) throws ServiceException;
 	
-	public void deleteUser(String id);
+	public void deleteUser(String id) throws ServiceException;
 	
 	public List<UserDetailsEntity> getAllUsersbyClientId(String clientId) throws ServiceException;
 	

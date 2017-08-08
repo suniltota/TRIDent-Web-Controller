@@ -49,20 +49,24 @@ public class ClientManagerImpl implements ClientManager {
 			throw new ServiceException("More than one Result found");
 		}
 	}
-
+	
+	@Override
 	public ClientEntity addClient(ClientEntity clientEntity) {
 		entityManager.persist(clientEntity);
 		return clientEntity;
 	}
 
+	@Override
 	public ClientEntity updateClient(ClientEntity clientEntity) {
 		return entityManager.merge(clientEntity);
 	}
 
+	@Override
 	public void deleteClient(String clientId) {
 		entityManager.remove(clientId);
 	}
 
+	@Override
 	public List<ClientEntity> getAllClients() {
 		try{
 			return (List<ClientEntity>) entityManager.createQuery(
