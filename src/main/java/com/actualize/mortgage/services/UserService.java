@@ -29,5 +29,7 @@ public interface UserService {
 	public List<UserDetailsModel> getAllUsers() throws ServiceException;
 	
 	public UserDetailsModel changePassword(String currentPassword, String newPassword, String confirmNewPassword) throws ServiceException;
+	
+	public UserDetailsModel resetPassword(String userName, String desiredPassword) throws ServiceException;
 
 }
