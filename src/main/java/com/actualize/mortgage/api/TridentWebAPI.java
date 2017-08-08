@@ -8,6 +8,9 @@ import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +29,7 @@ import com.actualize.mortgage.domainmodels.CalculateCDResponse;
 import com.actualize.mortgage.domainmodels.CalculateLEResponse;
 import com.actualize.mortgage.domainmodels.LoanEstimate;
 import com.actualize.mortgage.domainmodels.PDFResponse;
+import com.actualize.mortgage.services.UserActivityService;
 import com.actualize.mortgage.services.impl.ClosingDisclosureServicesImpl;
 import com.actualize.mortgage.services.impl.LoanEstimateServicesImpl;
 import com.actualize.mortgage.validation.domainmodels.UCDValidationErrors;
@@ -52,8 +56,11 @@ public class TridentWebAPI {
 	@Autowired
 	private LoanEstimateServicesImpl loanEstimateServices;
 	
+	@Autowired
+	private UserActivityService userActivityServiceImpl;
+	
 	@RequestMapping(value = "/{version}/templatetocdjson", method = { RequestMethod.POST })
-	public ClosingDisclosure templatetocdjson(@PathVariable String version, @RequestBody String txtdoc) throws Exception {
+	public ClosingDisclosure templatetocdjson(HttpServletRequest request, HttpServletResponse response, @PathVariable String version, @RequestBody String txtdoc) throws Exception {
 		LOG.info("user "+SecurityContextHolder.getContext().getAuthentication().getName()+" used Service: CD Text Template to CD JSON");
 		return  triDentWebService.convertTemplateToCDJson(txtdoc);	
 	}
@@ -67,51 +74,65 @@ public class TridentWebAPI {
 	}
 	
 	@RequestMapping(value = "/{version}/calculatecdpayments", method = { RequestMethod.POST })
-	public String calculateCDPayments(@PathVariable String version, @RequestBody ClosingDisclosure closingDisclosure) throws Exception
+	public String calculateCDPayments(HttpServletRequest request, HttpServletResponse response, @PathVariable String version, @RequestBody ClosingDisclosure closingDisclosure) throws Exception
 	{
-		LOG.info("user "+SecurityContextHolder.getContext().getAuthentication().getName()+" with Loan Id: "+getLoanIdFromCD(closingDisclosure)+ " used Service: CD Calculations");
+		String loanId = getLoanIdFromCD(closingDisclosure);
+		userActivityServiceImpl.insertUserActivity(request, response, loanId, "CDJSON to CDXMLWithCalculations");
+		LOG.info("user "+SecurityContextHolder.getContext().getAuthentication().getName()+" with Loan Id: "+getLoanIdFromCD(closingDisclosure)+ " used Service: CD JSON to CDXML With Calculations");
 		return triDentWebService.calculateCDPayments(closingDisclosure);
 	}
 	
 	@RequestMapping(value = "/{version}/calculatecdjson", method = { RequestMethod.POST })
-	public CalculateCDResponse calculateCDJSON(@PathVariable String version, @RequestBody ClosingDisclosure closingDisclosure) throws Exception
+	public CalculateCDResponse calculateCDJSON(HttpServletRequest request, HttpServletResponse response, @PathVariable String version, @RequestBody ClosingDisclosure closingDisclosure) throws Exception
 	{
-		LOG.info("user "+SecurityContextHolder.getContext().getAuthentication().getName()+" with Loan Id: "+getLoanIdFromCD(closingDisclosure)+ " used Service:CD JSON to CD JSON with Calculations ");
+		String loanId = getLoanIdFromCD(closingDisclosure);
+		userActivityServiceImpl.insertUserActivity(request, response, loanId, "CDJSON to CDJSONWithCalculations");
+		LOG.info("user "+SecurityContextHolder.getContext().getAuthentication().getName()+" with Loan Id: "+loanId+ " used Service:CD JSON to CD JSON with Calculations ");
 		return triDentWebService.createCalculateCDResponse(closingDisclosure);
 	}
 	
 	@RequestMapping(value = "/{version}/calculatelejson", method = { RequestMethod.POST })
-	public CalculateLEResponse calculateLEJSON(@PathVariable String version, @RequestBody LoanEstimate loanEstimateJSON) throws Exception
+	public CalculateLEResponse calculateLEJSON(HttpServletRequest request, HttpServletResponse response, @PathVariable String version, @RequestBody LoanEstimate loanEstimateJSON) throws Exception
 	{
-		LOG.info("user "+SecurityContextHolder.getContext().getAuthentication().getName()+" with Loan Id: "+getLoanIdFromLE(loanEstimateJSON)+ " used Service:LE JSON to LE JSON with Calculations ");
+		String loanId = getLoanIdFromLE(loanEstimateJSON);
+		userActivityServiceImpl.insertUserActivity(request, response, loanId, "LEJSON to LEJSONWithCalculations");
+		LOG.info("user "+SecurityContextHolder.getContext().getAuthentication().getName()+" with Loan Id: "+loanId+ " used Service:LE JSON to LE JSON with Calculations ");
 		return triDentWebService.createCalculateLEResponse(loanEstimateJSON);
 	}
 	
 	@RequestMapping(value = "/{version}/calculatelepayments", method = { RequestMethod.POST })
-	public String calculateLEPayments(@PathVariable String version, @RequestBody LoanEstimate loanEstimateJSON) throws Exception
+	public String calculateLEPayments(HttpServletRequest request, HttpServletResponse response, @PathVariable String version, @RequestBody LoanEstimate loanEstimateJSON) throws Exception
 	{
-		LOG.info("user "+SecurityContextHolder.getContext().getAuthentication().getName()+" with Loan Id: "+getLoanIdFromLE(loanEstimateJSON)+ " used Service: LE Calculations");
+		String loanId = getLoanIdFromLE(loanEstimateJSON);
+		userActivityServiceImpl.insertUserActivity(request, response, loanId, "LECalculations");
+		LOG.info("user "+SecurityContextHolder.getContext().getAuthentication().getName()+" with Loan Id: "+loanId+ " used Service: LE Calculations");
 		return triDentWebService.calculateLEPayments(loanEstimateJSON);
 	}
 	
 	@RequestMapping(value = "/{version}/cdjsontopdf", method = { RequestMethod.POST })
-	public List<PDFResponse> cdJsonToPdf(@PathVariable String version, @RequestBody ClosingDisclosure closingDisclosure) throws Exception
+	public List<PDFResponse> cdJsonToPdf(HttpServletRequest request, HttpServletResponse response, @PathVariable String version, @RequestBody ClosingDisclosure closingDisclosure) throws Exception
 	{
-		LOG.info("user "+SecurityContextHolder.getContext().getAuthentication().getName()+" with Loan Id: "+getLoanIdFromCD(closingDisclosure)+ " used Service: CDJSONtoPDF");
+		String loanId = getLoanIdFromCD(closingDisclosure);
+		LOG.info("user "+SecurityContextHolder.getContext().getAuthentication().getName()+" with Loan Id: "+loanId+ " used Service: CDJSONtoPDF");
+		userActivityServiceImpl.insertUserActivity(request, response, loanId, "CDJSONtoPDF");
 		return triDentWebService.cdJsonToPdf(closingDisclosure);
 	}
 	
 	@RequestMapping(value = "/{version}/lejsontopdf", method = { RequestMethod.POST })
-	public PDFResponse leJsonToPdf(@PathVariable String version, @RequestBody LoanEstimate loanEstimateJSON) throws Exception
+	public PDFResponse leJsonToPdf(HttpServletRequest request, HttpServletResponse response, @PathVariable String version, @RequestBody LoanEstimate loanEstimateJSON) throws Exception
 	{
-		LOG.info("user "+SecurityContextHolder.getContext().getAuthentication().getName() +" with Loan Id: "+getLoanIdFromLE(loanEstimateJSON)+ " used Service: LEJSONtoPDF");
+		String loanId = getLoanIdFromLE(loanEstimateJSON);
+		LOG.info("user "+SecurityContextHolder.getContext().getAuthentication().getName() +" with Loan Id: "+loanId+ " used Service: LEJSONtoPDF");
+		userActivityServiceImpl.insertUserActivity(request, response, loanId, "LEJSONtoPDF");
     	return triDentWebService.leJsonToPdf(loanEstimateJSON);
 	}
 	
 	@RequestMapping(value = "/{version}/validatecdjson", method = { RequestMethod.POST })
-	public UCDValidationErrors validateCDJson(@PathVariable String version, @RequestBody ClosingDisclosure closingDisclosure) throws Exception
+	public UCDValidationErrors validateCDJson(HttpServletRequest request, HttpServletResponse response, @PathVariable String version, @RequestBody ClosingDisclosure closingDisclosure) throws Exception
 	{
-		LOG.info("user "+SecurityContextHolder.getContext().getAuthentication().getName()+" with Loan Id: "+getLoanIdFromCD(closingDisclosure)+ " used Service: ValidateCDJSON");
+		String loanId = getLoanIdFromCD(closingDisclosure);
+		LOG.info("user "+SecurityContextHolder.getContext().getAuthentication().getName()+" with Loan Id: "+loanId+ " used Service: ValidateCDJSON");
+		userActivityServiceImpl.insertUserActivity(request, response, loanId, "ValidateCDJSON");
     	return triDentWebService.validateCDJson(closingDisclosure);
 	}
 	
@@ -123,28 +144,33 @@ public class TridentWebAPI {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/{version}/cdjsontrim", method = { RequestMethod.POST })
-	public String trimCDJson(@PathVariable String version, @RequestBody ClosingDisclosure closingDisclosure) throws Exception
+	public String trimCDJson(HttpServletRequest request, HttpServletResponse response, @PathVariable String version, @RequestBody ClosingDisclosure closingDisclosure) throws Exception
 	{
-		LOG.info("user "+SecurityContextHolder.getContext().getAuthentication().getName()+" with Loan Id: "+getLoanIdFromCD(closingDisclosure)+ " used Service: CD JSON to UCD XML");
-    	return triDentWebService.trimCDJson(closingDisclosure);
+		String loanId = getLoanIdFromCD(closingDisclosure);
+		LOG.info("user "+SecurityContextHolder.getContext().getAuthentication().getName()+" with Loan Id: "+loanId+ " used Service: CDJSONTOUCDXML");
+		userActivityServiceImpl.insertUserActivity(request, response, loanId, "CDJSONTOUCDXML");
+		return triDentWebService.trimCDJson(closingDisclosure);
 	}
 	
 	
 	@RequestMapping(value = "/cd/{version}/calculateLateCharge", method = { RequestMethod.POST })
-	public ClosingDisclosure cdCalculateLateCharge(@PathVariable String version, @RequestBody ClosingDisclosure closingDisclosure) throws Exception
+	public ClosingDisclosure cdCalculateLateCharge(HttpServletRequest request, HttpServletResponse response, @PathVariable String version, @RequestBody ClosingDisclosure closingDisclosure) throws Exception
 	{
-		LOG.info("user "+SecurityContextHolder.getContext().getAuthentication().getName()+" with Loan Id: "+getLoanIdFromCD(closingDisclosure)+ " used Service: CD CalculateLateCharge");
+		String loanId = getLoanIdFromCD(closingDisclosure);
+		LOG.info("user "+SecurityContextHolder.getContext().getAuthentication().getName()+" with Loan Id: "+loanId+ " used Service: CD CalculateLateCharge");
+		userActivityServiceImpl.insertUserActivity(request, response, loanId, "CDCalculateLateCharge");
 		String mismoXML = lateChargeRuleService.calculateLateChargeRule(closingDisclosureServices.createClosingDisclosureXMLfromObject(closingDisclosure));
 		InputStream in = new ByteArrayInputStream(mismoXML.getBytes(StandardCharsets.UTF_8));
 		return closingDisclosureServices.createClosingDisclosureObjectfromXMLDoc(in);
-		//return mismoXML;
 		
 	}
 	
 	@RequestMapping(value = "/le/{version}/calculateLateCharge", method = { RequestMethod.POST })
-	public LoanEstimate leCalculateLateCharge(@PathVariable String version, @RequestBody LoanEstimate loanEstimate) throws Exception
+	public LoanEstimate leCalculateLateCharge(HttpServletRequest request, HttpServletResponse response, @PathVariable String version, @RequestBody LoanEstimate loanEstimate) throws Exception
 	{
-		LOG.info("user "+SecurityContextHolder.getContext().getAuthentication().getName() +" with Loan Id: "+getLoanIdFromLE(loanEstimate) +" used Service: LE CalculateLateCharge");
+		String loanId = getLoanIdFromLE(loanEstimate);
+		LOG.info("user "+SecurityContextHolder.getContext().getAuthentication().getName() +" with Loan Id: "+loanId +" used Service: LE CalculateLateCharge");
+		userActivityServiceImpl.insertUserActivity(request, response, loanId, "LECalculateLateCharge");
 		String mismoXML = lateChargeRuleService.calculateLateChargeRule(loanEstimateServices.createLoanEstimateXMLfromObject(loanEstimate));
 		InputStream in = new ByteArrayInputStream(mismoXML.getBytes(StandardCharsets.UTF_8));
 		return loanEstimateServices.createLoanEstimateDocumentObjectfromXMLDoc(in);
