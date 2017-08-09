@@ -24,8 +24,9 @@ import org.hibernate.annotations.GenericGenerator;
 @Entity
 @Table(name="client")
 public class ClientEntity implements Serializable {
+
+	private static final long serialVersionUID = -7857213242827507858L;
 	
-	private static final long serialVersionUID = 4813925494221483774L;
 	@Id
 	@GeneratedValue(generator = "uuid")
 	@GenericGenerator(name = "uuid", strategy = "uuid2")
@@ -34,9 +35,6 @@ public class ClientEntity implements Serializable {
 	private String address;
 	private boolean isEnabled; 
 	private String phoneNumber;
-	private String passwordExpiryPolicy;
-	private String sessionTimeOut;
-	private String contractEndDate;
 	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
 	private List<ClientContactInfoEntity> clientContactInfo;
 	private Timestamp creationDate;
@@ -102,42 +100,6 @@ public class ClientEntity implements Serializable {
 		this.phoneNumber = phoneNumber;
 	}
 	/**
-	 * @return the passwordExpiryPolicy
-	 */
-	public String getPasswordExpiryPolicy() {
-		return passwordExpiryPolicy;
-	}
-	/**
-	 * @param passwordExpiryPolicy the passwordExpiryPolicy to set
-	 */
-	public void setPasswordExpiryPolicy(String passwordExpiryPolicy) {
-		this.passwordExpiryPolicy = passwordExpiryPolicy;
-	}
-	/**
-	 * @return the sessionTimeOut
-	 */
-	public String getSessionTimeOut() {
-		return sessionTimeOut;
-	}
-	/**
-	 * @param sessionTimeOut the sessionTimeOut to set
-	 */
-	public void setSessionTimeOut(String sessionTimeOut) {
-		this.sessionTimeOut = sessionTimeOut;
-	}
-	/**
-	 * @return the contractEndDate
-	 */
-	public String getContractEndDate() {
-		return contractEndDate;
-	}
-	/**
-	 * @param contractEndDate the contractEndDate to set
-	 */
-	public void setContractEndDate(String contractEndDate) {
-		this.contractEndDate = contractEndDate;
-	}
-	/**
 	 * @return the clientContactInfo
 	 */
 	public List<ClientContactInfoEntity> getClientContactInfo() {
@@ -173,6 +135,6 @@ public class ClientEntity implements Serializable {
 	public void setModificationDate(Timestamp modificationDate) {
 		this.modificationDate = modificationDate;
 	}
-	
-	
+
+
 }

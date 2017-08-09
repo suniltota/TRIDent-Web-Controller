@@ -106,22 +106,6 @@ public class Convertor {
 		return role;
 	}
 
-	public ClientModel toClientModel(ClientEntity clientEntity) {
-		ClientModel client = new ClientModel();
-		client.setClientId(clientEntity.getClientId());
-		client.setClientName(clientEntity.getClientName());
-		client.setAddress(clientEntity.getAddress());
-		client.setEnabled(clientEntity.isEnabled());
-		client.setSessionTimeOut(clientEntity.getSessionTimeOut());
-		client.setPhoneNumber(clientEntity.getPhoneNumber());
-		client.setPasswordExpiryPolicy(clientEntity.getPasswordExpiryPolicy());
-		client.setContractEndDate(clientEntity.getContractEndDate());
-		client.setPhoneNumber(clientEntity.getPhoneNumber());
-		client.setClientContactInfo(toClientContactInfoModel(clientEntity.getClientContactInfo()));
-		client.setCreationDate(clientEntity.getCreationDate().toString());
-		client.setModificationDate(clientEntity.getModificationDate().toString());
-		return client;
-	}
 
 	public UserDetailsEntity toUserDetailsEntity(final UserDetailsModel userDetails) throws ServiceException
 	{
@@ -182,58 +166,92 @@ public class Convertor {
 		return roleEntity;
 	}
 
+	public ClientModel toClientModel(ClientEntity clientEntity) {
+		ClientModel client = new ClientModel();
+		client.setClientId(clientEntity.getClientId());
+		client.setClientName(clientEntity.getClientName());
+		client.setAddress(clientEntity.getAddress());
+		client.setEnabled(clientEntity.isEnabled());
+		client.setPhoneNumber(clientEntity.getPhoneNumber());
+		client.setPhoneNumber(clientEntity.getPhoneNumber());
+		client.setClientContactInfo(toClientContactInfoModel(clientEntity.getClientContactInfo()));
+		//client.setServicesModel(toServiceModelList(clientEntity.getServicesEntity()));
+		client.setCreationDate(clientEntity.getCreationDate().toString());
+		client.setModificationDate(clientEntity.getModificationDate().toString());
+		return client;
+	}
+
 	public ClientEntity toClientEntity(ClientModel client) {
 		ClientEntity clientEntity = new ClientEntity();
 		clientEntity.setClientId(client.getClientId());
 		clientEntity.setClientName(client.getClientName());
 		clientEntity.setEnabled(client.isEnabled());
 		clientEntity.setPhoneNumber(client.getPhoneNumber());
-		clientEntity.setPasswordExpiryPolicy(client.getPasswordExpiryPolicy());
 		clientEntity.setPhoneNumber(client.getPhoneNumber());
-		clientEntity.setContractEndDate(client.getContractEndDate());
 		clientEntity.setClientContactInfo(toClientContactInfoEntity(client.getClientContactInfo()));
+		//clientEntity.setServicesEntity(toServiceEntityList(client.getServicesModel()));
 		clientEntity.setAddress(client.getAddress());
-		clientEntity.setSessionTimeOut(client.getSessionTimeOut());
 		return clientEntity;
 	}
 
 	public List<ClientContactInfoModel> toClientContactInfoModel(List<ClientContactInfoEntity> clientContactInfoEntityList){
-		
+
 		List<ClientContactInfoModel> clientContactInfoModels = new LinkedList<>();
-		
+
 		clientContactInfoEntityList.forEach(clientContactInfoEntity -> {
-			
-		ClientContactInfoModel clientContactInfoModel = new ClientContactInfoModel();
-		clientContactInfoModel.setContactInfoId(clientContactInfoEntity.getContactInfoId());
-		clientContactInfoModel.setContactType(clientContactInfoEntity.getContactType());
-		clientContactInfoModel.setEmail(clientContactInfoEntity.getEmail());
-		clientContactInfoModel.setName(clientContactInfoEntity.getName());
-		clientContactInfoModel.setPhone(clientContactInfoEntity.getPhone());
-		clientContactInfoModel.setCreationDate(clientContactInfoEntity.getCreationDate().toString());
-		clientContactInfoModel.setModificationDate(clientContactInfoEntity.getModificationDate().toString());
-		clientContactInfoModels.add(clientContactInfoModel);
-		
+
+			ClientContactInfoModel clientContactInfoModel = new ClientContactInfoModel();
+			clientContactInfoModel.setContactInfoId(clientContactInfoEntity.getContactInfoId());
+			clientContactInfoModel.setContactType(clientContactInfoEntity.getContactType());
+			clientContactInfoModel.setEmail(clientContactInfoEntity.getEmail());
+			clientContactInfoModel.setName(clientContactInfoEntity.getName());
+			clientContactInfoModel.setPhone(clientContactInfoEntity.getPhone());
+			clientContactInfoModel.setCreationDate(clientContactInfoEntity.getCreationDate().toString());
+			clientContactInfoModel.setModificationDate(clientContactInfoEntity.getModificationDate().toString());
+
+			clientContactInfoModels.add(clientContactInfoModel);
+
 		});
 		return clientContactInfoModels;
-		
+
 	}
-	
+
 	public List<ClientContactInfoEntity> toClientContactInfoEntity(List<ClientContactInfoModel> clientContactInfoModelList){
-		
+
 		List<ClientContactInfoEntity> clientContactInfoEntityList = new LinkedList<>();
-		
+
 		clientContactInfoModelList.forEach(clientContactInfoModel -> {
+
 			ClientContactInfoEntity clientContactInfoEntity = new ClientContactInfoEntity();
 			clientContactInfoEntity.setContactInfoId(clientContactInfoModel.getContactInfoId());
 			clientContactInfoEntity.setContactType(clientContactInfoModel.getContactType());
 			clientContactInfoEntity.setEmail(clientContactInfoModel.getEmail());
 			clientContactInfoEntity.setName(clientContactInfoModel.getName());
 			clientContactInfoEntity.setPhone(clientContactInfoModel.getPhone());
+
 			clientContactInfoEntityList.add(clientContactInfoEntity);
 		});
 		return clientContactInfoEntityList;
 	}
-	
+
+	public List<ServicesModel> toServiceModelList(List<ServicesEntity> servicesEntities)
+	{
+		List<ServicesModel> servicesModels = new LinkedList<>();
+		servicesEntities.forEach(serviceEntity -> {
+			servicesModels.add(toServiceModel(serviceEntity));
+		});
+		return servicesModels;
+	}
+
+	public List<ServicesEntity> toServiceEntityList(List<ServicesModel> servicesModels)
+	{
+		List<ServicesEntity> servicesEntities = new LinkedList<>();
+		servicesModels.forEach(servicesModel -> {
+			servicesEntities.add(toServicesEntity(servicesModel));
+		});
+		return servicesEntities;
+	}
+
 	public UserActivityEntity toUserActivityEntity(HttpServletRequest request, HttpServletResponse response, String loanId, String serviceName){
 		UserActivityEntity userActivity = new UserActivityEntity();
 		UserDetailsModel userDetails = (UserDetailsModel)SecurityContextHolder.getContext().getAuthentication().getPrincipal();

@@ -4,11 +4,7 @@
 package com.actualize.mortgage.domainmodels;
 
 import java.io.Serializable;
-import java.util.Date;
 import java.util.List;
-
-import javax.persistence.FetchType;
-import javax.persistence.OneToMany;
 
 /**
  * @author sboragala
@@ -23,9 +19,6 @@ public class ClientModel implements Serializable {
 	private String address;
 	private boolean isEnabled;
 	private String phoneNumber;
-	private String passwordExpiryPolicy;
-	private String contractEndDate;
-	private String sessionTimeOut;
 	private List<ClientContactInfoModel> clientContactInfo;
 	private String creationDate;
 	private String modificationDate;
@@ -90,42 +83,7 @@ public class ClientModel implements Serializable {
 	public void setPhoneNumber(String phoneNumber) {
 		this.phoneNumber = phoneNumber;
 	}
-	/**
-	 * @return the passwordExpiryPolicy
-	 */
-	public String getPasswordExpiryPolicy() {
-		return passwordExpiryPolicy;
-	}
-	/**
-	 * @param passwordExpiryPolicy the passwordExpiryPolicy to set
-	 */
-	public void setPasswordExpiryPolicy(String passwordExpiryPolicy) {
-		this.passwordExpiryPolicy = passwordExpiryPolicy;
-	}
-	/**
-	 * @return the contractEndDate
-	 */
-	public String getContractEndDate() {
-		return contractEndDate;
-	}
-	/**
-	 * @param contractEndDate the contractEndDate to set
-	 */
-	public void setContractEndDate(String contractEndDate) {
-		this.contractEndDate = contractEndDate;
-	}
-	/**
-	 * @return the sessionTimeOut
-	 */
-	public String getSessionTimeOut() {
-		return sessionTimeOut;
-	}
-	/**
-	 * @param sessionTimeOut the sessionTimeOut to set
-	 */
-	public void setSessionTimeOut(String sessionTimeOut) {
-		this.sessionTimeOut = sessionTimeOut;
-	}
+
 	/**
 	 * @return the clientContactInfo
 	 */
