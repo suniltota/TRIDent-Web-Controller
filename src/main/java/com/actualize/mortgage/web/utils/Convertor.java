@@ -9,6 +9,8 @@ import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
@@ -19,11 +21,13 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import com.actualize.mortgage.datamodels.ClientContactInfoEntity;
 import com.actualize.mortgage.datamodels.ClientEntity;
 import com.actualize.mortgage.datamodels.RoleEntity;
 import com.actualize.mortgage.datamodels.ServicesEntity;
 import com.actualize.mortgage.datamodels.UserActivityEntity;
 import com.actualize.mortgage.datamodels.UserDetailsEntity;
+import com.actualize.mortgage.domainmodels.ClientContactInfoModel;
 import com.actualize.mortgage.domainmodels.ClientModel;
 import com.actualize.mortgage.domainmodels.RoleModel;
 import com.actualize.mortgage.domainmodels.ServicesModel;
@@ -109,8 +113,13 @@ public class Convertor {
 		client.setAddress(clientEntity.getAddress());
 		client.setEnabled(clientEntity.isEnabled());
 		client.setSessionTimeOut(clientEntity.getSessionTimeOut());
+		client.setPhoneNumber(clientEntity.getPhoneNumber());
+		client.setPasswordExpiryPolicy(clientEntity.getPasswordExpiryPolicy());
+		client.setContractEndDate(clientEntity.getContractEndDate());
+		client.setPhoneNumber(clientEntity.getPhoneNumber());
+		client.setClientContactInfo(toClientContactInfoModel(clientEntity.getClientContactInfo()));
 		//client.setCreationDate(clientEntity.getCreationDate().toString());
-		client.setModificationDate(clientEntity.getModificationDate().toString());
+		//client.setModificationDate(clientEntity.getModificationDate().toString());
 		return client;
 	}
 
@@ -178,11 +187,53 @@ public class Convertor {
 		clientEntity.setClientId(client.getClientId());
 		clientEntity.setClientName(client.getClientName());
 		clientEntity.setEnabled(client.isEnabled());
+		clientEntity.setPhoneNumber(client.getPhoneNumber());
+		clientEntity.setPasswordExpiryPolicy(client.getPasswordExpiryPolicy());
+		clientEntity.setPhoneNumber(client.getPhoneNumber());
+		clientEntity.setContractEndDate(client.getContractEndDate());
+		clientEntity.setClientContactInfo(toClientContactInfoEntity(client.getClientContactInfo()));
 		clientEntity.setAddress(client.getAddress());
 		clientEntity.setSessionTimeOut(client.getSessionTimeOut());
 		return clientEntity;
 	}
 
+	public List<ClientContactInfoModel> toClientContactInfoModel(List<ClientContactInfoEntity> clientContactInfoEntityList){
+		
+		List<ClientContactInfoModel> clientContactInfoModels = new LinkedList<>();
+		
+		clientContactInfoEntityList.forEach(clientContactInfoEntity -> {
+			
+		ClientContactInfoModel clientContactInfoModel = new ClientContactInfoModel();
+		clientContactInfoModel.setContactInfoId(clientContactInfoEntity.getContactInfoId());
+		clientContactInfoModel.setContactType(clientContactInfoEntity.getContactType());
+		clientContactInfoModel.setEmail(clientContactInfoEntity.getEmail());
+		clientContactInfoModel.setName(clientContactInfoEntity.getName());
+		clientContactInfoModel.setPhone(clientContactInfoEntity.getPhone());
+		//clientContactInfoModel.setCreationDate(clientContactInfoEntity.getCreationDate().toString());
+		//clientContactInfoModel.setModificationDate(clientContactInfoEntity.getModificationDate().toString());
+		clientContactInfoModels.add(clientContactInfoModel);
+		
+		});
+		return clientContactInfoModels;
+		
+	}
+	
+	public List<ClientContactInfoEntity> toClientContactInfoEntity(List<ClientContactInfoModel> clientContactInfoModelList){
+		
+		List<ClientContactInfoEntity> clientContactInfoEntityList = new LinkedList<>();
+		
+		clientContactInfoModelList.forEach(clientContactInfoModel -> {
+			ClientContactInfoEntity clientContactInfoEntity = new ClientContactInfoEntity();
+			clientContactInfoEntity.setContactInfoId(clientContactInfoModel.getContactInfoId());
+			clientContactInfoEntity.setContactType(clientContactInfoModel.getContactType());
+			clientContactInfoEntity.setEmail(clientContactInfoModel.getEmail());
+			clientContactInfoEntity.setName(clientContactInfoModel.getName());
+			clientContactInfoEntity.setPhone(clientContactInfoModel.getPhone());
+			clientContactInfoEntityList.add(clientContactInfoEntity);
+		});
+		return clientContactInfoEntityList;
+	}
+	
 	public UserActivityEntity toUserActivityEntity(HttpServletRequest request, HttpServletResponse response, String loanId, String serviceName){
 		UserActivityEntity userActivity = new UserActivityEntity();
 		UserDetailsModel userDetails = (UserDetailsModel)SecurityContextHolder.getContext().getAuthentication().getPrincipal();

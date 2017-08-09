@@ -52,7 +52,7 @@ public class ClientManagerImpl implements ClientManager {
 	
 	@Override
 	public ClientEntity addClient(ClientEntity clientEntity) {
-		entityManager.persist(clientEntity);
+		entityManager.merge(clientEntity);
 		return clientEntity;
 	}
 

@@ -4,10 +4,15 @@
 package com.actualize.mortgage.datamodels;
 
 import java.io.Serializable;
-import java.sql.Date;
+import java.sql.Timestamp;
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
@@ -28,10 +33,14 @@ public class ClientEntity implements Serializable {
 	private String clientName;
 	private String address;
 	private boolean isEnabled; 
+	private String phoneNumber;
+	private String passwordExpiryPolicy;
 	private String sessionTimeOut;
-	private Date creationDate;
-	private Date modificationDate;
-	
+	private String contractEndDate;
+	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+	private List<ClientContactInfoEntity> clientContactInfo;
+	private Timestamp creationDate;
+	private Timestamp modificationDate;
 	/**
 	 * @return the clientId
 	 */
@@ -81,6 +90,30 @@ public class ClientEntity implements Serializable {
 		this.isEnabled = isEnabled;
 	}
 	/**
+	 * @return the phoneNumber
+	 */
+	public String getPhoneNumber() {
+		return phoneNumber;
+	}
+	/**
+	 * @param phoneNumber the phoneNumber to set
+	 */
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
+	}
+	/**
+	 * @return the passwordExpiryPolicy
+	 */
+	public String getPasswordExpiryPolicy() {
+		return passwordExpiryPolicy;
+	}
+	/**
+	 * @param passwordExpiryPolicy the passwordExpiryPolicy to set
+	 */
+	public void setPasswordExpiryPolicy(String passwordExpiryPolicy) {
+		this.passwordExpiryPolicy = passwordExpiryPolicy;
+	}
+	/**
 	 * @return the sessionTimeOut
 	 */
 	public String getSessionTimeOut() {
@@ -93,28 +126,53 @@ public class ClientEntity implements Serializable {
 		this.sessionTimeOut = sessionTimeOut;
 	}
 	/**
+	 * @return the contractEndDate
+	 */
+	public String getContractEndDate() {
+		return contractEndDate;
+	}
+	/**
+	 * @param contractEndDate the contractEndDate to set
+	 */
+	public void setContractEndDate(String contractEndDate) {
+		this.contractEndDate = contractEndDate;
+	}
+	/**
+	 * @return the clientContactInfo
+	 */
+	public List<ClientContactInfoEntity> getClientContactInfo() {
+		return clientContactInfo;
+	}
+	/**
+	 * @param clientContactInfo the clientContactInfo to set
+	 */
+	public void setClientContactInfo(List<ClientContactInfoEntity> clientContactInfo) {
+		this.clientContactInfo = clientContactInfo;
+	}
+	/**
 	 * @return the creationDate
 	 */
-	public Date getCreationDate() {
+	public Timestamp getCreationDate() {
 		return creationDate;
 	}
 	/**
 	 * @param creationDate the creationDate to set
 	 */
-	public void setCreationDate(Date creationDate) {
+	public void setCreationDate(Timestamp creationDate) {
 		this.creationDate = creationDate;
 	}
 	/**
 	 * @return the modificationDate
 	 */
-	public Date getModificationDate() {
+	public Timestamp getModificationDate() {
 		return modificationDate;
 	}
 	/**
 	 * @param modificationDate the modificationDate to set
 	 */
-	public void setModificationDate(Date modificationDate) {
+	public void setModificationDate(Timestamp modificationDate) {
 		this.modificationDate = modificationDate;
 	}
+	
 	
 }

@@ -4,6 +4,11 @@
 package com.actualize.mortgage.domainmodels;
 
 import java.io.Serializable;
+import java.util.Date;
+import java.util.List;
+
+import javax.persistence.FetchType;
+import javax.persistence.OneToMany;
 
 /**
  * @author sboragala
@@ -12,11 +17,16 @@ import java.io.Serializable;
 public class ClientModel implements Serializable {
 	
 	private static final long serialVersionUID = 4813925494221483774L;
+	
 	private String clientId;
 	private String clientName;
 	private String address;
 	private boolean isEnabled;
+	private String phoneNumber;
+	private String passwordExpiryPolicy;
+	private String contractEndDate;
 	private String sessionTimeOut;
+	private List<ClientContactInfoModel> clientContactInfo;
 	private String creationDate;
 	private String modificationDate;
 	
@@ -69,6 +79,42 @@ public class ClientModel implements Serializable {
 		this.isEnabled = isEnabled;
 	}
 	/**
+	 * @return the phoneNumber
+	 */
+	public String getPhoneNumber() {
+		return phoneNumber;
+	}
+	/**
+	 * @param phoneNumber the phoneNumber to set
+	 */
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
+	}
+	/**
+	 * @return the passwordExpiryPolicy
+	 */
+	public String getPasswordExpiryPolicy() {
+		return passwordExpiryPolicy;
+	}
+	/**
+	 * @param passwordExpiryPolicy the passwordExpiryPolicy to set
+	 */
+	public void setPasswordExpiryPolicy(String passwordExpiryPolicy) {
+		this.passwordExpiryPolicy = passwordExpiryPolicy;
+	}
+	/**
+	 * @return the contractEndDate
+	 */
+	public String getContractEndDate() {
+		return contractEndDate;
+	}
+	/**
+	 * @param contractEndDate the contractEndDate to set
+	 */
+	public void setContractEndDate(String contractEndDate) {
+		this.contractEndDate = contractEndDate;
+	}
+	/**
 	 * @return the sessionTimeOut
 	 */
 	public String getSessionTimeOut() {
@@ -79,6 +125,18 @@ public class ClientModel implements Serializable {
 	 */
 	public void setSessionTimeOut(String sessionTimeOut) {
 		this.sessionTimeOut = sessionTimeOut;
+	}
+	/**
+	 * @return the clientContactInfo
+	 */
+	public List<ClientContactInfoModel> getClientContactInfo() {
+		return clientContactInfo;
+	}
+	/**
+	 * @param clientContactInfo the clientContactInfo to set
+	 */
+	public void setClientContactInfo(List<ClientContactInfoModel> clientContactInfo) {
+		this.clientContactInfo = clientContactInfo;
 	}
 	/**
 	 * @return the creationDate
@@ -104,6 +162,5 @@ public class ClientModel implements Serializable {
 	public void setModificationDate(String modificationDate) {
 		this.modificationDate = modificationDate;
 	}
-	
 	
 }
