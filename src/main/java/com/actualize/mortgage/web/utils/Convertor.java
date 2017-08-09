@@ -81,8 +81,8 @@ public class Convertor {
 		userDetails.setRole(toRoleModel(userDetailsEntity.getRole()));
 		userDetails.setPasswordExpiryDate(userDetailsEntity.getPasswordExpiryDate().toString());
 		userDetails.setUpdatedBy(userDetailsEntity.getUpdatedBy());
-		//userDetails.setCreationDate(userDetailsEntity.getCreationDate().toString());
-		//userDetails.setModificationDate(userDetailsEntity.getModificationDate().toString());
+		userDetails.setCreationDate(userDetailsEntity.getCreationDate().toString());
+		userDetails.setModificationDate(userDetailsEntity.getModificationDate().toString());
 		return userDetails;
 	}
 	private Set<String> setAuthorities(String authorities) {
@@ -118,8 +118,8 @@ public class Convertor {
 		client.setContractEndDate(clientEntity.getContractEndDate());
 		client.setPhoneNumber(clientEntity.getPhoneNumber());
 		client.setClientContactInfo(toClientContactInfoModel(clientEntity.getClientContactInfo()));
-		//client.setCreationDate(clientEntity.getCreationDate().toString());
-		//client.setModificationDate(clientEntity.getModificationDate().toString());
+		client.setCreationDate(clientEntity.getCreationDate().toString());
+		client.setModificationDate(clientEntity.getModificationDate().toString());
 		return client;
 	}
 
@@ -209,8 +209,8 @@ public class Convertor {
 		clientContactInfoModel.setEmail(clientContactInfoEntity.getEmail());
 		clientContactInfoModel.setName(clientContactInfoEntity.getName());
 		clientContactInfoModel.setPhone(clientContactInfoEntity.getPhone());
-		//clientContactInfoModel.setCreationDate(clientContactInfoEntity.getCreationDate().toString());
-		//clientContactInfoModel.setModificationDate(clientContactInfoEntity.getModificationDate().toString());
+		clientContactInfoModel.setCreationDate(clientContactInfoEntity.getCreationDate().toString());
+		clientContactInfoModel.setModificationDate(clientContactInfoEntity.getModificationDate().toString());
 		clientContactInfoModels.add(clientContactInfoModel);
 		
 		});
