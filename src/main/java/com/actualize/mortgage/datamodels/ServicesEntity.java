@@ -4,7 +4,7 @@
 package com.actualize.mortgage.datamodels;
 
 import java.io.Serializable;
-import java.sql.Date;
+import java.sql.Timestamp;
 
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -17,8 +17,8 @@ import org.hibernate.annotations.GenericGenerator;
  *
  */
 public class ServicesEntity implements Serializable {
-	
-	
+
+
 	private static final long serialVersionUID = -3482359323627070382L;
 	@Id
 	@GeneratedValue(generator = "uuid")
@@ -27,9 +27,9 @@ public class ServicesEntity implements Serializable {
 	private String serviceName;
 	private String serviceDisplayName;
 	private String serviceDescription;
-	private Date creationDate;
-	private Date modificationDate;
-	
+	private Timestamp creationDate;
+	private Timestamp modificationDate;
+
 	/**
 	 * @return the serviceId
 	 */
@@ -81,26 +81,27 @@ public class ServicesEntity implements Serializable {
 	/**
 	 * @return the creationDate
 	 */
-	public Date getCreationDate() {
+	public Timestamp getCreationDate() {
 		return creationDate;
 	}
 	/**
 	 * @param creationDate the creationDate to set
 	 */
-	public void setCreationDate(Date creationDate) {
+	public void setCreationDate(Timestamp creationDate) {
 		this.creationDate = creationDate;
 	}
 	/**
 	 * @return the modificationDate
 	 */
-	public Date getModificationDate() {
+	public Timestamp getModificationDate() {
 		return modificationDate;
 	}
 	/**
 	 * @param modificationDate the modificationDate to set
 	 */
-	public void setModificationDate(Date modificationDate) {
+	public void setModificationDate(Timestamp modificationDate) {
 		this.modificationDate = modificationDate;
 	}
+
 
 }

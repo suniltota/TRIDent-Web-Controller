@@ -21,10 +21,12 @@ import org.springframework.stereotype.Service;
 
 import com.actualize.mortgage.datamodels.ClientEntity;
 import com.actualize.mortgage.datamodels.RoleEntity;
+import com.actualize.mortgage.datamodels.ServicesEntity;
 import com.actualize.mortgage.datamodels.UserActivityEntity;
 import com.actualize.mortgage.datamodels.UserDetailsEntity;
 import com.actualize.mortgage.domainmodels.ClientModel;
 import com.actualize.mortgage.domainmodels.RoleModel;
+import com.actualize.mortgage.domainmodels.ServicesModel;
 import com.actualize.mortgage.domainmodels.UserActivityModel;
 import com.actualize.mortgage.domainmodels.UserDetailsModel;
 import com.actualize.mortgage.exceptions.ServiceException;
@@ -217,5 +219,26 @@ public class Convertor {
 		userActivityModel.setUseractivityId(userActivityEntity.getUseractivityId());
 		userActivityModel.setUserDetailsModel(toUserDetails(userActivityEntity.getUserDetails()));
 		return userActivityModel;
+	}
+
+	public ServicesModel toServiceModel(ServicesEntity serviceEntity){
+		ServicesModel servicesModel = new ServicesModel();
+		servicesModel.setServiceId(serviceEntity.getServiceId());
+		servicesModel.setServiceName(serviceEntity.getServiceName());
+		servicesModel.setServiceDisplayName(serviceEntity.getServiceDisplayName());
+		servicesModel.setServiceDescription(serviceEntity.getServiceDescription());
+		servicesModel.setCreationDate(serviceEntity.getCreationDate().toString());
+		servicesModel.setModificationDate(serviceEntity.getModificationDate().toString());
+		return servicesModel;
+	}
+
+	public ServicesEntity toServicesEntity(ServicesModel servicesModel)
+	{
+		ServicesEntity servicesEntity = new ServicesEntity();
+		servicesEntity.setServiceId(servicesModel.getServiceId());
+		servicesEntity.setServiceName(servicesModel.getServiceName());
+		servicesEntity.setServiceDisplayName(servicesModel.getServiceDisplayName());
+		servicesEntity.setServiceDescription(servicesModel.getServiceDescription());
+		return servicesEntity;
 	}
 }
