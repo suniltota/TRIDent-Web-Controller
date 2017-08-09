@@ -175,8 +175,8 @@ public class Convertor {
 		client.setPhoneNumber(clientEntity.getPhoneNumber());
 		client.setPhoneNumber(clientEntity.getPhoneNumber());
 		client.setClientContactInfo(toClientContactInfoModel(clientEntity.getClientContactInfo()));
-		//client.setServicesModel(toServiceModelList(clientEntity.getServicesEntity()));
-		client.setCreationDate(clientEntity.getCreationDate().toString());
+		client.setServicesModel(toServiceModelList(clientEntity.getServicesEntities()));
+		//client.setCreationDate(clientEntity.getCreationDate().toString());
 		client.setModificationDate(clientEntity.getModificationDate().toString());
 		return client;
 	}
@@ -189,7 +189,7 @@ public class Convertor {
 		clientEntity.setPhoneNumber(client.getPhoneNumber());
 		clientEntity.setPhoneNumber(client.getPhoneNumber());
 		clientEntity.setClientContactInfo(toClientContactInfoEntity(client.getClientContactInfo()));
-		//clientEntity.setServicesEntity(toServiceEntityList(client.getServicesModel()));
+		clientEntity.setServicesEntities(toServiceEntityList(client.getServicesModel()));
 		clientEntity.setAddress(client.getAddress());
 		return clientEntity;
 	}
@@ -296,8 +296,8 @@ public class Convertor {
 		servicesModel.setServiceName(serviceEntity.getServiceName());
 		servicesModel.setServiceDisplayName(serviceEntity.getServiceDisplayName());
 		servicesModel.setServiceDescription(serviceEntity.getServiceDescription());
-		servicesModel.setCreationDate(serviceEntity.getCreationDate().toString());
-		servicesModel.setModificationDate(serviceEntity.getModificationDate().toString());
+		//servicesModel.setCreationDate(serviceEntity.getCreationDate().toString());
+		//servicesModel.setModificationDate(serviceEntity.getModificationDate().toString());
 		return servicesModel;
 	}
 

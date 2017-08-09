@@ -20,6 +20,7 @@ public class ClientModel implements Serializable {
 	private boolean isEnabled;
 	private String phoneNumber;
 	private List<ClientContactInfoModel> clientContactInfo;
+	private List<ServicesModel> servicesModel;
 	private String creationDate;
 	private String modificationDate;
 	
@@ -83,7 +84,6 @@ public class ClientModel implements Serializable {
 	public void setPhoneNumber(String phoneNumber) {
 		this.phoneNumber = phoneNumber;
 	}
-
 	/**
 	 * @return the clientContactInfo
 	 */
@@ -95,6 +95,18 @@ public class ClientModel implements Serializable {
 	 */
 	public void setClientContactInfo(List<ClientContactInfoModel> clientContactInfo) {
 		this.clientContactInfo = clientContactInfo;
+	}
+	/**
+	 * @return the servicesModel
+	 */
+	public List<ServicesModel> getServicesModel() {
+		return servicesModel;
+	}
+	/**
+	 * @param servicesModel the servicesModel to set
+	 */
+	public void setServicesModel(List<ServicesModel> servicesModel) {
+		this.servicesModel = servicesModel;
 	}
 	/**
 	 * @return the creationDate

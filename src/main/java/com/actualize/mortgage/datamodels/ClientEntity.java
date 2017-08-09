@@ -12,6 +12,9 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -37,6 +40,10 @@ public class ClientEntity implements Serializable {
 	private String phoneNumber;
 	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
 	private List<ClientContactInfoEntity> clientContactInfo;
+	@ManyToMany(fetch=FetchType.EAGER)
+	@JoinTable(name="client_services", joinColumns= @JoinColumn(name= "clientId"),
+	inverseJoinColumns = @JoinColumn(name="serviceId"))
+	private List<ServicesEntity> servicesEntities;
 	private Timestamp creationDate;
 	private Timestamp modificationDate;
 	/**
@@ -110,6 +117,18 @@ public class ClientEntity implements Serializable {
 	 */
 	public void setClientContactInfo(List<ClientContactInfoEntity> clientContactInfo) {
 		this.clientContactInfo = clientContactInfo;
+	}
+	/**
+	 * @return the servicesEntities
+	 */
+	public List<ServicesEntity> getServicesEntities() {
+		return servicesEntities;
+	}
+	/**
+	 * @param servicesEntities the servicesEntities to set
+	 */
+	public void setServicesEntities(List<ServicesEntity> servicesEntities) {
+		this.servicesEntities = servicesEntities;
 	}
 	/**
 	 * @return the creationDate

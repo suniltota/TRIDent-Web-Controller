@@ -6,8 +6,10 @@ package com.actualize.mortgage.datamodels;
 import java.io.Serializable;
 import java.sql.Timestamp;
 
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
 
@@ -16,6 +18,8 @@ import org.hibernate.annotations.GenericGenerator;
  * @author sboragala
  *
  */
+@Entity
+@Table(name="services")
 public class ServicesEntity implements Serializable {
 
 
