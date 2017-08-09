@@ -48,7 +48,7 @@ public class UserServiceImpl implements UserService {
 
 		UserDetailsEntity userDetailsEntity = userManagerImpl.getUserByUserName(userName);
 		if(null == userDetailsEntity)
-			return null;
+			throw new ServiceException("User does not exists, Please contact administrator");
 		return convertor.toUserDetails(userDetailsEntity);
 	}
 
