@@ -7,6 +7,7 @@ import java.io.Serializable;
 import java.sql.Timestamp;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -36,8 +37,10 @@ public class ClientContactInfoEntity implements Serializable {
 	private String phone;
 	@ManyToOne(cascade = CascadeType.ALL, fetch=FetchType.LAZY)
 	@JoinColumn(name="clientId")
-	private ClientEntity clientId;
+	private ClientEntity clientEntity;
+	@Column(name="creationDate", insertable=false, updatable=false)
 	private Timestamp creationDate;
+	@Column(name="modificationDate", insertable=false, updatable=false)
 	private Timestamp modificationDate;
 	/**
 	 * @return the contactInfoId
@@ -100,16 +103,16 @@ public class ClientContactInfoEntity implements Serializable {
 		this.phone = phone;
 	}
 	/**
-	 * @return the clientId
+	 * @return the clientEntity
 	 */
-	public ClientEntity getClientId() {
-		return clientId;
+	public ClientEntity getClientEntity() {
+		return clientEntity;
 	}
 	/**
-	 * @param clientId the clientId to set
+	 * @param clientEntity the clientEntity to set
 	 */
-	public void setClientId(ClientEntity clientId) {
-		this.clientId = clientId;
+	public void setClientEntity(ClientEntity clientEntity) {
+		this.clientEntity = clientEntity;
 	}
 	/**
 	 * @return the creationDate

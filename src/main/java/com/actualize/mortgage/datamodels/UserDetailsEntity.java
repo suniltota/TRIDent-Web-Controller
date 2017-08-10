@@ -4,7 +4,7 @@
 package com.actualize.mortgage.datamodels;
 
 import java.io.Serializable;
-import java.sql.Date;
+import java.sql.Timestamp;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -60,9 +60,9 @@ public class UserDetailsEntity implements Serializable {
 	private ClientEntity client;
 	private String updatedBy;
 	@Column(name="modificationDate", updatable=false, insertable=false)
-	private Date modificationDate;
+	private Timestamp modificationDate;
 	@Column(name="creationDate", updatable=false, insertable=false)
-	private Date creationDate;
+	private Timestamp creationDate;
 
 	/**
 	 * @return the userId
@@ -331,26 +331,27 @@ public class UserDetailsEntity implements Serializable {
 	/**
 	 * @return the modificationDate
 	 */
-	public Date getModificationDate() {
+	public Timestamp getModificationDate() {
 		return modificationDate;
 	}
 	/**
 	 * @param modificationDate the modificationDate to set
 	 */
-	public void setModificationDate(Date modificationDate) {
+	public void setModificationDate(Timestamp modificationDate) {
 		this.modificationDate = modificationDate;
 	}
 	/**
 	 * @return the creationDate
 	 */
-	public Date getCreationDate() {
+	public Timestamp getCreationDate() {
 		return creationDate;
 	}
 	/**
 	 * @param creationDate the creationDate to set
 	 */
-	public void setCreationDate(Date creationDate) {
+	public void setCreationDate(Timestamp creationDate) {
 		this.creationDate = creationDate;
 	}
+
 
 }

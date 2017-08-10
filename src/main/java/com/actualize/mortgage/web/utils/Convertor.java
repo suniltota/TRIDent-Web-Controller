@@ -5,6 +5,7 @@ package com.actualize.mortgage.web.utils;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
@@ -81,8 +82,8 @@ public class Convertor {
 		userDetails.setRole(toRoleModel(userDetailsEntity.getRole()));
 		userDetails.setPasswordExpiryDate(userDetailsEntity.getPasswordExpiryDate().toString());
 		userDetails.setUpdatedBy(userDetailsEntity.getUpdatedBy());
-		//userDetails.setCreationDate(userDetailsEntity.getCreationDate().toString());
-		//userDetails.setModificationDate(userDetailsEntity.getModificationDate().toString());
+		userDetails.setCreationDate(toStringFromDate(userDetailsEntity.getCreationDate()));
+		userDetails.setModificationDate(toStringFromDate(userDetailsEntity.getModificationDate()));
 		return userDetails;
 	}
 	private Set<String> setAuthorities(String authorities) {
@@ -101,8 +102,8 @@ public class Convertor {
 		role.setRoleId(roleEntity.getRoleId());
 		role.setRoleName(roleEntity.getRoleName());
 		role.setDisplayName(roleEntity.getDisplayName());
-		//role.setCreationDate(roleEntity.getCreationDate().toString());
-		//role.setModificationDate(roleEntity.getModificationDate().toString());
+		role.setCreationDate(toStringFromDate(roleEntity.getCreationDate()));
+		role.setModificationDate(toStringFromDate(roleEntity.getModificationDate()));
 		return role;
 	}
 
@@ -176,8 +177,8 @@ public class Convertor {
 		client.setPhoneNumber(clientEntity.getPhoneNumber());
 		client.setClientContactInfo(toClientContactInfoModel(clientEntity.getClientContactInfo()));
 		client.setServicesModel(toServiceModelList(clientEntity.getServicesEntities()));
-		//client.setCreationDate(clientEntity.getCreationDate().toString());
-		//client.setModificationDate(clientEntity.getModificationDate().toString());
+		client.setCreationDate(toStringFromDate(clientEntity.getCreationDate()));
+		client.setModificationDate(toStringFromDate(clientEntity.getModificationDate()));
 		return client;
 	}
 
@@ -191,7 +192,6 @@ public class Convertor {
 		clientEntity.setClientContactInfo(toClientContactInfoEntity(client.getClientContactInfo()));
 		clientEntity.setServicesEntities(toServiceEntityList(client.getServicesModel()));
 		clientEntity.setAddress(client.getAddress());
-		//clientEntity.setCreationDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(client.getCreationDate()));
 		return clientEntity;
 	}
 
@@ -207,8 +207,8 @@ public class Convertor {
 			clientContactInfoModel.setEmail(clientContactInfoEntity.getEmail());
 			clientContactInfoModel.setName(clientContactInfoEntity.getName());
 			clientContactInfoModel.setPhone(clientContactInfoEntity.getPhone());
-			//clientContactInfoModel.setCreationDate(clientContactInfoEntity.getCreationDate().toString());
-			//clientContactInfoModel.setModificationDate(clientContactInfoEntity.getModificationDate().toString());
+			clientContactInfoModel.setCreationDate(toStringFromDate(clientContactInfoEntity.getCreationDate()));
+			clientContactInfoModel.setModificationDate(toStringFromDate(clientContactInfoEntity.getModificationDate()));
 
 			clientContactInfoModels.add(clientContactInfoModel);
 
@@ -297,8 +297,8 @@ public class Convertor {
 		servicesModel.setServiceName(serviceEntity.getServiceName());
 		servicesModel.setServiceDisplayName(serviceEntity.getServiceDisplayName());
 		servicesModel.setServiceDescription(serviceEntity.getServiceDescription());
-		//servicesModel.setCreationDate(serviceEntity.getCreationDate().toString());
-		//servicesModel.setModificationDate(serviceEntity.getModificationDate().toString());
+		servicesModel.setCreationDate(toStringFromDate(serviceEntity.getCreationDate()));
+		servicesModel.setModificationDate(toStringFromDate(serviceEntity.getModificationDate()));
 		return servicesModel;
 	}
 
@@ -310,5 +310,13 @@ public class Convertor {
 		servicesEntity.setServiceDisplayName(servicesModel.getServiceDisplayName());
 		servicesEntity.setServiceDescription(servicesModel.getServiceDescription());
 		return servicesEntity;
+	}
+
+	private String toStringFromDate(Timestamp timeStamp)
+	{
+		if(null != timeStamp )
+			return new SimpleDateFormat("MM-dd-yyyy HH:mm:ss").format(timeStamp.getTime());
+		else
+			return "";
 	}
 }

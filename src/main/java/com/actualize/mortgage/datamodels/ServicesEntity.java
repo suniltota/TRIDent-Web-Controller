@@ -5,13 +5,11 @@ package com.actualize.mortgage.datamodels;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
-
 import org.hibernate.annotations.GenericGenerator;
 
 /**
@@ -109,6 +107,6 @@ public class ServicesEntity implements Serializable {
 	public void setModificationDate(Timestamp modificationDate) {
 		this.modificationDate = modificationDate;
 	}
-
-
+	
+	
 }
