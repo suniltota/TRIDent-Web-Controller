@@ -5,11 +5,17 @@ package com.actualize.mortgage.datamodels;
 
 import java.io.Serializable;
 import java.sql.Date;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
@@ -61,10 +67,15 @@ public class GroupEntity implements Serializable {
 	private long sessionTimeOut;
 	
 	@Column(name = "password_days")
-	private long passwordDays;
+	private long passwordExpireDays;
 	
-	@Column(name = "group_permissions")
-	private String groupPermissions;
+	@OneToMany(cascade = CascadeType.ALL, fetch= FetchType.EAGER)
+    @JoinTable(
+            name = "group_services",
+            joinColumns = @JoinColumn(name = "group_id"),
+            inverseJoinColumns = @JoinColumn(name = "service_id")
+    )
+	private Set<ServicesEntity> services;
 	
 	/**
 	 * @return the groupId
@@ -136,20 +147,6 @@ public class GroupEntity implements Serializable {
 		this.groupPath = groupPath;
 	}
 
-/*	*//**
-	 * @return the client
-	 *//*
-	public ClientEntity getClient() {
-		return client;
-	}
-
-	*//**
-	 * @param client the client to set
-	 *//*
-	public void setClient(ClientEntity client) {
-		this.client = client;
-	}
-*/
 	/**
 	 * @return the updatedBy
 	 */
@@ -237,28 +234,29 @@ public class GroupEntity implements Serializable {
 	/**
 	 * @return the passwordDays
 	 */
-	public long getPasswordDays() {
-		return passwordDays;
+	public long getPasswordExpireDays() {
+		return passwordExpireDays;
 	}
 
 	/**
 	 * @param passwordDays the passwordDays to set
 	 */
-	public void setPasswordDays(long passwordDays) {
-		this.passwordDays = passwordDays;
+	public void setPasswordExpireDays(long passwordDays) {
+		this.passwordExpireDays = passwordDays;
 	}
 
 	/**
-	 * @return the groupPermissions
+	 * @return the services
 	 */
-	public String getGroupPermissions() {
-		return groupPermissions;
+	public Set<ServicesEntity> getServices() {
+		return services;
 	}
 
 	/**
-	 * @param groupPermissions the groupPermissions to set
+	 * @param services the services to set
 	 */
-	public void setGroupPermissions(String groupPermissions) {
-		this.groupPermissions = groupPermissions;
+	public void setServices(Set<ServicesEntity> services) {
+		this.services = services;
 	}
+
 }

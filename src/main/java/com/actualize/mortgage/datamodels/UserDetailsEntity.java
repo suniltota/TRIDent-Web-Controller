@@ -56,8 +56,8 @@ public class UserDetailsEntity implements Serializable {
 	@JoinColumn(name="roleid")
 	private RoleEntity role;
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	@JoinColumn(name="clientid")
-	private ClientEntity client;
+	@JoinColumn(name="groupid")
+	private GroupEntity group;
 	private String updatedBy;
 	@Column(name="modificationDate", updatable=false, insertable=false)
 	private Timestamp modificationDate;
@@ -307,14 +307,14 @@ public class UserDetailsEntity implements Serializable {
 	/**
 	 * @return the client
 	 */
-	public ClientEntity getClient() {
-		return client;
+	public GroupEntity getGroup() {
+		return group;
 	}
 	/**
 	 * @param client the client to set
 	 */
-	public void setClient(ClientEntity client) {
-		this.client = client;
+	public void setGroup(GroupEntity group) {
+		this.group = group;
 	}
 	/**
 	 * @return the updatedBy

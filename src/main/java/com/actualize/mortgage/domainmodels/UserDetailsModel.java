@@ -38,7 +38,7 @@ public class UserDetailsModel implements UserDetails  {
 	private String sessionTimeOut;
 	private Set<GrantedAuthority> authorities;
 	private RoleModel role;
-	private ClientModel client;
+	private GroupModel group;
 	private String updatedBy;
 	private String modificationDate;
 	private String creationDate;
@@ -288,14 +288,14 @@ public class UserDetailsModel implements UserDetails  {
 	/**
 	 * @return the client
 	 */
-	public ClientModel getClient() {
-		return client;
+	public GroupModel getGroup() {
+		return group;
 	}
 	/**
 	 * @param client the client to set
 	 */
-	public void setClient(ClientModel client) {
-		this.client = client;
+	public void setGroup(GroupModel group) {
+		this.group = group;
 	}
 	/**
 	 * @return the updatedBy

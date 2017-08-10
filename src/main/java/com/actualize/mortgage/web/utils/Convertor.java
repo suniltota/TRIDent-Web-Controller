@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -26,6 +27,7 @@ import org.springframework.util.ObjectUtils;
 import com.actualize.mortgage.datamodels.ClientContactInfoEntity;
 import com.actualize.mortgage.datamodels.ClientEntity;
 import com.actualize.mortgage.datamodels.GroupEntity;
+import com.actualize.mortgage.datamodels.InvestorEntity;
 import com.actualize.mortgage.datamodels.RoleEntity;
 import com.actualize.mortgage.datamodels.ServicesEntity;
 import com.actualize.mortgage.datamodels.UserActivityEntity;
@@ -33,6 +35,7 @@ import com.actualize.mortgage.datamodels.UserDetailsEntity;
 import com.actualize.mortgage.domainmodels.ClientContactInfoModel;
 import com.actualize.mortgage.domainmodels.ClientModel;
 import com.actualize.mortgage.domainmodels.GroupModel;
+import com.actualize.mortgage.domainmodels.InvestorModel;
 import com.actualize.mortgage.domainmodels.RoleModel;
 import com.actualize.mortgage.domainmodels.ServicesModel;
 import com.actualize.mortgage.domainmodels.UserActivityModel;
@@ -41,6 +44,7 @@ import com.actualize.mortgage.exceptions.ServiceException;
 import com.actualize.mortgage.manager.ClientManager;
 import com.actualize.mortgage.manager.GroupManager;
 import com.actualize.mortgage.manager.RoleManager;
+import com.actualize.mortgage.manager.ServiceManager;
 import com.actualize.mortgage.manager.UserManager;
 
 /**
@@ -63,6 +67,8 @@ public class Convertor {
 	@Autowired
 	private GroupManager groupManager;
 
+	@Autowired
+	private ServiceManager serviceManager;
 
 	public UserDetailsModel toUserDetails(final UserDetailsEntity userDetailsEntity)
 	{
@@ -77,7 +83,7 @@ public class Convertor {
 		userDetails.setAccountNonLocked(userDetailsEntity.isAccountNonLocked());
 		userDetails.setCredentialsNonExpired(userDetailsEntity.isCredentialsNonExpired());
 		userDetails.setAuthorities(setAuthorities(userDetailsEntity.getAuthorities()));
-		userDetails.setClient(toClientModel(userDetailsEntity.getClient()));
+		userDetails.setGroup(toGroupModel(userDetailsEntity.getGroup()));
 		userDetails.setEmail(userDetailsEntity.getEmail());
 		userDetails.setEnabled(userDetailsEntity.isEnabled());
 		userDetails.setFailedLoginAttempts(userDetailsEntity.getFailedLoginAttempts());
@@ -128,10 +134,10 @@ public class Convertor {
 		userDetailsEntity.setAccountNonLocked(userDetails.isAccountNonLocked());
 		userDetailsEntity.setCredentialsNonExpired(userDetails.isCredentialsNonExpired());
 		userDetailsEntity.setAuthorities(toAuthoritiesEntity(userDetails.getAuthorities()));
-		ClientEntity clientEntity =  clientManagerImpl.getClientById(userDetails.getClient().getClientId());
-		if(null == clientEntity)
+		GroupEntity groupEntity =  groupManager.findOne(userDetails.getGroup().getGroupId());
+		if(null == groupEntity)
 			throw new ServiceException("Invalid Client");
-		userDetailsEntity.setClient(clientEntity);
+		userDetailsEntity.setGroup(groupEntity);
 		userDetailsEntity.setEmail(userDetails.getEmail());
 		userDetailsEntity.setEnabled(userDetails.isEnabled());
 		userDetailsEntity.setFailedLoginAttempts(userDetails.getFailedLoginAttempts());
@@ -242,7 +248,7 @@ public class Convertor {
 		return clientContactInfoEntityList;
 	}
 
-	public List<ServicesModel> toServiceModelList(List<ServicesEntity> servicesEntities)
+	public List<ServicesModel> toServiceModelList(Collection<ServicesEntity> servicesEntities)
 	{
 		List<ServicesModel> servicesModels = new LinkedList<>();
 		servicesEntities.forEach(serviceEntity -> {
@@ -256,6 +262,15 @@ public class Convertor {
 		List<ServicesEntity> servicesEntities = new LinkedList<>();
 		servicesModels.forEach(servicesModel -> {
 			servicesEntities.add(toServicesEntity(servicesModel));
+		});
+		return servicesEntities;
+	}
+
+	public Set<ServicesEntity> toServiceEntitySet(Collection<ServicesModel> servicesModels)
+	{
+		Set<ServicesEntity> servicesEntities = new HashSet<ServicesEntity>();
+		servicesModels.forEach(servicesModel -> {
+			servicesEntities.add(serviceManager.getServiceByServiceId(servicesModel.getServiceId()));
 		});
 		return servicesEntities;
 	}
@@ -276,7 +291,6 @@ public class Convertor {
 		try {
 			data = new DataOutputStream(response.getOutputStream());
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		userActivity.setResponseSize(Long.valueOf(data.size()));
@@ -343,8 +357,8 @@ public class Convertor {
 		groupEntity.setUpdatedBy(groupModel.getUpdatedBy());
 		groupEntity.setClientid(groupModel.getClientId());
 		groupEntity.setEnabled(groupModel.isEnabled());
-		groupEntity.setGroupPermissions(groupModel.getGroupPermissions());
-		groupEntity.setPasswordDays(groupModel.getPasswordDays());
+		groupEntity.setServices(toServiceEntitySet(groupModel.getServices()));
+		groupEntity.setPasswordExpireDays(groupModel.getPasswordExpireDays());
 		groupEntity.setSessionTimeOut(groupModel.getSessionTimeOut());
 		return groupEntity;
 	}
@@ -355,13 +369,40 @@ public class Convertor {
 		groupModel.setGroupPath(groupEntity.getGroupPath());
 		groupModel.setGroupSequence(groupEntity.getGroupSequence()+"");
 		groupModel.setGroupParentId(groupEntity.getParentGroupId());
+		if(!ObjectUtils.isEmpty(groupEntity.getParentGroupId())){
+			GroupEntity parentGroup = groupManager.findOne(groupEntity.getParentGroupId());
+			groupModel.setParentGroupName(parentGroup.getGroupName());
+		}
 		groupModel.setUpdatedBy(groupEntity.getUpdatedBy());
 		groupModel.setEnabled(groupEntity.isEnabled());
-		groupModel.setGroupPermissions(groupEntity.getGroupPermissions());
-		groupModel.setPasswordDays(groupEntity.getPasswordDays());
+		groupModel.setServices(toServiceModelList(groupEntity.getServices()));
+		if(! ObjectUtils.isEmpty(groupEntity.getServices())){
+		//	groupModel.setServiceDisplayNames(groupModel.getServices().stream().reduce());
+		}
+		groupModel.setPasswordExpireDays(groupEntity.getPasswordExpireDays());
 		groupModel.setSessionTimeOut(groupEntity.getSessionTimeOut());
 		return groupModel;
 	}
+	
+	public InvestorModel toInvestorModel(InvestorEntity investorEntity)
+		{
+			InvestorModel investorModel = new InvestorModel();
+			investorModel.setInvestorId(investorEntity.getInvestorId());
+			investorModel.setInvestorName(investorEntity.getInvestorName());
+			investorModel.setInvestorUrl(investorEntity.getInvestorUrl());
+			investorModel.setCreationDate(toStringFromDate(investorEntity.getCreationDate()));
+			investorModel.setModificationDate(toStringFromDate(investorEntity.getModificationDate()));
+			return investorModel;
+		}
+		
+		public InvestorEntity toInvestorEntity(InvestorModel investorModel)
+		{
+			InvestorEntity investorEntity = new InvestorEntity();
+			investorEntity.setInvestorId(investorModel.getInvestorId());
+			investorEntity.setInvestorName(investorModel.getInvestorName());
+			investorEntity.setInvestorUrl(investorModel.getInvestorUrl());
+			return investorEntity;
+		}
 	private String toStringFromDate(Timestamp timeStamp)
 	{
 		if(null != timeStamp )

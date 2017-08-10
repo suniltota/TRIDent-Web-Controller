@@ -35,7 +35,7 @@ public class GroupController {
 	}
 
 	@RequestMapping(value={"/groups/{id}"}, method = RequestMethod.GET)
-	public GroupModel getGroupByid(@PathVariable String groupId) throws ServiceException {
+	public GroupModel getGroupByid(@PathVariable("id") String groupId) throws ServiceException {
 		 return groupService.getGroupById(groupId);
 	}
 
@@ -66,6 +66,11 @@ public class GroupController {
 	public ResponseEntity<String> activateGroups(@RequestBody List<String> groupIds) throws ServiceException {
 		 groupService.activateOrDeActivateGroups(groupIds, true);
 		 return new ResponseEntity<String>("Groups activated Successfully", HttpStatus.OK);
+	}
+
+	@RequestMapping(value={"/getGroupSubGroups/{groupPath}"}, method = RequestMethod.GET)
+	public List<GroupModel> getGroupSubGroups(@PathVariable("groupPath") String groupPath) throws ServiceException {
+		return groupService.getGroupsByGroupPath(groupPath);
 	}
 
 }

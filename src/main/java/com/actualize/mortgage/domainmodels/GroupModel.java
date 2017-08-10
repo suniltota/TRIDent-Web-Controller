@@ -1,6 +1,9 @@
 package com.actualize.mortgage.domainmodels;
 
-public class GroupModel {
+import java.io.Serializable;
+import java.util.List;
+
+public class GroupModel implements Serializable {
 
 	private String groupId;
 	private String groupName;
@@ -11,8 +14,10 @@ public class GroupModel {
 	private String clientId;
 	private boolean enabled;
 	private long sessionTimeOut;
-	private long passwordDays;
-	private String groupPermissions;
+	private long passwordExpireDays;
+	private String parentGroupName;
+	private String serviceDisplayNames;
+	private List<ServicesModel> services;
 	
 	/**
 	 * @return the groupId
@@ -125,25 +130,52 @@ public class GroupModel {
 	/**
 	 * @return the passwordDays
 	 */
-	public long getPasswordDays() {
-		return passwordDays;
+	public long getPasswordExpireDays() {
+		return passwordExpireDays;
 	}
 	/**
 	 * @param passwordDays the passwordDays to set
 	 */
-	public void setPasswordDays(long passwordDays) {
-		this.passwordDays = passwordDays;
+	public void setPasswordExpireDays(long passwordDays) {
+		this.passwordExpireDays = passwordDays;
+	}
+
+	
+	/**
+	 * @return the groupServices
+	 */
+	public List<ServicesModel> getServices() {
+		return services;
 	}
 	/**
-	 * @return the groupPermissions
+	 * @param groupServices the groupServices to set
 	 */
-	public String getGroupPermissions() {
-		return groupPermissions;
+	public void setServices(List<ServicesModel> services) {
+		this.services = services;
 	}
 	/**
-	 * @param groupPermissions the groupPermissions to set
+	 * @return the parentGroupName
 	 */
-	public void setGroupPermissions(String groupPermissions) {
-		this.groupPermissions = groupPermissions;
+	public String getParentGroupName() {
+		return parentGroupName;
 	}
+	/**
+	 * @param parentGroupName the parentGroupName to set
+	 */
+	public void setParentGroupName(String parentGroupName) {
+		this.parentGroupName = parentGroupName;
+	}
+	/**
+	 * @return the serviceDisplayNames
+	 */
+	public String getServiceDisplayNames() {
+		return serviceDisplayNames;
+	}
+	/**
+	 * @param serviceDisplayNames the serviceDisplayNames to set
+	 */
+	public void setServiceDisplayNames(String serviceDisplayNames) {
+		this.serviceDisplayNames = serviceDisplayNames;
+	}
+	
 }

@@ -23,9 +23,9 @@ public class UserDetailsServiceImpl implements UserDetailsService{
 
 		UserDetailsModel userDetails = userServiceImpl.getUserDetailsByUsername(username);
 		
-		if(!userDetails.getClient().isEnabled())
-			throw new ServiceException("Client is disabled. Please contact administrator");
-
+/*		if(!userDetails.getGroup().isEnabled())
+			throw new ServiceException("Group is disabled. Please contact administrator");
+*/
 		return userDetails;
 	}
 }

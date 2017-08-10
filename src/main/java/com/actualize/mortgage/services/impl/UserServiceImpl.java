@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 
 import com.actualize.mortgage.datamodels.UserDetailsEntity;
 import com.actualize.mortgage.domainmodels.UserDetailsModel;
@@ -54,7 +55,25 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public UserDetailsModel addUserDetails(UserDetailsModel userDetails) throws ServiceException {
-
+		
+		if(ObjectUtils.isEmpty(userDetails)){
+			throw new ServiceException("User details mandatory!");
+		}
+		
+		if(ObjectUtils.isEmpty(userDetails.getUsername())){
+			throw new ServiceException("Username is empty/null!");
+		}
+		
+		if(ObjectUtils.isEmpty(userDetails.getPassword())){
+			throw new ServiceException("Password is empty/null!");
+		}
+		
+		if(ObjectUtils.isEmpty(userDetails.getEmail())){
+			throw new ServiceException("Email is empty/null!");
+		}
+		if(ObjectUtils.isEmpty(userDetails)){
+			throw new ServiceException("User details mandatory!");
+		}
 		UserDetailsEntity userDetailsEntity = userManagerImpl.getUserByUserName(userDetails.getUsername());
 		if(null != userDetailsEntity)
 			throw new ServiceException("Username not available");
