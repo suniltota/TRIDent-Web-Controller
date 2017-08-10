@@ -133,7 +133,7 @@ public class TridentWebAPI {
 		String loanId = getLoanIdFromCD(closingDisclosure);
 		LOG.info("user "+SecurityContextHolder.getContext().getAuthentication().getName()+" with Loan Id: "+loanId+ " used Service: ValidateCDJSON");
 		userActivityServiceImpl.insertUserActivity(request, response, loanId, "ValidateCDJSON");
-    	return triDentWebService.validateCDJson(closingDisclosure);
+    	return triDentWebService.validateCDJson(closingDisclosure, true);
 	}
 	
 	/**

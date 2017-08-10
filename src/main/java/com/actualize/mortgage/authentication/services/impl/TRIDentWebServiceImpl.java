@@ -155,14 +155,14 @@ public class TRIDentWebServiceImpl {
 		return loanEstimatePDFServicesImpl.generateLoanEstimatePDF(mismoDocument);
 	}
 
-	public UCDValidationErrors validateCDJson(ClosingDisclosure closingDisclosure) throws Exception {
+	public UCDValidationErrors validateCDJson(ClosingDisclosure closingDisclosure, boolean fromWebUI) throws Exception {
 		ClosingDisclosureServicesImpl closingDisclosureServicesImpl = new ClosingDisclosureServicesImpl();
 
 		String xmldoc = closingDisclosureServicesImpl.createClosingDisclosureXMLfromObject(closingDisclosure);
 		Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder()
 				.parse(new InputSource(new ByteArrayInputStream(xmldoc.getBytes("utf-8"))));
 		UCDValidator ucdValidator = new UCDValidator();
-		return ucdValidator.validateUCDXML(document);
+		return ucdValidator.validateUCDXML(document, fromWebUI);
 	}
 
 	public String trimCDJson(ClosingDisclosure closingDisclosure) throws Exception {
