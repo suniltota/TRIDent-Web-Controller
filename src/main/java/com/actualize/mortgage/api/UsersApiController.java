@@ -18,6 +18,7 @@ import com.actualize.mortgage.exceptions.ServiceException;
 import com.actualize.mortgage.services.UserService;
 
 @RestController
+@RequestMapping(value = "actualize/transformx/")
 public class UsersApiController {
 
 	private static final Logger LOG = LogManager.getLogger(UsersApiController.class);
