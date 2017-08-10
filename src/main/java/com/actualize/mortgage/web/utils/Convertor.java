@@ -81,8 +81,8 @@ public class Convertor {
 		userDetails.setRole(toRoleModel(userDetailsEntity.getRole()));
 		userDetails.setPasswordExpiryDate(userDetailsEntity.getPasswordExpiryDate().toString());
 		userDetails.setUpdatedBy(userDetailsEntity.getUpdatedBy());
-		userDetails.setCreationDate(userDetailsEntity.getCreationDate().toString());
-		userDetails.setModificationDate(userDetailsEntity.getModificationDate().toString());
+		//userDetails.setCreationDate(userDetailsEntity.getCreationDate().toString());
+		//userDetails.setModificationDate(userDetailsEntity.getModificationDate().toString());
 		return userDetails;
 	}
 	private Set<String> setAuthorities(String authorities) {
@@ -102,7 +102,7 @@ public class Convertor {
 		role.setRoleName(roleEntity.getRoleName());
 		role.setDisplayName(roleEntity.getDisplayName());
 		//role.setCreationDate(roleEntity.getCreationDate().toString());
-		role.setModificationDate(roleEntity.getModificationDate().toString());
+		//role.setModificationDate(roleEntity.getModificationDate().toString());
 		return role;
 	}
 
@@ -177,7 +177,7 @@ public class Convertor {
 		client.setClientContactInfo(toClientContactInfoModel(clientEntity.getClientContactInfo()));
 		client.setServicesModel(toServiceModelList(clientEntity.getServicesEntities()));
 		//client.setCreationDate(clientEntity.getCreationDate().toString());
-		client.setModificationDate(clientEntity.getModificationDate().toString());
+		//client.setModificationDate(clientEntity.getModificationDate().toString());
 		return client;
 	}
 
@@ -191,6 +191,7 @@ public class Convertor {
 		clientEntity.setClientContactInfo(toClientContactInfoEntity(client.getClientContactInfo()));
 		clientEntity.setServicesEntities(toServiceEntityList(client.getServicesModel()));
 		clientEntity.setAddress(client.getAddress());
+		//clientEntity.setCreationDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(client.getCreationDate()));
 		return clientEntity;
 	}
 
@@ -206,8 +207,8 @@ public class Convertor {
 			clientContactInfoModel.setEmail(clientContactInfoEntity.getEmail());
 			clientContactInfoModel.setName(clientContactInfoEntity.getName());
 			clientContactInfoModel.setPhone(clientContactInfoEntity.getPhone());
-			clientContactInfoModel.setCreationDate(clientContactInfoEntity.getCreationDate().toString());
-			clientContactInfoModel.setModificationDate(clientContactInfoEntity.getModificationDate().toString());
+			//clientContactInfoModel.setCreationDate(clientContactInfoEntity.getCreationDate().toString());
+			//clientContactInfoModel.setModificationDate(clientContactInfoEntity.getModificationDate().toString());
 
 			clientContactInfoModels.add(clientContactInfoModel);
 
