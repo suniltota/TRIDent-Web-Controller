@@ -7,6 +7,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.actualize.mortgage.datamodels.ServicesEntity;
 import com.actualize.mortgage.domainmodels.ServicesModel;
@@ -19,6 +20,7 @@ import com.actualize.mortgage.web.utils.Convertor;
  * @author sboragala
  *
  */
+@Service
 public class ServicesServiceImpl implements ServicesService {
 
 	@Autowired
