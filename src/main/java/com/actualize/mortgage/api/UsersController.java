@@ -19,9 +19,9 @@ import com.actualize.mortgage.services.UserService;
 
 @RestController
 @RequestMapping(value = "actualize/transformx/")
-public class UsersApiController {
+public class UsersController {
 
-	private static final Logger LOG = LogManager.getLogger(UsersApiController.class);
+	private static final Logger LOG = LogManager.getLogger(UsersController.class);
 
 	@Autowired
 	private UserService userService;

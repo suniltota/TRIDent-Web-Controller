@@ -15,7 +15,7 @@ import com.actualize.mortgage.services.ClientService;
 
 @RestController
 @RequestMapping(value = "/actualize/transformx/")
-public class ClientsApiController {
+public class ClientsController {
 
 	@Autowired
 	private ClientService clientService;

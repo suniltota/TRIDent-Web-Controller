@@ -16,7 +16,7 @@ import com.actualize.mortgage.services.RoleService;
 
 @RestController
 @RequestMapping(value = "/actualize/transformx/")
-public class RoleApiController {
+public class RoleController {
 
 	@Autowired
 	private RoleService roleService;

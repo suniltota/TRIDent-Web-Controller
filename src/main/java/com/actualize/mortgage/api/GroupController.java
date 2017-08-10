@@ -17,7 +17,7 @@ import com.actualize.mortgage.services.GroupService;
 
 @RestController
 @RequestMapping(value = "/actualize/transformx/")
-public class GroupApiController {
+public class GroupController {
 
 	@Autowired
 	private GroupService groupService;
