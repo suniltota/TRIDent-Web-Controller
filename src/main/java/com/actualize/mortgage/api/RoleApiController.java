@@ -15,7 +15,8 @@ import com.actualize.mortgage.exceptions.ServiceException;
 import com.actualize.mortgage.services.RoleService;
 
 @RestController
-public class RoleController {
+@RequestMapping(value = "/actualize/transformx/")
+public class RoleApiController {
 
 	@Autowired
 	private RoleService roleService;

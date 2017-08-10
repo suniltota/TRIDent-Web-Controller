@@ -21,21 +21,25 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 
 import com.actualize.mortgage.datamodels.ClientContactInfoEntity;
 import com.actualize.mortgage.datamodels.ClientEntity;
+import com.actualize.mortgage.datamodels.GroupEntity;
 import com.actualize.mortgage.datamodels.RoleEntity;
 import com.actualize.mortgage.datamodels.ServicesEntity;
 import com.actualize.mortgage.datamodels.UserActivityEntity;
 import com.actualize.mortgage.datamodels.UserDetailsEntity;
 import com.actualize.mortgage.domainmodels.ClientContactInfoModel;
 import com.actualize.mortgage.domainmodels.ClientModel;
+import com.actualize.mortgage.domainmodels.GroupModel;
 import com.actualize.mortgage.domainmodels.RoleModel;
 import com.actualize.mortgage.domainmodels.ServicesModel;
 import com.actualize.mortgage.domainmodels.UserActivityModel;
 import com.actualize.mortgage.domainmodels.UserDetailsModel;
 import com.actualize.mortgage.exceptions.ServiceException;
 import com.actualize.mortgage.manager.ClientManager;
+import com.actualize.mortgage.manager.GroupManager;
 import com.actualize.mortgage.manager.RoleManager;
 import com.actualize.mortgage.manager.UserManager;
 
@@ -55,6 +59,9 @@ public class Convertor {
 
 	@Autowired
 	private UserManager userManagerImpl;
+
+	@Autowired
+	private GroupManager groupManager;
 
 
 	public UserDetailsModel toUserDetails(final UserDetailsEntity userDetailsEntity)
@@ -312,6 +319,49 @@ public class Convertor {
 		return servicesEntity;
 	}
 
+	public GroupEntity toGroupEntity(GroupModel groupModel) {
+		GroupEntity groupEntity = new GroupEntity();
+		
+		if(ObjectUtils.isEmpty(groupModel.getGroupId())){
+			if(! ObjectUtils.isEmpty(groupModel.getGroupParentId())){
+				groupEntity.setGroupId(groupModel.getGroupId());
+				GroupEntity parentGroup = groupManager.findOne(groupModel.getGroupParentId());
+				if(!ObjectUtils.isEmpty(parentGroup.getGroupPath())){
+					groupEntity.setGroupPath(parentGroup.getGroupPath()+"|"+parentGroup.getGroupSequence());
+				}else{
+					groupEntity.setGroupPath(parentGroup.getGroupSequence()+"");
+				}
+			}
+		}else{
+			groupEntity.setGroupPath(groupModel.getGroupPath());
+			if(groupModel.getGroupSequence() != null){
+				groupEntity.setGroupSequence(Long.parseLong(groupModel.getGroupSequence()));
+			}
+		}
+		groupEntity.setGroupName(groupModel.getGroupName());
+		groupEntity.setParentGroupId(groupModel.getGroupParentId());
+		groupEntity.setUpdatedBy(groupModel.getUpdatedBy());
+		groupEntity.setClientid(groupModel.getClientId());
+		groupEntity.setEnabled(groupModel.isEnabled());
+		groupEntity.setGroupPermissions(groupModel.getGroupPermissions());
+		groupEntity.setPasswordDays(groupModel.getPasswordDays());
+		groupEntity.setSessionTimeOut(groupModel.getSessionTimeOut());
+		return groupEntity;
+	}
+	public GroupModel toGroupModel(GroupEntity groupEntity) {
+		GroupModel groupModel = new GroupModel();
+		groupModel.setGroupId(groupEntity.getGroupId());
+		groupModel.setGroupName(groupEntity.getGroupName());
+		groupModel.setGroupPath(groupEntity.getGroupPath());
+		groupModel.setGroupSequence(groupEntity.getGroupSequence()+"");
+		groupModel.setGroupParentId(groupEntity.getParentGroupId());
+		groupModel.setUpdatedBy(groupEntity.getUpdatedBy());
+		groupModel.setEnabled(groupEntity.isEnabled());
+		groupModel.setGroupPermissions(groupEntity.getGroupPermissions());
+		groupModel.setPasswordDays(groupEntity.getPasswordDays());
+		groupModel.setSessionTimeOut(groupEntity.getSessionTimeOut());
+		return groupModel;
+	}
 	private String toStringFromDate(Timestamp timeStamp)
 	{
 		if(null != timeStamp )

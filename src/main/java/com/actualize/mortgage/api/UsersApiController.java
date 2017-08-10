@@ -18,9 +18,9 @@ import com.actualize.mortgage.exceptions.ServiceException;
 import com.actualize.mortgage.services.UserService;
 
 @RestController
-public class UsersController {
+public class UsersApiController {
 
-	private static final Logger LOG = LogManager.getLogger(UsersController.class);
+	private static final Logger LOG = LogManager.getLogger(UsersApiController.class);
 
 	@Autowired
 	private UserService userService;
@@ -38,6 +38,7 @@ public class UsersController {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@RequestMapping(value={"/users"}, method = RequestMethod.POST)
 	public ResponseEntity  createUser(@RequestBody UserDetailsModel userDetails) throws ServiceException {
+		userService.addUserDetails(userDetails);
 		return new ResponseEntity("User created Successfully", HttpStatus.OK);
 	}
 	
