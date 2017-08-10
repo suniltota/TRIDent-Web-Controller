@@ -8,6 +8,7 @@ import java.sql.Timestamp;
 import java.util.List;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -29,7 +30,7 @@ import org.hibernate.annotations.GenericGenerator;
 public class ClientEntity implements Serializable {
 
 	private static final long serialVersionUID = -7857213242827507858L;
-	
+
 	@Id
 	@GeneratedValue(generator = "uuid")
 	@GenericGenerator(name = "uuid", strategy = "uuid2")
@@ -44,7 +45,9 @@ public class ClientEntity implements Serializable {
 	@JoinTable(name="client_services", joinColumns= @JoinColumn(name= "clientId"),
 	inverseJoinColumns = @JoinColumn(name="serviceId"))
 	private List<ServicesEntity> servicesEntities;
+	@Column(name="creationDate", insertable=false, updatable=false)
 	private Timestamp creationDate;
+	@Column(name="modificationDate", insertable=false, updatable=false)
 	private Timestamp modificationDate;
 	/**
 	 * @return the clientId

@@ -8,6 +8,7 @@ import java.sql.Date;
 import java.sql.Timestamp;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -42,7 +43,9 @@ public class UserActivityEntity implements Serializable {
 	private String timeLapsedForRequest;
 	private Long requestSize;
 	private Long responseSize;
+	@Column(name="creationDate", updatable=false, insertable=false)
 	private Date creationDate;
+	@Column(name="modificationDate", updatable=false, insertable=false)
 	private Date modificationDate;
 	/**
 	 * @return the useractivityId

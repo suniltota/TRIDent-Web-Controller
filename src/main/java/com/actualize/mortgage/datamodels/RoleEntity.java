@@ -4,7 +4,9 @@
 package com.actualize.mortgage.datamodels;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.sql.Timestamp;
+
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -27,9 +29,11 @@ public class RoleEntity implements Serializable{
 	private String roleId;
 	private String roleName;
 	private String displayName;
-	private Date modificationDate;
-	private Date creationDate;
-	
+	@Column(name="modificationDate", updatable=false, insertable=false)
+	private Timestamp modificationDate;
+	@Column(name="creationDate", updatable=false, insertable=false)
+	private Timestamp creationDate;
+
 	/**
 	 * @return the roleId
 	 */
@@ -69,27 +73,27 @@ public class RoleEntity implements Serializable{
 	/**
 	 * @return the modificationDate
 	 */
-	public Date getModificationDate() {
+	public Timestamp getModificationDate() {
 		return modificationDate;
 	}
 	/**
 	 * @param modificationDate the modificationDate to set
 	 */
-	public void setModificationDate(Date modificationDate) {
+	public void setModificationDate(Timestamp modificationDate) {
 		this.modificationDate = modificationDate;
 	}
 	/**
 	 * @return the creationDate
 	 */
-	public Date getCreationDate() {
+	public Timestamp getCreationDate() {
 		return creationDate;
 	}
 	/**
 	 * @param creationDate the creationDate to set
 	 */
-	public void setCreationDate(Date creationDate) {
+	public void setCreationDate(Timestamp creationDate) {
 		this.creationDate = creationDate;
 	}
-	
-	
+
+
 }

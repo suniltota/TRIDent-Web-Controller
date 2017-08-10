@@ -6,6 +6,7 @@ package com.actualize.mortgage.datamodels;
 import java.io.Serializable;
 import java.sql.Timestamp;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -31,7 +32,9 @@ public class ServicesEntity implements Serializable {
 	private String serviceName;
 	private String serviceDisplayName;
 	private String serviceDescription;
+	@Column(name="creationDate", updatable=false, insertable=false)
 	private Timestamp creationDate;
+	@Column(name="modificationDate", updatable=false, insertable=false)
 	private Timestamp modificationDate;
 
 	/**
