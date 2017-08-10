@@ -9,7 +9,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.NonUniqueResultException;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Repository;
@@ -82,13 +81,12 @@ public class UserManagerImpl implements UserManager{
 	}
 
 	@Override
-	public void deleteUser(String userid) {
-		Query query = entityManager.createQuery("update UserDetailsEntity set enabled = false" +
-    				" where userId = :userId");
-		query.setParameter("userId", userid);
-		query.executeUpdate();
+	public void deleteUser(String userId) {
+		entityManager.remove(entityManager.find(UserDetailsEntity.class, userId));
+		
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<UserDetailsEntity> getAllUsersbyClientId(String clientId) throws ServiceException {
 	 try{
@@ -99,6 +97,7 @@ public class UserManagerImpl implements UserManager{
 	    }
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<UserDetailsEntity> getAllUsers() throws ServiceException {
 		 try{

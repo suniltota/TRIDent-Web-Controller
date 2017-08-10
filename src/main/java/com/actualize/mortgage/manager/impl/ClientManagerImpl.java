@@ -63,9 +63,10 @@ public class ClientManagerImpl implements ClientManager {
 
 	@Override
 	public void deleteClient(String clientId) {
-		entityManager.remove(clientId);
+		entityManager.remove(entityManager.find(ClientEntity.class, clientId));
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<ClientEntity> getAllClients() {
 		try{

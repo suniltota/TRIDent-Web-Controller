@@ -79,7 +79,7 @@ public class RoleManagerImpl implements RoleManager {
 
 	@Override
 	public void deleteRole(String roleId) {
-		entityManager.remove(roleId);
+		entityManager.remove(entityManager.find(RoleEntity.class, roleId));
 	}
 
 }

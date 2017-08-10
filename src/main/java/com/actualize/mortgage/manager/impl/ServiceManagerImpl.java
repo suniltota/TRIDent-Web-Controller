@@ -31,7 +31,7 @@ public class ServiceManagerImpl implements ServiceManager{
 
 	@Override
 	public ServicesEntity addService(ServicesEntity servicesEntity) {
-		entityManager.persist(servicesEntity);
+		entityManager.merge(servicesEntity);
 		return servicesEntity;
 	}
 
@@ -72,7 +72,7 @@ public class ServiceManagerImpl implements ServiceManager{
 
 	@Override
 	public void deleteService(String serviceId) {
-		entityManager.remove(serviceId);
+		entityManager.remove(entityManager.find(ServicesEntity.class, serviceId));
 	}
 
 	@Override
