@@ -72,5 +72,10 @@ public class GroupController {
 	public List<GroupModel> getGroupSubGroups(@PathVariable("groupPath") String groupPath) throws ServiceException {
 		return groupService.getGroupsByGroupPath(groupPath);
 	}
+	
+/*	@RequestMapping(value={"/group/avaliabilty/{groupname}"}, method = RequestMethod.GET)
+	public List<GroupModel> getGroupSubGroups(@PathVariable("groupname") String groupPath) throws ServiceException {
+		return groupService.getGroupsByGroupPath(groupPath);
+	}*/
 
 }

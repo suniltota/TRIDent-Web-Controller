@@ -17,7 +17,7 @@ public class ClientModel implements Serializable {
 	private String clientId;
 	private String clientName;
 	private String address;
-	private boolean isEnabled;
+	private boolean enabled;
 	private String phoneNumber;
 	private List<ClientContactInfoModel> clientContactInfo;
 	private List<ServicesModel> servicesModel;
@@ -64,13 +64,13 @@ public class ClientModel implements Serializable {
 	 * @return the isEnabled
 	 */
 	public boolean isEnabled() {
-		return isEnabled;
+		return enabled;
 	}
 	/**
 	 * @param isEnabled the isEnabled to set
 	 */
 	public void setEnabled(boolean isEnabled) {
-		this.isEnabled = isEnabled;
+		this.enabled = isEnabled;
 	}
 	/**
 	 * @return the phoneNumber

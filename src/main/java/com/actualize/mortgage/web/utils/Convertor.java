@@ -234,35 +234,41 @@ public class Convertor {
 
 		List<ClientContactInfoEntity> clientContactInfoEntityList = new LinkedList<>();
 
-		clientContactInfoModelList.forEach(clientContactInfoModel -> {
+		if (!ObjectUtils.isEmpty(clientContactInfoModelList)) {
+			clientContactInfoModelList.forEach(clientContactInfoModel -> {
 
-			ClientContactInfoEntity clientContactInfoEntity = new ClientContactInfoEntity();
-			clientContactInfoEntity.setContactInfoId(clientContactInfoModel.getContactInfoId());
-			clientContactInfoEntity.setContactType(clientContactInfoModel.getContactType());
-			clientContactInfoEntity.setEmail(clientContactInfoModel.getEmail());
-			clientContactInfoEntity.setName(clientContactInfoModel.getName());
-			clientContactInfoEntity.setPhone(clientContactInfoModel.getPhone());
+				ClientContactInfoEntity clientContactInfoEntity = new ClientContactInfoEntity();
+				clientContactInfoEntity.setContactInfoId(clientContactInfoModel.getContactInfoId());
+				clientContactInfoEntity.setContactType(clientContactInfoModel.getContactType());
+				clientContactInfoEntity.setEmail(clientContactInfoModel.getEmail());
+				clientContactInfoEntity.setName(clientContactInfoModel.getName());
+				clientContactInfoEntity.setPhone(clientContactInfoModel.getPhone());
 
-			clientContactInfoEntityList.add(clientContactInfoEntity);
-		});
+				clientContactInfoEntityList.add(clientContactInfoEntity);
+			});
+		}
 		return clientContactInfoEntityList;
 	}
 
 	public List<ServicesModel> toServiceModelList(Collection<ServicesEntity> servicesEntities)
 	{
 		List<ServicesModel> servicesModels = new LinkedList<>();
-		servicesEntities.forEach(serviceEntity -> {
-			servicesModels.add(toServiceModel(serviceEntity));
-		});
+		if (!ObjectUtils.isEmpty(servicesEntities)) {
+			servicesEntities.forEach(serviceEntity -> {
+				servicesModels.add(toServiceModel(serviceEntity));
+			});
+		}
 		return servicesModels;
 	}
 
 	public List<ServicesEntity> toServiceEntityList(List<ServicesModel> servicesModels)
 	{
 		List<ServicesEntity> servicesEntities = new LinkedList<>();
+		if (!ObjectUtils.isEmpty(servicesEntities)) {
 		servicesModels.forEach(servicesModel -> {
 			servicesEntities.add(toServicesEntity(servicesModel));
 		});
+		}
 		return servicesEntities;
 	}
 
@@ -334,22 +340,25 @@ public class Convertor {
 	}
 
 	public GroupEntity toGroupEntity(GroupModel groupModel) {
-		GroupEntity groupEntity = new GroupEntity();
+		GroupEntity groupEntity = null;
 		
 		if(ObjectUtils.isEmpty(groupModel.getGroupId())){
-			if(! ObjectUtils.isEmpty(groupModel.getGroupParentId())){
-				groupEntity.setGroupId(groupModel.getGroupId());
-				GroupEntity parentGroup = groupManager.findOne(groupModel.getGroupParentId());
-				if(!ObjectUtils.isEmpty(parentGroup.getGroupPath())){
-					groupEntity.setGroupPath(parentGroup.getGroupPath()+"|"+parentGroup.getGroupSequence());
-				}else{
-					groupEntity.setGroupPath(parentGroup.getGroupSequence()+"");
-				}
-			}
+			groupEntity = new GroupEntity();
+			
 		}else{
-			groupEntity.setGroupPath(groupModel.getGroupPath());
+			groupEntity = groupManager.findOne(groupModel.getGroupId());
+			/*groupEntity.setGroupPath(groupModel.getGroupPath());
 			if(groupModel.getGroupSequence() != null){
 				groupEntity.setGroupSequence(Long.parseLong(groupModel.getGroupSequence()));
+			}*/
+		}
+		if(!ObjectUtils.isEmpty(groupModel.getGroupParentId())){
+			groupEntity.setGroupId(groupModel.getGroupId());
+			GroupEntity parentGroup = groupManager.findOne(groupModel.getGroupParentId());
+			if(!ObjectUtils.isEmpty(parentGroup.getGroupPath())){
+				groupEntity.setGroupPath(parentGroup.getGroupPath()+"|"+parentGroup.getGroupSequence());
+			}else{
+				groupEntity.setGroupPath(parentGroup.getGroupSequence()+"");
 			}
 		}
 		groupEntity.setGroupName(groupModel.getGroupName());

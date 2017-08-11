@@ -37,7 +37,8 @@ public class ClientEntity implements Serializable {
 	private String clientId;
 	private String clientName;
 	private String address;
-	private boolean isEnabled; 
+	@Column(name="isEnabled")
+	private boolean enabled; 
 	private String phoneNumber;
 	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
 	private List<ClientContactInfoEntity> clientContactInfo;
@@ -89,13 +90,13 @@ public class ClientEntity implements Serializable {
 	 * @return the isEnabled
 	 */
 	public boolean isEnabled() {
-		return isEnabled;
+		return enabled;
 	}
 	/**
 	 * @param isEnabled the isEnabled to set
 	 */
 	public void setEnabled(boolean isEnabled) {
-		this.isEnabled = isEnabled;
+		this.enabled = isEnabled;
 	}
 	/**
 	 * @return the phoneNumber

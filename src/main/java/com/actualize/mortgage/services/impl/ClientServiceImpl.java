@@ -37,7 +37,12 @@ public class ClientServiceImpl implements ClientService {
 		ClientEntity clientEntity = clientManager.getClientByClientName(clientModel.getClientName());
 		if(null != clientEntity)
 			throw new ServiceException("Client Name already exists");
-		client = convertor.toClientModel(clientManager.addClient(convertor.toClientEntity(clientModel)));
+		try {
+			client = convertor.toClientModel(clientManager.addClient(convertor.toClientEntity(clientModel)));
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		return client;
 	}
