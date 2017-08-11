@@ -45,7 +45,7 @@ public class UsersController {
 	@RequestMapping(value={"/users/{id}"}, method = RequestMethod.DELETE)
 	public ResponseEntity<String> deleteUser(@PathVariable("id") String userId) throws ServiceException {
 		userService.deleteUser(userId);
-		return new ResponseEntity<String>("User created Successfully", HttpStatus.OK);
+		return new ResponseEntity<String>("User deleted Successfully", HttpStatus.OK);
 	}
 
 	@RequestMapping(value={"/users"}, method = RequestMethod.PUT)

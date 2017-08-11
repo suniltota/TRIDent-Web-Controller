@@ -25,7 +25,7 @@ public interface UserManager  {
 	
 	public UserDetailsEntity updateUser(UserDetailsEntity userDetailsEntity) throws ServiceException;
 	
-	public void deleteUser(String id) throws ServiceException;
+	public void activeOrdeActivate(String id,boolean enabled) throws ServiceException;
 	
 	public List<UserDetailsEntity> getAllUsersbyClientId(String clientId) throws ServiceException;
 	
