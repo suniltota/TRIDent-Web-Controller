@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -45,13 +44,13 @@ public class GroupController {
 	@RequestMapping(value={"/groups"}, method = RequestMethod.GET)
 	public List<GroupModel> getAllGroups() throws ServiceException {
 		
-		UserDetailsModel userDetailsModel = (UserDetailsModel) SecurityContextHolder.getContext().getAuthentication()
+		/*UserDetailsModel userDetailsModel = (UserDetailsModel) SecurityContextHolder.getContext().getAuthentication()
 				.getPrincipal();
 		if (userDetailsModel != null && userDetailsModel.getGroup() != null) {
 			return groupService.getChildGroups(userDetailsModel.getGroup().getGroupSequence(),
-					userDetailsModel.getGroup().getGroupId(), userDetailsModel.getGroup().getGroupPath());
-		}
-		 return null;
+					 userDetailsModel.getGroup().getGroupPath());
+		}*/
+		 return groupService.getAllGroups();
 	}
 
 	@RequestMapping(value={"/groups/{id}"}, method = RequestMethod.DELETE)
