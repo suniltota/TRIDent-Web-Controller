@@ -103,13 +103,13 @@ public class GroupServiceImpl implements GroupService {
 	}
 
 	@Override
-	public List<GroupModel> getChildGroups(long groupSequence, String groupId, String groupPath)
+	public List<GroupModel> getChildGroups(long groupSequence, String groupPath)
 			throws ServiceException {
 			if(groupPath == null){
 				groupPath = groupSequence+ "" ;
 			}
 		List<GroupModel> groupModels = new ArrayList<>();
-		List<GroupEntity> groups = groupManager.getChildGroups(groupSequence, groupId, groupPath);
+		List<GroupEntity> groups = groupManager.getChildGroups(groupSequence, groupPath);
 		if (groups != null) {
 			groups.forEach(group -> groupModels.add(convertor.toGroupModel(group)));
 		}

@@ -27,5 +27,5 @@ public interface GroupService {
 
 	public Boolean isGroupNameAvailable(String groupname) throws ServiceException;
 	
-	public List<GroupModel> getChildGroups(long groupSequence,String groupId,String groupPath) throws ServiceException;	
+	public List<GroupModel> getChildGroups(long groupSequence,String groupPath) throws ServiceException;	
 }
