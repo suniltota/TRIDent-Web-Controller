@@ -48,6 +48,12 @@ public class InvestorServiceImpl implements InvestorService {
 
 	@Override
 	public InvestorModel addInvestor(InvestorModel investorModel) throws ServiceException {
+		if(null == investorModel || null == investorModel.getInvestorName() || investorModel.getInvestorName().isEmpty())
+			throw new ServiceException("Investor Name cannot be empty");
+		
+		if(null == investorModel || null == investorModel.getInvestorUrl() || investorModel.getInvestorUrl().isEmpty())
+			throw new ServiceException("Investor URL cannot be empty");
+		
 		InvestorEntity investorEntity = investorManagerImpl.getInvestorByInvestorName(investorModel.getInvestorName());
 		if(null != investorEntity)
 			throw new ServiceException("Investor name not unavailable");
@@ -57,12 +63,19 @@ public class InvestorServiceImpl implements InvestorService {
 
 	@Override
 	public InvestorModel updateInvestor(InvestorModel investorModel) throws ServiceException {
+		if(null == investorModel || null == investorModel.getInvestorName() || investorModel.getInvestorName().isEmpty())
+			throw new ServiceException("Investor Name cannot be empty");
 		InvestorEntity investorEntity =  investorManagerImpl.updateInvestor(convertor.toInvestorEntity(investorModel));
+		if(investorModel.getInvestorName().equalsIgnoreCase(investorEntity.getInvestorName()))
+			throw new ServiceException("Investor Name cannot be updated");
+			
 		return convertor.toInvestorModel(investorEntity);
 	}
 
 	@Override
 	public void deleteInvestor(String investorId) throws ServiceException {
+		if( null == investorId || investorId.isEmpty())
+			throw new ServiceException("Investor Id cannot be empty");
 		investorManagerImpl.deleteInvestor(investorId);
 		
 	}
