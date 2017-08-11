@@ -82,7 +82,7 @@ public class Convertor {
 		userDetails.setAccountNonExpired(userDetailsEntity.isAccountNonExpired());
 		userDetails.setAccountNonLocked(userDetailsEntity.isAccountNonLocked());
 		userDetails.setCredentialsNonExpired(userDetailsEntity.isCredentialsNonExpired());
-		userDetails.setAuthorities(setAuthorities(userDetailsEntity.getAuthorities()));
+		//userDetails.setAuthorities(setAuthorities(userDetailsEntity.getAuthorities()));
 		userDetails.setGroup(toGroupModel(userDetailsEntity.getGroup()));
 		userDetails.setEmail(userDetailsEntity.getEmail());
 		userDetails.setEnabled(userDetailsEntity.isEnabled());
@@ -133,10 +133,11 @@ public class Convertor {
 		userDetailsEntity.setAccountNonExpired(userDetails.isAccountNonExpired());
 		userDetailsEntity.setAccountNonLocked(userDetails.isAccountNonLocked());
 		userDetailsEntity.setCredentialsNonExpired(userDetails.isCredentialsNonExpired());
-		userDetailsEntity.setAuthorities(toAuthoritiesEntity(userDetails.getAuthorities()));
+		//userDetailsEntity.setAuthorities(toAuthoritiesEntity(userDetails.getAuthorities()));
+		if(null == userDetails.getGroup())
+			throw new ServiceException("Please select a group!");
 		GroupEntity groupEntity =  groupManager.findOne(userDetails.getGroup().getGroupId());
-		if(null == groupEntity)
-			throw new ServiceException("Invalid Client");
+		
 		userDetailsEntity.setGroup(groupEntity);
 		userDetailsEntity.setEmail(userDetails.getEmail());
 		userDetailsEntity.setEnabled(userDetails.isEnabled());
@@ -275,9 +276,11 @@ public class Convertor {
 	public Set<ServicesEntity> toServiceEntitySet(Collection<ServicesModel> servicesModels)
 	{
 		Set<ServicesEntity> servicesEntities = new HashSet<ServicesEntity>();
-		servicesModels.forEach(servicesModel -> {
-			servicesEntities.add(serviceManager.getServiceByServiceId(servicesModel.getServiceId()));
-		});
+		if(! ObjectUtils.isEmpty(servicesModels)){
+			servicesModels.forEach(servicesModel -> {
+				servicesEntities.add(serviceManager.getServiceByServiceId(servicesModel.getServiceId()));
+			});
+		}
 		return servicesEntities;
 	}
 
@@ -376,7 +379,7 @@ public class Convertor {
 		groupModel.setGroupId(groupEntity.getGroupId());
 		groupModel.setGroupName(groupEntity.getGroupName());
 		groupModel.setGroupPath(groupEntity.getGroupPath());
-		groupModel.setGroupSequence(groupEntity.getGroupSequence()+"");
+		groupModel.setGroupSequence(groupEntity.getGroupSequence());
 		groupModel.setGroupParentId(groupEntity.getParentGroupId());
 		if(!ObjectUtils.isEmpty(groupEntity.getParentGroupId())){
 			GroupEntity parentGroup = groupManager.findOne(groupEntity.getParentGroupId());

@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
 import com.actualize.mortgage.datamodels.GroupEntity;
+import com.actualize.mortgage.domainmodels.GroupModel;
 
 
 public interface GroupManager extends CrudRepository<GroupEntity,String>{
@@ -32,5 +33,11 @@ public interface GroupManager extends CrudRepository<GroupEntity,String>{
 	public GroupEntity getGroupBySequence(Long sequence);
 	
 	@Query("FROM GroupEntity g WHERE g.enabled = true and g.groupPath like ?1")
-	public List<GroupEntity> getGroupsByGroupPath(String groupPath);	
+	public List<GroupEntity> getGroupsByGroupPath(String groupPath);
+
+	@Query("SELECT COUNT(g) FROM GroupEntity g WHERE g.groupName = ?1")
+	public long isGroupNameAvailable(String groupname);	
+	
+	@Query("FROM GroupEntity g WHERE g.groupSequence != ?1 and g.groupId = ?2 and g.groupPath like ?3")
+	public List<GroupEntity> getChildGroups(long groupSequence,String groupId,String groupPath);	
 }

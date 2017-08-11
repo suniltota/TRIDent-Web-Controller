@@ -3,6 +3,7 @@
  */
 package com.actualize.mortgage.domainmodels;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -36,7 +37,6 @@ public class UserDetailsModel implements UserDetails  {
 	private String lastSuccessfulLogin;
 	private String lastSuccessfulLogout;
 	private String sessionTimeOut;
-	private Set<GrantedAuthority> authorities;
 	private RoleModel role;
 	private GroupModel group;
 	private String updatedBy;
@@ -259,21 +259,6 @@ public class UserDetailsModel implements UserDetails  {
 		this.passwordExpiryDate = passwordExpiryDate;
 	}
 	/**
-	 * @return the authorities
-	 */
-	public Set<GrantedAuthority> getAuthorities() {
-		return authorities;
-	}
-	/**
-	 * @param authorities the authorities to set
-	 */
-	public void setAuthorities(Set<String> authorities) {
-		Set<GrantedAuthority> authoritiesList = new HashSet<>();
-		for(String authority: authorities)
-			authoritiesList.add(new SimpleGrantedAuthority(authority));
-		this.authorities = authoritiesList;
-	}
-	/**
 	 * @return the role
 	 */
 	public RoleModel getRole() {
@@ -332,6 +317,12 @@ public class UserDetailsModel implements UserDetails  {
 	 */
 	public void setCreationDate(String creationDate) {
 		this.creationDate = creationDate;
+	}
+	
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 }

@@ -97,4 +97,22 @@ public class GroupServiceImpl implements GroupService {
 		return groupModels;
 	}
 
+	@Override
+	public Boolean isGroupNameAvailable(String groupname) throws ServiceException{
+		return groupManager.isGroupNameAvailable(groupname) > 0 ? false : true;
+	}
+
+	@Override
+	public List<GroupModel> getChildGroups(long groupSequence, String groupId, String groupPath)
+			throws ServiceException {
+			if(groupPath == null){
+				groupPath = groupSequence+ "" ;
+			}
+		List<GroupModel> groupModels = new ArrayList<>();
+		List<GroupEntity> groups = groupManager.getChildGroups(groupSequence, groupId, groupPath);
+		if (groups != null) {
+			groups.forEach(group -> groupModels.add(convertor.toGroupModel(group)));
+		}
+		return groupModels;
+	}
 }

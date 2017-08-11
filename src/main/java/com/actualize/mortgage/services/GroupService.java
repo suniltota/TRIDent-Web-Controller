@@ -24,4 +24,8 @@ public interface GroupService {
 	public void activateOrDeActivateGroup(String groupId, Boolean enabled) throws ServiceException;
 
 	public List<GroupModel> getGroupsByGroupPath(String groupPath) throws ServiceException;
+
+	public Boolean isGroupNameAvailable(String groupname) throws ServiceException;
+	
+	public List<GroupModel> getChildGroups(long groupSequence,String groupId,String groupPath) throws ServiceException;	
 }

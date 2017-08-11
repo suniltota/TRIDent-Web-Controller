@@ -5,9 +5,12 @@ import java.util.List;
 
 public class GroupModel implements Serializable {
 
+	/**
+	 * 
+	 */
 	private String groupId;
 	private String groupName;
-	private String groupSequence;
+	private long groupSequence;
 	private String groupParentId;
 	private String groupPath;
 	private String updatedBy;
@@ -46,13 +49,13 @@ public class GroupModel implements Serializable {
 	/**
 	 * @return the groupSequence
 	 */
-	public String getGroupSequence() {
+	public long getGroupSequence() {
 		return groupSequence;
 	}
 	/**
 	 * @param groupSequence the groupSequence to set
 	 */
-	public void setGroupSequence(String groupSequence) {
+	public void setGroupSequence(long groupSequence) {
 		this.groupSequence = groupSequence;
 	}
 	/**

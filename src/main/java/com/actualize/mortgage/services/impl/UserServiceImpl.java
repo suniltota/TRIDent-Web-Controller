@@ -48,8 +48,6 @@ public class UserServiceImpl implements UserService {
 	public UserDetailsModel getUserDetailsByUsername(String userName) throws ServiceException {
 
 		UserDetailsEntity userDetailsEntity = userManagerImpl.getUserByUserName(userName);
-		if(null == userDetailsEntity)
-			throw new ServiceException("User does not exists, Please contact administrator");
 		return convertor.toUserDetails(userDetailsEntity);
 	}
 
@@ -76,13 +74,19 @@ public class UserServiceImpl implements UserService {
 		}
 		UserDetailsEntity userDetailsEntity = userManagerImpl.getUserByUserName(userDetails.getUsername());
 		if(null != userDetailsEntity)
-			throw new ServiceException("Username not available");
-		/*userDetailsEntity = userManagerImpl.getUserByEmail(userDetails.getEmail());
+			throw new ServiceException("Username already taken");
+		userDetailsEntity = userManagerImpl.getUserByEmail(userDetails.getEmail());
 		if(null != userDetailsEntity)
-			throw new ServiceException("Email not available");*/
+			throw new ServiceException("Email already taken");
 		userDetails.setPasswordExpiryDate(LocalDate.now().plusDays(30).toString());
 		userDetails.setUpdatedBy(SecurityContextHolder.getContext().getAuthentication().getName());
 		userDetails.setPassword(new BCryptPasswordEncoder().encode(userDetails.getPassword().trim()));
+		userDetails.setAccountNonExpired(true);
+		userDetails.setAccountNonLocked(true);
+		userDetails.setCredentialsNonExpired(true);
+		userDetails.setEnabled(true);
+		userDetails.setLastSuccessfulLogin("1");
+		userDetails.setLastSuccessfulLogout("1");
 		if(userDetails.getSessionTimeOut() == null || userDetails.getSessionTimeOut().length() == 0){
 			userDetails.setSessionTimeOut(DEFAULT_SESSION_TIME);
 		}
@@ -97,7 +101,6 @@ public class UserServiceImpl implements UserService {
 		UserDetailsModel userDetailsModel = convertor.toUserDetails(userDetailsEntity);
 		userDetails.setUsername(userDetailsModel.getUsername());
 		userDetails.setUpdatedBy(SecurityContextHolder.getContext().getAuthentication().getName());
-		userDetails.setPassword(userDetailsModel.getPassword());
 
 		return convertor.toUserDetails(userManagerImpl.updateUser(convertor.toUserDetailsEntity(userDetails)));
 	}

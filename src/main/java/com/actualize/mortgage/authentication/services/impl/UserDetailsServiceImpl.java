@@ -22,7 +22,10 @@ public class UserDetailsServiceImpl implements UserDetailsService{
 			throw new UsernameNotFoundException("User Name can't be empty ");
 
 		UserDetailsModel userDetails = userServiceImpl.getUserDetailsByUsername(username);
-		
+
+		if(null == userDetails)
+			throw new ServiceException("User does not exists, Please contact administrator");
+
 /*		if(!userDetails.getGroup().isEnabled())
 			throw new ServiceException("Group is disabled. Please contact administrator");
 */

@@ -36,26 +36,28 @@ public class UsersController {
 		return userService.getUserDetailsById(userId);
 	}
 	
-	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@RequestMapping(value={"/users"}, method = RequestMethod.POST)
-	public ResponseEntity  createUser(@RequestBody UserDetailsModel userDetails) throws ServiceException {
+	public ResponseEntity<String>  createUser(@RequestBody UserDetailsModel userDetails) throws ServiceException {
 		userService.addUserDetails(userDetails);
-		return new ResponseEntity("User created Successfully", HttpStatus.OK);
+		return new ResponseEntity<String>("User created Successfully", HttpStatus.OK);
 	}
 	
 	@RequestMapping(value={"/users/{id}"}, method = RequestMethod.DELETE)
-	public void deleteUser(@PathVariable("id") String userId) throws ServiceException {
+	public ResponseEntity<String> deleteUser(@PathVariable("id") String userId) throws ServiceException {
 		userService.deleteUser(userId);
+		return new ResponseEntity<String>("User created Successfully", HttpStatus.OK);
 	}
 
 	@RequestMapping(value={"/users"}, method = RequestMethod.PUT)
-	public void updateUser(@RequestBody UserDetailsModel userDetails) throws ServiceException {
+	public ResponseEntity<String> updateUser(@RequestBody UserDetailsModel userDetails) throws ServiceException {
 		userService.updateUser(userDetails);
+		return new ResponseEntity<String>("User updated Successfully", HttpStatus.OK);
 	}
 	
 	@RequestMapping(value={"/users/userAvailability"}, method = RequestMethod.GET)
-	public UserDetailsModel userAvailability(@PathVariable("username") String userName) throws ServiceException {
-		return userService.getUserDetailsByUsername(userName);
+	public Boolean userAvailability(@PathVariable("username") String userName) throws ServiceException {
+		UserDetailsModel userDetailsModel= userService.getUserDetailsByUsername(userName);
+		return userDetailsModel == null ? false : true;
 	}
 	
 	@RequestMapping(value={"/getClientUsers/{id}"}, method = RequestMethod.GET)
