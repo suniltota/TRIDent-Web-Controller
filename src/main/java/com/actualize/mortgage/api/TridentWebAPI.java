@@ -77,7 +77,7 @@ public class TridentWebAPI {
 	public String calculateCDPayments(HttpServletRequest request, HttpServletResponse response, @PathVariable String version, @RequestBody ClosingDisclosure closingDisclosure) throws Exception
 	{
 		String loanId = getLoanIdFromCD(closingDisclosure);
-		userActivityServiceImpl.insertUserActivity(request, response, loanId, "CDJSON to CDXMLWithCalculations");
+		//userActivityServiceImpl.insertUserActivity(request, response, loanId, "CDJSON to CDXMLWithCalculations");
 		LOG.info("user "+SecurityContextHolder.getContext().getAuthentication().getName()+" with Loan Id: "+getLoanIdFromCD(closingDisclosure)+ " used Service: CD JSON to CDXML With Calculations");
 		return triDentWebService.calculateCDPayments(closingDisclosure);
 	}
@@ -86,7 +86,7 @@ public class TridentWebAPI {
 	public CalculateCDResponse calculateCDJSON(HttpServletRequest request, HttpServletResponse response, @PathVariable String version, @RequestBody ClosingDisclosure closingDisclosure) throws Exception
 	{
 		String loanId = getLoanIdFromCD(closingDisclosure);
-		userActivityServiceImpl.insertUserActivity(request, response, loanId, "CDJSON to CDJSONWithCalculations");
+		//userActivityServiceImpl.insertUserActivity(request, response, loanId, "CDJSON to CDJSONWithCalculations");
 		LOG.info("user "+SecurityContextHolder.getContext().getAuthentication().getName()+" with Loan Id: "+loanId+ " used Service:CD JSON to CD JSON with Calculations ");
 		return triDentWebService.createCalculateCDResponse(closingDisclosure);
 	}
@@ -95,7 +95,7 @@ public class TridentWebAPI {
 	public CalculateLEResponse calculateLEJSON(HttpServletRequest request, HttpServletResponse response, @PathVariable String version, @RequestBody LoanEstimate loanEstimateJSON) throws Exception
 	{
 		String loanId = getLoanIdFromLE(loanEstimateJSON);
-		userActivityServiceImpl.insertUserActivity(request, response, loanId, "LEJSON to LEJSONWithCalculations");
+		//userActivityServiceImpl.insertUserActivity(request, response, loanId, "LEJSON to LEJSONWithCalculations");
 		LOG.info("user "+SecurityContextHolder.getContext().getAuthentication().getName()+" with Loan Id: "+loanId+ " used Service:LE JSON to LE JSON with Calculations ");
 		return triDentWebService.createCalculateLEResponse(loanEstimateJSON);
 	}
@@ -104,7 +104,7 @@ public class TridentWebAPI {
 	public String calculateLEPayments(HttpServletRequest request, HttpServletResponse response, @PathVariable String version, @RequestBody LoanEstimate loanEstimateJSON) throws Exception
 	{
 		String loanId = getLoanIdFromLE(loanEstimateJSON);
-		userActivityServiceImpl.insertUserActivity(request, response, loanId, "LECalculations");
+		//userActivityServiceImpl.insertUserActivity(request, response, loanId, "LECalculations");
 		LOG.info("user "+SecurityContextHolder.getContext().getAuthentication().getName()+" with Loan Id: "+loanId+ " used Service: LE Calculations");
 		return triDentWebService.calculateLEPayments(loanEstimateJSON);
 	}
@@ -114,7 +114,7 @@ public class TridentWebAPI {
 	{
 		String loanId = getLoanIdFromCD(closingDisclosure);
 		LOG.info("user "+SecurityContextHolder.getContext().getAuthentication().getName()+" with Loan Id: "+loanId+ " used Service: CDJSONtoPDF");
-		userActivityServiceImpl.insertUserActivity(request, response, loanId, "CDJSONtoPDF");
+		//userActivityServiceImpl.insertUserActivity(request, response, loanId, "CDJSONtoPDF");
 		return triDentWebService.cdJsonToPdf(closingDisclosure);
 	}
 	
@@ -123,7 +123,7 @@ public class TridentWebAPI {
 	{
 		String loanId = getLoanIdFromLE(loanEstimateJSON);
 		LOG.info("user "+SecurityContextHolder.getContext().getAuthentication().getName() +" with Loan Id: "+loanId+ " used Service: LEJSONtoPDF");
-		userActivityServiceImpl.insertUserActivity(request, response, loanId, "LEJSONtoPDF");
+		//userActivityServiceImpl.insertUserActivity(request, response, loanId, "LEJSONtoPDF");
     	return triDentWebService.leJsonToPdf(loanEstimateJSON);
 	}
 	
@@ -132,7 +132,7 @@ public class TridentWebAPI {
 	{
 		String loanId = getLoanIdFromCD(closingDisclosure);
 		LOG.info("user "+SecurityContextHolder.getContext().getAuthentication().getName()+" with Loan Id: "+loanId+ " used Service: ValidateCDJSON");
-		userActivityServiceImpl.insertUserActivity(request, response, loanId, "ValidateCDJSON");
+		//userActivityServiceImpl.insertUserActivity(request, response, loanId, "ValidateCDJSON");
     	return triDentWebService.validateCDJson(closingDisclosure, true);
 	}
 	
@@ -148,7 +148,7 @@ public class TridentWebAPI {
 	{
 		String loanId = getLoanIdFromCD(closingDisclosure);
 		LOG.info("user "+SecurityContextHolder.getContext().getAuthentication().getName()+" with Loan Id: "+loanId+ " used Service: CDJSONTOUCDXML");
-		userActivityServiceImpl.insertUserActivity(request, response, loanId, "CDJSONTOUCDXML");
+		//userActivityServiceImpl.insertUserActivity(request, response, loanId, "CDJSONTOUCDXML");
 		return triDentWebService.trimCDJson(closingDisclosure);
 	}
 	
@@ -158,7 +158,7 @@ public class TridentWebAPI {
 	{
 		String loanId = getLoanIdFromCD(closingDisclosure);
 		LOG.info("user "+SecurityContextHolder.getContext().getAuthentication().getName()+" with Loan Id: "+loanId+ " used Service: CD CalculateLateCharge");
-		userActivityServiceImpl.insertUserActivity(request, response, loanId, "CDCalculateLateCharge");
+		//userActivityServiceImpl.insertUserActivity(request, response, loanId, "CDCalculateLateCharge");
 		String mismoXML = lateChargeRuleService.calculateLateChargeRule(closingDisclosureServices.createClosingDisclosureXMLfromObject(closingDisclosure));
 		InputStream in = new ByteArrayInputStream(mismoXML.getBytes(StandardCharsets.UTF_8));
 		return closingDisclosureServices.createClosingDisclosureObjectfromXMLDoc(in);
@@ -170,7 +170,7 @@ public class TridentWebAPI {
 	{
 		String loanId = getLoanIdFromLE(loanEstimate);
 		LOG.info("user "+SecurityContextHolder.getContext().getAuthentication().getName() +" with Loan Id: "+loanId +" used Service: LE CalculateLateCharge");
-		userActivityServiceImpl.insertUserActivity(request, response, loanId, "LECalculateLateCharge");
+		//userActivityServiceImpl.insertUserActivity(request, response, loanId, "LECalculateLateCharge");
 		String mismoXML = lateChargeRuleService.calculateLateChargeRule(loanEstimateServices.createLoanEstimateXMLfromObject(loanEstimate));
 		InputStream in = new ByteArrayInputStream(mismoXML.getBytes(StandardCharsets.UTF_8));
 		return loanEstimateServices.createLoanEstimateDocumentObjectfromXMLDoc(in);
