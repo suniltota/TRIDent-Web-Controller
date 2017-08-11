@@ -107,7 +107,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public void deleteUser(String userId) {
-		userManagerImpl.deleteUser(userId);
+		userManagerImpl.activeOrdeActivate(userId, false);
 	}
 
 	@Override

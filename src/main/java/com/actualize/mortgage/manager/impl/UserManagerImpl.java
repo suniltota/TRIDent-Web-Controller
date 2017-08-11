@@ -81,8 +81,10 @@ public class UserManagerImpl implements UserManager{
 	}
 
 	@Override
-	public void deleteUser(String userId) {
-		entityManager.remove(entityManager.find(UserDetailsEntity.class, userId));
+	public void activeOrdeActivate(String userId,boolean enabled) {
+		UserDetailsEntity userDetailsEntity =  getUserById(userId);
+		userDetailsEntity.setEnabled(enabled);
+		updateUser(userDetailsEntity);
 		
 	}
 
