@@ -6,14 +6,10 @@ package com.actualize.mortgage.datamodels;
 import java.io.Serializable;
 import java.sql.Timestamp;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
@@ -27,6 +23,7 @@ import org.hibernate.annotations.GenericGenerator;
 public class ClientContactInfoEntity implements Serializable {
 
 	private static final long serialVersionUID = -8883837225210015943L;
+	
 	@Id
 	@GeneratedValue(generator = "uuid")
 	@GenericGenerator(name = "uuid", strategy = "uuid2")
@@ -35,13 +32,14 @@ public class ClientContactInfoEntity implements Serializable {
 	private String name;
 	private String email;
 	private String phone;
-	@ManyToOne(cascade = CascadeType.ALL, fetch=FetchType.LAZY)
+	/*@ManyToOne(cascade = CascadeType.ALL, fetch=FetchType.LAZY)
 	@JoinColumn(name="clientId")
-	private ClientEntity clientEntity;
+	private ClientEntity clientEntity;*/
 	@Column(name="creationDate", insertable=false, updatable=false)
 	private Timestamp creationDate;
 	@Column(name="modificationDate", insertable=false, updatable=false)
 	private Timestamp modificationDate;
+	
 	/**
 	 * @return the contactInfoId
 	 */
@@ -105,15 +103,15 @@ public class ClientContactInfoEntity implements Serializable {
 	/**
 	 * @return the clientEntity
 	 */
-	public ClientEntity getClientEntity() {
+	/*public ClientEntity getClientEntity() {
 		return clientEntity;
-	}
+	}*/
 	/**
 	 * @param clientEntity the clientEntity to set
 	 */
-	public void setClientEntity(ClientEntity clientEntity) {
+/*	public void setClientEntity(ClientEntity clientEntity) {
 		this.clientEntity = clientEntity;
-	}
+	}*/
 	/**
 	 * @return the creationDate
 	 */

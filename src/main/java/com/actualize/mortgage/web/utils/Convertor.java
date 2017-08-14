@@ -28,6 +28,7 @@ import com.actualize.mortgage.datamodels.ClientContactInfoEntity;
 import com.actualize.mortgage.datamodels.ClientEntity;
 import com.actualize.mortgage.datamodels.GroupEntity;
 import com.actualize.mortgage.datamodels.InvestorEntity;
+import com.actualize.mortgage.datamodels.InvestorUserDetailsEntity;
 import com.actualize.mortgage.datamodels.RoleEntity;
 import com.actualize.mortgage.datamodels.ServicesEntity;
 import com.actualize.mortgage.datamodels.UserActivityEntity;
@@ -36,6 +37,7 @@ import com.actualize.mortgage.domainmodels.ClientContactInfoModel;
 import com.actualize.mortgage.domainmodels.ClientModel;
 import com.actualize.mortgage.domainmodels.GroupModel;
 import com.actualize.mortgage.domainmodels.InvestorModel;
+import com.actualize.mortgage.domainmodels.InvestorUserDetailsModel;
 import com.actualize.mortgage.domainmodels.RoleModel;
 import com.actualize.mortgage.domainmodels.ServicesModel;
 import com.actualize.mortgage.domainmodels.UserActivityModel;
@@ -43,6 +45,8 @@ import com.actualize.mortgage.domainmodels.UserDetailsModel;
 import com.actualize.mortgage.exceptions.ServiceException;
 import com.actualize.mortgage.manager.ClientManager;
 import com.actualize.mortgage.manager.GroupManager;
+import com.actualize.mortgage.manager.InvestorManager;
+import com.actualize.mortgage.manager.InvestorUserDetailsManager;
 import com.actualize.mortgage.manager.RoleManager;
 import com.actualize.mortgage.manager.ServiceManager;
 import com.actualize.mortgage.manager.UserManager;
@@ -56,19 +60,25 @@ import com.actualize.mortgage.manager.UserManager;
 public class Convertor {
 
 	@Autowired
-	private RoleManager roleManagerImpl;
+	private RoleManager roleManager;
 
 	@Autowired
-	private ClientManager clientManagerImpl; 
+	private ClientManager clientManager; 
 
 	@Autowired
-	private UserManager userManagerImpl;
+	private UserManager userManager;
 
 	@Autowired
 	private GroupManager groupManager;
 
 	@Autowired
 	private ServiceManager serviceManager;
+
+	@Autowired
+	private InvestorManager investorManager;
+	
+	@Autowired
+	private InvestorUserDetailsManager investorUserDetailsManager;
 
 	public UserDetailsModel toUserDetails(final UserDetailsEntity userDetailsEntity)
 	{
@@ -137,14 +147,14 @@ public class Convertor {
 		if(null == userDetails.getGroup())
 			throw new ServiceException("Please select a group!");
 		GroupEntity groupEntity =  groupManager.findOne(userDetails.getGroup().getGroupId());
-		
+
 		userDetailsEntity.setGroup(groupEntity);
 		userDetailsEntity.setEmail(userDetails.getEmail());
 		userDetailsEntity.setEnabled(userDetails.isEnabled());
 		userDetailsEntity.setFailedLoginAttempts(userDetails.getFailedLoginAttempts());
 		userDetailsEntity.setPassword(userDetails.getPassword());
 		userDetailsEntity.setResetPassword(userDetails.isResetPassword());
-		RoleEntity roleEntity = roleManagerImpl.getRoleById(userDetails.getRole().getRoleId());
+		RoleEntity roleEntity = roleManager.getRoleById(userDetails.getRole().getRoleId());
 		if(null == roleEntity)
 			throw new ServiceException("Invalid Role");
 		userDetailsEntity.setRole(roleEntity);
@@ -191,6 +201,7 @@ public class Convertor {
 		client.setPhoneNumber(clientEntity.getPhoneNumber());
 		client.setClientContactInfo(toClientContactInfoModel(clientEntity.getClientContactInfo()));
 		client.setServicesModel(toServiceModelList(clientEntity.getServicesEntities()));
+		client.setInvestorUserDetailsModel(toInvestorUserDetailsModelList(clientEntity.getInvestorUserDetailsEntity()));
 		client.setCreationDate(toStringFromDate(clientEntity.getCreationDate()));
 		client.setModificationDate(toStringFromDate(clientEntity.getModificationDate()));
 		return client;
@@ -204,7 +215,8 @@ public class Convertor {
 		clientEntity.setPhoneNumber(client.getPhoneNumber());
 		clientEntity.setPhoneNumber(client.getPhoneNumber());
 		clientEntity.setClientContactInfo(toClientContactInfoEntity(client.getClientContactInfo()));
-		clientEntity.setServicesEntities(toServiceEntityList(client.getServicesModel()));
+		clientEntity.setServicesEntities(toServiceEntitySet(client.getServicesModel()));
+		clientEntity.setInvestorUserDetailsEntity(toClientInvestorUserDetailsEntity(client.getInvestorUserDetailsModel()));
 		clientEntity.setAddress(client.getAddress());
 		return clientEntity;
 	}
@@ -266,9 +278,9 @@ public class Convertor {
 	{
 		List<ServicesEntity> servicesEntities = new LinkedList<>();
 		if (!ObjectUtils.isEmpty(servicesEntities)) {
-		servicesModels.forEach(servicesModel -> {
-			servicesEntities.add(toServicesEntity(servicesModel));
-		});
+			servicesModels.forEach(servicesModel -> {
+				servicesEntities.add(toServicesEntity(servicesModel));
+			});
 		}
 		return servicesEntities;
 	}
@@ -278,7 +290,11 @@ public class Convertor {
 		Set<ServicesEntity> servicesEntities = new HashSet<ServicesEntity>();
 		if(! ObjectUtils.isEmpty(servicesModels)){
 			servicesModels.forEach(servicesModel -> {
-				servicesEntities.add(serviceManager.getServiceByServiceId(servicesModel.getServiceId()));
+				validate(servicesModel.getServiceId(), "Service Id");
+				ServicesEntity servicesEntity = serviceManager.getServiceByServiceId(servicesModel.getServiceId());
+				if(null == servicesEntity)
+					new ServiceException("Invalid Service found");
+				servicesEntities.add(servicesEntity);
 			});
 		}
 		return servicesEntities;
@@ -290,8 +306,8 @@ public class Convertor {
 		userActivity.setLoanId(loanId);
 		userActivity.setRequestSize(request.getContentLengthLong());
 		userActivity.setResponseStatus(Integer.toString(response.getStatus()));
-		UserDetailsEntity userDetailsEntity = userManagerImpl.getUserById(userDetails.getUserId());
-		if( null == userDetailsEntity)
+		UserDetailsEntity userDetailsEntity = userManager.getUserById(userDetails.getUserId());
+		if(null == userDetailsEntity)
 			throw new ServiceException("Invalid User");
 		userActivity.setUserDetails(userDetailsEntity);
 		userActivity.setRequestStartTime(new SimpleDateFormat("MM/dd/YYYY HH:mm:ss.SSS").format(new Date().getTime()));
@@ -318,6 +334,7 @@ public class Convertor {
 		userActivityModel.setTimeLapsedForRequest(userActivityEntity.getTimeLapsedForRequest());
 		userActivityModel.setUseractivityId(userActivityEntity.getUseractivityId());
 		userActivityModel.setUserDetailsModel(toUserDetails(userActivityEntity.getUserDetails()));
+
 		return userActivityModel;
 	}
 
@@ -344,10 +361,10 @@ public class Convertor {
 
 	public GroupEntity toGroupEntity(GroupModel groupModel) {
 		GroupEntity groupEntity = null;
-		
+
 		if(ObjectUtils.isEmpty(groupModel.getGroupId())){
 			groupEntity = new GroupEntity();
-			
+
 		}else{
 			groupEntity = groupManager.findOne(groupModel.getGroupId());
 			/*groupEntity.setGroupPath(groupModel.getGroupPath());
@@ -389,37 +406,99 @@ public class Convertor {
 		groupModel.setEnabled(groupEntity.isEnabled());
 		groupModel.setServices(toServiceModelList(groupEntity.getServices()));
 		if(! ObjectUtils.isEmpty(groupEntity.getServices())){
-		//	groupModel.setServiceDisplayNames(groupModel.getServices().stream().reduce());
+			//	groupModel.setServiceDisplayNames(groupModel.getServices().stream().reduce());
 		}
 		groupModel.setPasswordExpireDays(groupEntity.getPasswordExpireDays());
 		groupModel.setSessionTimeOut(groupEntity.getSessionTimeOut());
 		return groupModel;
 	}
-	
+
 	public InvestorModel toInvestorModel(InvestorEntity investorEntity)
-		{
-			InvestorModel investorModel = new InvestorModel();
-			investorModel.setInvestorId(investorEntity.getInvestorId());
-			investorModel.setInvestorName(investorEntity.getInvestorName());
-			investorModel.setInvestorUrl(investorEntity.getInvestorUrl());
-			investorModel.setCreationDate(toStringFromDate(investorEntity.getCreationDate()));
-			investorModel.setModificationDate(toStringFromDate(investorEntity.getModificationDate()));
-			return investorModel;
-		}
+	{
+		InvestorModel investorModel = new InvestorModel();
+		investorModel.setInvestorId(investorEntity.getInvestorId());
+		investorModel.setInvestorName(investorEntity.getInvestorName());
+		investorModel.setInvestorUrl(investorEntity.getInvestorUrl());
+		investorModel.setCreationDate(toStringFromDate(investorEntity.getCreationDate()));
+		investorModel.setModificationDate(toStringFromDate(investorEntity.getModificationDate()));
+		return investorModel;
+	}
+
+	public InvestorEntity toInvestorEntity(InvestorModel investorModel)
+	{
+		InvestorEntity investorEntity = new InvestorEntity();
+		investorEntity.setInvestorId(investorModel.getInvestorId());
+		investorEntity.setInvestorName(investorModel.getInvestorName());
+		investorEntity.setInvestorUrl(investorModel.getInvestorUrl());
+		return investorEntity;
+	}
+
+	public InvestorUserDetailsEntity toInvestorUserDetailsEntity(InvestorUserDetailsModel investorUserDetailsModel)
+	{
+		InvestorUserDetailsEntity investorUserDetailsEntity = new InvestorUserDetailsEntity();
+		investorUserDetailsEntity.setInvestorUserId(investorUserDetailsModel.getInvestorUserId());
+		investorUserDetailsEntity.setLoanDeliveryFile(investorUserDetailsModel.getLoanDeliveryFile());
+		investorUserDetailsEntity.setUsername(investorUserDetailsModel.getUsername());
+		investorUserDetailsEntity.setPassword(investorUserDetailsModel.getPassword());
+		validate(investorUserDetailsModel.getInvestorModel().getInvestorId(), "Investor Id");
+		InvestorEntity investorEntity =  investorManager.getInvestorByInvestorId(investorUserDetailsModel.getInvestorModel().getInvestorId());
+		if(null == investorEntity)
+			throw new ServiceException("Invalid Investor");
+		investorUserDetailsEntity.setInvestorEntity(investorEntity);
+
+		return investorUserDetailsEntity;
+
+	}
+	
+	public List<InvestorUserDetailsEntity> toClientInvestorUserDetailsEntity(List<InvestorUserDetailsModel> investorUserDetailsModelList)
+	{
+		List<InvestorUserDetailsEntity> investorUserDetailsEntities = new LinkedList<>();
 		
-		public InvestorEntity toInvestorEntity(InvestorModel investorModel)
-		{
-			InvestorEntity investorEntity = new InvestorEntity();
-			investorEntity.setInvestorId(investorModel.getInvestorId());
-			investorEntity.setInvestorName(investorModel.getInvestorName());
-			investorEntity.setInvestorUrl(investorModel.getInvestorUrl());
-			return investorEntity;
-		}
+		investorUserDetailsModelList.forEach(investorUserDetailsModel -> {
+			investorUserDetailsEntities.add(toInvestorUserDetailsEntity(investorUserDetailsModel));
+		});
+		return investorUserDetailsEntities;
+
+	}
+
+
+	public InvestorUserDetailsModel toInvestorUserDetailsModel(InvestorUserDetailsEntity investorUserDetailsEntity)
+	{
+		InvestorUserDetailsModel investorUserDetailsModel = new InvestorUserDetailsModel();
+
+		investorUserDetailsModel.setInvestorUserId(investorUserDetailsEntity.getInvestorUserId());
+		investorUserDetailsModel.setLoanDeliveryFile(investorUserDetailsEntity.getLoanDeliveryFile());
+		investorUserDetailsModel.setUsername(investorUserDetailsEntity.getUsername());
+		investorUserDetailsModel.setPassword(investorUserDetailsEntity.getPassword());
+		investorUserDetailsModel.setInvestorModel(toInvestorModel(investorUserDetailsEntity.getInvestorEntity()));
+		investorUserDetailsModel.setCreationDate(toStringFromDate(investorUserDetailsEntity.getCreationDate()));
+		investorUserDetailsModel.setModificationDate(toStringFromDate(investorUserDetailsEntity.getModificationDate()));
+
+		return investorUserDetailsModel;
+
+	}
+	
+	public List<InvestorUserDetailsModel> toInvestorUserDetailsModelList(List<InvestorUserDetailsEntity> investorUserDetailsEntityList)
+	{
+		List<InvestorUserDetailsModel> investorUserDetailsModels = new LinkedList<>();
+		investorUserDetailsEntityList.forEach(investorUserDetailsEntity -> {
+			investorUserDetailsModels.add(toInvestorUserDetailsModel(investorUserDetailsEntity));
+		});
+		return investorUserDetailsModels;
+
+	}
+	
 	private String toStringFromDate(Timestamp timeStamp)
 	{
 		if(null != timeStamp )
 			return new SimpleDateFormat("MM-dd-yyyy HH:mm:ss").format(timeStamp.getTime());
 		else
 			return "";
+	}
+
+	private void validate(String validate, String message)
+	{
+		if(ObjectUtils.isEmpty(validate))
+			throw new ServiceException(message+" cannot be empty");
 	}
 }

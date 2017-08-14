@@ -6,6 +6,7 @@ package com.actualize.mortgage.datamodels;
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -40,12 +41,18 @@ public class ClientEntity implements Serializable {
 	@Column(name="isEnabled")
 	private boolean enabled; 
 	private String phoneNumber;
-	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.LAZY)
+	@JoinTable(name="client_client_contact_info", joinColumns= @JoinColumn(name= "client_id"),
+	inverseJoinColumns = @JoinColumn(name="contact_info_id"))
 	private List<ClientContactInfoEntity> clientContactInfo;
-	@ManyToMany(fetch=FetchType.EAGER)
-	@JoinTable(name="client_services", joinColumns= @JoinColumn(name= "clientId"),
-	inverseJoinColumns = @JoinColumn(name="serviceId"))
-	private List<ServicesEntity> servicesEntities;
+	@ManyToMany(fetch=FetchType.LAZY)
+	@JoinTable(name="client_services", joinColumns= @JoinColumn(name= "client_id"),
+	inverseJoinColumns = @JoinColumn(name="service_id"))
+	private Set<ServicesEntity> servicesEntities;
+	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.LAZY)
+	@JoinTable(name="client_investor_users", joinColumns= @JoinColumn(name= "client_id"),
+	inverseJoinColumns = @JoinColumn(name="investor_user_id"))
+	private List<InvestorUserDetailsEntity> investorUserDetailsEntity;
 	@Column(name="creationDate", insertable=false, updatable=false)
 	private Timestamp creationDate;
 	@Column(name="modificationDate", insertable=false, updatable=false)
@@ -125,14 +132,26 @@ public class ClientEntity implements Serializable {
 	/**
 	 * @return the servicesEntities
 	 */
-	public List<ServicesEntity> getServicesEntities() {
+	public Set<ServicesEntity> getServicesEntities() {
 		return servicesEntities;
 	}
 	/**
 	 * @param servicesEntities the servicesEntities to set
 	 */
-	public void setServicesEntities(List<ServicesEntity> servicesEntities) {
+	public void setServicesEntities(Set<ServicesEntity> servicesEntities) {
 		this.servicesEntities = servicesEntities;
+	}
+	/**
+	 * @return the investorUserDetailsEntity
+	 */
+	public List<InvestorUserDetailsEntity> getInvestorUserDetailsEntity() {
+		return investorUserDetailsEntity;
+	}
+	/**
+	 * @param investorUserDetailsEntity the investorUserDetailsEntity to set
+	 */
+	public void setInvestorUserDetailsEntity(List<InvestorUserDetailsEntity> investorUserDetailsEntity) {
+		this.investorUserDetailsEntity = investorUserDetailsEntity;
 	}
 	/**
 	 * @return the creationDate

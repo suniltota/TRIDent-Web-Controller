@@ -29,12 +29,16 @@ public class InvestorEntity implements Serializable{
 	@GenericGenerator(name = "uuid", strategy = "uuid2")
 	@Column(name="investor_id")
 	private String investorId;
-	@Column(name="investor_name")
+	
+	@Column(name="investor_name", unique = true, nullable= false)
 	private String investorName;
-	@Column(name="investor_url")
+	
+	@Column(name="investor_url", nullable= false)
 	private String investorUrl;
+	
 	@Column(name="creation_date", insertable=false, updatable=false)
 	private Timestamp creationDate;
+	
 	@Column(name="modification_date", insertable=false, updatable=false)
 	private Timestamp modificationDate;
 

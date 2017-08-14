@@ -21,6 +21,7 @@ public class ClientModel implements Serializable {
 	private String phoneNumber;
 	private List<ClientContactInfoModel> clientContactInfo;
 	private List<ServicesModel> servicesModel;
+	private List<InvestorUserDetailsModel> investorUserDetailsModel;
 	private String creationDate;
 	private String modificationDate;
 	
@@ -107,6 +108,18 @@ public class ClientModel implements Serializable {
 	 */
 	public void setServicesModel(List<ServicesModel> servicesModel) {
 		this.servicesModel = servicesModel;
+	}
+	/**
+	 * @return the investorUserDetailsModel
+	 */
+	public List<InvestorUserDetailsModel> getInvestorUserDetailsModel() {
+		return investorUserDetailsModel;
+	}
+	/**
+	 * @param investorUserDetailsModel the investorUserDetailsModel to set
+	 */
+	public void setInvestorUserDetailsModel(List<InvestorUserDetailsModel> investorUserDetailsModel) {
+		this.investorUserDetailsModel = investorUserDetailsModel;
 	}
 	/**
 	 * @return the creationDate
