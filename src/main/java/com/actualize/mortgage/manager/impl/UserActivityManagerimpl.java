@@ -33,7 +33,7 @@ public class UserActivityManagerimpl implements UserActivityManager {
 	@Override
 	public UserActivityEntity insertUserActivity(UserActivityEntity userActivityEntity) throws ServiceException {
 		try{
-		entityManager.persist(userActivityEntity);
+		entityManager.merge(userActivityEntity);
 		return userActivityEntity;
 		}
 		catch(Exception e)
