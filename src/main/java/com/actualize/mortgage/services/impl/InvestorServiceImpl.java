@@ -33,9 +33,8 @@ public class InvestorServiceImpl implements InvestorService {
 	@Override
 	public InvestorModel getInvestorByInvestorId(String investorId) throws ServiceException {
 		
-		if(ObjectUtils.isEmpty(investorId))
-			throw new ServiceException("Investor Id cannot be empty");
-
+		validateInvestor(investorId, "Investor Id");
+		
 		InvestorEntity investorEntity = investorManagerImpl.getInvestorByInvestorId(investorId);
 		
 		if(null == investorEntity)
@@ -47,13 +46,12 @@ public class InvestorServiceImpl implements InvestorService {
 	@Override
 	public InvestorModel getInvestorByInvestorName(String investorName) throws ServiceException {
 		
-		if(ObjectUtils.isEmpty(investorName))
-			throw new ServiceException("Investor Name cannot be empty");
+		validateInvestor(investorName, "Investor Name");
 		
 		InvestorEntity investorEntity = investorManagerImpl.getInvestorByInvestorName(investorName);
 		
 		if(null == investorEntity)
-			throw new ServiceException("No investor found with investor name: "+investorName);
+			throw new ServiceException("No Investor found with investor name: "+investorName);
 		
 		return convertor.toInvestorModel(investorEntity);
 	}
@@ -78,7 +76,7 @@ public class InvestorServiceImpl implements InvestorService {
 
 		InvestorEntity investorEntity =  investorManagerImpl.updateInvestor(convertor.toInvestorEntity(investorModel));
 		
-		if(investorModel.getInvestorName().equalsIgnoreCase(investorEntity.getInvestorName()))
+		if(!investorModel.getInvestorName().equalsIgnoreCase(investorEntity.getInvestorName()))
 			throw new ServiceException("Investor Name cannot be updated");
 
 		return convertor.toInvestorModel(investorEntity);
@@ -87,8 +85,7 @@ public class InvestorServiceImpl implements InvestorService {
 	@Override
 	public void deleteInvestor(String investorId) throws ServiceException {
 		
-		if(ObjectUtils.isEmpty(investorId))
-			throw new ServiceException("Investor Id cannot be empty");
+		validateInvestor(investorId, "Investor Id");
 		
 		investorManagerImpl.deleteInvestor(investorId);
 
@@ -115,6 +112,11 @@ public class InvestorServiceImpl implements InvestorService {
 
 		if(ObjectUtils.isEmpty(investorModel.getInvestorUrl()))
 			throw new ServiceException("Investor URL cannot be empty");
-
+	}
+	
+	private void validateInvestor(String investor, String message)
+	{
+		if(ObjectUtils.isEmpty(investor))
+			throw new ServiceException(message + " cannot be empty");
 	}
 }
