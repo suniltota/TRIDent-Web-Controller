@@ -179,5 +179,17 @@ public class UserActivityEntity implements Serializable {
 		this.modificationDate = modificationDate;
 	}
 	
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "UserActivityEntity [useractivityId=" + useractivityId + ", userDetails=" + userDetails + ", loanId="
+				+ loanId + ", serviceUtilized=" + serviceUtilized + ", responseStatus=" + responseStatus
+				+ ", requestStartTime=" + requestStartTime + ", timeLapsedForRequest=" + timeLapsedForRequest
+				+ ", requestSize=" + requestSize + ", responseSize=" + responseSize + ", creationDate=" + creationDate
+				+ ", modificationDate=" + modificationDate + "]";
+	}
+	
 	
 }

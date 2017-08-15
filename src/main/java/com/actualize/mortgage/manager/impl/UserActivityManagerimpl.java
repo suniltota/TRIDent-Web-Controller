@@ -9,6 +9,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Repository;
 
 import com.actualize.mortgage.datamodels.UserActivityEntity;
@@ -22,14 +24,25 @@ import com.actualize.mortgage.manager.UserActivityManager;
 @Repository
 @Transactional
 public class UserActivityManagerimpl implements UserActivityManager {
+	
+	private static final Logger LOG = LogManager.getLogger(UserActivityManagerimpl.class);
 
 	@PersistenceContext
 	EntityManager entityManager;
 
 	@Override
 	public UserActivityEntity insertUserActivity(UserActivityEntity userActivityEntity) throws ServiceException {
+		try{
 		entityManager.persist(userActivityEntity);
 		return userActivityEntity;
+		}
+		catch(Exception e)
+		{
+			LOG.error("failed to insert user activity"+ userActivityEntity.toString());
+			LOG.error("failed to insert user activity for reason: "+ e.toString());
+		}
+		return userActivityEntity;
+		
 	}
 
 	@Override

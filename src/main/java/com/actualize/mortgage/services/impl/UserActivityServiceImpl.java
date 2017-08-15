@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import com.actualize.mortgage.datamodels.UserActivityEntity;
@@ -28,7 +29,8 @@ public class UserActivityServiceImpl implements UserActivityService {
 
 	@Autowired
 	Convertor convertor;
-
+	
+	@Async("userActivity")
 	@Override
 	public UserActivityModel insertUserActivity(HttpServletRequest request, HttpServletResponse response, String loanId, String serviceName)
 			throws ServiceException {
