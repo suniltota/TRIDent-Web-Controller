@@ -5,6 +5,7 @@ package com.actualize.mortgage.domainmodels;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author sboragala
@@ -21,7 +22,8 @@ public class ClientModel implements Serializable {
 	private String phoneNumber;
 	private List<ClientContactInfoModel> clientContactInfo;
 	private List<ServicesModel> servicesModel;
-	private List<InvestorUserDetailsModel> investorUserDetailsModel;
+	private Set<InvestorModel> investorModels;
+	//private List<InvestorUserDetailsModel> investorUserDetailsModel;
 	private String creationDate;
 	private String modificationDate;
 	private String webSite;
@@ -112,14 +114,27 @@ public class ClientModel implements Serializable {
 	/**
 	 * @return the investorUserDetailsModel
 	 */
-	public List<InvestorUserDetailsModel> getInvestorUserDetailsModel() {
+	/*public List<InvestorUserDetailsModel> getInvestorUserDetailsModel() {
 		return investorUserDetailsModel;
 	}
-	/**
+	*//**
 	 * @param investorUserDetailsModel the investorUserDetailsModel to set
-	 */
+	 *//*
 	public void setInvestorUserDetailsModel(List<InvestorUserDetailsModel> investorUserDetailsModel) {
 		this.investorUserDetailsModel = investorUserDetailsModel;
+	}*/
+	
+	/**
+	 * @return the investorModels
+	 */
+	public Set<InvestorModel> getInvestorModels() {
+		return investorModels;
+	}
+	/**
+	 * @param investorModels the investorModels to set
+	 */
+	public void setInvestorModels(Set<InvestorModel> investorModels) {
+		this.investorModels = investorModels;
 	}
 	/**
 	 * @return the creationDate
