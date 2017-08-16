@@ -66,10 +66,10 @@ public class GroupController {
 		 return new ResponseEntity<String>("Groups deactivated Successfully", HttpStatus.OK);
 	}
 
-	@RequestMapping(value={"/groups/deactivate/{id}"}, method = RequestMethod.POST)
+	@RequestMapping(value={"/groups/activate/{id}"}, method = RequestMethod.POST)
 	public ResponseEntity<String> activateGroup(@PathVariable("id") String groupId) throws ServiceException {
 		 groupService.activateOrDeActivateGroup(groupId, true);
-		 return new ResponseEntity<String>("Group deactivated Successfully", HttpStatus.OK);
+		 return new ResponseEntity<String>("Group activated Successfully", HttpStatus.OK);
 	}
 
 	@RequestMapping(value={"/groups/activate/"}, method = RequestMethod.POST)
