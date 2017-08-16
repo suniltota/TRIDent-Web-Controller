@@ -70,7 +70,7 @@ public class UserDetailsEntity implements Serializable {
     @JoinTable(
             name = "user_services",
             joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id")
+            inverseJoinColumns = @JoinColumn(name = "service_id")
     )
 	private Set<ServicesEntity> services;
 	/**
