@@ -32,12 +32,15 @@ public interface GroupManager extends CrudRepository<GroupEntity,String>{
 	@Query("FROM GroupEntity g WHERE g.enabled = true and g.groupSequence = ?1")
 	public GroupEntity getGroupBySequence(Long sequence);
 	
-	@Query("FROM GroupEntity g WHERE g.enabled = true and g.groupPath like ?1")
+	@Query("FROM GroupEntity g WHERE g.enabled = true and g.groupPath like ?1%")
 	public List<GroupEntity> getGroupsByGroupPath(String groupPath);
 
 	@Query("SELECT COUNT(g) FROM GroupEntity g WHERE g.groupName = ?1")
 	public long isGroupNameAvailable(String groupname);	
 	
-	@Query("FROM GroupEntity g WHERE g.enabled = true and groupSequence != ?1 and g.groupPath like ?2")
-	public List<GroupEntity> getChildGroups(long groupSequence,String groupPath);	
+	@Query("FROM GroupEntity g WHERE g.groupPath like ?1%")
+	public List<GroupEntity> getChildGroups(String groupPath);
+
+	@Query("FROM GroupEntity g WHERE g.enabled = true")
+	public Iterable<GroupEntity> getAllActiveGroups();	
 }

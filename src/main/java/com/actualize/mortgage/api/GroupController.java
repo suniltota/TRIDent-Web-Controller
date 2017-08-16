@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -44,12 +45,12 @@ public class GroupController {
 	@RequestMapping(value={"/groups"}, method = RequestMethod.GET)
 	public List<GroupModel> getAllGroups() throws ServiceException {
 		
-		/*UserDetailsModel userDetailsModel = (UserDetailsModel) SecurityContextHolder.getContext().getAuthentication()
+		UserDetailsModel userDetailsModel = (UserDetailsModel) SecurityContextHolder.getContext().getAuthentication()
 				.getPrincipal();
 		if (userDetailsModel != null && userDetailsModel.getGroup() != null) {
 			return groupService.getChildGroups(userDetailsModel.getGroup().getGroupSequence(),
 					 userDetailsModel.getGroup().getGroupPath());
-		}*/
+		}
 		 return groupService.getAllGroups();
 	}
 
@@ -65,13 +66,13 @@ public class GroupController {
 		 return new ResponseEntity<String>("Groups deactivated Successfully", HttpStatus.OK);
 	}
 
-	@RequestMapping(value={"/groups/activate/{id}"}, method = RequestMethod.DELETE)
+	@RequestMapping(value={"/groups/deactivate/{id}"}, method = RequestMethod.POST)
 	public ResponseEntity<String> activateGroup(@PathVariable("id") String groupId) throws ServiceException {
 		 groupService.activateOrDeActivateGroup(groupId, true);
 		 return new ResponseEntity<String>("Group deactivated Successfully", HttpStatus.OK);
 	}
 
-	@RequestMapping(value={"/groups/activate/"}, method = RequestMethod.DELETE)
+	@RequestMapping(value={"/groups/activate/"}, method = RequestMethod.POST)
 	public ResponseEntity<String> activateGroups(@RequestBody List<String> groupIds) throws ServiceException {
 		 groupService.activateOrDeActivateGroups(groupIds, true);
 		 return new ResponseEntity<String>("Groups activated Successfully", HttpStatus.OK);
