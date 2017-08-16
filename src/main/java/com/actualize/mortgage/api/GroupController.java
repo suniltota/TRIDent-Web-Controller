@@ -85,8 +85,7 @@ public class GroupController {
 	
 	@RequestMapping(value={"/group/isGroupNameAvailable/{groupname}"}, method = RequestMethod.GET)
 	public boolean isGroupNameAvailable(@PathVariable("groupname") String groupname) throws ServiceException {
-		groupService.isGroupNameAvailable(groupname);
-		return true;
+		return groupService.isGroupNameAvailable(groupname);
 	}
 
 }
