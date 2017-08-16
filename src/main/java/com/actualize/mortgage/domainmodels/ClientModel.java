@@ -24,7 +24,7 @@ public class ClientModel implements Serializable {
 	private List<InvestorUserDetailsModel> investorUserDetailsModel;
 	private String creationDate;
 	private String modificationDate;
-	
+	private String webSite;
 	/**
 	 * @return the clientId
 	 */
@@ -145,5 +145,16 @@ public class ClientModel implements Serializable {
 	public void setModificationDate(String modificationDate) {
 		this.modificationDate = modificationDate;
 	}
-	
+	/**
+	 * @return the webSite
+	 */
+	public String getWebSite() {
+		return webSite;
+	}
+	/**
+	 * @param webSite the webSite to set
+	 */
+	public void setWebSite(String webSite) {
+		this.webSite = webSite;
+	}
 }

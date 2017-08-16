@@ -4,11 +4,9 @@
 package com.actualize.mortgage.domainmodels;
 
 import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 /**
@@ -42,6 +40,7 @@ public class UserDetailsModel implements UserDetails  {
 	private String updatedBy;
 	private String modificationDate;
 	private String creationDate;
+	private List<ServicesModel> services;
 	/**
 	 * @return the userId
 	 */
@@ -319,6 +318,18 @@ public class UserDetailsModel implements UserDetails  {
 		this.creationDate = creationDate;
 	}
 	
+	/**
+	 * @return the services
+	 */
+	public List<ServicesModel> getServices() {
+		return services;
+	}
+	/**
+	 * @param services the services to set
+	 */
+	public void setServices(List<ServicesModel> services) {
+		this.services = services;
+	}
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		// TODO Auto-generated method stub

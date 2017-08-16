@@ -62,16 +62,20 @@ public class ClientManagerImpl implements ClientManager {
 	}
 
 	@Override
-	public void deleteClient(String clientId) {
-		entityManager.remove(entityManager.find(ClientEntity.class, clientId));
+	public void activeOrDeactiveClient(String clientId,Boolean enabled) {
+		ClientEntity clientEntity = getClientById(clientId);
+		clientEntity.setEnabled(enabled);
+		updateClient(clientEntity);
+		//entityManager.remove(entityManager.find(ClientEntity.class, clientId));
+		
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<ClientEntity> getAllClients() {
+	public List<ClientEntity> getAllActiveClients() {
 		try{
 			return (List<ClientEntity>) entityManager.createQuery(
-			        "from ClientEntity").getResultList();
+			        "from ClientEntity c where c.enabled =  true").getResultList();
 		}
 		catch(NoResultException e)
 		{

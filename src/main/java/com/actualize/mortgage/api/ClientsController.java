@@ -22,12 +22,12 @@ public class ClientsController {
 	
 	@RequestMapping(value={"/clients"}, method = RequestMethod.GET)
 	public List<ClientModel> getclients() throws ServiceException {
-		return clientService.viewAllClients();
+		return clientService.getAllActiveClients();
 	}
 	
 	@RequestMapping(value={"/clients/{id}"}, method = RequestMethod.GET)
 	public ClientModel getClientById(@PathVariable("id") String clientId) throws ServiceException {
-		return clientService.viewClientById(clientId);
+		return clientService.getClientById(clientId);
 	}
 	
 	@RequestMapping(value={"/clients"}, method = RequestMethod.POST)
@@ -37,9 +37,14 @@ public class ClientsController {
 	
 	@RequestMapping(value={"/clients/{id}"}, method = RequestMethod.DELETE)
 	public void deleteClient(@PathVariable("id") String clientId) throws ServiceException {
-		clientService.deleteClient(clientId);
+		clientService.deactiveClient(clientId);
 	}
-	
+
+	@RequestMapping(value={"/clients/active/{id}"}, method = RequestMethod.POST)
+	public void activeClient(@PathVariable("id") String clientId) throws ServiceException {
+		clientService.activeClient(clientId);
+	}
+
 	@RequestMapping(value={"/clients"}, method = RequestMethod.PUT)
 	public void updateClient(@RequestBody ClientModel clientModel) throws ServiceException {
 		clientService.updateClient(clientModel);

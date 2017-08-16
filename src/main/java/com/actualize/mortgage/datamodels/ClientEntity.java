@@ -57,6 +57,8 @@ public class ClientEntity implements Serializable {
 	private Timestamp creationDate;
 	@Column(name="modificationDate", insertable=false, updatable=false)
 	private Timestamp modificationDate;
+	@Column(name="web_site")
+	private String webSite;
 	/**
 	 * @return the clientId
 	 */
@@ -177,6 +179,16 @@ public class ClientEntity implements Serializable {
 	public void setModificationDate(Timestamp modificationDate) {
 		this.modificationDate = modificationDate;
 	}
-
-
+	/**
+	 * @return the webSite
+	 */
+	public String getWebSite() {
+		return webSite;
+	}
+	/**
+	 * @param webSite the webSite to set
+	 */
+	public void setWebSite(String webSite) {
+		this.webSite = webSite;
+	}
 }

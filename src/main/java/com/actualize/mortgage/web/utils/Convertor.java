@@ -7,6 +7,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
@@ -107,6 +108,9 @@ public class Convertor {
 		userDetails.setUpdatedBy(userDetailsEntity.getUpdatedBy());
 		userDetails.setCreationDate(toStringFromDate(userDetailsEntity.getCreationDate()));
 		userDetails.setModificationDate(toStringFromDate(userDetailsEntity.getModificationDate()));
+		if(!ObjectUtils.isEmpty(userDetailsEntity.getServices())){
+			userDetails.setServices(toServiceModelList(userDetailsEntity.getServices()));
+		}
 		return userDetails;
 	}
 	private Set<String> setAuthorities(String authorities) {
@@ -164,6 +168,9 @@ public class Convertor {
 		userDetailsEntity.setLastSuccessfulLogin(userDetails.getLastSuccessfulLogin());
 		userDetailsEntity.setLastSuccessfulLogout(userDetails.getLastSuccessfulLogout());
 		userDetailsEntity.setSessionTimeOut(userDetails.getSessionTimeOut());
+		if(!ObjectUtils.isEmpty(userDetails.getServices())){
+			userDetailsEntity.setServices(toServiceEntitySet(userDetails.getServices()));
+		}
 		return userDetailsEntity;
 	}
 
@@ -204,6 +211,7 @@ public class Convertor {
 		client.setInvestorUserDetailsModel(toInvestorUserDetailsModelList(clientEntity.getInvestorUserDetailsEntity()));
 		client.setCreationDate(toStringFromDate(clientEntity.getCreationDate()));
 		client.setModificationDate(toStringFromDate(clientEntity.getModificationDate()));
+		client.setWebSite(clientEntity.getWebSite());
 		return client;
 	}
 
@@ -218,6 +226,7 @@ public class Convertor {
 		clientEntity.setServicesEntities(toServiceEntitySet(client.getServicesModel()));
 		clientEntity.setInvestorUserDetailsEntity(toClientInvestorUserDetailsEntity(client.getInvestorUserDetailsModel()));
 		clientEntity.setAddress(client.getAddress());
+		clientEntity.setWebSite(client.getWebSite());
 		return clientEntity;
 	}
 
@@ -235,7 +244,6 @@ public class Convertor {
 			clientContactInfoModel.setPhone(clientContactInfoEntity.getPhone());
 			clientContactInfoModel.setCreationDate(toStringFromDate(clientContactInfoEntity.getCreationDate()));
 			clientContactInfoModel.setModificationDate(toStringFromDate(clientContactInfoEntity.getModificationDate()));
-
 			clientContactInfoModels.add(clientContactInfoModel);
 
 		});

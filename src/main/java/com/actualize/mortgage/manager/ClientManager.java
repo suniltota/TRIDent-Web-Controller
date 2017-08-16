@@ -22,8 +22,8 @@ public interface ClientManager {
 	
 	public ClientEntity updateClient(ClientEntity clientEntity);
 	
-	public void deleteClient(String clientId);
+	public void activeOrDeactiveClient(String clientId,Boolean enabled);
 		
-	public List<ClientEntity> getAllClients();
+	public List<ClientEntity> getAllActiveClients();
 
 }

@@ -49,13 +49,13 @@ public class ClientServiceImpl implements ClientService {
 
 	@Override
 	public ClientModel updateClient(ClientModel clientModel) throws ServiceException {
-		viewClientById(clientModel.getClientId());
+		getClientById(clientModel.getClientId());
 
 		return convertor.toClientModel(clientManager.updateClient(convertor.toClientEntity(clientModel)));
 	}
 
 	@Override
-	public ClientModel viewClientById(String clientId) throws ServiceException {
+	public ClientModel getClientById(String clientId) throws ServiceException {
 		ClientEntity clientEntity = clientManager.getClientById(clientId);
 		if(null == clientEntity)
 			throw new ServiceException("Invalid Client");
@@ -64,7 +64,7 @@ public class ClientServiceImpl implements ClientService {
 	}
 
 	@Override
-	public ClientModel viewClientByName(String clientName) throws ServiceException {
+	public ClientModel getClientByName(String clientName) throws ServiceException {
 		ClientEntity clientEntity = clientManager.getClientByClientName(clientName);
 		if(null == clientEntity)
 			throw new ServiceException("Invalid Client");
@@ -73,8 +73,8 @@ public class ClientServiceImpl implements ClientService {
 	}
 
 	@Override
-	public List<ClientModel> viewAllClients() throws ServiceException {
-		List<ClientEntity> clientEntityList = clientManager.getAllClients();
+	public List<ClientModel> getAllActiveClients() throws ServiceException {
+		List<ClientEntity> clientEntityList = clientManager.getAllActiveClients();
 		List<ClientModel> clientModelList = new LinkedList<>();
 		if(null == clientEntityList)
 			throw new ServiceException("No Entries Found");
@@ -84,9 +84,13 @@ public class ClientServiceImpl implements ClientService {
 	}
 
 	@Override
-	public void deleteClient(String clientId) throws ServiceException {
-		clientManager.deleteClient(clientId);
+	public void activeClient(String clientId) throws ServiceException {
+		clientManager.activeOrDeactiveClient(clientId,true);
 	}
 
+	@Override
+	public void deactiveClient(String clientId) throws ServiceException {
+		clientManager.activeOrDeactiveClient(clientId,false);
+	}
 
 }

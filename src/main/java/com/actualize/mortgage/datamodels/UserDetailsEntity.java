@@ -5,6 +5,7 @@ package com.actualize.mortgage.datamodels;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -13,7 +14,9 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
@@ -63,7 +66,13 @@ public class UserDetailsEntity implements Serializable {
 	private Timestamp modificationDate;
 	@Column(name="creationDate", updatable=false, insertable=false)
 	private Timestamp creationDate;
-
+	@OneToMany(cascade = CascadeType.ALL, fetch= FetchType.EAGER)
+    @JoinTable(
+            name = "user_services",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
+	private Set<ServicesEntity> services;
 	/**
 	 * @return the userId
 	 */
@@ -352,6 +361,16 @@ public class UserDetailsEntity implements Serializable {
 	public void setCreationDate(Timestamp creationDate) {
 		this.creationDate = creationDate;
 	}
-
-
+	/**
+	 * @return the services
+	 */
+	public Set<ServicesEntity> getServices() {
+		return services;
+	}
+	/**
+	 * @param services the services to set
+	 */
+	public void setServices(Set<ServicesEntity> services) {
+		this.services = services;
+	}
 }
