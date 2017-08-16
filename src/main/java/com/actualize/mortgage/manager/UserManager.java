@@ -31,5 +31,8 @@ public interface UserManager  {
 	
 	public List<UserDetailsEntity> getAllUsers() throws ServiceException;
 
+	public void activeorDeactiveGroupUsers(String groupId, Boolean enabled) throws ServiceException;
+
+	public void activeorDeactiveMultipleGroupUsers(List<String> groupIds, Boolean enabled) throws ServiceException;
 	
 }

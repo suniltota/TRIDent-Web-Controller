@@ -192,4 +192,15 @@ public class UserServiceImpl implements UserService {
 
 		return userDetails;
 	}
+
+	@Override
+	public void activeorDeactiveGroupUsers(String groupId, Boolean enabled) throws ServiceException {
+		userManagerImpl.activeorDeactiveGroupUsers(groupId, enabled);
+	}
+
+	@Override
+	public void activeorDeactiveMultipleGroupUsers(List<String> groupIds, Boolean enabled) throws ServiceException {
+		userManagerImpl.activeorDeactiveMultipleGroupUsers(groupIds, enabled);
+	}
+
 }

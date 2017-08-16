@@ -91,6 +91,8 @@ public class ClientServiceImpl implements ClientService {
 	@Override
 	public void deactiveClient(String clientId) throws ServiceException {
 		clientManager.activeOrDeactiveClient(clientId,false);
+		clientManager.activeOrDeactiveClientsGroups(clientId, false);
+		clientManager.activeOrDeactiveClientsUsers(clientId, false);
 	}
 
 }

@@ -24,32 +24,26 @@ import com.actualize.mortgage.manager.ClientManager;
 @Repository
 @Transactional
 public class ClientManagerImpl implements ClientManager {
-	
+
 	@PersistenceContext
 	private EntityManager entityManager;
 
 	public ClientEntity getClientById(String clientId) {
 		return (ClientEntity) entityManager.find(ClientEntity.class, clientId);
 	}
-	
+
 	@Override
 	public ClientEntity getClientByClientName(String clientName) throws ServiceException {
-		try{
-			return (ClientEntity) entityManager.createQuery(
-			        "from ClientEntity where clientname = :clientName")
-			        .setParameter("clientName", clientName)
-			        .getSingleResult();
-		}
-		catch(NoResultException e)
-		{
+		try {
+			return (ClientEntity) entityManager.createQuery("from ClientEntity where clientname = :clientName")
+					.setParameter("clientName", clientName).getSingleResult();
+		} catch (NoResultException e) {
 			return null;
-		}
-		catch(NonUniqueResultException e)
-		{
+		} catch (NonUniqueResultException e) {
 			throw new ServiceException("More than one Result found");
 		}
 	}
-	
+
 	@Override
 	public ClientEntity addClient(ClientEntity clientEntity) {
 		entityManager.merge(clientEntity);
@@ -62,23 +56,32 @@ public class ClientManagerImpl implements ClientManager {
 	}
 
 	@Override
-	public void activeOrDeactiveClient(String clientId,Boolean enabled) {
-		ClientEntity clientEntity = getClientById(clientId);
-		clientEntity.setEnabled(enabled);
-		updateClient(clientEntity);
-		//entityManager.remove(entityManager.find(ClientEntity.class, clientId));
-		
+	public void activeOrDeactiveClient(String clientId, Boolean enabled) {
+		entityManager.createQuery("UPDATE ClientEntity c set c.enabled = :enabled WHERE c.clientId= :clientId")
+				.executeUpdate();
 	}
 
+	@Override
+	public void activeOrDeactiveClientsGroups(String clientId, Boolean enabled) {
+		entityManager.createQuery("UPDATE GroupEntity g set g.enabled = :enabled WHERE g.clientId= :clientId")
+				.executeUpdate();
+	}
+
+	@Override
+	public void activeOrDeactiveClientsUsers(String clientId, Boolean enabled) {
+		entityManager.createQuery("UPDATE UserDetailsEntity u set u.enabled = :enabled "
+				+ "WHERE u.group.groupId IN (Select g.groupId FROM GroupEntity g WHERE g.clientId= :clientId)")
+				.executeUpdate();
+	}
+
+	
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<ClientEntity> getAllActiveClients() {
-		try{
-			return (List<ClientEntity>) entityManager.createQuery(
-			        "from ClientEntity c where c.enabled =  true").getResultList();
-		}
-		catch(NoResultException e)
-		{
+		try {
+			return (List<ClientEntity>) entityManager.createQuery("from ClientEntity c where c.enabled =  true")
+					.getResultList();
+		} catch (NoResultException e) {
 			return null;
 		}
 	}

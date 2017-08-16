@@ -13,6 +13,7 @@ import com.actualize.mortgage.datamodels.GroupEntity;
 import com.actualize.mortgage.domainmodels.GroupModel;
 import com.actualize.mortgage.exceptions.ServiceException;
 import com.actualize.mortgage.manager.GroupManager;
+import com.actualize.mortgage.manager.UserManager;
 import com.actualize.mortgage.services.GroupService;
 import com.actualize.mortgage.web.utils.Convertor;
 
@@ -22,6 +23,9 @@ public class GroupServiceImpl implements GroupService {
 	@Autowired
 	private GroupManager groupManager;
 
+	@Autowired
+	private UserManager userManager;
+	
 	@Autowired
 	private Convertor convertor;
 
@@ -62,6 +66,7 @@ public class GroupServiceImpl implements GroupService {
 	public void activateOrDeActivateGroups(List<String> groupIds, Boolean enabled) throws ServiceException {
 		if (!ObjectUtils.isEmpty(groupIds)) {
 			groupManager.activateOrDeActivateGroups(groupIds, enabled);
+			userManager.activeorDeactiveMultipleGroupUsers(groupIds, enabled);
 		} else {
 			throw new ServiceException("Group Id is mandatory to enable/disable a group!");
 		}
@@ -72,6 +77,7 @@ public class GroupServiceImpl implements GroupService {
 	public void activateOrDeActivateGroup(String groupId, Boolean enabled) throws ServiceException {
 		if (!ObjectUtils.isEmpty(groupId)){
 			groupManager.activateOrDeActivateGroup(groupId, enabled);
+			userManager.activeorDeactiveGroupUsers(groupId, enabled);
 		} else {
 			throw new ServiceException("Group Id is mandatory to enable/disable a group!");
 		}

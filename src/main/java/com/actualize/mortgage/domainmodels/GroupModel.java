@@ -8,6 +8,10 @@ public class GroupModel implements Serializable {
 	/**
 	 * 
 	 */
+	private static final long serialVersionUID = 6068028145930968830L;
+	/**
+	 * 
+	 */
 	private String groupId;
 	private String groupName;
 	private long groupSequence;
