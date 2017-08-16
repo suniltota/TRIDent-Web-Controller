@@ -81,6 +81,7 @@ public class UserServiceImpl implements UserService {
 		userDetails.setPasswordExpiryDate(LocalDate.now().plusDays(30).toString());
 		userDetails.setUpdatedBy(SecurityContextHolder.getContext().getAuthentication().getName());
 		userDetails.setPassword(new BCryptPasswordEncoder().encode(userDetails.getPassword().trim()));
+		userDetails.setResetPassword(true);
 		userDetails.setAccountNonExpired(true);
 		userDetails.setAccountNonLocked(true);
 		userDetails.setCredentialsNonExpired(true);
@@ -164,6 +165,7 @@ public class UserServiceImpl implements UserService {
 			if(userDetails.getPassword().equals(new BCryptPasswordEncoder().encode(currentPassword)))
 			{
 				userDetails.setPassword(new BCryptPasswordEncoder().encode(newPassword));
+				userDetails.setResetPassword(false);
 				updateUser(userDetails);
 			}
 
