@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.actualize.mortgage.domainmodels.UserDetailsModel;
@@ -60,8 +61,16 @@ public class UsersController {
 		return userDetailsModel == null ? false : true;
 	}
 	
+	@RequestMapping(value={"/users/changePassword"}, method = RequestMethod.POST)
+	public ResponseEntity<String> userAvailability(@RequestParam("currentPassword") String currentPassword, @RequestParam("newPassword") String newPassword, @RequestParam("confirmPassword") String confirmPassword) throws ServiceException {
+		userService.changePassword(currentPassword, newPassword, confirmPassword);
+		return new ResponseEntity<String>("User Password updated Successfully", HttpStatus.OK);
+	}
+	
 	@RequestMapping(value={"/getClientUsers/{id}"}, method = RequestMethod.GET)
 	public List<UserDetailsModel> clientUsers(@PathVariable("id") String clientId) throws ServiceException {
 		return userService.getAllUsersbyClientId(clientId);
 	}
+	
+	
 }
