@@ -11,6 +11,7 @@ import org.springframework.util.ObjectUtils;
 
 import com.actualize.mortgage.datamodels.GroupEntity;
 import com.actualize.mortgage.domainmodels.GroupModel;
+import com.actualize.mortgage.domainmodels.ServicesModel;
 import com.actualize.mortgage.exceptions.ServiceException;
 import com.actualize.mortgage.manager.GroupManager;
 import com.actualize.mortgage.manager.UserManager;
@@ -133,5 +134,11 @@ public class GroupServiceImpl implements GroupService {
 			}
 		}
 		return groupModels;
+	}
+
+	@Override
+	public List<ServicesModel> groupServices(String groupId) {
+		GroupEntity groupEntity = groupManager.findOne(groupId);
+		return groupEntity != null ? convertor.toServiceModelList(groupEntity.getServices()) : null;
 	}
 }

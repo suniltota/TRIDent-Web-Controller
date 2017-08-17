@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.actualize.mortgage.domainmodels.GroupModel;
+import com.actualize.mortgage.domainmodels.ServicesModel;
 import com.actualize.mortgage.domainmodels.UserDetailsModel;
 import com.actualize.mortgage.exceptions.ServiceException;
 import com.actualize.mortgage.services.GroupService;
@@ -27,12 +28,19 @@ public class GroupController {
 
 	@RequestMapping(value={"/groups"}, method = RequestMethod.POST)
 	public ResponseEntity<String> createGroup(@RequestBody GroupModel groupModel) throws ServiceException {
-		 groupService.createorUpdateGroup(groupModel);
+		UserDetailsModel userDetailsModel = (UserDetailsModel) SecurityContextHolder.getContext().getAuthentication()
+				.getPrincipal();
+		groupModel.setCreatedBy(userDetailsModel.getUsername());
+		groupService.createorUpdateGroup(groupModel);
+		 
 		 return new ResponseEntity<String>("Group created Successfully", HttpStatus.OK);
 	}
 
 	@RequestMapping(value={"/groups"}, method = RequestMethod.PUT)
 	public ResponseEntity<String> updateGroup(@RequestBody GroupModel groupModel) throws ServiceException {
+		UserDetailsModel userDetailsModel = (UserDetailsModel) SecurityContextHolder.getContext().getAuthentication()
+				.getPrincipal();
+		groupModel.setCreatedBy(userDetailsModel.getUsername());
 		 groupService.createorUpdateGroup(groupModel);
 		 return new ResponseEntity<String>("Group updated Successfully", HttpStatus.OK);
 	}
@@ -86,6 +94,11 @@ public class GroupController {
 	@RequestMapping(value={"/group/isGroupNameAvailable/{groupname}"}, method = RequestMethod.GET)
 	public boolean isGroupNameAvailable(@PathVariable("groupname") String groupname) throws ServiceException {
 		return groupService.isGroupNameAvailable(groupname);
+	}
+
+	@RequestMapping(value={"/group/services/{groupId}"}, method = RequestMethod.GET)
+	public List<ServicesModel> groupServices(@PathVariable("groupId") String groupId) throws ServiceException {
+		return groupService.groupServices(groupId);
 	}
 
 }

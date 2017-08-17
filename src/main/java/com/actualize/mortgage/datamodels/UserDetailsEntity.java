@@ -73,6 +73,10 @@ public class UserDetailsEntity implements Serializable {
             inverseJoinColumns = @JoinColumn(name = "service_id")
     )
 	private Set<ServicesEntity> services;
+	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@JoinColumn(name="clientid")
+	private ClientEntity client;
+
 	/**
 	 * @return the userId
 	 */
@@ -373,4 +377,17 @@ public class UserDetailsEntity implements Serializable {
 	public void setServices(Set<ServicesEntity> services) {
 		this.services = services;
 	}
+	/**
+	 * @return the client
+	 */
+	public ClientEntity getClient() {
+		return client;
+	}
+	/**
+	 * @param client the client to set
+	 */
+	public void setClient(ClientEntity client) {
+		this.client = client;
+	}
+	
 }

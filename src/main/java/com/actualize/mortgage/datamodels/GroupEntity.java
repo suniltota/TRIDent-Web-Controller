@@ -77,6 +77,9 @@ public class GroupEntity implements Serializable {
     )
 	private Set<ServicesEntity> services;
 	
+	@Column(name = "created_by")
+	private String createdBy;
+	
 	/**
 	 * @return the groupId
 	 */
@@ -257,6 +260,20 @@ public class GroupEntity implements Serializable {
 	 */
 	public void setServices(Set<ServicesEntity> services) {
 		this.services = services;
+	}
+
+	/**
+	 * @return the createdBy
+	 */
+	public String getCreatedBy() {
+		return createdBy;
+	}
+
+	/**
+	 * @param createdBy the createdBy to set
+	 */
+	public void setCreatedBy(String createdBy) {
+		this.createdBy = createdBy;
 	}
 
 }

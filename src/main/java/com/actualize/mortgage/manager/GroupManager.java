@@ -10,7 +10,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
 import com.actualize.mortgage.datamodels.GroupEntity;
-import com.actualize.mortgage.domainmodels.GroupModel;
 
 
 public interface GroupManager extends CrudRepository<GroupEntity,String>{

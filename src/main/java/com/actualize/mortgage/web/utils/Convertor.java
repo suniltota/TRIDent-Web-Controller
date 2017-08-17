@@ -372,9 +372,12 @@ public class Convertor {
 
 		if(ObjectUtils.isEmpty(groupModel.getGroupId())){
 			groupEntity = new GroupEntity();
+			groupEntity.setCreatedBy(groupModel.getCreatedBy());
 
 		}else{
 			groupEntity = groupManager.findOne(groupModel.getGroupId());
+			groupEntity.setUpdatedBy(groupModel.getUpdatedBy());
+			
 			/*groupEntity.setGroupPath(groupModel.getGroupPath());
 			if(groupModel.getGroupSequence() != null){
 				groupEntity.setGroupSequence(Long.parseLong(groupModel.getGroupSequence()));
@@ -391,7 +394,6 @@ public class Convertor {
 		}
 		groupEntity.setGroupName(groupModel.getGroupName());
 		groupEntity.setParentGroupId(groupModel.getGroupParentId());
-		groupEntity.setUpdatedBy(groupModel.getUpdatedBy());
 		groupEntity.setClientid(groupModel.getClientId());
 		groupEntity.setEnabled(groupModel.isEnabled());
 		groupEntity.setServices(toServiceEntitySet(groupModel.getServices()));

@@ -25,6 +25,7 @@ public class GroupModel implements Serializable {
 	private String parentGroupName;
 	private String serviceDisplayNames;
 	private List<ServicesModel> services;
+	private String createdBy;
 	
 	/**
 	 * @return the groupId
@@ -184,5 +185,16 @@ public class GroupModel implements Serializable {
 	public void setServiceDisplayNames(String serviceDisplayNames) {
 		this.serviceDisplayNames = serviceDisplayNames;
 	}
-	
+	/**
+	 * @return the createdBy
+	 */
+	public String getCreatedBy() {
+		return createdBy;
+	}
+	/**
+	 * @param createdBy the createdBy to set
+	 */
+	public void setCreatedBy(String createdBy) {
+		this.createdBy = createdBy;
+	}
 }

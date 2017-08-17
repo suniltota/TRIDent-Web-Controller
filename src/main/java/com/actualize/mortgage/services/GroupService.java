@@ -3,6 +3,7 @@ package com.actualize.mortgage.services;
 import java.util.List;
 
 import com.actualize.mortgage.domainmodels.GroupModel;
+import com.actualize.mortgage.domainmodels.ServicesModel;
 import com.actualize.mortgage.exceptions.ServiceException;
 
 public interface GroupService {
@@ -27,6 +28,8 @@ public interface GroupService {
 
 	public Boolean isGroupNameAvailable(String groupname) throws ServiceException;
 	
-	public List<GroupModel> getChildGroups(long groupSequence,String groupPath) throws ServiceException;	
+	public List<GroupModel> getChildGroups(long groupSequence,String groupPath) throws ServiceException;
+
+	public List<ServicesModel> groupServices(String groupId);	
 	
 }

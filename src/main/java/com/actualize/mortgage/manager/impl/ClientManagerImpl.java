@@ -70,7 +70,7 @@ public class ClientManagerImpl implements ClientManager {
 	@Override
 	public void activeOrDeactiveClientsUsers(String clientId, Boolean enabled) {
 		entityManager.createQuery("UPDATE UserDetailsEntity u set u.enabled = :enabled "
-				+ "WHERE u.group.groupId IN (Select g.groupId FROM GroupEntity g WHERE g.clientId= :clientId)")
+				+ "WHERE u.client.clientId= :clientId)")
 				.executeUpdate();
 	}
 
