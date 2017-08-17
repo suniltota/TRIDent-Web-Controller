@@ -41,6 +41,7 @@ public class UserDetailsModel implements UserDetails  {
 	private String modificationDate;
 	private String creationDate;
 	private List<ServicesModel> services;
+	private String clientId;
 	/**
 	 * @return the userId
 	 */
@@ -329,6 +330,19 @@ public class UserDetailsModel implements UserDetails  {
 	 */
 	public void setServices(List<ServicesModel> services) {
 		this.services = services;
+	}
+	
+	/**
+	 * @return the clientId
+	 */
+	public String getClientId() {
+		return clientId;
+	}
+	/**
+	 * @param clientId the clientId to set
+	 */
+	public void setClientId(String clientId) {
+		this.clientId = clientId;
 	}
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {

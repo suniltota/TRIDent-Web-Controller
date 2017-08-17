@@ -111,6 +111,9 @@ public class Convertor {
 		if(!ObjectUtils.isEmpty(userDetailsEntity.getServices())){
 			userDetails.setServices(toServiceModelList(userDetailsEntity.getServices()));
 		}
+		if(!ObjectUtils.isEmpty(userDetailsEntity.getClient())){
+			userDetails.setClientId(userDetailsEntity.getClient().getClientId());
+		}
 		return userDetails;
 	}
 	private Set<String> setAuthorities(String authorities) {
@@ -170,6 +173,9 @@ public class Convertor {
 		userDetailsEntity.setSessionTimeOut(userDetails.getSessionTimeOut());
 		if(!ObjectUtils.isEmpty(userDetails.getServices())){
 			userDetailsEntity.setServices(toServiceEntitySet(userDetails.getServices()));
+		}
+		if(!ObjectUtils.isEmpty(userDetails.getClientId())){
+			userDetailsEntity.setClient(clientManager.getClientById(userDetails.getClientId()));
 		}
 		return userDetailsEntity;
 	}
