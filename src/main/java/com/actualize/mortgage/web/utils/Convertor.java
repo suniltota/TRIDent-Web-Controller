@@ -208,7 +208,8 @@ public class Convertor {
 		client.setPhoneNumber(clientEntity.getPhoneNumber());
 		client.setClientContactInfo(toClientContactInfoModel(clientEntity.getClientContactInfo()));
 		client.setServicesModel(toServiceModelList(clientEntity.getServicesEntities()));
-		client.setInvestorUserDetailsModel(toInvestorUserDetailsModelList(clientEntity.getInvestorUserDetailsEntity()));
+		//client.setInvestorUserDetailsModel(toInvestorUserDetailsModelList(clientEntity.getInvestorUserDetailsEntity()));
+		client.setInvestorModels(toInvestorModelList(clientEntity.getInvestorEntities()));
 		client.setCreationDate(toStringFromDate(clientEntity.getCreationDate()));
 		client.setModificationDate(toStringFromDate(clientEntity.getModificationDate()));
 		client.setWebSite(clientEntity.getWebSite());
@@ -224,7 +225,8 @@ public class Convertor {
 		clientEntity.setPhoneNumber(client.getPhoneNumber());
 		clientEntity.setClientContactInfo(toClientContactInfoEntity(client.getClientContactInfo()));
 		clientEntity.setServicesEntities(toServiceEntitySet(client.getServicesModel()));
-		clientEntity.setInvestorUserDetailsEntity(toClientInvestorUserDetailsEntity(client.getInvestorUserDetailsModel()));
+		//clientEntity.setInvestorUserDetailsEntity(toClientInvestorUserDetailsEntity(client.getInvestorUserDetailsModel()));
+		clientEntity.setInvestorEntities(toInvestorEntityList(client.getInvestorModels()));
 		clientEntity.setAddress(client.getAddress());
 		clientEntity.setWebSite(client.getWebSite());
 		return clientEntity;
@@ -433,6 +435,24 @@ public class Convertor {
 		investorModel.setModificationDate(toStringFromDate(investorEntity.getModificationDate()));
 		return investorModel;
 	}
+	
+	public Set<InvestorModel> toInvestorModelList(List<InvestorEntity> investorEntityList)
+	{
+		Set<InvestorModel> investorModels = new HashSet<>();
+		if(null == investorEntityList)
+			throw new ServiceException("list of investors are missing");
+		for(InvestorEntity investorEntity : investorEntityList){
+			InvestorModel investorModel = new InvestorModel();
+			investorModel.setInvestorId(investorEntity.getInvestorId());
+			investorModel.setInvestorName(investorEntity.getInvestorName());
+			investorModel.setInvestorUrl(investorEntity.getInvestorUrl());
+			investorModel.setCreationDate(toStringFromDate(investorEntity.getCreationDate()));
+			investorModel.setModificationDate(toStringFromDate(investorEntity.getModificationDate()));
+			investorModels.add(investorModel);
+		}
+			
+		return investorModels;
+	}
 
 	public InvestorEntity toInvestorEntity(InvestorModel investorModel)
 	{
@@ -441,6 +461,19 @@ public class Convertor {
 		investorEntity.setInvestorName(investorModel.getInvestorName());
 		investorEntity.setInvestorUrl(investorModel.getInvestorUrl());
 		return investorEntity;
+	}
+	
+	public List<InvestorEntity> toInvestorEntityList(Set<InvestorModel> investorModelList)
+	{
+		List<InvestorEntity> investorEntities = new LinkedList<>();
+		if(null == investorModelList)
+			throw new ServiceException("list of investors are missing");
+		for(InvestorModel investorModel : investorModelList){
+			validate(investorModel.getInvestorId(), "Investor Id");
+			investorEntities.add(investorManager.getInvestorByInvestorId(investorModel.getInvestorId()));
+		}
+			
+		return investorEntities;
 	}
 
 	public InvestorUserDetailsEntity toInvestorUserDetailsEntity(InvestorUserDetailsModel investorUserDetailsModel)

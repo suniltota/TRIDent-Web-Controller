@@ -41,18 +41,22 @@ public class ClientEntity implements Serializable {
 	@Column(name="isEnabled")
 	private boolean enabled; 
 	private String phoneNumber;
-	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.LAZY)
+	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
 	@JoinTable(name="client_client_contact_info", joinColumns= @JoinColumn(name= "client_id"),
 	inverseJoinColumns = @JoinColumn(name="contact_info_id"))
 	private List<ClientContactInfoEntity> clientContactInfo;
-	@ManyToMany(fetch=FetchType.LAZY)
+	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+	@JoinTable(name="client_investors", joinColumns= @JoinColumn(name= "client_id"),
+	inverseJoinColumns = @JoinColumn(name="investor_id"))
+	private List<InvestorEntity> investorEntities;
+	@ManyToMany(fetch=FetchType.EAGER)
 	@JoinTable(name="client_services", joinColumns= @JoinColumn(name= "client_id"),
 	inverseJoinColumns = @JoinColumn(name="service_id"))
 	private Set<ServicesEntity> servicesEntities;
-	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.LAZY)
-	@JoinTable(name="client_investor_users", joinColumns= @JoinColumn(name= "client_id"),
-	inverseJoinColumns = @JoinColumn(name="investor_user_id"))
-	private List<InvestorUserDetailsEntity> investorUserDetailsEntity;
+//	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.LAZY)
+//	@JoinTable(name="client_investor_users", joinColumns= @JoinColumn(name= "client_id"),
+//	inverseJoinColumns = @JoinColumn(name="investor_user_id"))
+//	private List<InvestorUserDetailsEntity> investorUserDetailsEntity;
 	@Column(name="creationDate", insertable=false, updatable=false)
 	private Timestamp creationDate;
 	@Column(name="modificationDate", insertable=false, updatable=false)
@@ -146,14 +150,26 @@ public class ClientEntity implements Serializable {
 	/**
 	 * @return the investorUserDetailsEntity
 	 */
-	public List<InvestorUserDetailsEntity> getInvestorUserDetailsEntity() {
+	/*public List<InvestorUserDetailsEntity> getInvestorUserDetailsEntity() {
 		return investorUserDetailsEntity;
 	}
-	/**
+	*//**
 	 * @param investorUserDetailsEntity the investorUserDetailsEntity to set
-	 */
+	 *//*
 	public void setInvestorUserDetailsEntity(List<InvestorUserDetailsEntity> investorUserDetailsEntity) {
 		this.investorUserDetailsEntity = investorUserDetailsEntity;
+	}*/
+	/**
+	 * @return the investorEntities
+	 */
+	public List<InvestorEntity> getInvestorEntities() {
+		return investorEntities;
+	}
+	/**
+	 * @param investorEntities the investorEntities to set
+	 */
+	public void setInvestorEntities(List<InvestorEntity> investorEntities) {
+		this.investorEntities = investorEntities;
 	}
 	/**
 	 * @return the creationDate
