@@ -9,6 +9,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.NonUniqueResultException;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Repository;
@@ -57,21 +58,27 @@ public class ClientManagerImpl implements ClientManager {
 
 	@Override
 	public void activeOrDeactiveClient(String clientId, Boolean enabled) {
-		entityManager.createQuery("UPDATE ClientEntity c set c.enabled = :enabled WHERE c.clientId= :clientId")
-				.executeUpdate();
+		Query query = entityManager.createQuery("UPDATE ClientEntity c set c.enabled = :enabled WHERE c.clientId= :clientId");
+		query.setParameter("enabled", enabled);
+		query.setParameter("clientId", clientId);
+		query.executeUpdate();
 	}
 
 	@Override
 	public void activeOrDeactiveClientsGroups(String clientId, Boolean enabled) {
-		entityManager.createQuery("UPDATE GroupEntity g set g.enabled = :enabled WHERE g.clientId= :clientId")
-				.executeUpdate();
+		Query query = entityManager.createQuery("UPDATE GroupEntity g set g.enabled = :enabled WHERE g.clientid= :clientId");
+		query.setParameter("enabled", enabled);
+		query.setParameter("clientId", clientId);
+		query.executeUpdate();
 	}
 
 	@Override
 	public void activeOrDeactiveClientsUsers(String clientId, Boolean enabled) {
-		entityManager.createQuery("UPDATE UserDetailsEntity u set u.enabled = :enabled "
-				+ "WHERE u.client.clientId= :clientId)")
-				.executeUpdate();
+		Query query = entityManager.createQuery("UPDATE UserDetailsEntity u set u.enabled = :enabled "
+				+ "WHERE u.client.clientId= :clientId)");
+		query.setParameter("enabled", enabled);
+		query.setParameter("clientId", clientId);
+		query.executeUpdate();
 	}
 
 	

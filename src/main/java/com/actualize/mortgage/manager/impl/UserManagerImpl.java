@@ -111,12 +111,14 @@ public class UserManagerImpl implements UserManager{
 
 	@Override
 	public void activeorDeactiveGroupUsers(String groupId, Boolean enabled) throws ServiceException {
-		entityManager.createQuery("Update UserDetailsEntity u set u.enabled= :enabled where group.groupId= :groupId").executeUpdate();
+		entityManager.createQuery("Update UserDetailsEntity u set u.enabled= :enabled where group.groupId= :groupId")
+		.setParameter("groupId", groupId).setParameter("enabled", enabled).executeUpdate();
 	}
 
 	@Override
 	public void activeorDeactiveMultipleGroupUsers(List<String> groupIds, Boolean enabled) throws ServiceException {
-		entityManager.createQuery("Update UserDetailsEntity u set u.enabled= :enabled where group.groupId IN :groupIds").executeUpdate();
+		entityManager.createQuery("Update UserDetailsEntity u set u.enabled= :enabled where group.groupId IN :groupIds")
+		.setParameter("groupIds", groupIds).setParameter("enabled", enabled).executeUpdate();
 
 	}
 
