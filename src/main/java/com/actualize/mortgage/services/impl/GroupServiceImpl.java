@@ -141,4 +141,14 @@ public class GroupServiceImpl implements GroupService {
 		GroupEntity groupEntity = groupManager.findOne(groupId);
 		return groupEntity != null ? convertor.toServiceModelList(groupEntity.getServices()) : null;
 	}
+
+	@Override
+	public List<GroupModel> getClientGroups(String clientId) {
+		List<GroupModel> groupModels = new ArrayList<>();
+		List<GroupEntity> groups = groupManager.getClientGroups(clientId);
+		if (groups != null) {
+			groups.forEach(group -> groupModels.add(convertor.toGroupModel(group)));
+		}
+		return groupModels;
+	}
 }

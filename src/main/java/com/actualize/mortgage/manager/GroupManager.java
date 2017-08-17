@@ -8,6 +8,7 @@ import java.util.List;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
 
 import com.actualize.mortgage.datamodels.GroupEntity;
 
@@ -41,5 +42,8 @@ public interface GroupManager extends CrudRepository<GroupEntity,String>{
 	public List<GroupEntity> getChildGroups(String groupPath);
 
 	@Query("FROM GroupEntity g WHERE g.enabled = true")
-	public Iterable<GroupEntity> getAllActiveGroups();	
+	public Iterable<GroupEntity> getAllActiveGroups();
+
+	@Query("FROM GroupEntity g WHERE g.clientid = :clientid") 
+	public List<GroupEntity> getClientGroups(@Param(value = "clientid") String clientid);	
 }

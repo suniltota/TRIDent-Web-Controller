@@ -94,7 +94,9 @@ public class Convertor {
 		userDetails.setAccountNonLocked(userDetailsEntity.isAccountNonLocked());
 		userDetails.setCredentialsNonExpired(userDetailsEntity.isCredentialsNonExpired());
 		//userDetails.setAuthorities(setAuthorities(userDetailsEntity.getAuthorities()));
-		userDetails.setGroup(toGroupModel(userDetailsEntity.getGroup()));
+		if(!ObjectUtils.isEmpty(userDetailsEntity.getGroup())){
+			userDetails.setGroup(toGroupModel(userDetailsEntity.getGroup()));
+		}
 		userDetails.setEmail(userDetailsEntity.getEmail());
 		userDetails.setEnabled(userDetailsEntity.isEnabled());
 		userDetails.setFailedLoginAttempts(userDetailsEntity.getFailedLoginAttempts());

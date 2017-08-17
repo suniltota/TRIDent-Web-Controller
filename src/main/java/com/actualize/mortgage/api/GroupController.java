@@ -101,4 +101,9 @@ public class GroupController {
 		return groupService.groupServices(groupId);
 	}
 
+	@RequestMapping(value={"/group/clientGroups/{clientId}"}, method = RequestMethod.GET)
+	public List<GroupModel> getClientGroups(@PathVariable("clientId") String clientId) throws ServiceException {
+		return groupService.getClientGroups(clientId);
+	}
+
 }

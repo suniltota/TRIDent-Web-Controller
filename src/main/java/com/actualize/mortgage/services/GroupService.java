@@ -30,6 +30,8 @@ public interface GroupService {
 	
 	public List<GroupModel> getChildGroups(long groupSequence,String groupPath) throws ServiceException;
 
-	public List<ServicesModel> groupServices(String groupId);	
+	public List<ServicesModel> groupServices(String groupId);
+
+	public List<GroupModel> getClientGroups(String clientId);	
 	
 }
