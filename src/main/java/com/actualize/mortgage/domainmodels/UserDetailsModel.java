@@ -15,8 +15,11 @@ import org.springframework.security.core.userdetails.UserDetails;
  */
 public class UserDetailsModel implements UserDetails  {
 	
-	private static final long serialVersionUID = -4782585539283649741L;
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 7872259552103679827L;
 	private String userId;
 	private String firstName;
 	private String lastName;
