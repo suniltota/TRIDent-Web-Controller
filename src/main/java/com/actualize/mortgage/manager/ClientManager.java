@@ -30,4 +30,6 @@ public interface ClientManager {
 
 	void activeOrDeactiveClientsUsers(String clientId, Boolean enabled);
 	public List<ClientEntity> getAllClients();
+
+	public long isClientNameAvailable(String clientname);
 }

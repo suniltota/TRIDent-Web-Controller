@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.actualize.mortgage.domainmodels.ClientModel;
+import com.actualize.mortgage.domainmodels.ServicesModel;
 import com.actualize.mortgage.exceptions.ServiceException;
 import com.actualize.mortgage.services.ClientService;
 
@@ -55,4 +56,16 @@ public class ClientsController {
 		clientService.updateClient(clientModel);
 		return new ResponseEntity<String>("Client updated Successfully",HttpStatus.OK);
 	}
+	
+	@RequestMapping(value={"/clients/isClientNameAvailable"}, method = RequestMethod.GET)
+	public boolean isClientNameAvailable(@PathVariable("clientname") String clientname) throws ServiceException {
+		return clientService.isClientNameAvailable(clientname);
+	}
+
+	@RequestMapping(value={"/clients/services/{id}"}, method = RequestMethod.GET)
+	public List<ServicesModel> clientServices(@PathVariable("id") String clientId) throws ServiceException {
+		ClientModel clientModel = clientService.getClientById(clientId);
+		return clientModel.getServicesModel();
+	}
+
 }

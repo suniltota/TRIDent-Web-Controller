@@ -23,4 +23,5 @@ public interface ClientService {
 	public void activeClient(String clientId) throws ServiceException;
 	public void deactiveClient(String clientId) throws ServiceException;
 	public List<ClientModel> getAllClients()throws ServiceException;
+	public boolean isClientNameAvailable(String clientname);
 }

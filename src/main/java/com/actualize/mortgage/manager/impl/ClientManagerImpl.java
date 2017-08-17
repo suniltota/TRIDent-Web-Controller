@@ -103,4 +103,14 @@ public class ClientManagerImpl implements ClientManager {
 		}
 	}
 
+	@Override
+	public long isClientNameAvailable(String clientname) {
+		try {
+			return (long) entityManager.createQuery("Select count(c) from ClientEntity c where c.clientName =  :clientname")
+					.setParameter("clientname", clientname).getFirstResult();
+		} catch (NoResultException e) {
+			return 1;
+		}
+	}
+
 }

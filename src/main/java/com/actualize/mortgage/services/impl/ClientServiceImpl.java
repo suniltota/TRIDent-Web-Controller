@@ -106,4 +106,9 @@ public class ClientServiceImpl implements ClientService {
 		return clientModelList;
 	}
 
+	@Override
+	public boolean isClientNameAvailable(String clientname) {
+		return clientManager.isClientNameAvailable(clientname) > 0 ? false : true;
+	}
+
 }
