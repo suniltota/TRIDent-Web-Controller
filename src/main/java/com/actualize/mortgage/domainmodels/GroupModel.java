@@ -8,7 +8,10 @@ public class GroupModel implements Serializable {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 6068028145930968830L;
+	private static final long serialVersionUID = -9074190352907872977L;
+	/**
+	 * 
+	 */
 	/**
 	 * 
 	 */
