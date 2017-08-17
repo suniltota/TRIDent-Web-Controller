@@ -29,5 +29,5 @@ public interface ClientManager {
 	void activeOrDeactiveClientsGroups(String clientId, Boolean enabled);
 
 	void activeOrDeactiveClientsUsers(String clientId, Boolean enabled);
-
+	public List<ClientEntity> getAllClients();
 }

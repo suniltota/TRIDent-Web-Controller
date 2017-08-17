@@ -22,4 +22,5 @@ public interface ClientService {
 	public List<ClientModel> getAllActiveClients() throws ServiceException;
 	public void activeClient(String clientId) throws ServiceException;
 	public void deactiveClient(String clientId) throws ServiceException;
+	public List<ClientModel> getAllClients()throws ServiceException;
 }

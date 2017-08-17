@@ -86,4 +86,14 @@ public class ClientManagerImpl implements ClientManager {
 		}
 	}
 
+	@Override
+	public List<ClientEntity> getAllClients() {
+		try {
+			return (List<ClientEntity>) entityManager.createQuery("from ClientEntity c")
+					.getResultList();
+		} catch (NoResultException e) {
+			return null;
+		}
+	}
+
 }

@@ -95,4 +95,15 @@ public class ClientServiceImpl implements ClientService {
 		clientManager.activeOrDeactiveClientsUsers(clientId, false);
 	}
 
+	@Override
+	public List<ClientModel> getAllClients() throws ServiceException {
+		List<ClientEntity> clientEntityList = clientManager.getAllClients();
+		List<ClientModel> clientModelList = new LinkedList<>();
+		if(null == clientEntityList)
+			throw new ServiceException("No Entries Found");
+		for(ClientEntity clientEntity : clientEntityList)
+			clientModelList.add(convertor.toClientModel(clientEntity));
+		return clientModelList;
+	}
+
 }
