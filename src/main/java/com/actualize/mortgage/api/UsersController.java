@@ -67,6 +67,12 @@ public class UsersController {
 		return new ResponseEntity<String>("User Password updated Successfully", HttpStatus.OK);
 	}
 	
+	@RequestMapping(value={"/users/resetPassword"}, method = RequestMethod.POST)
+	public ResponseEntity<String> resetPassword(@RequestParam("username") String username, @RequestParam("newPassword") String newPassword) throws ServiceException {
+		userService.resetPassword(username, newPassword);
+		return new ResponseEntity<String>("User Password reseted Successfully", HttpStatus.OK);
+	}
+
 	@RequestMapping(value={"/getClientUsers/{id}"}, method = RequestMethod.GET)
 	public List<UserDetailsModel> clientUsers(@PathVariable("id") String clientId) throws ServiceException {
 		return userService.getAllUsersbyClientId(clientId);
