@@ -48,7 +48,7 @@ public class ClientEntity implements Serializable {
 	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
 	@JoinTable(name="client_investors", joinColumns= @JoinColumn(name= "client_id"),
 	inverseJoinColumns = @JoinColumn(name="investor_id"))
-	private List<InvestorEntity> investorEntities;
+	private Set<InvestorEntity> investorEntities;
 	@ManyToMany(fetch=FetchType.EAGER)
 	@JoinTable(name="client_services", joinColumns= @JoinColumn(name= "client_id"),
 	inverseJoinColumns = @JoinColumn(name="service_id"))
@@ -162,13 +162,13 @@ public class ClientEntity implements Serializable {
 	/**
 	 * @return the investorEntities
 	 */
-	public List<InvestorEntity> getInvestorEntities() {
+	public Set<InvestorEntity> getInvestorEntities() {
 		return investorEntities;
 	}
 	/**
 	 * @param investorEntities the investorEntities to set
 	 */
-	public void setInvestorEntities(List<InvestorEntity> investorEntities) {
+	public void setInvestorEntities(Set<InvestorEntity> investorEntities) {
 		this.investorEntities = investorEntities;
 	}
 	/**

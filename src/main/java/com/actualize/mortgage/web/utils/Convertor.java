@@ -211,7 +211,6 @@ public class Convertor {
 		client.setAddress(clientEntity.getAddress());
 		client.setEnabled(clientEntity.isEnabled());
 		client.setPhoneNumber(clientEntity.getPhoneNumber());
-		client.setPhoneNumber(clientEntity.getPhoneNumber());
 		client.setClientContactInfo(toClientContactInfoModel(clientEntity.getClientContactInfo()));
 		client.setServicesModel(toServiceModelList(clientEntity.getServicesEntities()));
 		//client.setInvestorUserDetailsModel(toInvestorUserDetailsModelList(clientEntity.getInvestorUserDetailsEntity()));
@@ -442,7 +441,7 @@ public class Convertor {
 		return investorModel;
 	}
 	
-	public Set<InvestorModel> toInvestorModelList(List<InvestorEntity> investorEntityList)
+	public Set<InvestorModel> toInvestorModelList(Collection<InvestorEntity> investorEntityList)
 	{
 		Set<InvestorModel> investorModels = new HashSet<>();
 		if(null == investorEntityList)
@@ -469,9 +468,9 @@ public class Convertor {
 		return investorEntity;
 	}
 	
-	public List<InvestorEntity> toInvestorEntityList(Set<InvestorModel> investorModelList)
+	public Set<InvestorEntity> toInvestorEntityList(Set<InvestorModel> investorModelList)
 	{
-		List<InvestorEntity> investorEntities = new LinkedList<>();
+		Set<InvestorEntity> investorEntities = new HashSet<>();
 		if(null == investorModelList)
 			throw new ServiceException("list of investors are missing");
 		for(InvestorModel investorModel : investorModelList){
