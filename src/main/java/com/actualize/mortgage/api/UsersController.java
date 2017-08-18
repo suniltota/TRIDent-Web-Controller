@@ -61,14 +61,14 @@ public class UsersController {
 		return userDetailsModel == null ? false : true;
 	}
 	
-	@RequestMapping(value={"/users/changePassword"}, method = RequestMethod.POST)
-	public ResponseEntity<String> userAvailability(@RequestParam("currentPassword") String currentPassword, @RequestParam("newPassword") String newPassword, @RequestParam("confirmPassword") String confirmPassword) throws ServiceException {
+	@RequestMapping(value={"/users/resetPassword"}, method = RequestMethod.POST)
+	public ResponseEntity<String> resetPassword(@RequestParam("currentPassword") String currentPassword, @RequestParam("newPassword") String newPassword, @RequestParam("confirmPassword") String confirmPassword) throws ServiceException {
 		userService.changePassword(currentPassword, newPassword, confirmPassword);
 		return new ResponseEntity<String>("User Password updated Successfully", HttpStatus.OK);
 	}
 	
-	@RequestMapping(value={"/users/resetPassword"}, method = RequestMethod.POST)
-	public ResponseEntity<String> resetPassword(@RequestParam("username") String username, @RequestParam("newPassword") String newPassword) throws ServiceException {
+	@RequestMapping(value={"/users/changePassword"}, method = RequestMethod.POST)
+	public ResponseEntity<String> changePassword(@RequestParam("username") String username, @RequestParam("newPassword") String newPassword) throws ServiceException {
 		userService.resetPassword(username, newPassword);
 		return new ResponseEntity<String>("User Password reseted Successfully", HttpStatus.OK);
 	}
